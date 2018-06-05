@@ -2,9 +2,28 @@
 
 <div class="site-main grid-x route-{{currentRouteName}}">
   <div class="search-container">
-    {{labs-search}} 
+    {{labs-search}}
+    {{labs-bbl-lookup}}
   </div>
-  Hello Woild!
+  <div class="map-container cell medium-auto large-order-2">
+  </div>
+
+  <div class="layer-menu cell large-order-1 {{if (not-eq currentRouteName 'index') 'show-for-medium'}}">
+    <form>
+      <div class="grid-container">
+        <div class="grid-x grid-padding-x">
+          <div class="cell">
+            <label>Project Name
+              <input type="text" placeholder="Input">
+            </label>
+            <label>Applicant Name
+              <input type="text" placeholder="Input">
+            </label>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 
 {{outlet}}

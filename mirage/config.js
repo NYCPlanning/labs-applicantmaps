@@ -1,5 +1,6 @@
 export default function() {
   this.passthrough('https://zola-search-api.planninglabs.nyc/**');
+  this.passthrough('https://planninglabs.carto.com/**');
   // These comments are here to help you get started. Feel free to delete them.
 
   /*
