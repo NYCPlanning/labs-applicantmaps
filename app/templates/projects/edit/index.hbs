@@ -7,14 +7,14 @@
 
   {{!-- New Maps --}}
   <div class="grid-x grid-padding-x">
-    <div class="cell medium-3">
+    {{#link-to 'projects.edit.map.new' model.id tagName='div' class='cell medium-3'}}
       <div class="radius bordered shadow card">
         <img src="https://placehold.it/300x200">
         <div class="card-divider">
           Area
         </div>
       </div>
-    </div>
+    {{/link-to}}
 
     <div class="cell medium-3">
       <div class="radius bordered shadow card">
@@ -53,8 +53,7 @@
   {{!-- Edit existing maps --}}
   <div class="grid-x grid-padding-x">
     {{#each model.applicantMaps as |map|}}
-      <div class="cell medium-3">
-      {{#link-to 'projects.edit.map.edit' model.id map.id}}
+      {{#link-to 'projects.edit.map.edit' model.id map.id tagName='div' class='cell medium-3' role='button'}}
         <div class="radius bordered shadow card">
           <img src="https://placehold.it/300x200">
           <div class="card-divider">
@@ -62,7 +61,6 @@
           </div>
         </div>
       {{/link-to}}
-      </div>
     {{/each}}
   </div>
 </div>
