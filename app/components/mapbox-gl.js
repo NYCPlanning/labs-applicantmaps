@@ -7,14 +7,6 @@ import { bind } from '@ember/runloop';
 import MapboxGl from 'mapbox-gl';
 
 export default class ExtendedMapboxGlComponent extends MapboxGlComponent {
-  constructor() {
-    super(...arguments);
-
-    if (window.FakeXMLHttpRequest) {
-      window.XMLHttpRequestFake = window.XMLHttpRequest;
-    }
-  }
-
   _setup() {
     const mbglConfig = getOwner(this).resolveRegistration('config:environment')['mapbox-gl'];
     const options = assign({}, mbglConfig.map, get(this, 'initOptions'));
