@@ -8,6 +8,12 @@
     {{labs-bbl-lookup}}
   </div>
   <div class="map-container cell medium-auto large-order-2">
+    {{#mapbox-gl
+      class='map-container'
+      mapLoaded=(action 'handleMapLoad') as |map|
+    }}
+
+    {{/mapbox-gl}}
   </div>
 
   <div class="layer-menu cell large-order-1 {{if (not-eq currentRouteName 'index') 'show-for-medium'}}">
@@ -29,6 +35,9 @@
         </div>
       </form>
     {{/new-project}}
+    <button class="button small gray text-orange" {{action "handleDrawButtonClick" 'polygon'}}>
+      {{fa-icon "object-group"}} <span class="hide-for-medium">Draw</span> Polygon
+    </button>
   </div>
 </div>
 
