@@ -1,5 +1,5 @@
 <div class="grid-container">
-  <div class="grid-y grid-padding-x">
+  <div class="grid-y">
     <div class="cell">
       <form>  
         <label>Project Name
@@ -14,7 +14,7 @@
         <button type="button" class="success button project-save-button" onclick={{action 'save' model}}>Save</button>
       </form>
     </div>
-    <div class="cell #main-map">
+    <div class="cell" id="main-map">
       {{mapbox-gl
         class='map-container'
         mapLoaded=(action 'handleMapLoad')}}

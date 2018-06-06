@@ -78,7 +78,7 @@ body {
 
   position: relative;
   z-index: 1;
-  height: 50vh;
+  min-height: 50vh;
   background-color: $medium-gray;
 
   @include breakpoint(large) {

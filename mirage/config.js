@@ -4,11 +4,11 @@ export default function() {
   this.passthrough('https://raw.githubusercontent.com/**');
   this.passthrough('http://raw.githubusercontent.com/**');
   this.passthrough('https://raw.githubusercontent.com/**');
+  this.passthrough('https://tiles.planninglabs.nyc/**');
   // These comments are here to help you get started. Feel free to delete them.
 
   this.get('/projects');
   this.get('/projects/:id');
-
   this.post('/projects');
   /*
     Config (with defaults).

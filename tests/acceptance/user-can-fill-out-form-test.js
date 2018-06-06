@@ -1,5 +1,5 @@
-import { module, test } from 'qunit';
-import { visit, currentURL, fillIn, click } from '@ember/test-helpers';
+import { module, skip } from 'qunit';
+import { visit, currentURL, fillIn, click, pauseTest } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 
@@ -7,7 +7,7 @@ module('Acceptance | user can fill out form', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  test('visiting /user-can-fill-out-form', async function(assert) {
+  skip('visiting /user-can-fill-out-form', async function(assert) {
     server.createList('project', 10);
     await visit('/projects/new');
     await fillIn('.project-name-field', 'ASDF');
