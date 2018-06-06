@@ -4,9 +4,7 @@ export default function() {
   // These comments are here to help you get started. Feel free to delete them.
 
   this.get('/projects');
-  this.get('/projects/:id', function(schema, request) {
-    return schema.projects.find(request.params.id);
-  });
+  this.get('/projects/:id');
 
   this.post('/projects');
   /*
