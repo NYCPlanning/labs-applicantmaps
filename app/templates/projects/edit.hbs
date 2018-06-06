@@ -1,14 +1,15 @@
 <div class="cell">
   <div class="grid-x text-center">
     <div class="cell">
-      <h3 class="separator-center">Add Maps to your project:</h3>
+      <h3 class="separator-center">Add Map to your project:</h3>
     </div>
   </div>
 
+  {{!-- New Maps --}}
   <div class="grid-x grid-padding-x">
     <div class="cell medium-3">
       <div class="radius bordered shadow card">
-        <img src="https://placehold.it/250x250">
+        <img src="https://placehold.it/300x200">
         <div class="card-divider">
           Area
         </div>
@@ -17,7 +18,7 @@
 
     <div class="cell medium-3">
       <div class="radius bordered shadow card">
-        <img src="https://placehold.it/250x250">
+        <img src="https://placehold.it/300x200">
         <div class="card-divider">
           Tax
         </div>
@@ -26,7 +27,7 @@
 
     <div class="cell medium-3">
       <div class="radius bordered shadow card">
-        <img src="https://placehold.it/250x250">
+        <img src="https://placehold.it/300x200">
         <div class="card-divider">
           Zoning Change
         </div>
@@ -35,12 +36,34 @@
 
     <div class="cell medium-3">
       <div class="radius bordered shadow card">
-        <img src="https://placehold.it/250x250">
+        <img src="https://placehold.it/300x200">
         <div class="card-divider">
           Zoning Section
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="grid-x text-center">
+    <div class="cell">
+      <h3 class="separator-center">Current Maps:</h3>
+    </div>
+  </div>
+
+  {{!-- Edit existing maps --}}
+  <div class="grid-x grid-padding-x">
+    {{#each model.applicantMaps as |map|}}
+      <div class="cell medium-3">
+      {{#link-to 'projects.edit.map.edit' model.id map.id}}
+        <div class="radius bordered shadow card">
+          <img src="https://placehold.it/300x200">
+          <div class="card-divider">
+            {{map.id}}
+          </div>
+        </div>
+      {{/link-to}}
+      </div>
+    {{/each}}
   </div>
 </div>
 
