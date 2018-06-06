@@ -1,0 +1,20 @@
+<form>
+  <div class="grid-container">
+    <div class="grid-x grid-padding-x">
+      <div class="cell">
+        <label>Project Name
+          {{input type="text" class='project-name-field' value=model.projectName}}
+        </label>
+        <label>Applicant Name
+          {{input type="text" class='applicant-name-field' value=model.applicantName}}
+        </label>
+        <label>Applicant Name
+          {{input type="text" class='applicant-name-field' value=model.projectId}}
+        </label>
+        <button type="button" class="success button project-save-button" onclick={{action 'save' model}}>Save</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+{{outlet}}

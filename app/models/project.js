@@ -10,6 +10,6 @@ export default class ProjectModel extends Model {
   @attr() projectArea; // geojson
   @attr('string') projectName;
   @attr('string') applicantName;
-  @attr('number') projectId;
+  @attr('string') projectId;
   @attr('number', { defaultValue: 0 }) datePrepared;
 }

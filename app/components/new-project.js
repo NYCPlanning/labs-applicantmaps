@@ -4,6 +4,7 @@ import { action } from '@ember-decorators/object';
 
 export default class NewProjectComponent extends Component {
   @service store;
+  @service router;
 
   constructor() {
     super(...arguments);
@@ -15,6 +16,8 @@ export default class NewProjectComponent extends Component {
 
   @action
   save() {
-    this.get('projectModel').save();
+    this.get('projectModel').save().then(savedProject => {
+      this.get('router').transitionTo('projects.edit', savedProject);
+    });
   }
 }
