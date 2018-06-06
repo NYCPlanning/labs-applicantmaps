@@ -1,7 +1,7 @@
-<form>
-  <div class="grid-container">
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
+<div class="grid-container">
+  <div class="grid-y grid-padding-x">
+    <div class="cell">
+      <form>  
         <label>Project Name
           {{input type="text" class='project-name-field' value=model.projectName}}
         </label>
@@ -12,9 +12,14 @@
           {{input type="text" class='applicant-name-field' value=model.projectId}}
         </label>
         <button type="button" class="success button project-save-button" onclick={{action 'save' model}}>Save</button>
-      </div>
+      </form>
+    </div>
+    <div class="cell #main-map">
+      {{mapbox-gl
+        class='map-container'
+        mapLoaded=(action 'handleMapLoad')}}
     </div>
   </div>
-</form>
+</div>
 
 {{outlet}}
