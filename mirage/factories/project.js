@@ -2,8 +2,7 @@ import { Factory, faker } from 'ember-cli-mirage';
 
 export default Factory.extend({
   afterCreate(project, server) {
-    const maps = server.createList('applicant-map', 10, { project });
-    project.maps = maps;
+    server.createList('applicant-map', 2, { project });
   },
 
   projectName() {
@@ -14,7 +13,7 @@ export default Factory.extend({
     return `${faker.name.firstName()} ${faker.name.lastName()}`;
   },
 
-  projectID() {
+  projectId() {
     return faker.random.alphaNumeric();
   },
 

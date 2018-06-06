@@ -7,6 +7,8 @@ export default function() {
   this.get('/projects/:id', function(schema, request) {
     return schema.projects.find(request.params.id);
   });
+
+  this.post('/projects');
   /*
     Config (with defaults).
 

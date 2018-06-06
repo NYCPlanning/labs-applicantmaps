@@ -11,23 +11,24 @@
   </div>
 
   <div class="layer-menu cell large-order-1 {{if (not-eq currentRouteName 'index') 'show-for-medium'}}">
-    <form>
-      <div class="grid-container">
-        <div class="grid-x grid-padding-x">
-          <div class="cell">
-            <label>Project Name
-              <input type="text" placeholder="Input">
-            </label>
-            <label>Applicant Name
-              <input type="text" placeholder="Input">
-            </label>
-            <label>Other Question
-              <input type="text" placeholder="Input">
-            </label>
+
+    {{#new-project as |projectModel saveAction|}}
+      <form>
+        <div class="grid-container">
+          <div class="grid-x grid-padding-x">
+            <div class="cell">
+              <label>Project Name
+                {{input type="text" value=projectModel.projectName}}
+              </label>
+              <label>Applicant Name
+                {{input type="text" value=projectModel.applicantName}}
+              </label>
+              <button type="button" class="success button" onclick={{action saveAction}}>Save</button>
+            </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    {{/new-project}}
   </div>
 </div>
 

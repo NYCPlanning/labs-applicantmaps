@@ -1,5 +1,7 @@
-import { Factory, association } from 'ember-cli-mirage';
+import { Factory, faker } from 'ember-cli-mirage';
 
 export default Factory.extend({
-  project: association(),
+  mapName() {
+    return `${faker.company.companyName()}`;
+  },
 });
