@@ -17,6 +17,8 @@ export default class NewProjectController extends Controller {
   isDrawing = false;
   drawMode = null;
 
+  @service notificationMessages;
+
   @computed('model.projectArea')
   get projectAreaSource() {
     const data = this.get('model.projectArea');
@@ -68,13 +70,11 @@ export default class NewProjectController extends Controller {
 
   @action
   setProjectArea(e) {
-    console.log(e)
     // delete the drawn geometry
     draw.deleteAll();
 
     const { geometry } = e.features[0];
 
-    console.log(geometry)
     this.set('model.projectArea', geometry)
   }
 

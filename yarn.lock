@@ -1946,8 +1946,8 @@ caniuse-api@^2.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000792, caniuse-lite@^1.0.30000805, caniuse-lite@^1.0.30000844:
-  version "1.0.30000849"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000849.tgz#7e1aa48e6d58917dcd70aabf7e7a33514a258f91"
+  version "1.0.30000850"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000850.tgz#e68a88db4ea598b4c33b8419f7385473e4802495"
 
 capture-exit@^1.1.0, capture-exit@^1.2.0:
   version "1.2.0"
@@ -3189,9 +3189,9 @@ ember-inflector@^2.0.0:
   dependencies:
     ember-cli-babel "^6.0.0"
 
-ember-labs-maps@nycplanning/ember-labs-maps:
+ember-labs-maps@nycplanning/ember-labs-maps#v0.1.2:
   version "0.0.0"
-  resolved "https://codeload.github.com/nycplanning/ember-labs-maps/tar.gz/14138fd89f6d64ccee248884373dbccdab5b7f67"
+  resolved "https://codeload.github.com/nycplanning/ember-labs-maps/tar.gz/ec802624f8b4ca00b9750a3ea3b45e80b8ebe060"
   dependencies:
     "@ember-decorators/argument" "0.8.13"
     "@ember-decorators/babel-transforms" "^2.0.0"
