@@ -11,11 +11,16 @@
     </div>
     <div id="responsive-menu" class="cell large-shrink {{if closed 'show-for-large'}} hide-for-print">
       <nav role="navigation">
-        <ul class="menu">
-          <li class="menu-list-item">
-
+        {{#zf-dropdown-menu class="vertical large-horizontal"}}
+          <li>
+            <a href="#">Foo</a>
+            <ul class="menu">
+              <li><a href="#">Bax</a></li>
+              <li><a href="#">Qux</a></li>
+            </ul>
           </li>
-        </ul>
+          <li><a href="#">Bar</a></li>
+        {{/zf-dropdown-menu}}
       </nav>
     </div>
   </div>
