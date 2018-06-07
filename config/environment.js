@@ -27,6 +27,10 @@ module.exports = function(environment) {
       route: 'search',
     },
 
+    'ember-cli-notifications': {
+      autoClear: true,
+    },
+
     'mapbox-gl': {
       accessToken: '',
       map: {
