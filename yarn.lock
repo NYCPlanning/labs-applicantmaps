@@ -1946,8 +1946,8 @@ caniuse-api@^2.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000792, caniuse-lite@^1.0.30000805, caniuse-lite@^1.0.30000844:
-  version "1.0.30000849"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000849.tgz#7e1aa48e6d58917dcd70aabf7e7a33514a258f91"
+  version "1.0.30000850"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000850.tgz#e68a88db4ea598b4c33b8419f7385473e4802495"
 
 capture-exit@^1.1.0, capture-exit@^1.2.0:
   version "1.2.0"
@@ -3190,9 +3190,9 @@ ember-inflector@^2.0.0:
   dependencies:
     ember-cli-babel "^6.0.0"
 
-ember-labs-maps@nycplanning/ember-labs-maps:
+ember-labs-maps@nycplanning/ember-labs-maps#v0.1.2:
   version "0.0.0"
-  resolved "https://codeload.github.com/nycplanning/ember-labs-maps/tar.gz/14138fd89f6d64ccee248884373dbccdab5b7f67"
+  resolved "https://codeload.github.com/nycplanning/ember-labs-maps/tar.gz/ec802624f8b4ca00b9750a3ea3b45e80b8ebe060"
   dependencies:
     "@ember-decorators/argument" "0.8.15"
     "@ember-decorators/babel-transforms" "^2.0.0"
@@ -5654,6 +5654,20 @@ lodash.support@~2.3.0:
   resolved "https://registry.yarnpkg.com/lodash.support/-/lodash.support-2.3.0.tgz#7eaf038af4f0d6aab776b44aa6dcfc80334c9bfd"
   dependencies:
     lodash._renative "~2.3.0"
+
+lodash.template@^3.3.2:
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/lodash.template/-/lodash.template-3.6.2.tgz#f8cdecc6169a255be9098ae8b0c53d378931d14f"
+  dependencies:
+    lodash._basecopy "^3.0.0"
+    lodash._basetostring "^3.0.0"
+    lodash._basevalues "^3.0.0"
+    lodash._isiterateecall "^3.0.0"
+    lodash._reinterpolate "^3.0.0"
+    lodash.escape "^3.0.0"
+    lodash.keys "^3.0.0"
+    lodash.restparam "^3.0.0"
+    lodash.templatesettings "^3.0.0"
 
 lodash.template@^4.2.4, lodash.template@^4.2.5, lodash.template@^4.4.0:
   version "4.4.0"
@@ -8285,17 +8299,15 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
 
-<<<<<<< HEAD
 tooltip.js@^1.1.5:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/tooltip.js/-/tooltip.js-1.2.0.tgz#8b16482f04397f4f9d7387843dccf186890c8860"
   dependencies:
     popper.js "^1.0.2"
-=======
+
 toposort@^1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/toposort/-/toposort-1.0.7.tgz#2e68442d9f64ec720b8cc89e6443ac6caa950029"
->>>>>>> 8bc5bc29e2fbb64dc6ce364c57c9bcb9763981d9
 
 tough-cookie@~2.3.0, tough-cookie@~2.3.3:
   version "2.3.4"
