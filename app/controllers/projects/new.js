@@ -25,17 +25,6 @@ export default class NewProjectController extends Controller {
     }
   }
 
-  @computed('model.{projectName,applicantName,projectArea}')
-  get isValid() {
-    console.log('checking isvalid')
-    const projectName = this.get('model.projectName');
-    const applicantName = this.get('model.applicantName');
-    const projectArea = this.get('model.projectArea');
-    console.log(projectName, applicantName, projectArea)
-
-    return !!projectName && !!applicantName && !!projectArea;
-  }
-
   transformRequest(url) {
     window.XMLHttpRequest = window.XMLHttpRequestNative;
     return { url };
