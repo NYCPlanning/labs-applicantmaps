@@ -1974,7 +1974,6 @@ cartobox-promises-utility@nycplanning/cartobox-promises-utility, cartobox-promis
   resolved "https://codeload.github.com/nycplanning/cartobox-promises-utility/tar.gz/57f1c96a0bf03c47e048c30d202643cc49db3c69"
   dependencies:
     ember-cli-babel "^6.6.0"
-    ember-fetch "4.0.1"
 
 cartobox-promises-utility@nycplanning/cartobox-promises-utility#v1.0.1:
   version "0.0.0"
@@ -3194,18 +3193,14 @@ ember-labs-maps@nycplanning/ember-labs-maps#v0.1.2:
   version "0.0.0"
   resolved "https://codeload.github.com/nycplanning/ember-labs-maps/tar.gz/ec802624f8b4ca00b9750a3ea3b45e80b8ebe060"
   dependencies:
-    "@ember-decorators/argument" "0.8.15"
+    "@ember-decorators/argument" "0.8.13"
     "@ember-decorators/babel-transforms" "^2.0.0"
-    cartobox-promises-utility nycplanning/cartobox-promises-utility#v1.0.1
     ember-cli-babel "^6.6.0"
     ember-cli-htmlbars "^2.0.1"
     ember-cli-htmlbars-inline-precompile "^1.0.0"
-    ember-decorators "2.1.0"
-    ember-font-awesome "^4.0.0-rc.2"
+    ember-decorators "2.0.0"
     ember-mapbox-gl "0.10.0"
-    ember-tooltips "^3.0.0-beta.2"
     ember-truth-helpers "2.0.0"
-    pretender "2.0.0"
 
 ember-load-initializers@^1.0.0:
   version "1.1.0"
