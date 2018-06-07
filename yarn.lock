@@ -1974,7 +1974,6 @@ cartobox-promises-utility@nycplanning/cartobox-promises-utility, cartobox-promis
   resolved "https://codeload.github.com/nycplanning/cartobox-promises-utility/tar.gz/57f1c96a0bf03c47e048c30d202643cc49db3c69"
   dependencies:
     ember-cli-babel "^6.6.0"
-    ember-fetch "4.0.1"
 
 cartobox-promises-utility@nycplanning/cartobox-promises-utility#v1.0.1:
   version "0.0.0"
@@ -3194,18 +3193,14 @@ ember-labs-maps@nycplanning/ember-labs-maps:
   version "0.0.0"
   resolved "https://codeload.github.com/nycplanning/ember-labs-maps/tar.gz/14138fd89f6d64ccee248884373dbccdab5b7f67"
   dependencies:
-    "@ember-decorators/argument" "0.8.15"
+    "@ember-decorators/argument" "0.8.13"
     "@ember-decorators/babel-transforms" "^2.0.0"
-    cartobox-promises-utility nycplanning/cartobox-promises-utility#v1.0.1
     ember-cli-babel "^6.6.0"
     ember-cli-htmlbars "^2.0.1"
     ember-cli-htmlbars-inline-precompile "^1.0.0"
-    ember-decorators "2.1.0"
-    ember-font-awesome "^4.0.0-rc.2"
+    ember-decorators "2.0.0"
     ember-mapbox-gl "0.10.0"
-    ember-tooltips "^3.0.0-beta.2"
     ember-truth-helpers "2.0.0"
-    pretender "2.0.0"
 
 ember-load-initializers@^1.0.0:
   version "1.1.0"
@@ -5654,6 +5649,20 @@ lodash.support@~2.3.0:
   resolved "https://registry.yarnpkg.com/lodash.support/-/lodash.support-2.3.0.tgz#7eaf038af4f0d6aab776b44aa6dcfc80334c9bfd"
   dependencies:
     lodash._renative "~2.3.0"
+
+lodash.template@^3.3.2:
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/lodash.template/-/lodash.template-3.6.2.tgz#f8cdecc6169a255be9098ae8b0c53d378931d14f"
+  dependencies:
+    lodash._basecopy "^3.0.0"
+    lodash._basetostring "^3.0.0"
+    lodash._basevalues "^3.0.0"
+    lodash._isiterateecall "^3.0.0"
+    lodash._reinterpolate "^3.0.0"
+    lodash.escape "^3.0.0"
+    lodash.keys "^3.0.0"
+    lodash.restparam "^3.0.0"
+    lodash.templatesettings "^3.0.0"
 
 lodash.template@^4.2.4, lodash.template@^4.2.5, lodash.template@^4.4.0:
   version "4.4.0"
@@ -8285,17 +8294,15 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
 
-<<<<<<< HEAD
 tooltip.js@^1.1.5:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/tooltip.js/-/tooltip.js-1.2.0.tgz#8b16482f04397f4f9d7387843dccf186890c8860"
   dependencies:
     popper.js "^1.0.2"
-=======
+
 toposort@^1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/toposort/-/toposort-1.0.7.tgz#2e68442d9f64ec720b8cc89e6443ac6caa950029"
->>>>>>> 8bc5bc29e2fbb64dc6ce364c57c9bcb9763981d9
 
 tough-cookie@~2.3.0, tough-cookie@~2.3.3:
   version "2.3.4"

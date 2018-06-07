@@ -1,46 +1,45 @@
 <div class="cell route-{{currentRouteName}}">
-  <div class="grid-x grid-padding-x grid-padding-y">
-    <div class="cell auto">
-      <h3>Easily prepare valid maps for Land Use and Environmental Applications</h3>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </p>
-    </div>
-    <div class="cell auto">
+  <div class="grid-container">
+    <div class="grid-x grid-padding-x grid-padding-y">
+      <div class="cell auto">
 
-      <h3 class="subheader">
-        STEP ONE:
-      </h3>
+        <h1>Prepare, save, and print maps for Land Use and Environmental applications.</h1>
 
-      Create a new project
-      {{link-to 'Get Started' 'projects.new' tagName='button' type='button' class='success button'}}
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum labore et dolore magna aliqua.</p>
 
-      <h3 class="subheader">
-        STEP TWO:
-      </h3>
-      Add maps
+        <p> Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-      <h3 class="subheader">
-        STEP THREE:
-      </h3>
+        <p class="lead text-center"><a href="#"><strong>Learn more&hellip;</strong></a></p>
 
-      <p>Print each of your maps to paper or save to PDF</p>
+      </div>
+      <div class="cell large-5">
 
-      <p>Share your projects and maps with unique URLs</p>
+        <h2 class="header-small" style="padding-top:1rem;">STEP ONE</h2>
+        <p class="lead">Create a new project for your application.</p>
+        {{link-to 'Get Started' 'projects.new' tagName='button' type='button' class='button large expanded'}}
 
+        <h2 class="header-small" style="padding-top:1rem;">STEP TWO</h2>
+        <p class="lead">Add maps to your project.</p>
+        <div class="grid-x grid-padding-small medium-up-2 large-up-4">
+          <div class="cell">
+            <img src="http://via.placeholder.com/600x400?text=MAP" />
+          </div>
+          <div class="cell">
+            <img src="http://via.placeholder.com/600x400?text=MAP" />
+          </div>
+          <div class="cell">
+            <img src="http://via.placeholder.com/600x400?text=MAP" />
+          </div>
+          <div class="cell">
+            <img src="http://via.placeholder.com/600x400?text=MAP" />
+          </div>
+        </div>
+
+        <h2 class="header-small" style="padding-top:1rem;">STEP THREE</h2>
+        <p class="lead clearfix"><span class="float-left" style="margin:0.25rem 1rem 1rem 0">{{fa-icon 'print' size=2}}</span> Print your maps to paper or save them as PDFs.</p>
+        <p class="lead clearfix"><span class="float-left" style="margin:0.25rem 1rem 1rem 0">{{fa-icon 'share-alt' size=2}}</span> Share your projects and maps with unique URLs.</p>
+
+      </div>
     </div>
   </div>
 </div>
