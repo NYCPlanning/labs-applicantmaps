@@ -1,0 +1,68 @@
+<div class="cell">
+  <div class="grid-x text-center">
+    <div class="cell">
+      <h3 class="separator-center">Add Map to your project:</h3>
+    </div>
+  </div>
+
+  {{!-- New Maps --}}
+  <div class="grid-x grid-padding-x">
+    {{#link-to 'projects.edit.map.new' model.id tagName='div' class='cell medium-3'}}
+      <div class="radius bordered shadow card">
+        <img src="https://placehold.it/300x200">
+        <div class="card-divider">
+          Area
+        </div>
+      </div>
+    {{/link-to}}
+
+    <div class="cell medium-3">
+      <div class="radius bordered shadow card">
+        <img src="https://placehold.it/300x200">
+        <div class="card-divider">
+          Tax
+        </div>
+      </div>
+    </div>
+
+    <div class="cell medium-3">
+      <div class="radius bordered shadow card">
+        <img src="https://placehold.it/300x200">
+        <div class="card-divider">
+          Zoning Change
+        </div>
+      </div>
+    </div>
+
+    <div class="cell medium-3">
+      <div class="radius bordered shadow card">
+        <img src="https://placehold.it/300x200">
+        <div class="card-divider">
+          Zoning Section
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-x text-center">
+    <div class="cell">
+      <h3 class="separator-center">Current Maps:</h3>
+    </div>
+  </div>
+
+  {{!-- Edit existing maps --}}
+  <div class="grid-x grid-padding-x">
+    {{#each model.applicantMaps as |map|}}
+      {{#link-to 'projects.edit.map.edit' model.id map.id tagName='div' class='cell medium-3' role='button'}}
+        <div class="radius bordered shadow card">
+          <img src="https://placehold.it/300x200">
+          <div class="card-divider">
+            {{map.id}}
+          </div>
+        </div>
+      {{/link-to}}
+    {{/each}}
+  </div>
+</div>
+
+{{outlet}}

@@ -10,6 +10,7 @@ export default function() {
   this.get('/projects');
   this.get('/projects/:id');
   this.post('/projects');
+  this.post('/applicant-maps');
   /*
     Config (with defaults).
 
