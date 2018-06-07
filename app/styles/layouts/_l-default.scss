@@ -34,7 +34,7 @@ body {
     height: calc(100vh - 6rem);
   }
 
-  @include breakpoint(large) {
+  @include breakpoint(medium) {
     overflow: hidden;
 
     > .cell {
@@ -81,34 +81,19 @@ body {
   min-height: 50vh;
   background-color: $medium-gray;
 
-  @include breakpoint(large) {
+  @include breakpoint(medium) {
     height: 100%;
   }
 }
 
 .layer-menu {
   background-color: $light-gray;
+  position: relative;
   z-index: 2;
-  // min-height: calc(50vh - 8rem);
+  padding: $global-margin;
 
   @include breakpoint(medium) {
-    min-height: none;
-    max-height: 50vh;
-    height: calc(50vh - 5.25rem);
-    width: 15rem;
-    box-shadow: -4px 0 0 rgba(0,0,0,0.1);
-    overflow: scroll;
-    margin-top: 5.25rem;
-  }
-
-  @include breakpoint(large) {
-    height: calc(100% - 5.25rem);
     box-shadow: 2px 0 0 rgba(0,0,0,0.1);
-    // padding-bottom: 6.25rem;
-  }
-
-  @include breakpoint(xlarge) {
-    width: 18rem;
   }
 }
 
