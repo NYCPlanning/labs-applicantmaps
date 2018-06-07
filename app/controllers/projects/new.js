@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import { action } from '@ember-decorators/object';
+import { action, computed } from '@ember-decorators/object';
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from 'mapbox-gl-draw';
 
@@ -12,9 +12,34 @@ const draw = new MapboxDraw({
   // styles: drawStyles, TODO modify default draw styles
 });
 
-export default class ApplicationController extends Controller {
+export default class NewProjectController extends Controller {
   isDrawing = false;
   drawMode = null;
+
+  @computed('model.projectArea')
+  get projectAreaSource() {
+    const data = this.get('model.projectArea');
+    return {
+      type: 'geojson',
+      data,
+    }
+  }
+
+  @computed('model.{projectName,applicantName,projectArea}')
+  get isValid() {
+    console.log('checking isvalid')
+    const projectName = this.get('model.projectName');
+    const applicantName = this.get('model.applicantName');
+    const projectArea = this.get('model.projectArea');
+    console.log(projectName, applicantName, projectArea)
+
+    return !!projectName && !!applicantName && !!projectArea;
+  }
+
+  transformRequest(url) {
+    window.XMLHttpRequest = window.XMLHttpRequestNative;
+    return { url };
+  }
 
   @action
   handleMapLoad(map) {
@@ -35,7 +60,7 @@ export default class ApplicationController extends Controller {
   }
 
   @action
-  handleDrawButtonClick(type) {
+  handleDrawButtonClick() {
     const isDrawing = this.get('isDrawing');
     const map = this.get('mapInstance');
     if (isDrawing) {
@@ -44,20 +69,29 @@ export default class ApplicationController extends Controller {
      this.set('drawMode', null);
     } else {
      map.addControl(draw, 'top-right');
-     this.set('drawMode', type);
 
-     if (type === 'polygon') {
-       draw.changeMode('draw_polygon');
-     }
+     draw.changeMode('draw_polygon');
 
      this.set('isDrawing', true);
     }
   }
 
   @action
+  setProjectArea(e) {
+    console.log(e)
+    // delete the drawn geometry
+    draw.deleteAll();
+
+    const { geometry } = e.features[0];
+
+    console.log(geometry)
+    this.set('model.projectArea', geometry)
+  }
+
+  @action
   async save(model) {
     const project = await model.save()
-    
+
     this.transitionToRoute('projects.edit', project);
   }
 }
