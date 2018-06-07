@@ -17,6 +17,7 @@
     "test": "ember test"
   },
   "devDependencies": {
+    "@ember-decorators/argument": "0.8.15",
     "@ember-decorators/babel-transforms": "^2.0.0",
     "babel-eslint": "^8.0.0",
     "broccoli-asset-rev": "^2.4.5",
@@ -32,6 +33,7 @@
     "ember-cli-htmlbars-inline-precompile": "^1.0.0",
     "ember-cli-inject-live-reload": "^1.4.1",
     "ember-cli-mirage": "0.4.7",
+    "ember-cli-notifications": "4.3.3",
     "ember-cli-qunit": "^4.1.1",
     "ember-cli-sass": "^6.0.0",
     "ember-cli-shims": "^1.2.0",
@@ -41,6 +43,7 @@
     "ember-decorators": "2.1.0",
     "ember-export-application-global": "^2.0.0",
     "ember-font-awesome": "^4.0.0-rc.4",
+    "ember-labs-maps": "nycplanning/ember-labs-maps",
     "ember-load-initializers": "^1.0.0",
     "ember-mapbox-gl": "^0.10.0",
     "ember-mapbox-gl-draw": "^1.1.0",
@@ -58,7 +61,7 @@
     "node": "^4.5 || 6.* || >= 7.*"
   },
   "dependencies": {
-    "@ember-decorators/argument": "0.8.15",
+    "cartobox-promises-utility": "nycplanning/cartobox-promises-utility",
     "foundation-sites": "^6.4.3"
   }
 }

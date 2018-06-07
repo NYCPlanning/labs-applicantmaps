@@ -1,0 +1,49 @@
+/* paper.css https://github.com/cognitom/paper-css/blob/master/paper.css */
+ @page { margin: 0 }
+ body { margin: 0 }
+ .paper {
+   margin: 0;
+   overflow: hidden;
+   position: relative;
+   box-sizing: border-box;
+   page-break-after: always;
+ }
+
+ /** Paper sizes **/
+ .paper.A3               { width: 297mm; height: 419mm }
+ .paper.A3.landscape     { width: 420mm; height: 296mm }
+ .paper.A4               { width: 210mm; height: 296mm }
+ .paper.A4.landscape     { width: 297mm; height: 209mm }
+ .paper.A5               { width: 148mm; height: 209mm }
+ .paper.A5.landscape     { width: 210mm; height: 147mm }
+ .paper.letter           { width: 216mm; height: 279mm }
+ .paper.letter.landscape { width: 280mm; height: 215mm }
+ .paper.legal            { width: 216mm; height: 356mm }
+ .paper.legal.landscape  { width: 357mm; height: 215mm }
+
+ /** Padding area **/
+ .paper.padding-10mm { padding: 10mm }
+ .paper.padding-15mm { padding: 15mm }
+ .paper.padding-20mm { padding: 20mm }
+ .paper.padding-25mm { padding: 25mm }
+
+ /** For screen preview **/
+ @media screen {
+   body { background: #e0e0e0 }
+   .paper {
+     background: white;
+     box-shadow: 0 .5mm 2mm rgba(0,0,0,.3);
+     margin: 5mm auto;
+   }
+ }
+
+ /** Fix for Chrome issue #273306 **/
+ @media print {
+   .paper.A3.landscape          { width: 420mm }
+   .paper.A3, .paper.A4.landscape { width: 297mm }
+   .paper.A4, .paper.A5.landscape { width: 210mm }
+   .paper.A5                    { width: 148mm }
+   .paper.letter, .paper.legal    { width: 216mm }
+   .paper.letter.landscape      { width: 280mm }
+   .paper.legal.landscape       { width: 357mm }
+ }

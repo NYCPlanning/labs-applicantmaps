@@ -1,23 +1,42 @@
-<div class="grid-container">
-  <div class="grid-y">
-    <div class="cell">
-      <form>  
-        <label>Project Name
+<div class="cell">
+  <div class="grid-x">
+    <div class="cell medium-4">
+      <form>
+        <label>Project Title
           {{input type="text" class='project-name-field' value=model.projectName}}
         </label>
         <label>Applicant Name
           {{input type="text" class='applicant-name-field' value=model.applicantName}}
         </label>
-        <label>Applicant Name
-          {{input type="text" class='applicant-name-field' value=model.projectId}}
+        <label>Project Area
         </label>
-        <button type="button" class="success button project-save-button" onclick={{action 'save' model}}>Save</button>
+        <p>Draw a polygon representing your project area on the map</p>
+        <button type="button" class="success button project-save-button" onclick={{action 'handleDrawButtonClick' model}}>Draw</button>
+        <hr>
+
+        <button type="button" class="success button project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Create Project</button>
+
       </form>
     </div>
-    <div class="cell" id="main-map">
-      {{mapbox-gl
-        class='map-container'
-        mapLoaded=(action 'handleMapLoad')}}
+    <div class="cell auto">
+      <div id="main-map">
+
+        {{#mapbox-gl
+          class='map-container'
+          mapLoaded=(action 'handleMapLoad')
+          initOptions=(hash transformRequest=transformRequest) as | map |
+        }}
+          {{#if model.projectArea}}
+            {{#map.source options=projectAreaSource as |source|}}
+              {{source.layer
+                before='boundary_country'
+              }}
+            {{/map.source}}
+          {{/if}}
+          {{map.on 'draw.create' (action "setProjectArea")}}
+          {{map.on 'draw.update' (action "setProjectArea")}}
+        {{/mapbox-gl}}
+      </div>
     </div>
   </div>
 </div>
