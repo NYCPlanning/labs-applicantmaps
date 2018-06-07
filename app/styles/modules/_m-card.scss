@@ -1,0 +1,36 @@
+// --------------------------------------------------
+// Card
+// --------------------------------------------------
+
+.card {
+
+}
+
+.card.link {
+  display: block;
+  border-radius: $global-radius;
+  transition: all 0.2s;
+  padding: 0.5rem;
+
+  .fa-plus {
+    display: block;
+    background: $medium-gray;
+    color: darken($medium-gray, 10%);
+    padding: 1rem;
+  }
+
+  &,
+  .card-section {
+    background-color: $primary-color;
+    color: $white;
+  }
+
+  .card-section {
+    padding: 0.25rem 0 0;
+  }
+
+  &:hover {
+    box-shadow: 0 0 1rem rgba(0,0,0,0.1);
+    transform: scale(1.04);
+  }
+}

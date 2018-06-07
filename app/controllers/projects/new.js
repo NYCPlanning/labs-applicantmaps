@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action, computed } from '@ember-decorators/object';
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from 'mapbox-gl-draw';
+import { service } from '@ember-decorators/service';
 
 const draw = new MapboxDraw({
   displayControlsDefault: false,
@@ -79,7 +80,9 @@ export default class NewProjectController extends Controller {
 
   @action
   async save(model) {
-    const project = await model.save()
+    const project = await model.save();
+
+    this.get('notificationMessages').success('Project saved!');
 
     this.transitionToRoute('projects.edit', project);
   }
