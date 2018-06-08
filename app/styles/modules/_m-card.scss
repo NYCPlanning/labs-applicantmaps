@@ -4,33 +4,38 @@
 
 .card {
 
-}
-
-.card.link {
-  display: block;
-  border-radius: $global-radius;
-  transition: all 0.2s;
-  padding: 0.5rem;
-
-  .fa-plus {
+  &.link {
     display: block;
-    background: $medium-gray;
-    color: darken($medium-gray, 10%);
-    padding: 1rem;
-  }
+    border-radius: $global-radius;
+    transition: all 0.2s;
+    padding: 0.5rem;
 
-  &,
-  .card-section {
-    background-color: $primary-color;
-    color: $white;
-  }
+    .fa-plus {
+      display: block;
+      background: $medium-gray;
+      color: darken($medium-gray, 10%);
+      padding: 1rem;
+    }
 
-  .card-section {
-    padding: 0.25rem 0 0;
-  }
+    &,
+    .card-section {
+      background-color: $anchor-color;
+      color: $white;
+      transition: all 0.2s;
+    }
 
-  &:hover {
-    box-shadow: 0 0 1rem rgba(0,0,0,0.1);
-    transform: scale(1.04);
+    .card-section {
+      padding: 0.25rem 0 0;
+    }
+
+    &:hover {
+      box-shadow: 0 0 1rem rgba(0,0,0,0.1);
+      transform: scale(1.04);
+
+      &,
+      .card-section {
+        background-color: $anchor-color-hover;
+      }
+    }
   }
 }
