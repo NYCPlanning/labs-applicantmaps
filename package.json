@@ -23,6 +23,7 @@
     "broccoli-asset-rev": "^2.4.5",
     "broccoli-clean-css": "~1.1.0",
     "ember-ajax": "^3.0.0",
+    "ember-browserify": "1.2.2",
     "ember-cli": "~3.0.2",
     "ember-cli-app-version": "^3.0.0",
     "ember-cli-babel": "^6.6.0",
@@ -43,7 +44,7 @@
     "ember-decorators": "2.1.0",
     "ember-export-application-global": "^2.0.0",
     "ember-font-awesome": "^4.0.0-rc.4",
-    "ember-labs-maps": "nycplanning/ember-labs-maps#v0.1.2",
+    "ember-labs-maps": "nycplanning/ember-labs-maps#v0.1.4",
     "ember-load-initializers": "^1.0.0",
     "ember-mapbox-gl": "^0.10.0",
     "ember-mapbox-gl-draw": "^1.1.0",
@@ -62,6 +63,7 @@
     "node": "^4.5 || 6.* || >= 7.*"
   },
   "dependencies": {
+    "@turf/buffer": "^5.1.5",
     "cartobox-promises-utility": "nycplanning/cartobox-promises-utility",
     "foundation-sites": "^6.4.3"
   }
