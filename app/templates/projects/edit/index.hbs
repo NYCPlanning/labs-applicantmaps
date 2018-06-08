@@ -14,7 +14,8 @@
     <div class="cell auto">
 
       {{!-- Existing maps --}}
-      <h3 class="">Current Maps:</h3>
+      <h3 class="">Existing Maps</h3>
+      <p>Choose one of your existing project maps to view, print, or edit.</p>
       <div class="grid-x grid-padding-x medium-up-3">
         {{#each model.applicantMaps as |map|}}
           <div class="cell">
@@ -28,8 +29,11 @@
         {{/each}}
       </div>
 
+      <hr>
+
       {{!-- New Maps --}}
-      <h3 class="">Add Map to your project:</h3>
+      <h3 class="">Add New Map</h3>
+      <p>Choose the type of map you would like to add to your project.</p>
       <div class="grid-x grid-padding-x medium-up-2 large-up-4">
         <div class="cell">
           {{#link-to 'projects.edit.map.new' model.id tagName='div' class='card link text-center'}}
