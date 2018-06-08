@@ -17,13 +17,6 @@
       padding: 1rem;
     }
 
-    &,
-    .card-section {
-      background-color: $anchor-color;
-      color: $white;
-      transition: all 0.2s;
-    }
-
     .card-section {
       padding: 0.25rem 0 0;
     }
@@ -31,10 +24,21 @@
     &:hover {
       box-shadow: 0 0 1rem rgba(0,0,0,0.1);
       transform: scale(1.04);
+    }
 
+    &.primary {
       &,
       .card-section {
-        background-color: $anchor-color-hover;
+        color: $white;
+        background-color: $anchor-color;
+        transition: all 0.2s;
+      }
+
+      &:hover {
+        &,
+        .card-section {
+          background-color: $anchor-color-hover;
+        }
       }
     }
   }
