@@ -12,14 +12,17 @@
     <div id="responsive-menu" class="cell large-shrink {{if closed 'show-for-large'}} hide-for-print">
       <nav role="navigation">
         {{#zf-dropdown-menu class="vertical large-horizontal"}}
+          <li>{{link-to 'About' 'index'}}</li>
           <li>
-            <a href="#">Foo</a>
+            <a href="#">My Projects</a>
             <ul class="menu">
+              <li><a href="#">Foo</a></li>
+              <li><a href="#">Bar</a></li>
+              <li><a href="#">Baz</a></li>
               <li><a href="#">Bax</a></li>
               <li><a href="#">Qux</a></li>
             </ul>
           </li>
-          <li><a href="#">Bar</a></li>
         {{/zf-dropdown-menu}}
       </nav>
     </div>
