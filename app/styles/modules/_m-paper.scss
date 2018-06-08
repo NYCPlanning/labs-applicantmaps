@@ -29,21 +29,33 @@
 
  /** For screen preview **/
  @media screen {
-   body { background: #e0e0e0 }
    .paper {
-     background: white;
-     box-shadow: 0 .5mm 2mm rgba(0,0,0,.3);
-     margin: 5mm auto;
+     @include horizontal-center;
+
+     background: White;
+     box-shadow: 0 0.5mm 2mm rgba(0,0,0,0.3);
+
+     &.letter {
+       zoom: 0.3;
+       -moz-transform: scale(0.3);
+
+       @include breakpoint(45rem) { zoom: 0.4; -moz-transform: scale(0.4); }
+       @include breakpoint(64rem) { zoom: 0.6; -moz-transform: scale(0.6); }
+       @include breakpoint(70rem) { zoom: 0.7; -moz-transform: scale(0.7); }
+       @include breakpoint(75rem) { zoom: 0.8; -moz-transform: scale(0.8); }
+       @include breakpoint(85rem) { zoom: 0.9; -moz-transform: scale(0.9); }
+       @include breakpoint(90rem) { zoom: 1;   -moz-transform: scale(1);   }
+     }
    }
  }
 
  /** Fix for Chrome issue #273306 **/
  @media print {
-   .paper.A3.landscape          { width: 420mm }
+   .paper.A3.landscape            { width: 420mm }
    .paper.A3, .paper.A4.landscape { width: 297mm }
    .paper.A4, .paper.A5.landscape { width: 210mm }
-   .paper.A5                    { width: 148mm }
+   .paper.A5                      { width: 148mm }
    .paper.letter, .paper.legal    { width: 216mm }
-   .paper.letter.landscape      { width: 280mm }
-   .paper.legal.landscape       { width: 357mm }
+   .paper.letter.landscape        { width: 280mm }
+   .paper.legal.landscape         { width: 357mm }
  }

@@ -1,4 +1,4 @@
-<div class="cell medium-5 large-4 layer-menu">
+<div class="cell medium-5 large-3 layer-menu">
   <label>Project Title
     {{input type="text" class='project-name-field' value=model.projectName}}
   </label>
@@ -13,7 +13,7 @@
   <button type="button" class="button expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Create Project</button>
 
 </div>
-<div class="cell medium-7 large-8 map-container">
+<div class="cell medium-7 large-9 map-container">
 
   {{#mapbox-gl
     id='main-map'

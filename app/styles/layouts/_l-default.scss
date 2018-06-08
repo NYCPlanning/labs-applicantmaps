@@ -73,17 +73,23 @@ body {
   }
 }
 
-.map-container {
+.map-container,
+.paper-container {
   @include xy-cell-static(full,false,0);
 
   position: relative;
   z-index: 1;
   min-height: 50vh;
-  background-color: $medium-gray;
+  background-color: darken($body-background, 10%);
 
   @include breakpoint(medium) {
     height: 100%;
   }
+}
+
+.paper-container {
+  overflow: scroll !important;
+  padding: 2rem;
 }
 
 .layer-menu {
