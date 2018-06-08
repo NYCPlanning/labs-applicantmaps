@@ -19,8 +19,9 @@
 
     &,
     .card-section {
-      background-color: $primary-color;
+      background-color: $anchor-color;
       color: $white;
+      transition: all 0.2s;
     }
 
     .card-section {
@@ -28,8 +29,13 @@
     }
 
     &:hover {
-      box-shadow: 0 0 1rem rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.03);
+      box-shadow: 0 0 1rem rgba(0,0,0,0.1);
       transform: scale(1.04);
+
+      &,
+      .card-section {
+        background-color: $anchor-color-hover;
+      }
     }
   }
 }
