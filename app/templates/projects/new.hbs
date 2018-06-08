@@ -1,44 +1,50 @@
-<div class="cell">
-  <div class="grid-x">
-    <div class="cell medium-4">
-      <form>
-        <label>Project Title
-          {{input type="text" class='project-name-field' value=model.projectName}}
-        </label>
-        <label>Applicant Name
-          {{input type="text" class='applicant-name-field' value=model.applicantName}}
-        </label>
-        <label>Project Area
-        </label>
-        <p>Draw a polygon representing your project area on the map</p>
-        <button type="button" class="success button project-save-button" onclick={{action 'handleDrawButtonClick' model}}>Draw</button>
-        <hr>
+<div class="cell medium-5 large-4 layer-menu">
+  <label>Project Title
+    {{input type="text" class='project-name-field' value=model.projectName}}
+  </label>
 
-        <button type="button" class="success button project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Create Project</button>
+  <label>Applicant Name
+    {{input type="text" class='applicant-name-field' value=model.applicantName}}
+  </label>
 
-      </form>
-    </div>
-    <div class="cell auto">
-      <div id="main-map">
+  <label>Project Area</label>
+  <p>Define your project area by drawing a polygon on the map.</p>
+  <p class="text-center"><button type="button" class="button gray text-orange" onclick={{action 'handleDrawButtonClick' model}}>Draw</button></p>
+  <button type="button" class="button expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Create Project</button>
 
-        {{#mapbox-gl
-          class='map-container'
-          mapLoaded=(action 'handleMapLoad')
-          initOptions=(hash transformRequest=transformRequest) as | map |
+</div>
+<div class="cell medium-7 large-8 map-container">
+
+  {{#mapbox-gl
+    id='main-map'
+    mapLoaded=(action 'handleMapLoad')
+    initOptions=(hash transformRequest=transformRequest) as | map |
+  }}
+    {{#if model.projectArea}}
+      {{#map.source options=projectAreaSource as |source|}}
+        {{source.layer
+          before='boundary_country'
         }}
-          {{#if model.projectArea}}
-            {{#map.source options=projectAreaSource as |source|}}
-              {{source.layer
-                before='boundary_country'
-              }}
-            {{/map.source}}
-          {{/if}}
-          {{map.on 'draw.create' (action "setProjectArea")}}
-          {{map.on 'draw.update' (action "setProjectArea")}}
-        {{/mapbox-gl}}
-      </div>
-    </div>
-  </div>
+      {{/map.source}}
+
+    {{/if}}
+    {{#each (await sources) as |sourceOptions|}}
+      {{log sourceOptions}}
+      {{#map.source options=sourceOptions as |source|}}
+        {{source.layer
+          layer=taxLotsLinesLayer
+          before='boundary_country'
+        }}
+        {{source.layer
+          layer=taxLotsLabelsLayer
+          before='boundary_country'
+        }}
+      {{/map.source}}
+    {{/each}}
+    {{map.on 'draw.create' (action "setProjectArea")}}
+    {{map.on 'draw.update' (action "setProjectArea")}}
+  {{/mapbox-gl}}
+
 </div>
 
 {{outlet}}

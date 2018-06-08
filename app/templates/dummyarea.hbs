@@ -8,9 +8,18 @@
         transformRequest=transformRequest
       )
       model=model
-      mapLoaded=(action 'handleMapLoad') as | map |}}
+      mapLoaded=(action 'handleMapLoad') as |map|}}
       {{map.labs-layers model=model}}
-
+      {{#map.source options=projectAreaSource as |source|}}
+        {{source.layer
+          before='boundary_country'
+        }}
+      {{/map.source}}
+      {{#map.source options=projectBufferSource as |source|}}
+        {{source.layer
+          before='boundary_country'
+        }}
+      {{/map.source}}
   {{/labs-map}}
 </div>
 
