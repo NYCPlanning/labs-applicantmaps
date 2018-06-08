@@ -1,5 +1,4 @@
 <div class="cell medium-5 large-4 layer-menu">
-
   <label>Project Title
     {{input type="text" class='project-name-field' value=model.projectName}}
   </label>
@@ -27,7 +26,21 @@
           before='boundary_country'
         }}
       {{/map.source}}
+
     {{/if}}
+    {{#each (await sources) as |sourceOptions|}}
+      {{log sourceOptions}}
+      {{#map.source options=sourceOptions as |source|}}
+        {{source.layer
+          layer=taxLotsLinesLayer
+          before='boundary_country'
+        }}
+        {{source.layer
+          layer=taxLotsLabelsLayer
+          before='boundary_country'
+        }}
+      {{/map.source}}
+    {{/each}}
     {{map.on 'draw.create' (action "setProjectArea")}}
     {{map.on 'draw.update' (action "setProjectArea")}}
   {{/mapbox-gl}}
