@@ -16,7 +16,7 @@
       {{!-- Existing maps --}}
       <h3 class="">Existing Maps</h3>
       <p>Choose one of your existing project maps to view, print, or edit.</p>
-      <div class="grid-x grid-padding-x medium-up-3">
+      <div class="grid-x grid-padding-x medium-up-2 large-up-3">
         {{#each model.applicantMaps as |map|}}
           <div class="cell">
             {{#link-to 'projects.edit.map.edit' model.id map.id tagName='div' class='card link text-center' role='button'}}
