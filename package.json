@@ -63,6 +63,7 @@
     "node": "^4.5 || 6.* || >= 7.*"
   },
   "dependencies": {
+    "@turf/bbox": "^6.0.1",
     "@turf/buffer": "^5.1.5",
     "cartobox-promises-utility": "nycplanning/cartobox-promises-utility",
     "foundation-sites": "^6.4.3"

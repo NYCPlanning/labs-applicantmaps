@@ -6,24 +6,26 @@
       {{#labs-map
         id='main-map'
         initOptions=(hash
-          zoom=15.479951257235973
-          center=(array -73.96532400540775 40.709710016659386)
-          bearing=20.97777777785973
+          zoom=12
+          center=(array -73.983307 40.704977)
+          bearing=0
           transformRequest=areaMapForm.transformRequest
         )
         model=model
-        mapLoaded=(action areaMapForm.handleMapLoad) as |map|}}
+        mapLoaded=(action areaMapForm.handleMapLoad model.project.projectAreaSource.data) as |map|}}
 
           {{map.labs-layers model=model}}
 
           {{#map.source options=model.project.projectAreaSource as |source|}}
             {{source.layer
+              layer=projectAreaLayer
               before='boundary_country'
             }}
           {{/map.source}}
 
           {{#map.source options=model.project.projectBufferSource as |source|}}
             {{source.layer
+              layer=projectBufferLayer
               before='boundary_country'
             }}
           {{/map.source}}
