@@ -25,21 +25,23 @@ body {
 }
 
 .site-main {
-  position: relative;
-  z-index: 1;
-  height: calc(100vh - 5rem);
-  background-color: $body-background;
+  @media screen {
+    position: relative;
+    z-index: 1;
+    height: calc(100vh - 5rem);
+    background-color: $body-background;
 
-  @include breakpoint(medium) {
-    height: calc(100vh - 6rem);
-  }
+    @include breakpoint(medium) {
+      height: calc(100vh - 6rem);
+    }
 
-  @include breakpoint(medium) {
-    overflow: hidden;
+    @include breakpoint(medium) {
+      overflow: hidden;
 
-    > .cell {
-      @include xy-cell-block($vertical:true);
-      overflow-x: hidden;
+      > .cell {
+        @include xy-cell-block($vertical:true);
+        overflow-x: hidden;
+      }
     }
   }
 }
@@ -75,21 +77,25 @@ body {
 
 .map-container,
 .paper-container {
-  @include xy-cell-static(full,false,0);
+  @media screen {
+    @include xy-cell-static(full,false,0);
 
-  position: relative;
-  z-index: 1;
-  min-height: 50vh;
-  background-color: darken($body-background, 10%);
+    position: relative;
+    z-index: 1;
+    min-height: 50vh;
+    background-color: darken($body-background, 10%);
 
-  @include breakpoint(medium) {
-    height: 100%;
+    @include breakpoint(medium) {
+      height: 100%;
+    }
   }
 }
 
 .paper-container {
-  overflow: scroll !important;
-  padding: 2rem;
+  @media screen {
+    overflow: scroll !important;
+    padding: 2rem;
+  }
 }
 
 .layer-menu {
