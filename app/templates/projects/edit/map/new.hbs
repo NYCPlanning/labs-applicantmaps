@@ -1,5 +1,36 @@
-Your New Map
+<div class="paper letter landscape">
+  {{#area-map-form tagName='' as |areaMapForm|}}
+    {{#labs-map
+      id='main-map'
+      initOptions=(hash
+        zoom=15.479951257235973
+        center=(array -73.96532400540775 40.709710016659386)
+        bearing=20.97777777785973
+        transformRequest=areaMapForm.transformRequest
+      )
+      model=model
+      mapLoaded=(action areaMapForm.handleMapLoad) as |map|}}
 
-<button onclick={{action 'save' model}}>Save to this project</button>
+        {{map.labs-layers model=model}}
+
+        {{#map.source options=model.project.projectAreaSource as |source|}}
+          {{source.layer
+            before='boundary_country'
+          }}
+        {{/map.source}}
+
+        {{#map.source options=model.project.projectBufferSource as |source|}}
+          {{source.layer
+            before='boundary_country'
+          }}
+        {{/map.source}}
+
+    {{/labs-map}}
+  {{/area-map-form}}
+</div>
+
+{{outlet}}
+
+<button onclick={{action 'save' model.applicantMap}}>Save to this project</button>
 
 {{outlet}}

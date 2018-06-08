@@ -2,16 +2,22 @@ import DS from 'ember-data';
 import { attr } from '@ember-decorators/data';
 import { hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
-
+import turfBuffer from 'npm:@turf/buffer';
 
 const { Model } = DS;
 
 export default class ProjectModel extends Model {
   @hasMany('applicant-map', { polymorphic: true }) applicantMaps;
 
+  @attr({ 
+    defaultValue() {
+      return {
+        type: 'Point',
+        coordinates: [0,0]
+      }
+    }
+  }) projectArea; // geojson
 
-
-  @attr() projectArea; // geojson
   @attr('string') projectName;
   @attr('string') applicantName;
   @attr('string') projectId;
@@ -24,5 +30,23 @@ export default class ProjectModel extends Model {
     const projectArea = this.get('projectArea');
 
     return !!projectName && !!applicantName && !!projectArea;
+  }
+
+  @computed('projectArea')
+  get projectAreaSource() {
+    const projectArea = this.get('projectArea');
+    return {
+      type: 'geojson',
+      data: projectArea,
+    }
+  }
+
+  @computed('projectAreaSource')
+  get projectBufferSource() {
+    const { data } = this.get('projectAreaSource');
+    return {
+      type: 'geojson',
+      data: turfBuffer(data, 0.113636, { units: 'miles' })
+    };
   }
 }
