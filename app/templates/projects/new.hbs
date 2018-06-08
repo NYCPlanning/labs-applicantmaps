@@ -29,7 +29,6 @@
 
     {{/if}}
     {{#each (await sources) as |sourceOptions|}}
-      {{log sourceOptions}}
       {{#map.source options=sourceOptions as |source|}}
         {{source.layer
           layer=taxLotsLinesLayer

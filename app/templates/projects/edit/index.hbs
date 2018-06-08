@@ -7,7 +7,24 @@
         <li><strong>Applicant:</strong> Jane Jacobs</li>
         <li><strong>Tax Lots:</strong> Queens Block 02293, Lot 1; Block 02294 32, Lots 30, 31, 32, 33</li>
       </ul>
-      <p><img src="http://via.placeholder.com/600x400?text=MAP" /></p>
+
+      {{#mapbox-gl
+          id='project-map'
+          initOptions=(hash
+            zoom=12
+            center=(array -73.96532400540775 40.709710016659386)
+            transformRequest=transformRequest
+          )
+          mapLoaded=(action handleMapLoad model.projectAreaSource.data)
+          as |map|
+      }}
+        {{#map.source options=model.projectAreaSource as |source|}}
+          {{source.layer
+            layer=projectAreaLayer
+            before='boundary_country'
+          }}
+        {{/map.source}}
+      {{/mapbox-gl}}
       <button class="button expanded gray text-orange">Edit Project</button>
 
     </div>
