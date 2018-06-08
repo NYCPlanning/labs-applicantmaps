@@ -12,7 +12,7 @@
           transformRequest=areaMapForm.transformRequest
         )
         model=model
-        mapLoaded=(action areaMapForm.handleMapLoad model.projectAreaSource.data) as |map|}}
+        mapLoaded=(action areaMapForm.handleMapLoad model.project.projectAreaSource.data) as |map|}}
 
           {{map.labs-layers model=model}}
 

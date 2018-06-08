@@ -31,7 +31,7 @@ export default class AreaMapFormComponent extends Component {
     window.map = map;
 
     map.fitBounds(turfBbox.default(projectArea), {
-      padding: 400,
+      padding: 100,
     });
 
   }
