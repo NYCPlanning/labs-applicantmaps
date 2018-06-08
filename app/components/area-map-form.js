@@ -1,22 +1,32 @@
 import Component from '@ember/component';
-import { action, computed } from '@ember-decorators/object';
-import turfBuffer from 'npm:@turf/buffer';
+import { action } from '@ember-decorators/object';
+import { service } from '@ember-decorators/service';
+import { hash } from 'rsvp';
+import normalizeCartoVectors from 'cartobox-promises-utility/utils/normalize-carto-vectors';
 
 export default class AreaMapFormComponent extends Component {
-  @computed('model.applicantMap.projectArea')
-  get projectAreaSource() {
-    const projectArea = this.get('model.applicantMap.projectArea');
-    return projectArea
+  constructor() {
+    super(...arguments);
+
+    const store = this.get('store');
+
+    const sources = store.findAll('source')
+      .then(sourceModels => normalizeCartoVectors(sourceModels.toArray()));
+    const layerGroups = store.findAll('layer-group');
+    const layers = store.peekAll('layer');
+
+    hash({
+      sources,
+      layers,
+      layerGroups })
+    .then(modelHash => {
+      this.set('layerModels', modelHash);
+    });
   }
 
-  @computed('projectAreaSource')
-  get projectBufferSource() {
-    const projectArea = this.get('projectAreaSource').data;
-    return {
-      type: 'geojson',
-      data: turfBuffer(projectArea, 0.5, {units: 'miles'})
-    }
-  }
+  @service store;
+
+  layerModels = null;
 
   transformRequest(url) {
     window.XMLHttpRequest = window.XMLHttpRequestNative;

@@ -19,7 +19,7 @@
       <div class="grid-x grid-padding-x medium-up-3">
         {{#each model.applicantMaps as |map|}}
           <div class="cell">
-            {{#link-to 'projects.edit.map.edit' model.id map.id tagName='div' class='card link text-center' role='button'}}
+            {{#link-to 'projects.edit.map.new' map tagName='div' class='card link text-center' role='button'}}
               <img src="/img/sample-map-1.gif" alt="Sample Map" />
               <div class="card-section">
                 {{map.id}}
@@ -68,7 +68,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 
