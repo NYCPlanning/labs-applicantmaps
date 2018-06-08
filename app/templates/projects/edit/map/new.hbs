@@ -18,12 +18,14 @@
 
           {{#map.source options=model.project.projectAreaSource as |source|}}
             {{source.layer
+              layer=projectAreaLayer
               before='boundary_country'
             }}
           {{/map.source}}
 
           {{#map.source options=model.project.projectBufferSource as |source|}}
             {{source.layer
+              layer=projectBufferLayer
               before='boundary_country'
             }}
           {{/map.source}}
