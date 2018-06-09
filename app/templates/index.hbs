@@ -16,7 +16,9 @@
 
         <h2 class="header-small" style="padding-top:1rem;">STEP ONE</h2>
         <p class="lead">Create a new project for your application.</p>
-        {{link-to 'Get Started' 'projects.new' tagName='button' type='button' class='button large expanded'}}
+        {{#link-to 'projects.new' tagName='button' type='button' class='button large expanded'}}
+          <strong>Get Started</strong> &nbsp;{{fa-icon 'arrow-right'}}
+        {{/link-to}}
 
         <h2 class="header-small" style="padding-top:1rem;">STEP TWO</h2>
         <p class="lead">Add maps to your project.</p>

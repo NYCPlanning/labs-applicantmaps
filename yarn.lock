@@ -294,6 +294,13 @@
     "@turf/helpers" "^5.1.5"
     "@turf/meta" "^5.1.5"
 
+"@turf/bbox@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@turf/bbox/-/bbox-6.0.1.tgz#b966075771475940ee1c16be2a12cf389e6e923a"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/meta" "6.x"
+
 "@turf/buffer@^5.1.5":
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/@turf/buffer/-/buffer-5.1.5.tgz#841c9627cfb974b122ac4e1a956f0466bc0231c4"
@@ -319,9 +326,19 @@
   dependencies:
     "@turf/helpers" "^5.1.5"
 
+"@turf/helpers@6.x":
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-6.1.4.tgz#d6fd7ebe6782dd9c87dca5559bda5c48ae4c3836"
+
 "@turf/helpers@^5.1.5":
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-5.1.5.tgz#153405227ab933d004a5bb9641a9ed999fcbe0cf"
+
+"@turf/meta@6.x":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@turf/meta/-/meta-6.0.2.tgz#eb92951126d24a613ac1b7b99d733fcc20fd30cf"
+  dependencies:
+    "@turf/helpers" "6.x"
 
 "@turf/meta@^5.1.5":
   version "5.2.0"
@@ -2198,7 +2215,7 @@ cartobox-promises-utility@nycplanning/cartobox-promises-utility, cartobox-promis
   resolved "https://codeload.github.com/nycplanning/cartobox-promises-utility/tar.gz/57f1c96a0bf03c47e048c30d202643cc49db3c69"
   dependencies:
     ember-cli-babel "^6.6.0"
-    ember-fetch "4.0.1"
+    ember-fetch "5.0.0"
 
 caseless@~0.11.0:
   version "0.11.0"
@@ -3582,14 +3599,18 @@ ember-labs-maps@nycplanning/ember-labs-maps#v0.1.4:
   version "0.0.0"
   resolved "https://codeload.github.com/nycplanning/ember-labs-maps/tar.gz/79abe7a3de682780a7dd47ee63fa472fe6adb194"
   dependencies:
-    "@ember-decorators/argument" "0.8.13"
+    "@ember-decorators/argument" "0.8.15"
     "@ember-decorators/babel-transforms" "^2.0.0"
+    cartobox-promises-utility nycplanning/cartobox-promises-utility#v1.0.2
     ember-cli-babel "^6.6.0"
     ember-cli-htmlbars "^2.0.1"
     ember-cli-htmlbars-inline-precompile "^1.0.0"
-    ember-decorators "2.0.0"
+    ember-decorators "2.1.0"
+    ember-font-awesome "^4.0.0-rc.2"
     ember-mapbox-gl "0.10.0"
+    ember-tooltips "^3.0.0-beta.2"
     ember-truth-helpers "2.0.0"
+    pretender "2.0.0"
 
 ember-load-initializers@^1.0.0:
   version "1.1.0"
@@ -6671,13 +6692,12 @@ node-fetch@^2.0.0-alpha.9:
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.1.2.tgz#ab884e8e7e57e38a944753cec706f788d1768bb5"
 
 node-gyp@^3.3.1:
-  version "3.6.3"
-  resolved "https://registry.yarnpkg.com/node-gyp/-/node-gyp-3.6.3.tgz#369fcb09146ae2167f25d8d23d8b49cc1a110d8d"
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/node-gyp/-/node-gyp-3.7.0.tgz#789478e8f6c45e277aa014f3e28f958f286f9203"
   dependencies:
     fstream "^1.0.0"
     glob "^7.0.3"
     graceful-fs "^4.1.2"
-    minimatch "^3.0.2"
     mkdirp "^0.5.0"
     nopt "2 || 3"
     npmlog "0 || 1 || 2 || 3 || 4"
@@ -8852,8 +8872,8 @@ terser@^3.7.5:
     source-map "~0.6.1"
 
 testem@^2.0.0:
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/testem/-/testem-2.7.1.tgz#d0be5ed15aa084ebf4ef7f0f97e968ea4561a888"
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/testem/-/testem-2.7.2.tgz#7c4da147f4b184e79808748a2a6b0e4d11537703"
   dependencies:
     backbone "^1.1.2"
     bluebird "^3.4.6"

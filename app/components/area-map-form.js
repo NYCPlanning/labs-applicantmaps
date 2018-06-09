@@ -3,6 +3,7 @@ import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 import { hash } from 'rsvp';
 import normalizeCartoVectors from 'cartobox-promises-utility/utils/normalize-carto-vectors';
+import turfBbox from 'npm:@turf/bbox';
 
 export default class AreaMapFormComponent extends Component {
   constructor() {
@@ -33,8 +34,15 @@ export default class AreaMapFormComponent extends Component {
     return { url };
   }
 
+  // TODO for some reason I have to pass in the projectArea instead
+  // of just calling this.get('projectAreaSource') ('this' is not available in the action)
   @action
-  handleMapLoad(map) {
+  handleMapLoad(projectArea, map) {
     window.map = map;
+
+    map.fitBounds(turfBbox.default(projectArea), {
+      padding: 100,
+    });
+
   }
 }
