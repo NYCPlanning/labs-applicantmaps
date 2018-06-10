@@ -1,4 +1,27 @@
 <div class="cell medium-5 large-3 layer-menu">
+  <h2>{{model.project.projectName}}</h2>
+  <p>!Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+  consequat.</p>
+
+  <hr/>
+
+  <div class="text-left">
+    <input type="radio" name="orientation" value="Portrait" id="Portrait" required/>
+    <label for="Portrait">Portrait</label>
+    <input type="radio" name="orientation" value="Portrait" id="landscape" required/>
+    <label for="landscape">Landscape</label>
+  </div>
+
+  <button 
+    type="button" 
+    class="button expanded project-save-button" 
+    onclick={{action 'save' model}}
+  >
+    Save to this project
+  </button>
+
 </div>
 <div class="cell medium-7 large-9 paper-container">
   <div class="paper letter landscape padding-10mm">
@@ -34,6 +57,5 @@
     {{/area-map-form}}
   </div>
 </div>
-{{!-- <button onclick={{action 'save' model.applicantMap}}>Save to this project</button> --}}
 
 {{outlet}}
