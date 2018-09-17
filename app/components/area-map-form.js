@@ -29,11 +29,6 @@ export default class AreaMapFormComponent extends Component {
 
   layerModels = null;
 
-  transformRequest(url) {
-    window.XMLHttpRequest = window.XMLHttpRequestNative;
-    return { url };
-  }
-
   // TODO for some reason I have to pass in the projectArea instead
   // of just calling this.get('projectAreaSource') ('this' is not available in the action)
   @action

@@ -44,12 +44,6 @@ export default class DummyAreaController extends Controller{
     }
   }
 
-
-  transformRequest(url) {
-    window.XMLHttpRequest = window.XMLHttpRequestNative;
-    return { url };
-  }
-
   @action
   handleMapLoad(map) {
     window.map = map;

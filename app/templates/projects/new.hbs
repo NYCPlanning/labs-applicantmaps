@@ -17,8 +17,7 @@
 
   {{#mapbox-gl
     id='main-map'
-    mapLoaded=(action 'handleMapLoad')
-    initOptions=(hash transformRequest=transformRequest) as | map |
+    mapLoaded=(action 'handleMapLoad') as | map |
   }}
     {{#if model.projectArea}}
       {{#map.source options=projectAreaSource as |source|}}

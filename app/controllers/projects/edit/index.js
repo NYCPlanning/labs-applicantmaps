@@ -4,11 +4,6 @@ import turfBbox from 'npm:@turf/bbox';
 
 
 export default class ProjectIndexController extends Controller {
-  transformRequest(url) {
-    window.XMLHttpRequest = window.XMLHttpRequestNative;
-    return { url };
-  }
-
   projectAreaLayer = {
     "id": "project-area-line",
     "type": "line",

@@ -1,4 +1,8 @@
+import patchXMLHTTPRequest from './helpers/mirage-mapbox-gl-monkeypatch';
+
 export default function() {
+  patchXMLHTTPRequest();
+
   this.passthrough('https://search-api.planninglabs.nyc/**');
   this.passthrough('https://planninglabs.carto.com/**');
   this.passthrough('https://raw.githubusercontent.com/**');
