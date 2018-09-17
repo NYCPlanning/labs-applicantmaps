@@ -20,7 +20,7 @@ export default class ProjectModel extends Model {
 
   @attr('string') projectName;
   @attr('string') applicantName;
-  @attr('string') projectId;
+  @attr('string') zapProjectId;
   @attr('number', { defaultValue: 0 }) datePrepared;
 
   @computed('projectName', 'applicantName', 'projectArea')
@@ -28,8 +28,9 @@ export default class ProjectModel extends Model {
     const projectName = this.get('projectName');
     const applicantName = this.get('applicantName');
     const projectArea = this.get('projectArea');
+    const zapProjectId = this.get('zapProjectId');
 
-    return !!projectName && !!applicantName && !!projectArea;
+    return !!projectName && !!applicantName && !!projectArea && !!zapProjectId;
   }
 
   @computed('projectArea')

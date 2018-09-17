@@ -7,6 +7,10 @@
     {{input type="text" class='applicant-name-field' value=model.applicantName}}
   </label>
 
+  <label>ZAP Project ID
+    {{input type="text" class='applicant-name-field' value=model.zapProjectId}}
+  </label>
+
   <label>Project Area</label>
   <p>Define your project area by drawing a polygon on the map.</p>
   <p class="text-center"><button type="button" class="button gray text-orange" onclick={{action 'handleDrawButtonClick' model}}>Draw</button></p>
