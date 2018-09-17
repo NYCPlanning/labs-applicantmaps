@@ -9,6 +9,7 @@ export default function() {
   this.passthrough('http://raw.githubusercontent.com/**');
   this.passthrough('https://raw.githubusercontent.com/**');
   this.passthrough('https://tiles.planninglabs.nyc/**');
+  this.passthrough('https://layers-api-staging.planninglabs.nyc/**');
   this.passthrough('/sources.json');
   this.passthrough('/layer-groups.json');
   // These comments are here to help you get started. Feel free to delete them.

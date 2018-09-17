@@ -1,28 +1,25 @@
 import Component from '@ember/component';
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
-import { hash } from 'rsvp';
-import normalizeCartoVectors from 'cartobox-promises-utility/utils/normalize-carto-vectors';
 import turfBbox from 'npm:@turf/bbox';
+import { hash } from 'rsvp';
 
 export default class AreaMapFormComponent extends Component {
   constructor() {
     super(...arguments);
 
     const store = this.get('store');
-
-    const sources = store.findAll('source')
-      .then(sourceModels => normalizeCartoVectors(sourceModels.toArray()));
-    const layerGroups = store.findAll('layer-group');
-    const layers = store.peekAll('layer');
+    const layerGroups = store.query('layer-group', {
+      'layer-groups': [
+        { id: 'zoning-districts', visible: true },
+        { id: 'tax-lots', visible: true, layers: [{ tooltipable: true }] },
+        { id: 'commercial-overlays', visible: true },
+      ]
+    });
 
     hash({
-      sources,
-      layers,
-      layerGroups })
-    .then(modelHash => {
-      this.set('layerModels', modelHash);
-    });
+      layerGroups
+    })
   }
 
   @service store;
@@ -38,6 +35,5 @@ export default class AreaMapFormComponent extends Component {
     map.fitBounds(turfBbox.default(projectArea), {
       padding: 100,
     });
-
   }
 }
