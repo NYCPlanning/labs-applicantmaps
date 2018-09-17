@@ -26,18 +26,17 @@
 <div class="cell medium-7 large-9 paper-container">
   <div class="paper letter landscape padding-10mm">
     {{#area-map-form tagName='' as |areaMapForm|}}
+
       {{#labs-map
         id='main-map'
         initOptions=(hash
+          style=areaMapForm.model.meta.mapboxStyle
           zoom=12
           center=(array -73.983307 40.704977)
-          transformRequest=areaMapForm.transformRequest
         )
         mapLoaded=(action areaMapForm.handleMapLoad model.project.projectAreaSource.data) as |map|}}
 
-          {{#if (await areaMapForm.layerModels)}}
-            {{map.labs-layers model=(await areaMapForm.layerModels)}}
-          {{/if}}
+          {{map.labs-layers layerGroups=areaMapForm.model.layerGroups}}
 
           {{#map.source options=model.project.projectAreaSource as |source|}}
             {{source.layer

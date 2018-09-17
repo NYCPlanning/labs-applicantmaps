@@ -1,8 +1,6 @@
 import Component from '@ember/component';
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
-import { hash } from 'rsvp';
-import normalizeCartoVectors from 'cartobox-promises-utility/utils/normalize-carto-vectors';
 import turfBbox from 'npm:@turf/bbox';
 
 export default class AreaMapFormComponent extends Component {
@@ -10,29 +8,37 @@ export default class AreaMapFormComponent extends Component {
     super(...arguments);
 
     const store = this.get('store');
+    store.query('layer-group', {
+      'layer-groups': [
+        { id: 'zoning-districts', visible: true },
+        { 
+          id: 'tax-lots', 
+          visible: true, 
+          layers: [
+            { tooltipable: false }, 
+            {}, 
+            { style: { layout: { 'text-field': '{numfloors}' } } }
+          ] 
+        },
+        { id: 'commercial-overlays', visible: true },
+        { id: 'subway', visible: true },
+        { id: 'building-footprints', visible: true },
+        { id: 'special-purpose-districts', visible: false },
+        { id: 'citymap', visible: true },
+      ]
+    }).then(layerGroups => {
+      const { meta }= layerGroups;
 
-    const sources = store.findAll('source')
-      .then(sourceModels => normalizeCartoVectors(sourceModels.toArray()));
-    const layerGroups = store.findAll('layer-group');
-    const layers = store.peekAll('layer');
-
-    hash({
-      sources,
-      layers,
-      layerGroups })
-    .then(modelHash => {
-      this.set('layerModels', modelHash);
+      this.set('model', { 
+        layerGroups,
+        meta,
+      });
     });
   }
 
   @service store;
 
-  layerModels = null;
-
-  transformRequest(url) {
-    window.XMLHttpRequest = window.XMLHttpRequestNative;
-    return { url };
-  }
+  model = null;
 
   // TODO for some reason I have to pass in the projectArea instead
   // of just calling this.get('projectAreaSource') ('this' is not available in the action)
@@ -43,6 +49,5 @@ export default class AreaMapFormComponent extends Component {
     map.fitBounds(turfBbox.default(projectArea), {
       padding: 100,
     });
-
   }
 }

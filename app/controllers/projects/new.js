@@ -103,11 +103,6 @@ export default class NewProjectController extends Controller {
     ]
   }])
 
-  transformRequest(url) {
-    window.XMLHttpRequest = window.XMLHttpRequestNative;
-    return { url };
-  }
-
   @action
   handleMapLoad(map) {
     this.set('mapInstance', map);

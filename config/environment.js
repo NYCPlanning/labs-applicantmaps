@@ -22,6 +22,9 @@ module.exports = function(environment) {
       // when it is created
     },
 
+    host: 'https://layers-api-staging.planninglabs.nyc',
+    namespace: 'v1',
+
     'labs-search': {
       host: (environment === 'devlocal') ? '//localhost:4000' : 'https://zola-search-api.planninglabs.nyc',
       route: 'search',
@@ -69,6 +72,7 @@ module.exports = function(environment) {
 
   if (environment === 'production') {
     // here you can enable a production-specific feature
+    ENV.host = 'https://layers-api.planninglabs.nyc'
   }
 
   return ENV;
