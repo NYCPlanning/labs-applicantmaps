@@ -27,6 +27,7 @@ jobs:
           - v1-dependencies-
 
       - run: yarn install
+      - run: sudo apt-get install libgif-dev
 
       - save_cache:
           paths:
