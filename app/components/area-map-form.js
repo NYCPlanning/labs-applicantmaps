@@ -11,8 +11,20 @@ export default class AreaMapFormComponent extends Component {
     store.query('layer-group', {
       'layer-groups': [
         { id: 'zoning-districts', visible: true },
-        { id: 'tax-lots', visible: true, layers: [{ tooltipable: true }] },
+        { 
+          id: 'tax-lots', 
+          visible: true, 
+          layers: [
+            { tooltipable: false }, 
+            {}, 
+            { style: { layout: { 'text-field': '{numfloors}' } } }
+          ] 
+        },
         { id: 'commercial-overlays', visible: true },
+        { id: 'subway', visible: true },
+        { id: 'building-footprints', visible: true },
+        { id: 'special-purpose-districts', visible: false },
+        { id: 'citymap', visible: true },
       ]
     }).then(layerGroups => {
       const { meta }= layerGroups;
