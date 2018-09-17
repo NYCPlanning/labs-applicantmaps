@@ -20,7 +20,7 @@ export default class ProjectModel extends Model {
 
   @attr('string') projectName;
   @attr('string') applicantName;
-  @attr('string') zapProjectId;
+  @attr('number') zapProjectId;
   @attr('number', { defaultValue: 0 }) datePrepared;
 
   @computed('projectName', 'applicantName', 'projectArea')

@@ -13,6 +13,7 @@ module('Acceptance | user can fill out form', function(hooks) {
     await visit('/projects/new');
     await fillIn('.project-name-field', 'ASDF');
     await fillIn('.applicant-name-field', 'ASDF');
+    await fillIn('.zap-project-id-field', 'ASDF');
     await click('.project-save-button');
 
     assert.equal(currentURL(), '/projects/11/edit');
