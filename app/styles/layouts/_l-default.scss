@@ -98,8 +98,8 @@ body {
   }
 }
 
-.layer-menu {
-  background-color: $light-gray;
+.sidebar {
+  background-color: $off-white;
   position: relative;
   z-index: 2;
   padding: $global-margin;
@@ -116,7 +116,7 @@ body {
       height: calc(100vh - 14.25rem);
     }
 
-    .layer-menu {
+    .sidebar {
       min-height: 6rem;
     }
   }
@@ -127,7 +127,7 @@ body {
       max-height: none;
     }
 
-    .layer-menu {
+    .sidebar {
       height: calc(100% - 5.25rem);
       max-height: none;
     }
