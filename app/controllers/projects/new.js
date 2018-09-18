@@ -16,9 +16,35 @@ const draw = new MapboxDraw({
 });
 
 export default class NewProjectController extends Controller {
+  constructor() {
+    super(...arguments)
+    this.set('selectedLots', {
+      type: "FeatureCollection",
+      features: [],
+    });
+  }
+
   isDrawing = false;
   drawMode = null;
   lotSelectionMode = false;
+
+  @computed('selectedLots.features.[]')
+  get selectedLotsSource() {
+    console.log('evaluating selectedLotsSource')
+    const selectedLots = this.get('selectedLots');
+    return {
+      type: 'geojson',
+      data: selectedLots,
+    }
+  }
+
+  selectedLotsLayer = {
+    type: 'fill',
+    paint: {
+      'fill-color': 'rgba(217, 216, 1, 1)',
+      'fill-outline-color': 'rgba(255, 255, 255, 1)',
+    },
+  }
 
   @service notificationMessages;
 
@@ -136,6 +162,33 @@ export default class NewProjectController extends Controller {
      draw.changeMode('draw_polygon');
 
      this.set('isDrawing', true);
+    }
+  }
+
+  @action
+  handleLayerClick(feature) {
+    const { id: layerId } = feature.layer;
+
+    if (layerId == 'pluto-fill') {
+      const { type, geometry, properties } = feature;
+      const selectedLots = this.get('selectedLots');
+
+      // if the lot is not in the selection, push it, if it is, remove it
+      const inSelection = selectedLots.features.find(lot => lot.properties.bbl === properties.bbl);
+
+      console.log('In Selection', inSelection)
+      if (inSelection === undefined) {
+        const mutatedLots = selectedLots.features.copy();
+        mutatedLots.push({
+          type,
+          geometry,
+          properties,
+        });
+
+        this.set('selectedLots.features', mutatedLots);
+      } else {
+        this.set('selectedLots.features', selectedLots.features.filter(lot => lot.properties.bbl !== properties.bbl));
+      }
     }
   }
 

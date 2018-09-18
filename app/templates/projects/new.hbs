@@ -26,28 +26,34 @@
       )
       mapLoaded=(action handleMapLoad) as |map|}}
 
-        {{map.labs-layers layerGroups=projectMapForm.model.layerGroups}}
+        {{map.labs-layers
+          layerGroups=projectMapForm.model.layerGroups
+          onLayerClick=(action 'handleLayerClick')
+        }}
+
         {{#if model.projectArea}}
           {{#map.source options=projectAreaSource as |source|}}
             {{source.layer
               before='boundary_country'
             }}
           {{/map.source}}
-
         {{/if}}
-        {{!-- {{#map.source options=model.project.projectAreaSource as |source|}}
+
+        {{log selectedLots.features}}
+
+        {{#map.source options=selectedLotsSource as |source|}}
           {{source.layer
-            layer=projectAreaLayer
+            layer=selectedLotsLayer
             before='boundary_country'
           }}
         {{/map.source}}
 
-        {{#map.source options=model.project.projectBufferSource as |source|}}
+        {{!-- {{#map.source options=model.project.projectBufferSource as |source|}}
           {{source.layer
             layer=projectBufferLayer
             before='boundary_country'
           }}
-        {{/map.source}} --}}
+        {{/map.source}}  --}}
         {{map.on 'draw.create' (action "setProjectArea")}}
         {{map.on 'draw.update' (action "setProjectArea")}}
     {{/labs-map}}
