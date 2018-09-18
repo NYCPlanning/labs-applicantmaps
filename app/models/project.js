@@ -13,7 +13,7 @@ export default class ProjectModel extends Model {
     defaultValue() {
       return {
         type: 'Point',
-        coordinates: [0,0]
+        coordinates: [-73.983307, 40.704977]
       }
     }
   }) projectArea; // geojson
