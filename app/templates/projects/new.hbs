@@ -22,11 +22,30 @@
 
 </div>
 <div class="cell medium-7 large-9 map-container">
-
   {{#mapbox-gl
     id='main-map'
     mapLoaded=(action 'handleMapLoad') as | map |
   }}
+    {{labs-search
+      onSelect=(action 'handleSearchSelect')
+      onClear=(action 'handleSearchClear')}}
+
+    {{#if searchedAddressSource}}
+      {{#map.source options=searchedAddressSource as |source|}}
+        {{source.layer layer=(hash
+            type='circle'
+            paint=(hash
+              circle-radius=8
+              circle-color="#00A1F9"
+              circle-stroke-width=2
+              circle-stroke-color="#FFFFFF"
+            )
+          )
+          before='boundary_country'
+        }}
+      {{/map.source}}
+    {{/if}}
+
     {{#if model.projectArea}}
       {{#map.source options=projectAreaSource as |source|}}
         {{source.layer
@@ -35,6 +54,7 @@
       {{/map.source}}
 
     {{/if}}
+
     {{#each (await sources) as |sourceOptions|}}
       {{#map.source options=sourceOptions as |source|}}
         {{source.layer
@@ -47,6 +67,7 @@
         }}
       {{/map.source}}
     {{/each}}
+
     {{map.on 'draw.create' (action "setProjectArea")}}
     {{map.on 'draw.update' (action "setProjectArea")}}
   {{/mapbox-gl}}

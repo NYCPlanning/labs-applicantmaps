@@ -5,7 +5,7 @@
 .labs-geosearch {
   background-color: $light-gray;
   padding: rem-calc(9) rem-calc(6) rem-calc(6);
-  position: relative;
+  position: absolute;
   z-index: 2;
 
   .search {

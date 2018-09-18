@@ -29,6 +29,8 @@ export default class NewProjectController extends Controller {
     }
   }
 
+  searchedAddressSource = null;
+
   taxLotsLinesLayer = {
     "id": "pluto-line",
     "type": "line",
@@ -101,6 +103,36 @@ export default class NewProjectController extends Controller {
       }
     ]
   }])
+
+  @action
+  handleSearchSelect(result) {
+    const map = this.get('mapInstance');
+
+    // handle address search results
+    if (result.type === 'lot') {
+      const center = result.geometry.coordinates;
+      this.set('searchedAddressSource', {
+        type: 'geojson',
+        data: {
+          type: 'Feature',
+          properties: {},
+          geometry: result.geometry,
+        },
+      });
+
+      if (map) {
+        map.flyTo({
+          center,
+          zoom: 15,
+        });
+      }
+    }
+  }
+
+  @action
+  handleSearchClear() {
+    this.set('searchedAddressSource', null);
+  }
 
   @action
   handleMapLoad(map) {
