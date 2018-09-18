@@ -1,4 +1,4 @@
-<div class="cell medium-5 large-3 layer-menu">
+<div class="cell medium-5 large-3 sidebar">
   <label>Project Title
     {{input type="text" class='project-name-field' value=model.projectName}}
   </label>
@@ -7,9 +7,17 @@
     {{input type="text" class='applicant-name-field' value=model.applicantName}}
   </label>
 
+  <label>ZAP Project ID
+    {{input type="text" class='zap-project-id-field' value=model.zapProjectId}}
+  </label>
+
+  <label>Description
+    {{textarea class='zap-project-description-field' value=model.description rows="6"}}
+  </label>
+
   <label>Project Area</label>
   <p>Define your project area by drawing a polygon on the map.</p>
-  <p class="text-center"><button type="button" class="button gray text-orange" onclick={{action 'handleDrawButtonClick' model}}>Draw</button></p>
+  <p class="text-center"><button type="button" class="button gray" onclick={{action 'handleDrawButtonClick' model}}>Draw</button></p>
   <button type="button" class="button expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Create Project</button>
 
 </div>
@@ -17,8 +25,7 @@
 
   {{#mapbox-gl
     id='main-map'
-    mapLoaded=(action 'handleMapLoad')
-    initOptions=(hash transformRequest=transformRequest) as | map |
+    mapLoaded=(action 'handleMapLoad') as | map |
   }}
     {{#if model.projectArea}}
       {{#map.source options=projectAreaSource as |source|}}

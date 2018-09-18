@@ -22,6 +22,9 @@ module.exports = function(environment) {
       // when it is created
     },
 
+    host: 'https://layers-api-staging.planninglabs.nyc',
+    namespace: 'v1',
+
     'labs-search': {
       host: (environment === 'devlocal') ? '//localhost:4000' : 'https://zola-search-api.planninglabs.nyc',
       route: 'search',
@@ -38,6 +41,13 @@ module.exports = function(environment) {
         zoom: 12.25,
         center: [ -73.9868, 40.724 ]
       }
+    },
+
+    fontawesome: {
+      icons: {
+        'free-regular-svg-icons': 'all',
+        'free-solid-svg-icons': 'all',
+      },
     },
   };
 
@@ -69,6 +79,7 @@ module.exports = function(environment) {
 
   if (environment === 'production') {
     // here you can enable a production-specific feature
+    ENV.host = 'https://layers-api.planninglabs.nyc'
   }
 
   return ENV;

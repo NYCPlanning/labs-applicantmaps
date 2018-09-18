@@ -9,10 +9,12 @@ module('Acceptance | user can fill out form', function(hooks) {
 
   test('user-can-fill-out-form', async function(assert) {
     server.createList('project', 10);
-    window.XMLHttpRequestFake = window.XMLHttpRequest;
+
     await visit('/projects/new');
     await fillIn('.project-name-field', 'ASDF');
     await fillIn('.applicant-name-field', 'ASDF');
+    await fillIn('.zap-project-id-field', 'ASDF');
+    await fillIn('.zap-project-description-field', 'Fill out description');
     await click('.project-save-button');
 
     assert.equal(currentURL(), '/projects/11/edit');
