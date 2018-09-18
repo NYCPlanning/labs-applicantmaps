@@ -10,12 +10,49 @@
   <label>Project Area</label>
   <p>Define your project area by drawing a polygon on the map.</p>
   <p class="text-center"><button type="button" class="button gray" onclick={{action 'handleDrawButtonClick' model}}>Draw</button></p>
+  <p class="text-center"><button type="button" class="button gray" onclick={{action 'handleLotSelectionButtonClick' model}}>Select with Lots</button></p>
+
   <button type="button" class="button expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Create Project</button>
 
 </div>
 <div class="cell medium-7 large-9 map-container">
+  {{#project-map-form tagName='' as |projectMapForm|}}
+    {{#labs-map
+      id='main-map'
+      initOptions=(hash
+        style=projectMapForm.model.meta.mapboxStyle
+        zoom=12
+        center=(array -73.983307 40.704977)
+      )
+      mapLoaded=(action handleMapLoad) as |map|}}
 
-  {{#mapbox-gl
+        {{map.labs-layers layerGroups=projectMapForm.model.layerGroups}}
+        {{#if model.projectArea}}
+          {{#map.source options=projectAreaSource as |source|}}
+            {{source.layer
+              before='boundary_country'
+            }}
+          {{/map.source}}
+
+        {{/if}}
+        {{!-- {{#map.source options=model.project.projectAreaSource as |source|}}
+          {{source.layer
+            layer=projectAreaLayer
+            before='boundary_country'
+          }}
+        {{/map.source}}
+
+        {{#map.source options=model.project.projectBufferSource as |source|}}
+          {{source.layer
+            layer=projectBufferLayer
+            before='boundary_country'
+          }}
+        {{/map.source}} --}}
+        {{map.on 'draw.create' (action "setProjectArea")}}
+        {{map.on 'draw.update' (action "setProjectArea")}}
+    {{/labs-map}}
+  {{/project-map-form}}
+  {{!-- {{#mapbox-gl
     id='main-map'
     mapLoaded=(action 'handleMapLoad') as | map |
   }}
@@ -41,7 +78,7 @@
     {{/each}}
     {{map.on 'draw.create' (action "setProjectArea")}}
     {{map.on 'draw.update' (action "setProjectArea")}}
-  {{/mapbox-gl}}
+  {{/mapbox-gl}} --}}
 
 </div>
 

@@ -18,6 +18,7 @@ const draw = new MapboxDraw({
 export default class NewProjectController extends Controller {
   isDrawing = false;
   drawMode = null;
+  lotSelectionMode = false;
 
   @service notificationMessages;
 
@@ -107,18 +108,18 @@ export default class NewProjectController extends Controller {
   handleMapLoad(map) {
     this.set('mapInstance', map);
     window.map = map;
-
-    // setup controls
-    const navigationControl = new mapboxgl.NavigationControl();
-    const geoLocateControl = new mapboxgl.GeolocateControl({
-      positionOptions: {
-        enableHighAccuracy: true,
-      },
-      trackUserLocation: true,
-    });
-
-    map.addControl(navigationControl, 'top-left');
-    map.addControl(geoLocateControl, 'top-left');
+    //
+    // // setup controls
+    // const navigationControl = new mapboxgl.NavigationControl();
+    // const geoLocateControl = new mapboxgl.GeolocateControl({
+    //   positionOptions: {
+    //     enableHighAccuracy: true,
+    //   },
+    //   trackUserLocation: true,
+    // });
+    //
+    // map.addControl(navigationControl, 'top-left');
+    // map.addControl(geoLocateControl, 'top-left');
   }
 
   @action
@@ -135,6 +136,15 @@ export default class NewProjectController extends Controller {
      draw.changeMode('draw_polygon');
 
      this.set('isDrawing', true);
+    }
+  }
+
+  @action
+  handleLotSelectionButtonClick() {
+    const { lotSelectionMode } = this;
+
+    if (!lotSelectionMode) {
+      console.log('Time to select lots!')
     }
   }
 
