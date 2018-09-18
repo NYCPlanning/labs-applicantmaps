@@ -35,7 +35,6 @@ export default class NewProjectMapController extends Controller {
     }
   }
 
-
   @action
   async save(model) {
     const map = await model.save();
