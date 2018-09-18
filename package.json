@@ -19,6 +19,9 @@
   "devDependencies": {
     "@ember-decorators/argument": "0.8.15",
     "@ember-decorators/babel-transforms": "^2.0.0",
+    "@fortawesome/ember-fontawesome": "^0.1.6",
+    "@fortawesome/free-regular-svg-icons": "^5.3.1",
+    "@fortawesome/free-solid-svg-icons": "^5.3.1",
     "babel-eslint": "^8.0.0",
     "broccoli-asset-rev": "^2.4.5",
     "broccoli-clean-css": "~1.1.0",
@@ -29,7 +32,7 @@
     "ember-cli-babel": "^6.6.0",
     "ember-cli-dependency-checker": "^2.0.0",
     "ember-cli-eslint": "^4.2.1",
-    "ember-cli-foundation-6-sass": "0.0.24",
+    "ember-cli-foundation-6-sass": "^0.0.25",
     "ember-cli-htmlbars": "^2.0.1",
     "ember-cli-htmlbars-inline-precompile": "^1.0.0",
     "ember-cli-inject-live-reload": "^1.4.1",
@@ -43,7 +46,6 @@
     "ember-data": "~3.0.0",
     "ember-decorators": "2.1.0",
     "ember-export-application-global": "^2.0.0",
-    "ember-font-awesome": "^4.0.0-rc.4",
     "ember-load-initializers": "^1.0.0",
     "ember-mapbox-composer": "0.0.6",
     "ember-mapbox-gl": "^0.10.0",
@@ -56,6 +58,7 @@
     "ember-welcome-page": "^3.0.0",
     "eslint-plugin-ember": "^5.0.0",
     "labs-ember-search": "nycplanning/labs-ember-search#v2.0.5",
+    "labs-ui": "^0.0.7",
     "loader.js": "^4.2.3",
     "mapbox-gl": "^0.44.0"
   },
@@ -66,6 +69,6 @@
     "@turf/bbox": "^6.0.1",
     "@turf/buffer": "^5.1.5",
     "cartobox-promises-utility": "nycplanning/cartobox-promises-utility",
-    "foundation-sites": "^6.4.3"
+    "foundation-sites": "^6.3.1"
   }
 }

@@ -42,6 +42,13 @@ module.exports = function(environment) {
         center: [ -73.9868, 40.724 ]
       }
     },
+
+    fontawesome: {
+      icons: {
+        'free-regular-svg-icons': 'all',
+        'free-solid-svg-icons': 'all',
+      },
+    },
   };
 
   if (environment === 'development') {
