@@ -68,6 +68,8 @@
   "dependencies": {
     "@turf/bbox": "^6.0.1",
     "@turf/buffer": "^5.1.5",
+    "@turf/concave": "^6.0.5",
+    "@turf/union": "^6.0.3",
     "cartobox-promises-utility": "nycplanning/cartobox-promises-utility",
     "foundation-sites": "^6.3.1"
   }

@@ -10,7 +10,7 @@
   <label>Project Area</label>
   <p>Define your project area by drawing a polygon on the map.</p>
   <p class="text-center"><button type="button" class="button gray" onclick={{action 'handleDrawButtonClick' model}}>Draw</button></p>
-  <p class="text-center"><button type="button" class="button gray" onclick={{action 'handleLotSelectionButtonClick' model}}>Select with Lots</button></p>
+  <p class="text-center"><button type="button" class="button gray" onclick={{action 'handleLotSelectionButtonClick' model}}>{{if lotSelectionMode "Done" "Select with Lots"}}</button></p>
 
   <button type="button" class="button expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Create Project</button>
 

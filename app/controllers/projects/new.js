@@ -4,7 +4,8 @@ import mapboxgl from 'mapbox-gl';
 import MapboxDraw from 'mapbox-gl-draw';
 import { service } from '@ember-decorators/service';
 import normalizeCartoVectors from 'cartobox-promises-utility/utils/normalize-carto-vectors';
-
+import turfUnion from 'npm:@turf/union';
+import turfBuffer from 'npm:@turf/buffer';
 
 const draw = new MapboxDraw({
   displayControlsDefault: false,
@@ -169,7 +170,7 @@ export default class NewProjectController extends Controller {
   handleLayerClick(feature) {
     const { id: layerId } = feature.layer;
 
-    if (layerId == 'pluto-fill') {
+    if (layerId == 'pluto-fill' && this.get('lotSelectionMode')) {
       const { type, geometry, properties } = feature;
       const selectedLots = this.get('selectedLots');
 
@@ -178,14 +179,11 @@ export default class NewProjectController extends Controller {
 
       console.log('In Selection', inSelection)
       if (inSelection === undefined) {
-        const mutatedLots = selectedLots.features.copy();
-        mutatedLots.push({
+        this.get('selectedLots.features').pushObject({
           type,
           geometry,
           properties,
-        });
-
-        this.set('selectedLots.features', mutatedLots);
+        })
       } else {
         this.set('selectedLots.features', selectedLots.features.filter(lot => lot.properties.bbl !== properties.bbl));
       }
@@ -194,11 +192,63 @@ export default class NewProjectController extends Controller {
 
   @action
   handleLotSelectionButtonClick() {
-    const { lotSelectionMode } = this;
+    const lotSelectionMode = this.get('lotSelectionMode');
+    this.set('lotSelectionMode', !lotSelectionMode)
 
-    if (!lotSelectionMode) {
-      console.log('Time to select lots!')
+
+    if (lotSelectionMode) {
+      const selectedLots = this.get('selectedLots');
+
+      // const points = [];
+      //
+      // // iterate over features, push all points to an array
+      // selectedLots.features.forEach((feature) => {
+      //   console.log('HERE', feature.geometry)
+      //   feature.geometry.coordinates[0].forEach((coordinate) => {
+      //     console.log(coordinate)
+      //     points.push({
+      //       type: "Feature",
+      //       geometry: {
+      //         type: "Point",
+      //         coordinates: coordinate,
+      //       },
+      //       properties: {},
+      //     })
+      //   })
+      // })
+
+
+      // const pointsFC = {
+      //   type: "FeatureCollection",
+      //   features: points
+      // }
+      //
+      // console.log(JSON.stringify(pointsFC));
+      //
+      // // process selected lots
+      // const concaveHull = turfConcave.default(pointsFC)
+
+      let union = selectedLots.features[0].geometry
+
+      if (selectedLots.features.length > 1) {
+        for(let i=1; i< selectedLots.features.length; i += 1) {
+
+          const bufferedGeometry = turfBuffer(selectedLots.features[i].geometry, .00005)
+
+          union = turfUnion.default(union, bufferedGeometry)
+        }
+      }
+
+
+
+      console.log('union', union)
+      this.set('model.projectArea', union)
+
+
+
+      this.set('selectedLots.features', [])
     }
+
   }
 
   @action
