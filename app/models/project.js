@@ -6,6 +6,14 @@ import turfBuffer from 'npm:@turf/buffer';
 
 const { Model } = DS;
 
+const requiredFields = [
+  'projectName',
+  'applicantName',
+  'projectArea',
+  'zapProjectId',
+  'description',
+];
+
 export default class ProjectModel extends Model.extend({}) {
   @hasMany('applicant-map', { polymorphic: true }) applicantMaps;
 
@@ -21,16 +29,12 @@ export default class ProjectModel extends Model.extend({}) {
   @attr('string') projectName;
   @attr('string') applicantName;
   @attr('string') zapProjectId;
+  @attr('string') description;
   @attr('number', { defaultValue: 0 }) datePrepared;
 
-  @computed('projectName', 'applicantName', 'projectArea', 'zapProjectId')
+  @computed(...requiredFields)
   get isValid() {
-    const projectName = this.get('projectName');
-    const applicantName = this.get('applicantName');
-    const projectArea = this.get('projectArea');
-    const zapProjectId = this.get('zapProjectId');
-
-    return !!projectName && !!applicantName && !!projectArea && !!zapProjectId;
+    return requiredFields.every(field => this.get(field));
   }
 
   @computed('projectArea')

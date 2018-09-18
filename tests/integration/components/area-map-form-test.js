@@ -13,14 +13,5 @@ module('Integration | Component | area-map-form', function(hooks) {
     await render(hbs`{{area-map-form}}`);
 
     assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
-    await render(hbs`
-      {{#area-map-form}}
-        template block text
-      {{/area-map-form}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });
