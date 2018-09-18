@@ -5,7 +5,6 @@ import MapboxDraw from 'mapbox-gl-draw';
 import { service } from '@ember-decorators/service';
 import normalizeCartoVectors from 'cartobox-promises-utility/utils/normalize-carto-vectors';
 
-
 const draw = new MapboxDraw({
   displayControlsDefault: false,
   controls: {
