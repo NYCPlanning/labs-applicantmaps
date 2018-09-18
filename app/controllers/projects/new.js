@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import { action, computed } from '@ember-decorators/object';
+import { argument } from '@ember-decorators/argument';
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from 'mapbox-gl-draw';
 import { service } from '@ember-decorators/service';
@@ -19,6 +20,18 @@ export default class NewProjectController extends Controller {
   drawMode = null;
 
   @service notificationMessages;
+
+  @argument
+  isAddingDevelopmentSite = false;
+
+  @argument
+  isAddingProjectArea = false;
+
+  @argument
+  isAddingRezoningArea = false;
+
+  @argument
+  isSelectingLots = false;
 
   @computed('model.projectArea')
   get projectAreaSource() {

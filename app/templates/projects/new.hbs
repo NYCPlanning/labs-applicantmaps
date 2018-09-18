@@ -1,23 +1,88 @@
 <div class="cell medium-5 large-3 sidebar">
-  <label>Project Title
+  <label class="text-small">Project Title
     {{input type="text" class='project-name-field' value=model.projectName}}
   </label>
 
-  <label>Applicant Name
+  <label class="text-small">Applicant Name
     {{input type="text" class='applicant-name-field' value=model.applicantName}}
   </label>
 
-  <label>ZAP Project ID
+  <label class="text-small">ZAP Project ID
     {{input type="text" class='zap-project-id-field' value=model.zapProjectId}}
   </label>
 
-  <label>Description
-    {{textarea class='zap-project-description-field' value=model.description rows="6"}}
+  <label class="text-small">Description
+    {{textarea class='zap-project-description-field' value=model.description rows="3"}}
   </label>
 
-  <label>Project Area</label>
-  <p>Define your project area by drawing a polygon on the map.</p>
+  <label class="text-small">Project Geometries</label>
+
+  {{#if isAddingDevelopmentSite}}
+    <div class="callout">
+      {{#if isSelectingLots}}
+        <p class="text-small">Click individual tax lots to toggle their selection OR use the drawing tools to select multiple lots at once.</p>
+        <div class="grid-x grid-margin-x">
+          <button class="cell auto button small">Make Selection</button>
+          <button class="cell shrink button small alert clear" {{action (mut isSelectingLots) false}}>Cancel</button>
+        </div>
+      {{else}}
+        <p class="text-small">Use the drawing tools on the map to define the development site OR&hellip;</p>
+        <button class="button gray expanded" {{action (mut isSelectingLots) true}}>Select Tax Lots</button>
+        <div class="grid-x grid-margin-x">
+          <button class="cell auto button small" {{action (mut isAddingDevelopmentSite) false}}>Done</button>
+          <button class="cell shrink button small alert clear" {{action (mut isAddingDevelopmentSite) false}}>Cancel</button>
+        </div>
+      {{/if}}
+    </div>
+  {{else}}
+    <button class="button expanded" {{action (mut isAddingDevelopmentSite) true}}>{{fa-icon 'plus'}} Add Development Site</button>
+  {{/if}}
+
+  {{#if isAddingProjectArea}}
+    <div class="callout">
+      {{#if isSelectingLots}}
+        <p class="text-small">Click individual tax lots to toggle their selection OR use the drawing tools to select multiple lots at once.</p>
+        <div class="grid-x grid-margin-x">
+          <button class="cell auto button small">Make Selection</button>
+          <button class="cell shrink button small alert clear" {{action (mut isSelectingLots) false}}>Cancel</button>
+        </div>
+      {{else}}
+        <p class="text-small">Use the drawing tools on the map to define the development site OR&hellip;</p>
+        <button class="button gray expanded" {{action (mut isSelectingLots) true}}>Select Tax Lots</button>
+        <div class="grid-x grid-margin-x">
+          <button class="cell auto button small" {{action (mut isAddingProjectArea) false}}>Done</button>
+          <button class="cell shrink button small alert clear" {{action (mut isAddingProjectArea) false}}>Cancel</button>
+        </div>
+      {{/if}}
+    </div>
+  {{else}}
+    <button class="button expanded" {{action (mut isAddingProjectArea) true}}>{{fa-icon 'plus'}} Add Project Area</button>
+  {{/if}}
+
+  {{#if isAddingRezoningArea}}
+    <div class="callout">
+      {{#if isSelectingLots}}
+        <p class="text-small">Click individual tax lots to toggle their selection OR use the drawing tools to select multiple lots at once.</p>
+        <div class="grid-x grid-margin-x">
+          <button class="cell auto button small">Make Selection</button>
+          <button class="cell shrink button small alert clear" {{action (mut isSelectingLots) false}}>Cancel</button>
+        </div>
+      {{else}}
+        <p class="text-small">Use the drawing tools on the map to define the development site OR&hellip;</p>
+        <button class="button gray expanded" {{action (mut isSelectingLots) true}}>Select Tax Lots</button>
+        <div class="grid-x grid-margin-x">
+          <button class="cell auto button small" {{action (mut isAddingRezoningArea) false}}>Done</button>
+          <button class="cell shrink button small alert clear" {{action (mut isAddingRezoningArea) false}}>Cancel</button>
+        </div>
+      {{/if}}
+    </div>
+  {{else}}
+    <button class="button expanded" {{action (mut isAddingRezoningArea) true}}>{{fa-icon 'plus'}} Add Rezoning Area</button>
+  {{/if}}
+
+
   <p class="text-center"><button type="button" class="button gray" onclick={{action 'handleDrawButtonClick' model}}>Draw</button></p>
+
   <button type="button" class="button expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Create Project</button>
 
 </div>
