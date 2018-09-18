@@ -10,7 +10,6 @@ const requiredFields = [
   'projectName',
   'applicantName',
   'projectArea',
-  'zapProjectId',
   'description',
 ];
 
