@@ -3,7 +3,7 @@ import { attr, belongsTo } from '@ember-decorators/data';
 
 const { Model } = DS;
 
-export default class ApplicantMapModel extends Model {
+export default class ApplicantMapModel extends Model.extend({}) {
   // area, tax, zoning change, zoning section
   @attr('string') type;
   @attr() toggledLayers;

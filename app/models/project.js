@@ -6,7 +6,7 @@ import turfBuffer from 'npm:@turf/buffer';
 
 const { Model } = DS;
 
-export default class ProjectModel extends Model {
+export default class ProjectModel extends Model.extend({}) {
   @hasMany('applicant-map', { polymorphic: true }) applicantMaps;
 
   @attr({ 
@@ -20,7 +20,7 @@ export default class ProjectModel extends Model {
 
   @attr('string') projectName;
   @attr('string') applicantName;
-  @attr('number') zapProjectId;
+  @attr('string') zapProjectId;
   @attr('number', { defaultValue: 0 }) datePrepared;
 
   @computed('projectName', 'applicantName', 'projectArea')
@@ -30,7 +30,7 @@ export default class ProjectModel extends Model {
     const projectArea = this.get('projectArea');
     const zapProjectId = this.get('zapProjectId');
 
-    return !!projectName && !!applicantName && !!projectArea && !!zapProjectId;
+    return !!projectName && !!applicantName && !!projectArea;
   }
 
   @computed('projectArea')
