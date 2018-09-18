@@ -23,14 +23,14 @@ export default class ProjectModel extends Model.extend({}) {
   @attr('string') zapProjectId;
   @attr('number', { defaultValue: 0 }) datePrepared;
 
-  @computed('projectName', 'applicantName', 'projectArea')
+  @computed('projectName', 'applicantName', 'projectArea', 'zapProjectId')
   get isValid() {
     const projectName = this.get('projectName');
     const applicantName = this.get('applicantName');
     const projectArea = this.get('projectArea');
     const zapProjectId = this.get('zapProjectId');
 
-    return !!projectName && !!applicantName && !!projectArea;
+    return !!projectName && !!applicantName && !!projectArea && !!zapProjectId;
   }
 
   @computed('projectArea')
