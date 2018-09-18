@@ -25,6 +25,7 @@ export default class AreaMapFormComponent extends Component {
         { id: 'building-footprints', visible: true },
         { id: 'special-purpose-districts', visible: false },
         { id: 'citymap', visible: true },
+        { id: 'street-direction-arrows', visible: true },
       ]
     }).then(layerGroups => {
       const { meta }= layerGroups;
