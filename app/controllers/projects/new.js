@@ -3,7 +3,6 @@ import { action, computed } from '@ember-decorators/object';
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from 'mapbox-gl-draw';
 import { service } from '@ember-decorators/service';
-import normalizeCartoVectors from 'cartobox-promises-utility/utils/normalize-carto-vectors';
 import turfUnion from 'npm:@turf/union';
 import turfBuffer from 'npm:@turf/buffer';
 
@@ -31,7 +30,6 @@ export default class NewProjectController extends Controller {
 
   @computed('selectedLots.features.[]')
   get selectedLotsSource() {
-    console.log('evaluating selectedLotsSource')
     const selectedLots = this.get('selectedLots');
     return {
       type: 'geojson',
@@ -58,95 +56,15 @@ export default class NewProjectController extends Controller {
     }
   }
 
-  taxLotsLinesLayer = {
-    "id": "pluto-line",
-    "type": "line",
-    "source": "pluto",
-    "minzoom": 15,
-    "source-layer": "pluto",
-    "paint": {
-      "line-width": 0.5,
-      "line-color": "rgba(130, 130, 130, 1)",
-      "line-opacity": {
-        "stops": [
-          [
-            15,
-            0
-          ],
-          [
-            16,
-            1
-          ]
-        ]
-      }
-    }
-  }
-
-  taxLotsLabelsLayer = {
-        "id": "pluto-labels",
-        "type": "symbol",
-        "source": "pluto",
-        "source-layer": "pluto",
-        "minzoom": 15,
-        "layout": {
-          "text-field": "{lot}",
-          "text-font": [
-            "Open Sans Regular",
-            "Arial Unicode MS Regular"
-          ],
-          "text-size": 11
-        },
-        "paint": {
-          "text-opacity": {
-            "stops": [
-              [
-                16.5,
-                0
-              ],
-              [
-                17.5,
-                1
-              ]
-            ]
-          },
-          "icon-color": "rgba(193, 193, 193, 1)",
-          "text-color": "rgba(154, 154, 154, 1)",
-          "text-halo-color": "rgba(152, 152, 152, 0)"
-        }
-      }
-
-  sources = normalizeCartoVectors([{
-    "id": "pluto",
-    "type": "cartovector",
-    "minzoom": 10,
-    "source-layers": [
-      {
-        "id": "pluto",
-        "sql": "SELECT the_geom_webmercator, landuse, numfloors FROM mappluto_v1711"
-      },
-      {
-        "id": "block-centroids",
-        "sql": "SELECT the_geom_webmercator, block FROM mappluto_block_centroids"
-      }
-    ]
-  }])
-
   @action
   handleMapLoad(map) {
     this.set('mapInstance', map);
     window.map = map;
-    //
-    // // setup controls
-    // const navigationControl = new mapboxgl.NavigationControl();
-    // const geoLocateControl = new mapboxgl.GeolocateControl({
-    //   positionOptions: {
-    //     enableHighAccuracy: true,
-    //   },
-    //   trackUserLocation: true,
-    // });
-    //
-    // map.addControl(navigationControl, 'top-left');
-    // map.addControl(geoLocateControl, 'top-left');
+
+    // setup controls
+    const navigationControl = new mapboxgl.NavigationControl();
+
+    map.addControl(navigationControl, 'top-left');
   }
 
   @action
@@ -170,6 +88,7 @@ export default class NewProjectController extends Controller {
   handleLayerClick(feature) {
     const { id: layerId } = feature.layer;
 
+    // if lot was clicked when in lot selection mode, handle the clicl
     if (layerId == 'pluto-fill' && this.get('lotSelectionMode')) {
       const { type, geometry, properties } = feature;
       const selectedLots = this.get('selectedLots');
@@ -177,7 +96,6 @@ export default class NewProjectController extends Controller {
       // if the lot is not in the selection, push it, if it is, remove it
       const inSelection = selectedLots.features.find(lot => lot.properties.bbl === properties.bbl);
 
-      console.log('In Selection', inSelection)
       if (inSelection === undefined) {
         this.get('selectedLots.features').pushObject({
           type,
@@ -195,60 +113,27 @@ export default class NewProjectController extends Controller {
     const lotSelectionMode = this.get('lotSelectionMode');
     this.set('lotSelectionMode', !lotSelectionMode)
 
-
+    // if finished with lot selection mode, process the selected lots
     if (lotSelectionMode) {
       const selectedLots = this.get('selectedLots');
+      const bufferkm = .00005
 
-      // const points = [];
-      //
-      // // iterate over features, push all points to an array
-      // selectedLots.features.forEach((feature) => {
-      //   console.log('HERE', feature.geometry)
-      //   feature.geometry.coordinates[0].forEach((coordinate) => {
-      //     console.log(coordinate)
-      //     points.push({
-      //       type: "Feature",
-      //       geometry: {
-      //         type: "Point",
-      //         coordinates: coordinate,
-      //       },
-      //       properties: {},
-      //     })
-      //   })
-      // })
-
-
-      // const pointsFC = {
-      //   type: "FeatureCollection",
-      //   features: points
-      // }
-      //
-      // console.log(JSON.stringify(pointsFC));
-      //
-      // // process selected lots
-      // const concaveHull = turfConcave.default(pointsFC)
-
-      let union = selectedLots.features[0].geometry
+      let union = turfBuffer(selectedLots.features[0].geometry, bufferkm)
 
       if (selectedLots.features.length > 1) {
         for(let i=1; i< selectedLots.features.length; i += 1) {
 
-          const bufferedGeometry = turfBuffer(selectedLots.features[i].geometry, .00005)
+          const bufferedGeometry = turfBuffer(selectedLots.features[i].geometry, bufferkm)
 
           union = turfUnion.default(union, bufferedGeometry)
         }
       }
 
-
-
-      console.log('union', union)
+      // set the union as the projectArea
       this.set('model.projectArea', union)
-
-
-
+      // clear selected features
       this.set('selectedLots.features', [])
     }
-
   }
 
   @action

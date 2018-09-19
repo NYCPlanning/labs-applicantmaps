@@ -31,6 +31,7 @@
           onLayerClick=(action 'handleLayerClick')
         }}
 
+        {{!-- Ad-hoc source and layer for projectArea --}}
         {{#if model.projectArea}}
           {{#map.source options=projectAreaSource as |source|}}
             {{source.layer
@@ -39,8 +40,7 @@
           {{/map.source}}
         {{/if}}
 
-        {{log selectedLots.features}}
-
+        {{!-- Ad-hoc source and layer for showing selected lots in lot selection mode --}}
         {{#map.source options=selectedLotsSource as |source|}}
           {{source.layer
             layer=selectedLotsLayer
@@ -48,44 +48,10 @@
           }}
         {{/map.source}}
 
-        {{!-- {{#map.source options=model.project.projectBufferSource as |source|}}
-          {{source.layer
-            layer=projectBufferLayer
-            before='boundary_country'
-          }}
-        {{/map.source}}  --}}
         {{map.on 'draw.create' (action "setProjectArea")}}
         {{map.on 'draw.update' (action "setProjectArea")}}
     {{/labs-map}}
   {{/project-map-form}}
-  {{!-- {{#mapbox-gl
-    id='main-map'
-    mapLoaded=(action 'handleMapLoad') as | map |
-  }}
-    {{#if model.projectArea}}
-      {{#map.source options=projectAreaSource as |source|}}
-        {{source.layer
-          before='boundary_country'
-        }}
-      {{/map.source}}
-
-    {{/if}}
-    {{#each (await sources) as |sourceOptions|}}
-      {{#map.source options=sourceOptions as |source|}}
-        {{source.layer
-          layer=taxLotsLinesLayer
-          before='boundary_country'
-        }}
-        {{source.layer
-          layer=taxLotsLabelsLayer
-          before='boundary_country'
-        }}
-      {{/map.source}}
-    {{/each}}
-    {{map.on 'draw.create' (action "setProjectArea")}}
-    {{map.on 'draw.update' (action "setProjectArea")}}
-  {{/mapbox-gl}} --}}
-
 </div>
 
 {{outlet}}
