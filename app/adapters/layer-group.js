@@ -7,6 +7,7 @@ const { JSONAPIAdapter } = DS;
 
 export default class LayerGroupAdapter extends JSONAPIAdapter {
   host = host;
+
   namespace = namespace;
 
   async query(store, type, query = {}) {

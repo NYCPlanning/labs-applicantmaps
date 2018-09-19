@@ -1,7 +1,7 @@
-'use strict';
 
-module.exports = function(environment) {
-  let ENV = {
+
+module.exports = function (environment) {
+  const ENV = {
     modulePrefix: 'labs-applicant-maps',
     environment,
     rootURL: '/',
@@ -13,8 +13,8 @@ module.exports = function(environment) {
       },
       EXTEND_PROTOTYPES: {
         // Prevent Ember Data from overriding Date.parse.
-        Date: false
-      }
+        Date: false,
+      },
     },
 
     APP: {
@@ -39,8 +39,8 @@ module.exports = function(environment) {
       map: {
         style: '//raw.githubusercontent.com/NYCPlanning/labs-gl-style/master/data/style.json',
         zoom: 12.25,
-        center: [ -73.9868, 40.724 ]
-      }
+        center: [-73.9868, 40.724],
+      },
     },
 
     fontawesome: {
@@ -61,7 +61,7 @@ module.exports = function(environment) {
 
   if (environment === 'dev-local') {
     ENV['ember-cli-mirage'] = {
-      enabled: false
+      enabled: false,
     };
   }
 
@@ -79,7 +79,7 @@ module.exports = function(environment) {
 
   if (environment === 'production') {
     // here you can enable a production-specific feature
-    ENV.host = 'https://layers-api.planninglabs.nyc'
+    ENV.host = 'https://layers-api.planninglabs.nyc';
   }
 
   return ENV;

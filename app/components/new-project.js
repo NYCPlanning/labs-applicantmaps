@@ -4,10 +4,11 @@ import { action } from '@ember-decorators/object';
 
 export default class NewProjectComponent extends Component {
   @service store;
+
   @service router;
 
   constructor() {
-    super(...arguments);
+    super(...arguments); // eslint-disable-line
 
     this.set('projectModel', this.get('store').createRecord('project'));
   }
@@ -16,7 +17,7 @@ export default class NewProjectComponent extends Component {
 
   @action
   save() {
-    this.get('projectModel').save().then(savedProject => {
+    this.get('projectModel').save().then((savedProject) => {
       this.get('router').transitionTo('projects.edit', savedProject);
     });
   }

@@ -3,14 +3,14 @@ import config from './config/environment';
 
 const Router = EmberRouter.extend({
   location: config.locationType,
-  rootURL: config.rootURL
+  rootURL: config.rootURL,
 });
 
-Router.map(function() {
-  this.route('projects', function() {
+Router.map(function () { // eslint-disable-line
+  this.route('projects', function () {
     this.route('new');
-    this.route('edit', { path: ':id/edit' }, function() {
-      this.route('map', function() {
+    this.route('edit', { path: ':id/edit' }, function () {
+      this.route('map', function () {
         this.route('new');
         this.route('edit', { path: ':map_id' });
       });
