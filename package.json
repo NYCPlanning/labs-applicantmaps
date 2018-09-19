@@ -12,17 +12,15 @@
   "repository": "",
   "scripts": {
     "build": "ember build",
-    "lint:js": "eslint ./*.js app config lib server tests",
+    "lint:js": "./node_modules/.bin/eslint --fix  ./*.js app config lib server tests",
     "start": "ember serve",
     "test": "ember test"
   },
   "devDependencies": {
-    "@ember-decorators/argument": "0.8.15",
-    "@ember-decorators/babel-transforms": "^2.0.0",
     "@fortawesome/ember-fontawesome": "^0.1.6",
     "@fortawesome/free-regular-svg-icons": "^5.3.1",
     "@fortawesome/free-solid-svg-icons": "^5.3.1",
-    "babel-eslint": "^8.0.0",
+    "babel-eslint": "^9.0.0",
     "broccoli-asset-rev": "^2.4.5",
     "broccoli-clean-css": "~1.1.0",
     "ember-ajax": "^3.0.0",
@@ -31,7 +29,7 @@
     "ember-cli-app-version": "^3.0.0",
     "ember-cli-babel": "^6.6.0",
     "ember-cli-dependency-checker": "^2.0.0",
-    "ember-cli-eslint": "^4.2.1",
+    "ember-cli-eslint": "^4.2.2",
     "ember-cli-foundation-6-sass": "^0.0.25",
     "ember-cli-htmlbars": "^2.0.1",
     "ember-cli-htmlbars-inline-precompile": "^1.0.0",
@@ -43,10 +41,8 @@
     "ember-cli-shims": "^1.2.0",
     "ember-cli-sri": "^2.1.0",
     "ember-cli-uglify": "^2.0.0",
-    "ember-data": "~3.0.0",
     "ember-decorators": "2.1.0",
     "ember-export-application-global": "^2.0.0",
-    "ember-load-initializers": "^1.0.0",
     "ember-mapbox-composer": "0.0.6",
     "ember-mapbox-gl": "^0.10.0",
     "ember-mapbox-gl-draw": "^1.1.0",
@@ -56,19 +52,28 @@
     "ember-source": "~3.0.0",
     "ember-truth-helpers": "2.0.0",
     "ember-welcome-page": "^3.0.0",
-    "eslint-plugin-ember": "^5.0.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-ember": "^5.2.0",
+    "eslint-plugin-ember-best-practices": "^1.1.1",
+    "eslint-plugin-import": "^2.12.0",
     "labs-ember-search": "nycplanning/labs-ember-search",
     "labs-ui": "^0.0.7",
     "loader.js": "^4.2.3",
     "mapbox-gl": "^0.44.0"
   },
   "engines": {
-    "node": "^4.5 || 6.* || >= 7.*"
+    "node": "^8.11.3"
   },
   "dependencies": {
+    "@ember-decorators/argument": "0.8.15",
+    "@ember-decorators/babel-transforms": "^2.0.0",
     "@turf/bbox": "^6.0.1",
     "@turf/buffer": "^5.1.5",
     "cartobox-promises-utility": "nycplanning/cartobox-promises-utility",
+    "ember-cli": "~3.0.2",
+    "ember-data": "~3.0.0",
+    "ember-load-initializers": "^1.0.0",
     "foundation-sites": "^6.3.1"
   }
 }

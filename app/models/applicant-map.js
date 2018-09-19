@@ -6,6 +6,8 @@ const { Model } = DS;
 export default class ApplicantMapModel extends Model.extend({}) {
   // area, tax, zoning change, zoning section
   @attr('string') type;
+
   @attr() toggledLayers;
+
   @belongsTo('project', { inverse: 'applicantMaps' }) project;
 }

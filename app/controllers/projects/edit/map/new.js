@@ -7,32 +7,32 @@ export default class NewProjectMapController extends Controller {
   notificationMessages;
 
   projectAreaLayer = {
-    "id": "project-area-line",
-    "type": "line",
-    "layout": {
-      "visibility": "visible",
-      "line-cap": "round"
+    id: 'project-area-line',
+    type: 'line',
+    layout: {
+      visibility: 'visible',
+      'line-cap': 'round',
     },
-    "paint": {
-      "line-width": 6,
-      "line-dasharray": [
+    paint: {
+      'line-width': 6,
+      'line-dasharray': [
         0.1,
-        2
-      ]
-    }
+        2,
+      ],
+    },
   }
 
   projectBufferLayer = {
-    "id": "project-buffer-line",
-    "type": "line",
-    "paint": {
-      "line-color": "rgba(116, 4, 80, 1)",
-      "line-width": 6,
-      "line-dasharray": [
+    id: 'project-buffer-line',
+    type: 'line',
+    paint: {
+      'line-color': 'rgba(116, 4, 80, 1)',
+      'line-width': 6,
+      'line-dasharray': [
         0.5,
-        0.5
-      ]
-    }
+        0.5,
+      ],
+    },
   }
 
   @action
