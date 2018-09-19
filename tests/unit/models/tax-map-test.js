@@ -2,13 +2,13 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { run } from '@ember/runloop';
 
-module('Unit | Model | maps/zoning section map', function(hooks) {
+module('Unit | Model | maps/tax map', function(hooks) {
   setupTest(hooks);
 
   // Replace this with your real tests.
   test('it exists', function(assert) {
     let store = this.owner.lookup('service:store');
-    let model = run(() => store.createRecord('maps/zoning-section-map', {}));
+    let model = run(() => store.createRecord('tax-map', {}));
     assert.ok(model);
   });
 });

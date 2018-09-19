@@ -8,7 +8,7 @@ module('Unit | Model | maps/area map', function(hooks) {
   // Replace this with your real tests.
   test('it exists', function(assert) {
     let store = this.owner.lookup('service:store');
-    let model = run(() => store.createRecord('maps/area-map', {}));
+    let model = run(() => store.createRecord('area-map', {}));
     assert.ok(model);
   });
 });

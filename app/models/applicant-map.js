@@ -13,5 +13,7 @@ export default class ApplicantMapModel extends Model.extend({}) {
 
   @attr() toggledLayers;
 
+  @attr() center;
+
   @belongsTo('project', { inverse: 'applicantMaps' }) project;
 }
