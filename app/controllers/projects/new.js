@@ -16,16 +16,18 @@ const draw = new MapboxDraw({
 });
 
 export default class NewProjectController extends Controller {
-  constructor() {
-    super(...arguments)
+  constructor(...args) {
+    super(...args);
     this.set('selectedLots', {
-      type: "FeatureCollection",
+      type: 'FeatureCollection',
       features: [],
     });
   }
 
   isDrawing = false;
+
   drawMode = null;
+
   lotSelectionMode = false;
 
   @computed('selectedLots.features.[]')
@@ -34,7 +36,7 @@ export default class NewProjectController extends Controller {
     return {
       type: 'geojson',
       data: selectedLots,
-    }
+    };
   }
 
   selectedLotsLayer = {
@@ -53,7 +55,7 @@ export default class NewProjectController extends Controller {
     return {
       type: 'geojson',
       data,
-    }
+    };
   }
 
   @action
@@ -102,15 +104,15 @@ export default class NewProjectController extends Controller {
     const isDrawing = this.get('isDrawing');
     const map = this.get('mapInstance');
     if (isDrawing) {
-     draw.trash();
-     this.set('isDrawing', false);
-     this.set('drawMode', null);
+      draw.trash();
+      this.set('isDrawing', false);
+      this.set('drawMode', null);
     } else {
-     map.addControl(draw, 'top-right');
+      map.addControl(draw, 'top-right');
 
-     draw.changeMode('draw_polygon');
+      draw.changeMode('draw_polygon');
 
-     this.set('isDrawing', true);
+      this.set('isDrawing', true);
     }
   }
 
@@ -119,7 +121,7 @@ export default class NewProjectController extends Controller {
     const { id: layerId } = feature.layer;
 
     // if lot was clicked when in lot selection mode, handle the clicl
-    if (layerId == 'pluto-fill' && this.get('lotSelectionMode')) {
+    if (layerId === 'pluto-fill' && this.get('lotSelectionMode')) {
       const { type, geometry, properties } = feature;
       const selectedLots = this.get('selectedLots');
 
@@ -131,7 +133,7 @@ export default class NewProjectController extends Controller {
           type,
           geometry,
           properties,
-        })
+        });
       } else {
         this.set('selectedLots.features', selectedLots.features.filter(lot => lot.properties.bbl !== properties.bbl));
       }
@@ -141,28 +143,27 @@ export default class NewProjectController extends Controller {
   @action
   handleLotSelectionButtonClick() {
     const lotSelectionMode = this.get('lotSelectionMode');
-    this.set('lotSelectionMode', !lotSelectionMode)
+    this.set('lotSelectionMode', !lotSelectionMode);
 
     // if finished with lot selection mode, process the selected lots
     if (lotSelectionMode) {
       const selectedLots = this.get('selectedLots');
-      const bufferkm = .00005
+      const bufferkm = 0.00005;
 
-      let union = turfBuffer(selectedLots.features[0].geometry, bufferkm)
+      let union = turfBuffer(selectedLots.features[0].geometry, bufferkm);
 
       if (selectedLots.features.length > 1) {
-        for(let i=1; i< selectedLots.features.length; i += 1) {
+        for (let i = 1; i < selectedLots.features.length; i += 1) {
+          const bufferedGeometry = turfBuffer(selectedLots.features[i].geometry, bufferkm);
 
-          const bufferedGeometry = turfBuffer(selectedLots.features[i].geometry, bufferkm)
-
-          union = turfUnion.default(union, bufferedGeometry)
+          union = turfUnion.default(union, bufferedGeometry);
         }
       }
 
       // set the union as the projectArea
-      this.set('model.projectArea', union)
+      this.set('model.projectArea', union);
       // clear selected features
-      this.set('selectedLots.features', [])
+      this.set('selectedLots.features', []);
     }
   }
 
@@ -173,7 +174,7 @@ export default class NewProjectController extends Controller {
 
     const { geometry } = e.features[0];
 
-    this.set('model.projectArea', geometry)
+    this.set('model.projectArea', geometry);
   }
 
   @action

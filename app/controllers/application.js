@@ -14,6 +14,7 @@ const draw = new MapboxDraw({
 
 export default class ApplicationController extends Controller {
   isDrawing = false;
+
   drawMode = null;
 
   @action
@@ -35,22 +36,22 @@ export default class ApplicationController extends Controller {
   }
 
    @action
-   handleDrawButtonClick(type) {
-     const isDrawing = this.get('isDrawing');
-     const map = this.get('mapInstance');
-     if (isDrawing) {
-       draw.trash();
-       this.set('isDrawing', false);
-       this.set('drawMode', null);
-     } else {
-       map.addControl(draw, 'top-right');
-       this.set('drawMode', type);
+  handleDrawButtonClick(type) {
+    const isDrawing = this.get('isDrawing');
+    const map = this.get('mapInstance');
+    if (isDrawing) {
+      draw.trash();
+      this.set('isDrawing', false);
+      this.set('drawMode', null);
+    } else {
+      map.addControl(draw, 'top-right');
+      this.set('drawMode', type);
 
-       if (type === 'polygon') {
-         draw.changeMode('draw_polygon');
-       }
+      if (type === 'polygon') {
+        draw.changeMode('draw_polygon');
+      }
 
-       this.set('isDrawing', true);
-     }
-   }
+      this.set('isDrawing', true);
+    }
+  }
 }

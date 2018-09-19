@@ -2,14 +2,14 @@
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-module.exports = function(defaults) {
-  let app = new EmberApp(defaults, {
+module.exports = function (defaults) {
+  const app = new EmberApp(defaults, {
     'ember-cli-foundation-6-sass': {
       foundationJs: 'all',
     },
     sourcemaps: {
       enabled: true,
-      extensions: ['js']
+      extensions: ['js'],
     },
   });
 
