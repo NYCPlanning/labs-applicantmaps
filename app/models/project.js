@@ -14,7 +14,7 @@ const requiredFields = [
 ];
 
 export default class ProjectModel extends Model.extend({}) {
-  @hasMany('applicant-map', { polymorphic: true }) applicantMaps;
+  @hasMany('applicant-map', { polymorphic: true, async: false }) applicantMaps;
 
   @attr({
     defaultValue() {
