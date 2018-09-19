@@ -8,10 +8,13 @@ module('Integration | Helper | mapbox-geojson-source', function(hooks) {
 
   // Replace this with your real tests.
   test('it renders', async function(assert) {
-    this.set('inputValue', '1234');
+    this.set('inputValue', {
+      type: 'FeatureCollection',
+      features: [],
+    });
 
-    await render(hbs`{{mapbox-geojson-source inputValue}}`);
+    await render(hbs`{{get (mapbox-geojson-source inputValue) 'type'}}`);
 
-    assert.equal(this.element.textContent.trim(), '1234');
+    assert.equal(this.element.textContent.trim(), 'geojson');
   });
 });

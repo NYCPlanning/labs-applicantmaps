@@ -1,10 +1,7 @@
 import Controller from '@ember/controller';
 import { action, computed } from '@ember-decorators/object';
 import mapboxgl from 'mapbox-gl';
-import MapboxDraw from 'mapbox-gl-draw';
 import { service } from '@ember-decorators/service';
-import turfUnion from 'npm:@turf/union';
-import turfBuffer from 'npm:@turf/buffer';
 
 const developmentSiteLayer = {
   type: 'line',
