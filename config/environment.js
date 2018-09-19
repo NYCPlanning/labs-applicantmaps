@@ -26,7 +26,7 @@ module.exports = function(environment) {
     namespace: 'v1',
 
     'labs-search': {
-      host: (environment === 'devlocal') ? '//localhost:4000' : 'https://zola-search-api.planninglabs.nyc',
+      host: 'https://search-api.planninglabs.nyc',
       route: 'search',
     },
 
