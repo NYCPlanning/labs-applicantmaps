@@ -17,68 +17,38 @@
 
   <label class="text-small">Project Geometries</label>
 
-  {{#if (eq projectGeometryMode 'developmentSite')}}
-    <div class="callout">
-      {{#if lotSelectionMode}}
-        <p class="text-small">Click individual tax lots to toggle their selection OR use the drawing tools to select multiple lots at once.</p>
-        <div class="grid-x grid-margin-x">
-          <button class="cell auto button small" {{action 'finishLotSelection'}}>Make Selection</button>
-          <button class="cell shrink button small alert clear" {{action (mut isSelectingLots) false}}>Cancel</button>
-        </div>
-      {{else}}
-        <p class="text-small">Use the drawing tools on the map to define the development site OR&hellip;</p>
-        <button class="button gray expanded" {{action "startLotSelection"}}>Select Tax Lots</button>
-        <div class="grid-x grid-margin-x">
-          <button class="cell auto button small" {{action 'setProjectGeometry'}}>Done</button>
-          <button class="cell shrink button small alert clear" {{action 'toggleGeometryEditing' 'developmentSite'}}>Cancel</button>
-        </div>
-      {{/if}}
-    </div>
-  {{else}}
-    <button class="button expanded" {{action 'toggleGeometryEditing' 'developmentSite'}}>{{fa-icon 'plus'}} Add Development Site</button>
-  {{/if}}
+  {{draw-control
+    mode="developmentSite"
+    modeDisplayName="Development Site"
+    projectGeometryMode=projectGeometryMode
+    lotSelectionMode=lotSelectionMode
+    toggleGeometryEditing=(action "toggleGeometryEditing")
+    startLotSelection=(action "startLotSelection")
+    finishLotSelection=(action "finishLotSelection")
+    setProjectGeometry=(action "setProjectGeometry")
+  }}
 
-  {{#if (eq projectGeometryMode 'projectArea')}}
-    <div class="callout">
-      {{#if lotSelectionMode}}
-        <p class="text-small">Click individual tax lots to toggle their selection OR use the drawing tools to select multiple lots at once.</p>
-        <div class="grid-x grid-margin-x">
-          <button class="cell auto button small" {{action 'finishLotSelection'}}>Make Selection</button>
-          <button class="cell shrink button small alert clear" {{action (mut isSelectingLots) false}}>Cancel</button>
-        </div>
-      {{else}}
-        <p class="text-small">Use the drawing tools on the map to define the development site OR&hellip;</p>
-        <button class="button gray expanded" {{action "startLotSelection"}}>Select Tax Lots</button>
-        <div class="grid-x grid-margin-x">
-          <button class="cell auto button small" {{action 'setProjectGeometry'}}>Done</button>
-          <button class="cell shrink button small alert clear" {{action 'toggleGeometryEditing' 'projectArea'}}>Cancel</button>
-        </div>
-      {{/if}}
-    </div>
-  {{else}}
-    <button class="button expanded" {{action 'toggleGeometryEditing' 'projectArea'}}>{{fa-icon 'plus'}} Add Project Area</button>
-  {{/if}}
+  {{draw-control
+    mode="projectArea"
+    modeDisplayName="Project Area"
+    projectGeometryMode=projectGeometryMode
+    lotSelectionMode=lotSelectionMode
+    toggleGeometryEditing=(action "toggleGeometryEditing")
+    startLotSelection=(action "startLotSelection")
+    finishLotSelection=(action "finishLotSelection")
+    setProjectGeometry=(action "setProjectGeometry")
+  }}
 
-  {{#if (eq  projectGeometryMode 'rezoningArea')}}
-    <div class="callout">
-      {{#if isSelectingLots}}
-        <p class="text-small">Click individual tax lots to toggle their selection OR use the drawing tools to select multiple lots at once.</p>
-        <div class="grid-x grid-margin-x">
-          <button class="cell auto button small" {{action 'finishLotSelection'}}>Make Selection</button>
-          <button class="cell shrink button small alert clear" {{action (mut isSelectingLots) false}}>Cancel</button>
-        </div>
-      {{else}}
-        <p class="text-small">Use the drawing tools on the map to define the development site OR&hellip;</p>
-        <button class="button gray expanded" {{action "startLotSelection"}}>Select Tax Lots</button>
-        <div class="grid-x grid-margin-x">
-          <button class="cell auto button small" {{action 'setProjectGeometry'}}>Done</button>
-          <button class="cell shrink button small alert clear" {{action 'toggleGeometryEditing' 'projectArea'}}>Cancel</button>
-        </div>
-      {{/if}}
-    </div>
-  {{else}}
-    <button class="button expanded" {{action (mut isAddingRezoningArea) true}}>{{fa-icon 'plus'}} Add Rezoning Area</button>
-  {{/if}}
+  {{draw-control
+    mode="rezoningArea"
+    modeDisplayName="Rezoning Area"
+    projectGeometryMode=projectGeometryMode
+    lotSelectionMode=lotSelectionMode
+    toggleGeometryEditing=(action "toggleGeometryEditing")
+    startLotSelection=(action "startLotSelection")
+    finishLotSelection=(action "finishLotSelection")
+    setProjectGeometry=(action "setProjectGeometry")
+  }}
 
   <button type="button" class="button expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Create Project</button>
 
@@ -119,6 +89,17 @@
             }}
           {{/map.source}}
         {{/if}}
+
+        {{!-- Ad-hoc source and layer for projectArea --}}
+        {{#if model.rezoningArea}}
+          {{#map.source options=rezoningAreaSource as |source|}}
+            {{source.layer
+              layer=rezoningAreaLayer
+              before='boundary_country'
+            }}
+          {{/map.source}}
+        {{/if}}
+
 
         {{!-- Ad-hoc source and layer for showing selected lots in lot selection mode --}}
         {{#map.source options=selectedLotsSource as |source|}}

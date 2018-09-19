@@ -27,6 +27,8 @@ export default class ProjectModel extends Model.extend({}) {
 
   @attr() developmentSite
 
+  @attr() rezoningArea
+
   @attr('string') projectName;
 
   @attr('string') applicantName;
