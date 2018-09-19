@@ -1,20 +1,42 @@
 import Controller from '@ember/controller';
 import { action, computed } from '@ember-decorators/object';
-import { argument } from '@ember-decorators/argument';
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from 'mapbox-gl-draw';
 import { service } from '@ember-decorators/service';
 import turfUnion from 'npm:@turf/union';
 import turfBuffer from 'npm:@turf/buffer';
 
-const draw = new MapboxDraw({
-  displayControlsDefault: false,
-  controls: {
-    polygon: true,
-    trash: true,
+const developmentSiteLayer = {
+  type: 'line',
+  paint: {
+    'line-color': 'green',
+    'line-width': 4,
   },
-  // styles: drawStyles, TODO modify default draw styles
-});
+};
+
+const projectAreaLayer = {
+  type: 'line',
+  paint: {
+    'line-color': 'orange',
+    'line-width': 4,
+  },
+};
+
+const rezoningAreaLayer = {
+  type: 'line',
+  paint: {
+    'line-color': 'purple',
+    'line-width': 4,
+  },
+};
+
+const selectedLotsLayer = {
+  type: 'fill',
+  paint: {
+    'fill-color': 'rgba(217, 216, 1, 1)',
+    'fill-outline-color': 'rgba(255, 255, 255, 1)',
+  },
+};
 
 export default class NewProjectController extends Controller {
   constructor(...args) {
@@ -25,74 +47,21 @@ export default class NewProjectController extends Controller {
     });
   }
 
-  lotSelectionMode = false;
+  developmentSiteLayer = developmentSiteLayer
+
+  projectAreaLayer = projectAreaLayer
+
+  rezoningAreaLayer = rezoningAreaLayer
+
+  selectedLotsLayer = selectedLotsLayer
+
+  lotSelectionMode = false
 
   @service notificationMessages;
 
-  @argument
-  projectGeometryMode = null;
+  projectGeometryMode = null
 
-  @argument
-  isSelectingLots = false;
-
-  developmentSiteLayer = {
-    type: 'line',
-    paint: {
-      'line-color': 'green',
-      'line-width': 4,
-    },
-  }
-
-  projectAreaLayer = {
-    type: 'line',
-    paint: {
-      'line-color': 'orange',
-      'line-width': 4,
-    },
-  }
-
-  rezoningAreaLayer = {
-    type: 'line',
-    paint: {
-      'line-color': 'purple',
-      'line-width': 4,
-    },
-  }
-
-  selectedLotsLayer = {
-    type: 'fill',
-    paint: {
-      'fill-color': 'rgba(217, 216, 1, 1)',
-      'fill-outline-color': 'rgba(255, 255, 255, 1)',
-    },
-  }
-
-  @computed('model.developmentSite')
-  get developmentSiteSource() {
-    const data = this.get('model.developmentSite');
-    return {
-      type: 'geojson',
-      data,
-    };
-  }
-
-  @computed('model.projectArea')
-  get projectAreaSource() {
-    const data = this.get('model.projectArea');
-    return {
-      type: 'geojson',
-      data,
-    };
-  }
-
-  @computed('model.rezoningArea')
-  get rezoningAreaSource() {
-    const data = this.get('model.rezoningArea');
-    return {
-      type: 'geojson',
-      data,
-    };
-  }
+  isSelectingLots = false
 
   @computed('selectedLots.features.[]')
   get selectedLotsSource() {
@@ -101,21 +70,6 @@ export default class NewProjectController extends Controller {
       type: 'geojson',
       data: selectedLots,
     };
-  }
-
-  @action toggleGeometryEditing(type) {
-    this.set('projectGeometryMode', type);
-
-    const projectGeometryMode = this.get('projectGeometryMode');
-
-    const map = this.get('mapInstance');
-    if (projectGeometryMode) {
-      map.addControl(draw, 'top-right');
-      draw.changeMode('draw_polygon');
-    } else {
-      draw.trash();
-      map.removeControl(draw);
-    }
   }
 
   @action
@@ -181,62 +135,6 @@ export default class NewProjectController extends Controller {
         this.set('selectedLots.features', selectedLots.features.filter(lot => lot.properties.bbl !== properties.bbl));
       }
     }
-  }
-
-  @action
-  startLotSelection() {
-    this.set('lotSelectionMode', true);
-    draw.trash();
-    draw.changeMode('simple_select');
-  }
-
-  @action
-  finishLotSelection() {
-    // runs when user is done selecting lots
-    // adds a small buffer to all lots to ensure the union will be contiguous
-    // unions all lots together into one feature
-    // TODO simplify the resulting union to get rid of curved corners with many vertices
-    this.set('lotSelectionMode', false);
-
-    const selectedLots = this.get('selectedLots');
-    const bufferkm = 0.00008;
-
-    let union = turfBuffer(selectedLots.features[0].geometry, bufferkm);
-
-    if (selectedLots.features.length > 1) {
-      for (let i = 1; i < selectedLots.features.length; i += 1) {
-        const bufferedGeometry = turfBuffer(selectedLots.features[i].geometry, bufferkm);
-
-        union = turfUnion.default(union, bufferedGeometry);
-      }
-    }
-
-    // set the drawn geom as an editable mapbox-gl-draw geom
-    draw.set({
-      type: 'FeatureCollection',
-      features: [union],
-    });
-    // clear selected features
-    this.set('selectedLots.features', []);
-  }
-
-  @action
-  setProjectGeometry() {
-    const FeatureCollection = draw.getAll();
-
-    // delete the drawn geometry
-    draw.deleteAll();
-
-    const { geometry } = FeatureCollection.features[0];
-    const projectGeometryMode = this.get('projectGeometryMode');
-
-    // set geometry depending on mode
-    const model = this.get('model');
-    model.set(projectGeometryMode, geometry);
-    this.set('model', model);
-
-    // breakdown the draw tools
-    this.toggleGeometryEditing(null);
   }
 
   @action
