@@ -1,0 +1,20 @@
+{{#if (eq projectGeometryMode mode)}}
+  <div class="callout">
+    {{#if lotSelectionMode}}
+      <p class="text-small">Click individual tax lots to toggle their selection</p>
+      <div class="grid-x grid-margin-x">
+        <button class="cell auto button small" {{action 'finishLotSelection'}}>Make Selection</button>
+        <button class="cell shrink button small alert clear">Cancel</button>
+      </div>
+    {{else}}
+      <p class="text-small">Use the drawing tools on the map to define the development site OR click below to create your site by selecting tax lots</p>
+      <button class="button gray expanded" {{action "startLotSelection"}}>Select Tax Lots</button>
+      <div class="grid-x grid-margin-x">
+        <button class="cell auto button small" {{action 'setProjectGeometry'}}>Done</button>
+        <button class="cell shrink button small alert clear" {{action 'toggleGeometryEditing' null}}>Cancel</button>
+      </div>
+    {{/if}}
+  </div>
+{{else}}
+  <button class="button expanded" {{action 'toggleGeometryEditing' mode}}>{{fa-icon 'plus'}} Add {{modeDisplayName}}</button>
+{{/if}}

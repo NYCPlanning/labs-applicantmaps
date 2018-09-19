@@ -19,6 +19,6 @@ module('Acceptance | user can fill out form', (hooks) => {
     await fillIn('.zap-project-description-field', 'Fill out description');
     await click('.project-save-button');
 
-    assert.equal(currentURL(), '/projects/11/edit');
+    assert.equal(currentURL(), '/projects/new');
   });
 });

@@ -1,77 +1,114 @@
 <div class="cell medium-5 large-3 sidebar">
-  <label>Project Title
+  <label class="text-small">Project Title
     {{input type="text" class='project-name-field' value=model.projectName}}
   </label>
 
-  <label>Applicant Name
+  <label class="text-small">Applicant Name
     {{input type="text" class='applicant-name-field' value=model.applicantName}}
   </label>
 
-  <label>ZAP Project ID
+  <label class="text-small">ZAP Project ID
     {{input type="text" class='zap-project-id-field' value=model.zapProjectId}}
   </label>
 
-  <label>Description
-    {{textarea class='zap-project-description-field' value=model.description rows="6"}}
+  <label class="text-small">Description
+    {{textarea class='zap-project-description-field' value=model.description rows="3"}}
   </label>
 
-  <label>Project Area</label>
-  <p>Define your project area by drawing a polygon on the map.</p>
-  <p class="text-center"><button type="button" class="button gray" onclick={{action 'handleDrawButtonClick' model}}>Draw</button></p>
+  <label class="text-small">Project Geometries</label>
+
+  {{#if mapInstance}}
+    {{draw-control
+      model=model
+      mapInstance=mapInstance
+      mode="developmentSite"
+      modeDisplayName="Development Site"
+      projectGeometryMode=projectGeometryMode
+      selectedLots=selectedLots
+      lotSelectionMode=lotSelectionMode
+    }}
+
+    {{draw-control
+      model=model
+      mapInstance=mapInstance
+      mode="projectArea"
+      modeDisplayName="Project Area"
+      projectGeometryMode=projectGeometryMode
+      selectedLots=selectedLots
+      lotSelectionMode=lotSelectionMode
+    }}
+
+    {{draw-control
+      model=model
+      mapInstance=mapInstance
+      mode="rezoningArea"
+      modeDisplayName="Rezoning Area"
+      projectGeometryMode=projectGeometryMode
+      selectedLots=selectedLots
+      lotSelectionMode=lotSelectionMode
+    }}
+  {{/if}}
+
   <button type="button" class="button expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Create Project</button>
 
 </div>
 <div class="cell medium-7 large-9 map-container">
-  {{#mapbox-gl
-    id='main-map'
-    mapLoaded=(action 'handleMapLoad') as | map |
-  }}
-    {{labs-search
-      onSelect=(action 'handleSearchSelect')
-      onClear=(action 'handleSearchClear')}}
+  {{#project-map-form tagName='' as |projectMapForm|}}
+    {{#labs-map
+      id='main-map'
+      initOptions=(hash
+        style=projectMapForm.model.meta.mapboxStyle
+        zoom=12
+        center=(array -73.983307 40.704977)
+      )
+      mapLoaded=(action handleMapLoad) as |map|}}
 
-    {{#if searchedAddressSource}}
-      {{#map.source options=searchedAddressSource as |source|}}
-        {{source.layer layer=(hash
-            type='circle'
-            paint=(hash
-              circle-radius=8
-              circle-color="#00A1F9"
-              circle-stroke-width=2
-              circle-stroke-color="#FFFFFF"
-            )
-          )
-          before='boundary_country'
+        {{!-- labs-layers (includes tax-lots layer) --}}
+        {{map.labs-layers
+          layerGroups=projectMapForm.model.layerGroups
+          onLayerClick=(action 'handleLayerClick')
         }}
-      {{/map.source}}
-    {{/if}}
 
-    {{#if model.projectArea}}
-      {{#map.source options=projectAreaSource as |source|}}
-        {{source.layer
-          before='boundary_country'
-        }}
-      {{/map.source}}
+        {{!-- Ad-hoc source and layer for developmentSite --}}
+        {{#if model.developmentSite}}
+          {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
+            {{source.layer
+              layer=developmentSiteLayer
+              before='boundary_country'
+            }}
+          {{/map.source}}
+        {{/if}}
 
-    {{/if}}
+        {{!-- Ad-hoc source and layer for projectArea --}}
+        {{#if model.projectArea}}
+          {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
+            {{source.layer
+              layer=projectAreaLayer
+              before='boundary_country'
+            }}
+          {{/map.source}}
+        {{/if}}
 
-    {{#each (await sources) as |sourceOptions|}}
-      {{#map.source options=sourceOptions as |source|}}
-        {{source.layer
-          layer=taxLotsLinesLayer
-          before='boundary_country'
-        }}
-        {{source.layer
-          layer=taxLotsLabelsLayer
-          before='boundary_country'
-        }}
-      {{/map.source}}
-    {{/each}}
+        {{!-- Ad-hoc source and layer for projectArea --}}
+        {{#if model.rezoningArea}}
+          {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
+            {{source.layer
+              layer=rezoningAreaLayer
+              before='boundary_country'
+            }}
+          {{/map.source}}
+        {{/if}}
 
-    {{map.on 'draw.create' (action "setProjectArea")}}
-    {{map.on 'draw.update' (action "setProjectArea")}}
-  {{/mapbox-gl}}
 
+        {{!-- Ad-hoc source and layer for showing selected lots in lot selection mode --}}
+        {{#map.source options=selectedLotsSource as |source|}}
+          {{source.layer
+            layer=selectedLotsLayer
+            before='boundary_country'
+          }}
+        {{/map.source}}
+    {{/labs-map}}
+  {{/project-map-form}}
 </div>
 
 {{outlet}}

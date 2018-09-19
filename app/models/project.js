@@ -8,6 +8,7 @@ const { Model } = DS;
 const requiredFields = [
   'projectName',
   'applicantName',
+  'developmentSite',
   'projectArea',
   'description',
 ];
@@ -23,6 +24,10 @@ export default class ProjectModel extends Model.extend({}) {
       };
     },
   }) projectArea; // geojson
+
+  @attr() developmentSite
+
+  @attr() rezoningArea
 
   @attr('string') projectName;
 
