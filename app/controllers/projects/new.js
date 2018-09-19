@@ -40,6 +40,22 @@ export default class NewProjectController extends Controller {
     };
   }
 
+  developmentSiteLayer = {
+    type: 'line',
+    paint: {
+      'line-color': 'green',
+      'line-width': 4,
+    },
+  }
+
+  projectAreaLayer = {
+    type: 'line',
+    paint: {
+      'line-color': 'orange',
+      'line-width': 4,
+    },
+  }
+
   selectedLotsLayer = {
     type: 'fill',
     paint: {
@@ -49,6 +65,9 @@ export default class NewProjectController extends Controller {
   }
 
   @service notificationMessages;
+
+  @argument
+  projectGeometryMode = null;
 
   @argument
   isAddingDevelopmentSite = false;
@@ -62,6 +81,16 @@ export default class NewProjectController extends Controller {
   @argument
   isSelectingLots = false;
 
+
+  @computed('model.developmentSite')
+  get developmentSiteSource() {
+    const data = this.get('model.developmentSite');
+    return {
+      type: 'geojson',
+      data,
+    };
+  }
+
   @computed('model.projectArea')
   get projectAreaSource() {
     const data = this.get('model.projectArea');
@@ -69,6 +98,24 @@ export default class NewProjectController extends Controller {
       type: 'geojson',
       data,
     };
+  }
+
+  @action toggleGeometryEditing(type) {
+    this.set('projectGeometryMode', type);
+
+    const projectGeometryMode = this.get('projectGeometryMode');
+
+    const map = this.get('mapInstance');
+    if (projectGeometryMode) {
+      map.addControl(draw, 'top-right');
+      draw.changeMode('draw_polygon');
+      // this.set('isDrawing', true);
+    } else {
+      draw.trash();
+      map.removeControl(draw);
+      this.set('isDrawing', false);
+      // this.set('drawMode', null);
+    }
   }
 
   @action
@@ -108,6 +155,7 @@ export default class NewProjectController extends Controller {
 
     // setup controls
     const navigationControl = new mapboxgl.NavigationControl();
+
 
     map.addControl(navigationControl, 'top-left');
   }
@@ -154,40 +202,58 @@ export default class NewProjectController extends Controller {
   }
 
   @action
-  handleLotSelectionButtonClick() {
-    const lotSelectionMode = this.get('lotSelectionMode');
-    this.set('lotSelectionMode', !lotSelectionMode);
-
-    // if finished with lot selection mode, process the selected lots
-    if (lotSelectionMode) {
-      const selectedLots = this.get('selectedLots');
-      const bufferkm = 0.00005;
-
-      let union = turfBuffer(selectedLots.features[0].geometry, bufferkm);
-
-      if (selectedLots.features.length > 1) {
-        for (let i = 1; i < selectedLots.features.length; i += 1) {
-          const bufferedGeometry = turfBuffer(selectedLots.features[i].geometry, bufferkm);
-
-          union = turfUnion.default(union, bufferedGeometry);
-        }
-      }
-
-      // set the union as the projectArea
-      this.set('model.projectArea', union);
-      // clear selected features
-      this.set('selectedLots.features', []);
-    }
+  startLotSelection() {
+    this.set('lotSelectionMode', true);
+    draw.trash();
+    draw.changeMode('simple_select');
   }
 
   @action
-  setProjectArea(e) {
+  finishLotSelection() {
+    // should be run when user is done selecting lots
+    this.set('lotSelectionMode', false);
+
+    const selectedLots = this.get('selectedLots');
+    const bufferkm = 0.00008;
+
+    let union = turfBuffer(selectedLots.features[0].geometry, bufferkm);
+
+    if (selectedLots.features.length > 1) {
+      for (let i = 1; i < selectedLots.features.length; i += 1) {
+        const bufferedGeometry = turfBuffer(selectedLots.features[i].geometry, bufferkm);
+
+        union = turfUnion.default(union, bufferedGeometry);
+      }
+    }
+
+
+    // set the drawn geom as an editable mapbox-gl-draw geom
+    draw.set({
+      type: 'FeatureCollection',
+      features: [union],
+    });
+    // clear selected features
+    this.set('selectedLots.features', []);
+  }
+
+  @action
+  setProjectGeometry() {
+    const FeatureCollection = draw.getAll();
+
     // delete the drawn geometry
     draw.deleteAll();
 
-    const { geometry } = e.features[0];
+    const { geometry } = FeatureCollection.features[0];
+    const projectGeometryMode = this.get('projectGeometryMode');
 
-    this.set('model.projectArea', geometry);
+    // set geometry depending on mode
+    const model = this.get('model');
+    model.set(projectGeometryMode, geometry);
+    this.set('model', model);
+
+    this.toggleGeometryEditing(null);
+    console.log(projectGeometryMode)
+    console.log(this.get('model').toJSON());
   }
 
   @action
