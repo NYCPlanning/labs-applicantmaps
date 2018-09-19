@@ -1,4 +1,4 @@
-import { Model } from 'ember-cli-mirage';
+import ApplicantMapModel from './applicant-map';
 
-export default Model.extend({
+export default ApplicantMapModel.extend({
 });

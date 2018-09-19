@@ -9,6 +9,7 @@ module.exports = {
     sourceType: 'module',
     ecmaFeatures: {
       legacyDecorators: true,
+      experimentalObjectRestSpread: true,
     }
   },
   plugins: [
@@ -46,7 +47,10 @@ module.exports = {
       ],
       parserOptions: {
         sourceType: 'script',
-        ecmaVersion: 2015
+        ecmaVersion: 2017,
+        ecmaFeatures: {
+          experimentalObjectRestSpread: true
+        }
       },
       env: {
         browser: false,

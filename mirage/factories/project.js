@@ -2,11 +2,22 @@ import { Factory, faker } from 'ember-cli-mirage';
 
 export default Factory.extend({
   afterCreate(project) {
-    // server.createList('applicant-map', 2, { project });
-    project.createApplicantMap('area-map');
-    project.createApplicantMap('tax-map', {});
-    project.createApplicantMap('zoning-change-map', {});
-    project.createApplicantMap('zoning-section-map', {});
+    const commonApplicantMapAttrs = {
+      center: [faker.address.latitude(), faker.address.longitude()],
+    };
+
+    project.createApplicantMap('area-map', {
+      ...commonApplicantMapAttrs,
+    });
+    project.createApplicantMap('tax-map', {
+      ...commonApplicantMapAttrs,
+    });
+    project.createApplicantMap('zoning-change-map', {
+      ...commonApplicantMapAttrs,
+    });
+    project.createApplicantMap('zoning-section-map', {
+      ...commonApplicantMapAttrs,
+    });
   },
 
   projectName() {
