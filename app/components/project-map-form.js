@@ -1,11 +1,9 @@
 import Component from '@ember/component';
-import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
-import turfBbox from 'npm:@turf/bbox';
 
 export default class ProjectMapFormComponent extends Component {
-  constructor() {
-    super(...arguments);
+  constructor(...args) {
+    super(...args);
 
     const store = this.get('store');
     store.query('layer-group', {
@@ -16,12 +14,12 @@ export default class ProjectMapFormComponent extends Component {
           layers: [
             { tooltipable: false },
             {},
-            { style: { layout: { 'text-field': '{numfloors}' } } }
-          ]
+            { style: { layout: { 'text-field': '{numfloors}' } } },
+          ],
         },
-      ]
-    }).then(layerGroups => {
-      const { meta }= layerGroups;
+      ],
+    }).then((layerGroups) => {
+      const { meta } = layerGroups;
 
       this.set('model', {
         layerGroups,

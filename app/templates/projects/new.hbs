@@ -64,25 +64,21 @@
       {{#if isSelectingLots}}
         <p class="text-small">Click individual tax lots to toggle their selection OR use the drawing tools to select multiple lots at once.</p>
         <div class="grid-x grid-margin-x">
-          <button class="cell auto button small">Make Selection</button>
+          <button class="cell auto button small" {{action 'finishLotSelection'}}>Make Selection</button>
           <button class="cell shrink button small alert clear" {{action (mut isSelectingLots) false}}>Cancel</button>
         </div>
       {{else}}
         <p class="text-small">Use the drawing tools on the map to define the development site OR&hellip;</p>
-        <button class="button gray expanded" {{action (mut isSelectingLots) true}}>Select Tax Lots</button>
+        <button class="button gray expanded" {{action "startLotSelection"}}>Select Tax Lots</button>
         <div class="grid-x grid-margin-x">
-          <button class="cell auto button small" {{action (mut isAddingRezoningArea) false}}>Done</button>
-          <button class="cell shrink button small alert clear" {{action (mut isAddingRezoningArea) false}}>Cancel</button>
+          <button class="cell auto button small" {{action 'setProjectGeometry'}}>Done</button>
+          <button class="cell shrink button small alert clear" {{action 'toggleGeometryEditing' 'projectArea'}}>Cancel</button>
         </div>
       {{/if}}
     </div>
   {{else}}
     <button class="button expanded" {{action (mut isAddingRezoningArea) true}}>{{fa-icon 'plus'}} Add Rezoning Area</button>
   {{/if}}
-
-
-  <p class="text-center"><button type="button" class="button gray" onclick={{action 'handleDrawButtonClick' model}}>Draw</button></p>
-
 
   <button type="button" class="button expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Create Project</button>
 
@@ -98,6 +94,7 @@
       )
       mapLoaded=(action handleMapLoad) as |map|}}
 
+        {{!-- labs-layers (includes tax-lots layer) --}}
         {{map.labs-layers
           layerGroups=projectMapForm.model.layerGroups
           onLayerClick=(action 'handleLayerClick')
@@ -130,9 +127,6 @@
             before='boundary_country'
           }}
         {{/map.source}}
-
-        {{!-- {{map.on 'draw.create' (action "setProjectGeometry")}} --}}
-        {{!-- {{map.on 'draw.update' (action "setProjectGeometry")}} --}}
     {{/labs-map}}
   {{/project-map-form}}
 </div>

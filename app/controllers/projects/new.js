@@ -25,20 +25,15 @@ export default class NewProjectController extends Controller {
     });
   }
 
-  isDrawing = false;
-
-  drawMode = null;
-
   lotSelectionMode = false;
 
-  @computed('selectedLots.features.[]')
-  get selectedLotsSource() {
-    const selectedLots = this.get('selectedLots');
-    return {
-      type: 'geojson',
-      data: selectedLots,
-    };
-  }
+  @service notificationMessages;
+
+  @argument
+  projectGeometryMode = null;
+
+  @argument
+  isSelectingLots = false;
 
   developmentSiteLayer = {
     type: 'line',
@@ -56,6 +51,14 @@ export default class NewProjectController extends Controller {
     },
   }
 
+  rezoningAreaLayer = {
+    type: 'line',
+    paint: {
+      'line-color': 'purple',
+      'line-width': 4,
+    },
+  }
+
   selectedLotsLayer = {
     type: 'fill',
     paint: {
@@ -63,24 +66,6 @@ export default class NewProjectController extends Controller {
       'fill-outline-color': 'rgba(255, 255, 255, 1)',
     },
   }
-
-  @service notificationMessages;
-
-  @argument
-  projectGeometryMode = null;
-
-  @argument
-  isAddingDevelopmentSite = false;
-
-  @argument
-  isAddingProjectArea = false;
-
-  @argument
-  isAddingRezoningArea = false;
-
-  @argument
-  isSelectingLots = false;
-
 
   @computed('model.developmentSite')
   get developmentSiteSource() {
@@ -100,6 +85,24 @@ export default class NewProjectController extends Controller {
     };
   }
 
+  @computed('model.rezoningArea')
+  get rezoningAreaSource() {
+    const data = this.get('model.rezoningArea');
+    return {
+      type: 'geojson',
+      data,
+    };
+  }
+
+  @computed('selectedLots.features.[]')
+  get selectedLotsSource() {
+    const selectedLots = this.get('selectedLots');
+    return {
+      type: 'geojson',
+      data: selectedLots,
+    };
+  }
+
   @action toggleGeometryEditing(type) {
     this.set('projectGeometryMode', type);
 
@@ -109,12 +112,9 @@ export default class NewProjectController extends Controller {
     if (projectGeometryMode) {
       map.addControl(draw, 'top-right');
       draw.changeMode('draw_polygon');
-      // this.set('isDrawing', true);
     } else {
       draw.trash();
       map.removeControl(draw);
-      this.set('isDrawing', false);
-      // this.set('drawMode', null);
     }
   }
 
@@ -156,25 +156,7 @@ export default class NewProjectController extends Controller {
     // setup controls
     const navigationControl = new mapboxgl.NavigationControl();
 
-
     map.addControl(navigationControl, 'top-left');
-  }
-
-  @action
-  handleDrawButtonClick() {
-    const isDrawing = this.get('isDrawing');
-    const map = this.get('mapInstance');
-    if (isDrawing) {
-      draw.trash();
-      this.set('isDrawing', false);
-      this.set('drawMode', null);
-    } else {
-      map.addControl(draw, 'top-right');
-
-      draw.changeMode('draw_polygon');
-
-      this.set('isDrawing', true);
-    }
   }
 
   @action
@@ -210,7 +192,10 @@ export default class NewProjectController extends Controller {
 
   @action
   finishLotSelection() {
-    // should be run when user is done selecting lots
+    // runs when user is done selecting lots
+    // adds a small buffer to all lots to ensure the union will be contiguous
+    // unions all lots together into one feature
+    // TODO simplify the resulting union to get rid of curved corners with many vertices
     this.set('lotSelectionMode', false);
 
     const selectedLots = this.get('selectedLots');
@@ -225,7 +210,6 @@ export default class NewProjectController extends Controller {
         union = turfUnion.default(union, bufferedGeometry);
       }
     }
-
 
     // set the drawn geom as an editable mapbox-gl-draw geom
     draw.set({
@@ -251,9 +235,8 @@ export default class NewProjectController extends Controller {
     model.set(projectGeometryMode, geometry);
     this.set('model', model);
 
+    // breakdown the draw tools
     this.toggleGeometryEditing(null);
-    console.log(projectGeometryMode)
-    console.log(this.get('model').toJSON());
   }
 
   @action
