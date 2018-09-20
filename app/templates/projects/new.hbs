@@ -18,35 +18,26 @@
   <label class="text-small">Project Geometries</label>
 
   {{#if mapInstance}}
-    {{#project-geometries-menu as |menu|}}
-      {{draw-control
-        model=model
-        mapInstance=mapInstance
+    {{#project-geometries-menu 
+      model=model
+      mapInstance=mapInstance
+      projectGeometryMode=projectGeometryMode
+      selectedLots=selectedLots
+      lotSelectionMode=lotSelectionMode
+      as |menu|}}
+      {{menu.draw-control
         mode="developmentSite"
         modeDisplayName="Development Site"
-        projectGeometryMode=projectGeometryMode
-        selectedLots=selectedLots
-        lotSelectionMode=lotSelectionMode
       }}
 
-      {{draw-control
-        model=model
-        mapInstance=mapInstance
+      {{menu.draw-control
         mode="projectArea"
         modeDisplayName="Project Area"
-        projectGeometryMode=projectGeometryMode
-        selectedLots=selectedLots
-        lotSelectionMode=lotSelectionMode
       }}
 
-      {{draw-control
-        model=model
-        mapInstance=mapInstance
+      {{menu.draw-control
         mode="rezoningArea"
         modeDisplayName="Rezoning Area"
-        projectGeometryMode=projectGeometryMode
-        selectedLots=selectedLots
-        lotSelectionMode=lotSelectionMode
       }}
     {{/project-geometries-menu}}
   {{/if}}
