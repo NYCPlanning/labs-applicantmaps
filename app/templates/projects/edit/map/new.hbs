@@ -58,7 +58,15 @@
             }}
           {{/map.source}}
 
+          {{map.on 'zoom' (action 'updateBounds')}}
+          {{map.on 'drag' (action 'updateBounds')}}
+          {{map.on 'pitch' (action 'updateBounds')}}
+          {{map.on 'rotate' (action 'updateBounds')}}
+
       {{/labs-map}}
+      {{#if boundsPolygon}}
+        {{inset-map boundsPolygon=boundsPolygon}}
+      {{/if}}
     {{/area-map-form}}
   </div>
 </div>

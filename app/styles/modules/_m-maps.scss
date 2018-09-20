@@ -189,3 +189,14 @@
   height: 300px;
   margin-bottom: $global-margin
 }
+
+// inset Map
+#inset-map {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 300px;
+  width: 300px;
+  z-index: 1;
+  border: 1px solid #808080;
+}
