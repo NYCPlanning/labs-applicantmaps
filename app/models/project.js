@@ -81,13 +81,9 @@ export default class ProjectModel extends Model.extend({}) {
   // union all geometries together, draw a 600 foot buffer around the union
   @computed('developmentSite', 'projectArea', 'rezoningArea')
   get projectGeometryBuffer() {
-    const developmentSite = this.get('developmentSite');
-    const projectArea = this.get('projectArea');
-    const rezoningArea = this.get('rezoningArea');
+    const geometries = this.getProperties('developmentSite', 'projectArea', 'rezoningArea');
 
-    let union = null;
-
-    [developmentSite, projectArea, rezoningArea].forEach((geometry) => {
+    const projectGeometryUnion = Object.values(geometries).reduce((union, geometry) => {
       if (geometry) {
         if (union === null) {
           union = geometry;
@@ -95,8 +91,10 @@ export default class ProjectModel extends Model.extend({}) {
           union = turfUnion.default(union, geometry);
         }
       }
-    });
 
-    return turfBuffer(union, 0.113636, { units: 'miles' });
+      return union;
+    }, null);
+
+    return turfBuffer(projectGeometryUnion, 0.113636, { units: 'miles' });
   }
 }
