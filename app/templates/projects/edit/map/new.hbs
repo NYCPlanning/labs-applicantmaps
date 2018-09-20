@@ -1,26 +1,27 @@
 <div class="cell medium-5 large-3 sidebar">
-  <h2>{{model.project.projectName}}</h2>
-  <p>!Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-  consequat.</p>
+  <h2 class="header-large">{{model.project.projectName}} Area Map</h2>
 
   <hr/>
 
   <div class="text-left">
-    <input type="radio" name="orientation" value="Portrait" id="Portrait" required/>
-    <label for="Portrait">Portrait</label>
-    <input type="radio" name="orientation" value="Portrait" id="landscape" required/>
-    <label for="landscape">Landscape</label>
+    <input type="radio" name="paper-size" value="letter" id="paper-size--letter" checked />
+    <label for="paper-size--letter">Letter</label>
+    <input type="radio" name="paper-size" value="Portrait" id="paper-size--legal" />
+    <label for="paper-size--legal">Legal</label>
   </div>
 
-  <button
-    type="button"
-    class="button expanded project-save-button"
-    onclick={{action 'save' model}}
-  >
-    Save to this project
-  </button>
+  <hr/>
+
+  <div class="text-left">
+    <input type="radio" name="paper-orientation" value="portrait" id="paper-orientation--portrait" />
+    <label for="paper-orientation--portrait">Portrait</label>
+    <input type="radio" name="paper-orientation" value="landscape" id="paper-orientation--landscape" checked />
+    <label for="paper-orientation--landscape">Landscape</label>
+  </div>
+
+  <hr/>
+
+  <button type="button" class="button project-save-button" onclick={{action 'save' model}}>Save Map</button>
 </div>
 
 <div class="cell medium-7 large-9 paper-container">
@@ -31,7 +32,7 @@
         <div class="grid-y" style="height:100%;">
           <div class="cell shrink legend">
             <section class="legend-section">
-              <h1 class="legend-project-name">{{model.project.projectName}} - Area Map</h1>
+              <h1 class="legend-project-name">{{model.project.projectName}} Area Map</h1>
               <h2 class="legend-applicant">{{model.project.applicantName}}</h2>
               {{!-- {{#if model.project.description}}
                 {{model.project.description}}
