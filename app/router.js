@@ -17,7 +17,6 @@ Router.map(function () { // eslint-disable-line
       });
     });
   });
-  this.route('dummyarea');
 });
 
 export default Router;
