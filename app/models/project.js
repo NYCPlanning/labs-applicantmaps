@@ -58,29 +58,28 @@ export default class ProjectModel extends Model.extend({}) {
   @computed('developmentSite', 'projectArea', 'rezoningArea')
   get projectGeometryBoundingBox() {
     // build a geojson FeatureCollection from all three project geoms
-    const FC = {
-      type: 'FeatureCollection',
-      features: [],
-    };
+    const geometries = this.getProperties('developmentSite', 'projectArea', 'rezoningArea');
 
-    const developmentSite = this.get('developmentSite');
-    const projectArea = this.get('projectArea');
-    const rezoningArea = this.get('rezoningArea');
+    const featureCollection = Object.values(geometries)
+      .reduce((acc, geometry) => {
+        if (geometry) {
+          acc.features.push({
+            type: 'Feature',
+            geometry,
+          });
+        }
 
-    [developmentSite, projectArea, rezoningArea].forEach((geometry) => {
-      if (geometry) {
-        FC.features.push({
-          type: 'Feature',
-          geometry,
-        });
-      }
-    });
+        return acc;
+      }, {
+        type: 'FeatureCollection',
+        features: [],
+      });
 
-    return turfBbox.default(FC);
+    return turfBbox.default(featureCollection);
   }
 
   // union all geometries together, draw a 600 foot buffer around the union
-  @computed('projectAreaSource')
+  @computed('developmentSite', 'projectArea', 'rezoningArea')
   get projectGeometryBuffer() {
     const developmentSite = this.get('developmentSite');
     const projectArea = this.get('projectArea');
