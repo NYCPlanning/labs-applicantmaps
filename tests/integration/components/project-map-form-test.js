@@ -13,14 +13,5 @@ module('Integration | Component | project-map-form', function(hooks) {
     await render(hbs`{{project-map-form}}`);
 
     assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
-    await render(hbs`
-      {{#project-map-form}}
-        template block text
-      {{/project-map-form}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });
