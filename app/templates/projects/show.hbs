@@ -48,7 +48,9 @@
             {{/map.source}}
           {{/if}}
         {{/mapbox-gl}}
-      <button class="button expanded gray">Edit Project</button>
+      {{#link-to 'projects.edit' model.id tagName='div'}}
+        <button class="button expanded gray">Edit Project</button>
+      {{/link-to}}
 
     </div>
     <div class="cell auto">

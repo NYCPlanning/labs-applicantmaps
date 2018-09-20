@@ -4,7 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { tagName } from '@ember-decorators/component';
-import projectGeomLayers from '../../utils/project-geom-layers';
+import projectGeomLayers from '../utils/project-geom-layers';
 
 const selectedLotsLayer = {
   type: 'fill',
