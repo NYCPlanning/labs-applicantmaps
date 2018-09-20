@@ -1,4 +1,19 @@
 import Component from '@ember/component';
+import { argument } from '@ember-decorators/argument';
 
-export default Component.extend({
-});
+export default class ProjectGeometriesClassComponent extends Component {
+  @argument
+  model
+
+  @argument
+  mapInstance
+
+  @argument
+  projectGeometryMode
+
+  @argument
+  selectedLots
+
+  @argument
+  lotSelectionMode
+}
