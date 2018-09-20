@@ -16,5 +16,10 @@
     {{/if}}
   </div>
 {{else}}
-  <button class="button expanded" {{action 'toggleGeometryEditing' mode}}>{{fa-icon 'plus'}} Add {{modeDisplayName}}</button>
+  <button 
+    class="button expanded" {{action 'toggleGeometryEditing' mode}}
+    disabled={{projectGeometryMode}} 
+  >
+    {{fa-icon 'plus'}} Add {{modeDisplayName}}
+  </button>
 {{/if}}
