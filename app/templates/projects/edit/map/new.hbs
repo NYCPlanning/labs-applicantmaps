@@ -37,6 +37,7 @@
         mapLoaded=(action 'handleMapLoaded') as |map|}}
 
           {{map.labs-layers layerGroups=areaMapForm.model.layerGroups}}
+            
           {{#map.source options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
             {{source.layer
               layer=developmentSiteLayer

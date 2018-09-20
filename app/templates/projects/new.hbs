@@ -64,10 +64,14 @@
       mapLoaded=(action handleMapLoad) as |map|}}
 
         {{!-- labs-layers (includes tax-lots layer) --}}
-        {{map.labs-layers
+        {{#map.labs-layers
           layerGroups=projectMapForm.model.layerGroups
           onLayerClick=(action 'handleLayerClick')
-        }}
+          as |layers|}}
+            {{#layers.tooltip as |tooltip|}}
+              {{tooltip-renderer feature=tooltip.feature template=tooltip.layer.tooltipTemplate}}
+            {{/layers.tooltip}}
+        {{/map.labs-layers}}
 
         {{!-- Ad-hoc source and layer for developmentSite --}}
         {{#if model.developmentSite}}

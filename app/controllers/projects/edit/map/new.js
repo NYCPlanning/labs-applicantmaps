@@ -55,7 +55,7 @@ export default class NewProjectMapController extends Controller {
 
   @action
   handleMapLoaded(map) {
-    this.set('mapInstance', map)
+    this.set('mapInstance', map);
     const buffer = this.get('model.project.projectGeometryBuffer');
 
     map.fitBounds(turfBbox.default(buffer), {
@@ -68,13 +68,13 @@ export default class NewProjectMapController extends Controller {
   @action
   updateBounds() {
     const map = this.get('mapInstance');
-      const canvas = map.getCanvas();
+    const canvas = map.getCanvas();
     let { width, height } = canvas;
 
     // workaround for retina displays
     if (window.devicePixelRatio > 1) {
-      width = width * 0.5;
-      height = height * 0.5;
+      width *= 0.5;
+      height *= 0.5;
     }
 
     const cUL = map.unproject([0, 0]).toArray();
