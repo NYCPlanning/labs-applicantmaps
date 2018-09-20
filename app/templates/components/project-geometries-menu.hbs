@@ -1,1 +1,10 @@
-{{yield}}
+{{yield (hash 
+  draw-control=(component 'draw-control'
+    model=model
+    mapInstance=mapInstance
+    mode="developmentSite"
+    modeDisplayName="Development Site"
+    projectGeometryMode=projectGeometryMode
+    selectedLots=selectedLots
+    lotSelectionMode=lotSelectionMode)
+)}}
