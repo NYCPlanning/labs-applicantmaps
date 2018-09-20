@@ -30,8 +30,6 @@ export default class NewProjectController extends Controller {
 
   @service notificationMessages;
 
-  projectGeometryMode = null
-
   isSelectingLots = false
 
   @computed('selectedLots.features.[]')

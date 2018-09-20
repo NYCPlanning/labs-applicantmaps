@@ -18,35 +18,27 @@
   <label class="text-small">Project Geometries</label>
 
   {{#if mapInstance}}
-    {{draw-control
+    {{#project-geometries-menu 
       model=model
       mapInstance=mapInstance
-      mode="developmentSite"
-      modeDisplayName="Development Site"
-      projectGeometryMode=projectGeometryMode
       selectedLots=selectedLots
       lotSelectionMode=lotSelectionMode
-    }}
+      as |menu|}}
+      {{menu.draw-control
+        mode="developmentSite"
+        modeDisplayName="Development Site"
+      }}
 
-    {{draw-control
-      model=model
-      mapInstance=mapInstance
-      mode="projectArea"
-      modeDisplayName="Project Area"
-      projectGeometryMode=projectGeometryMode
-      selectedLots=selectedLots
-      lotSelectionMode=lotSelectionMode
-    }}
+      {{menu.draw-control
+        mode="projectArea"
+        modeDisplayName="Project Area"
+      }}
 
-    {{draw-control
-      model=model
-      mapInstance=mapInstance
-      mode="rezoningArea"
-      modeDisplayName="Rezoning Area"
-      projectGeometryMode=projectGeometryMode
-      selectedLots=selectedLots
-      lotSelectionMode=lotSelectionMode
-    }}
+      {{menu.draw-control
+        mode="rezoningArea"
+        modeDisplayName="Rezoning Area"
+      }}
+    {{/project-geometries-menu}}
   {{/if}}
 
   <button type="button" class="button expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Create Project</button>
