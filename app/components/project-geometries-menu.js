@@ -16,4 +16,6 @@ export default class ProjectGeometriesClassComponent extends Component {
 
   @argument
   lotSelectionMode
+
+  projectGeometryMode = null
 }
