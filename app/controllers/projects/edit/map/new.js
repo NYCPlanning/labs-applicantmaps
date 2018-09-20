@@ -3,6 +3,8 @@ import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 import turfBbox from 'npm:@turf/bbox';
 
+import areaMapLegendConfig from '../../../../utils/area-map-legend-config';
+
 const developmentSiteLayer = {
   id: 'development-site-line',
   type: 'line',
@@ -50,6 +52,8 @@ export default class NewProjectMapController extends Controller {
   projectAreaLayer = projectAreaLayer
 
   projectBufferLayer = projectBufferLayer
+
+  areaMapLegendConfig = areaMapLegendConfig
 
   @action
   handleMapLoaded(map) {

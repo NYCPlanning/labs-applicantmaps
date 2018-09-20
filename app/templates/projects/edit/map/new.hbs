@@ -27,6 +27,29 @@
   <div class="paper letter landscape padding-10mm">
     <h2>{{model.project.projectName}} - Area Map</h2>
     {{#area-map-form tagName='' as |areaMapForm|}}
+      <div id="area-map-legend">
+        <h4>Project</h4>
+        {{#if model.project.projectArea}}
+          {{labs-ui/legend-item item=areaMapLegendConfig.projectArea}}
+        {{/if}}
+        {{#if model.project.developmentSite}}
+          {{labs-ui/legend-item item=areaMapLegendConfig.developmentSite}}
+        {{/if}}
+        {{#if model.project.rezoningArea}}
+          {{labs-ui/legend-item item=areaMapLegendConfig.rezoningArea}}
+        {{/if}}
+        {{#if model.project.projectGeometryBuffer}}
+          {{labs-ui/legend-item item=areaMapLegendConfig.projectGeometryBuffer}}
+        {{/if}}
+        <h4>Zoning</h4>
+        {{#each areaMapLegendConfig.zoningLegendItems as |item|}}
+          {{labs-ui/legend-item item=item}}
+        {{/each}}
+        <h4>Land Use</h4>
+        {{#each areaMapLegendConfig.landuseLegendItems as |item|}}
+          {{labs-ui/legend-item item=item}}
+        {{/each}}
+      </div>
       {{#labs-map
         id='main-map'
         initOptions=(hash
