@@ -18,35 +18,37 @@
   <label class="text-small">Project Geometries</label>
 
   {{#if mapInstance}}
-    {{draw-control
-      model=model
-      mapInstance=mapInstance
-      mode="developmentSite"
-      modeDisplayName="Development Site"
-      projectGeometryMode=projectGeometryMode
-      selectedLots=selectedLots
-      lotSelectionMode=lotSelectionMode
-    }}
+    {{#project-geometries-menu as |menu|}}
+      {{draw-control
+        model=model
+        mapInstance=mapInstance
+        mode="developmentSite"
+        modeDisplayName="Development Site"
+        projectGeometryMode=projectGeometryMode
+        selectedLots=selectedLots
+        lotSelectionMode=lotSelectionMode
+      }}
 
-    {{draw-control
-      model=model
-      mapInstance=mapInstance
-      mode="projectArea"
-      modeDisplayName="Project Area"
-      projectGeometryMode=projectGeometryMode
-      selectedLots=selectedLots
-      lotSelectionMode=lotSelectionMode
-    }}
+      {{draw-control
+        model=model
+        mapInstance=mapInstance
+        mode="projectArea"
+        modeDisplayName="Project Area"
+        projectGeometryMode=projectGeometryMode
+        selectedLots=selectedLots
+        lotSelectionMode=lotSelectionMode
+      }}
 
-    {{draw-control
-      model=model
-      mapInstance=mapInstance
-      mode="rezoningArea"
-      modeDisplayName="Rezoning Area"
-      projectGeometryMode=projectGeometryMode
-      selectedLots=selectedLots
-      lotSelectionMode=lotSelectionMode
-    }}
+      {{draw-control
+        model=model
+        mapInstance=mapInstance
+        mode="rezoningArea"
+        modeDisplayName="Rezoning Area"
+        projectGeometryMode=projectGeometryMode
+        selectedLots=selectedLots
+        lotSelectionMode=lotSelectionMode
+      }}
+    {{/project-geometries-menu}}
   {{/if}}
 
   <button type="button" class="button expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Create Project</button>
