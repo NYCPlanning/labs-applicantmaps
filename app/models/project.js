@@ -3,6 +3,7 @@ import { attr, hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
 import turfBuffer from 'npm:@turf/buffer';
 import turfUnion from 'npm:@turf/union';
+import turfBbox from 'npm:@turf/bbox';
 
 const { Model } = DS;
 
@@ -52,6 +53,30 @@ export default class ProjectModel extends Model.extend({}) {
       type: 'geojson',
       data: projectArea,
     };
+  }
+
+  @computed('developmentSite', 'projectArea', 'rezoningArea')
+  get projectGeometryBoundingBox() {
+    // build a geojson FeatureCollection from all three project geoms
+    const FC = {
+      type: 'FeatureCollection',
+      features: [],
+    };
+
+    const developmentSite = this.get('developmentSite');
+    const projectArea = this.get('projectArea');
+    const rezoningArea = this.get('rezoningArea');
+
+    [developmentSite, projectArea, rezoningArea].forEach((geometry) => {
+      if (geometry) {
+        FC.features.push({
+          type: 'Feature',
+          geometry,
+        });
+      }
+    });
+
+    return turfBbox.default(FC);
   }
 
   // union all geometries together, draw a 600 foot buffer around the union
