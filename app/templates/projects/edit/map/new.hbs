@@ -32,6 +32,7 @@
           <div class="cell shrink">
             {{!-- TODO: print a real permalink --}}<p class="text-tiny"><a href="">localhost:4200/projects/10/area-map</a></p>
             <h1 class="header-medium">{{model.project.projectName}} - Area Map</h1>
+
             <h2 class="header-small">Project</h2>
             {{#if model.project.projectArea}}
               {{labs-ui/legend-item item=areaMapLegendConfig.projectArea}}
@@ -93,7 +94,13 @@
                 }}
               {{/map.source}}
 
+              {{map.on 'rotate' (action 'handleMapRotateOrPitch')}}
+              {{map.on 'pitch' (action 'handleMapRotateOrPitch')}}
           {{/labs-map}}
+          <div id="north-arrow-container">
+            <div id="north-arrow" style={{northArrowTransforms.arrow}} />
+            <div id="north-n" style={{northArrowTransforms.n}}><span class="n" style={{northArrowTransforms.nSpan}}>N</span></div>
+          </div>
         {{/area-map-form}}
       </div>
 

@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import { action } from '@ember-decorators/object';
+import { action, computed } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 import turfBbox from 'npm:@turf/bbox';
 
@@ -55,14 +55,42 @@ export default class NewProjectMapController extends Controller {
 
   areaMapLegendConfig = areaMapLegendConfig
 
+  mapInstance = null
+
+  mapPitch = null
+
+  mapBearing = null
+
+  @computed('mapBearing', 'mapPitch')
+  get northArrowTransforms() {
+    const bearing = this.get('mapBearing');
+    const pitch = this.get('mapPitch');
+
+    return {
+      arrow: `transform: rotateX(${pitch}deg) rotate(${360 - bearing}deg)`,
+      n: `transform: rotate(${360 - bearing}deg)`,
+      nSpan: `transform: rotate(${(360 - bearing) * -1}deg)`,
+    };
+  }
+
   @action
   handleMapLoaded(map) {
+    this.set('mapInstance', map);
     const buffer = this.get('model.project.projectGeometryBuffer');
 
     map.fitBounds(turfBbox.default(buffer), {
       padding: 100,
       duration: 0,
     });
+
+    this.handleMapRotateOrPitch();
+  }
+
+  @action
+  handleMapRotateOrPitch() {
+    const map = this.get('mapInstance');
+    this.set('mapBearing', map.getBearing());
+    this.set('mapPitch', map.getPitch());
   }
 
   @action
