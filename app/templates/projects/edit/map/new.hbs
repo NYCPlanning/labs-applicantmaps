@@ -50,7 +50,7 @@
               before='boundary_country'
             }}
           {{/map.source}}
-          {{log (mapbox-geojson-source model.project.projectGeometryBuffer)}}
+
           {{#map.source options=(mapbox-geojson-source model.project.projectGeometryBuffer) as |source|}}
             {{source.layer
               layer=projectBufferLayer
