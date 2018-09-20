@@ -8,6 +8,7 @@ const Router = EmberRouter.extend({
 
 Router.map(function () { // eslint-disable-line
   this.route('projects', function () {
+    this.route('show', { path: ':id' });
     this.route('new');
     this.route('edit', { path: ':id/edit' }, function () {
       this.route('map', function () {
