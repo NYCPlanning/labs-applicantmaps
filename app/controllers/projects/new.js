@@ -140,6 +140,6 @@ export default class NewProjectController extends Controller {
 
     this.get('notificationMessages').success('Project saved!');
 
-    this.transitionToRoute('projects.edit', project);
+    this.transitionToRoute('projects.show', project);
   }
 }
