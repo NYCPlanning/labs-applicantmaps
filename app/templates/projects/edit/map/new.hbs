@@ -25,64 +25,80 @@
 
 <div class="cell medium-7 large-9 paper-container">
   <div class="paper letter landscape padding-10mm">
-    <h2>{{model.project.projectName}} - Area Map</h2>
-    {{#area-map-form tagName='' as |areaMapForm|}}
-      <div id="area-map-legend">
-        <h4>Project</h4>
-        {{#if model.project.projectArea}}
-          {{labs-ui/legend-item item=areaMapLegendConfig.projectArea}}
-        {{/if}}
-        {{#if model.project.developmentSite}}
-          {{labs-ui/legend-item item=areaMapLegendConfig.developmentSite}}
-        {{/if}}
-        {{#if model.project.rezoningArea}}
-          {{labs-ui/legend-item item=areaMapLegendConfig.rezoningArea}}
-        {{/if}}
-        {{#if model.project.projectGeometryBuffer}}
-          {{labs-ui/legend-item item=areaMapLegendConfig.projectGeometryBuffer}}
-        {{/if}}
-        <h4>Zoning</h4>
-        {{#each areaMapLegendConfig.zoningLegendItems as |item|}}
-          {{labs-ui/legend-item item=item}}
-        {{/each}}
-        <h4>Land Use</h4>
-        {{#each areaMapLegendConfig.landuseLegendItems as |item|}}
-          {{labs-ui/legend-item item=item}}
-        {{/each}}
+    <div class="paper-grid grid-x">
+
+      <div class="cell small-3">
+        <div class="grid-y" style="height:100%;">
+          <div class="cell shrink">
+            {{!-- TODO: print a real permalink --}}<p class="text-tiny"><a href="">localhost:4200/projects/10/area-map</a></p>
+            <h1 class="header-medium">{{model.project.projectName}} - Area Map</h1>
+            <h4>Project</h4>
+            {{#if model.project.projectArea}}
+              {{labs-ui/legend-item item=areaMapLegendConfig.projectArea}}
+            {{/if}}
+            {{#if model.project.developmentSite}}
+              {{labs-ui/legend-item item=areaMapLegendConfig.developmentSite}}
+            {{/if}}
+            {{#if model.project.rezoningArea}}
+              {{labs-ui/legend-item item=areaMapLegendConfig.rezoningArea}}
+            {{/if}}
+            {{#if model.project.projectGeometryBuffer}}
+              {{labs-ui/legend-item item=areaMapLegendConfig.projectGeometryBuffer}}
+            {{/if}}
+            <h4>Zoning</h4>
+            {{#each areaMapLegendConfig.zoningLegendItems as |item|}}
+              {{labs-ui/legend-item item=item}}
+            {{/each}}
+            <h4>Land Use</h4>
+            {{#each areaMapLegendConfig.landuseLegendItems as |item|}}
+              {{labs-ui/legend-item item=item}}
+            {{/each}}
+          </div>
+          <div class="cell auto">
+            <div style="background:hotpink;height:100%;">THIS IS THE CITY CONTEXT MAP</div>
+          </div>
+        </div>
       </div>
-      {{#labs-map
-        id='main-map'
-        initOptions=(hash
-          style=areaMapForm.model.meta.mapboxStyle
-          zoom=12
-          center=(array -73.983307 40.704977)
-        )
-        mapLoaded=(action 'handleMapLoaded') as |map|}}
 
-          {{map.labs-layers layerGroups=areaMapForm.model.layerGroups}}
-          {{#map.source options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
-            {{source.layer
-              layer=developmentSiteLayer
-              before='boundary_country'
-            }}
-          {{/map.source}}
+      <div class="cell small-9">
+        {{#area-map-form tagName='' as |areaMapForm|}}
+          {{#labs-map
+            id='main-map'
+            initOptions=(hash
+              style=areaMapForm.model.meta.mapboxStyle
+              zoom=12
+              center=(array -73.983307 40.704977)
+            )
+            mapLoaded=(action 'handleMapLoaded') as |map|}}
 
-          {{#map.source options=(mapbox-geojson-source model.project.projectArea) as |source|}}
-            {{source.layer
-              layer=projectAreaLayer
-              before='boundary_country'
-            }}
-          {{/map.source}}
+              {{map.labs-layers layerGroups=areaMapForm.model.layerGroups}}
+              {{#map.source options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
+                {{source.layer
+                  layer=developmentSiteLayer
+                  before='boundary_country'
+                }}
+              {{/map.source}}
 
-          {{#map.source options=(mapbox-geojson-source model.project.projectGeometryBuffer) as |source|}}
-            {{source.layer
-              layer=projectBufferLayer
-              before='boundary_country'
-            }}
-          {{/map.source}}
+              {{#map.source options=(mapbox-geojson-source model.project.projectArea) as |source|}}
+                {{source.layer
+                  layer=projectAreaLayer
+                  before='boundary_country'
+                }}
+              {{/map.source}}
 
-      {{/labs-map}}
-    {{/area-map-form}}
+              {{#map.source options=(mapbox-geojson-source model.project.projectGeometryBuffer) as |source|}}
+                {{source.layer
+                  layer=projectBufferLayer
+                  before='boundary_country'
+                }}
+              {{/map.source}}
+
+          {{/labs-map}}
+        {{/area-map-form}}
+      </div>
+
+    </div>
+
   </div>
 </div>
 

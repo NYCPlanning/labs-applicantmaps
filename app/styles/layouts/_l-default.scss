@@ -98,6 +98,14 @@ body {
   }
 }
 
+.paper-grid {
+  height: 100%;
+
+  > .cell:first-child {
+    padding-right: 5mm;
+  }
+}
+
 .sidebar {
   background-color: $off-white;
   position: relative;
