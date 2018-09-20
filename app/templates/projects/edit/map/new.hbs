@@ -81,30 +81,38 @@
               zoom=12
               center=(array -73.983307 40.704977)
             )
-            mapLoaded=(action 'handleMapLoaded') as |map|}}
+            mapLoaded=(action 'handleMapLoaded') as |map|
+          }}
 
-              {{map.labs-layers layerGroups=areaMapForm.model.layerGroups}}
-              {{#map.source options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
-                {{source.layer
-                  layer=developmentSiteLayer
-                  before='boundary_country'
-                }}
-              {{/map.source}}
+            {{map.labs-layers layerGroups=areaMapForm.model.layerGroups}}
+            {{#map.source options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
+              {{source.layer
+                layer=developmentSiteLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
 
-              {{#map.source options=(mapbox-geojson-source model.project.projectArea) as |source|}}
-                {{source.layer
-                  layer=projectAreaLayer
-                  before='boundary_country'
-                }}
-              {{/map.source}}
+            {{#map.source options=(mapbox-geojson-source model.project.projectArea) as |source|}}
+              {{source.layer
+                layer=projectAreaLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
 
-              {{#map.source options=(mapbox-geojson-source model.project.projectGeometryBuffer) as |source|}}
-                {{source.layer
-                  layer=projectBufferLayer
-                  before='boundary_country'
-                }}
-              {{/map.source}}
+            {{#map.source options=(mapbox-geojson-source model.project.projectGeometryBuffer) as |source|}}
+              {{source.layer
+                layer=projectBufferLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
 
+            {{map.on 'rotate' (action 'handleMapRotateOrPitch')}}
+            {{map.on 'pitch' (action 'handleMapRotateOrPitch')}}
+
+            <div id="north-arrow-container">
+              <div id="north-arrow" style={{northArrowTransforms.arrow}} />
+              <div id="north-n" style={{northArrowTransforms.n}}><span class="n" style={{northArrowTransforms.nSpan}}>N</span></div>
+            </div>
           {{/labs-map}}
         {{/area-map-form}}
         {{!-- TODO: print a real permalink --}}<p class="text-tiny text-right"><a href="">localhost:4200/projects/10/area-map</a></p>
