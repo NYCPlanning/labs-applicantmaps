@@ -5,7 +5,7 @@
       center=(array -73.96532400540775 40.709710016659386)
       interactive=false
     )
-    as | map |
+    mapLoaded=(action 'handleMapLoad') as | map |
   }}
   {{#map.source options=(mapbox-geojson-source boundsPolygon) as |source|}}
              {{source.layer}}
