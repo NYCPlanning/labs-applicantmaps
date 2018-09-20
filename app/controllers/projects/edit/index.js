@@ -2,30 +2,37 @@ import Controller from '@ember/controller';
 import { action } from '@ember-decorators/object';
 import turfBbox from 'npm:@turf/bbox';
 
+import projectGeomLayers from '../../../utils/project-geom-layers';
 
 export default class ProjectIndexController extends Controller {
-  projectAreaLayer = {
-    id: 'project-area-line',
-    type: 'line',
-    layout: {
-      visibility: 'visible',
-      'line-cap': 'round',
-    },
-    paint: {
-      'line-width': 6,
-      'line-dasharray': [
-        0.1,
-        2,
-      ],
-    },
-  }
+  projectGeomLayers = projectGeomLayers
 
   @action
-  handleMapLoad(projectArea, map) { // eslint-disable-line
+  handleMapLoad(map) { // eslint-disable-line
     window.map = map;
 
-    map.fitBounds(turfBbox.default(projectArea), {
-      padding: 10,
+    // build a geojson FeatureCollection from all three project geoms
+    const FC = {
+      type: 'FeatureCollection',
+      features: [],
+    };
+
+    const developmentSite = this.get('model.developmentSite');
+    const projectArea = this.get('model.projectArea');
+    const rezoningArea = this.get('model.rezoningArea');
+
+    [developmentSite, projectArea, rezoningArea].forEach((geometry) => {
+      if (geometry) {
+        FC.features.push({
+          type: 'Feature',
+          geometry,
+        });
+      }
+    });
+
+    map.fitBounds(turfBbox.default(FC), {
+      padding: 50,
+      duration: 0,
     });
   }
 }

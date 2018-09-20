@@ -2,9 +2,20 @@ import Controller from '@ember/controller';
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 
+import turfBbox from 'npm:@turf/bbox';
+
 export default class NewProjectMapController extends Controller {
   @service
   notificationMessages;
+
+  developmentSiteLayer = {
+    id: 'development-site-line',
+    type: 'line',
+    paint: {
+      'line-width': 2,
+      'line-color': 'red',
+    },
+  }
 
   projectAreaLayer = {
     id: 'project-area-line',
@@ -33,6 +44,16 @@ export default class NewProjectMapController extends Controller {
         0.5,
       ],
     },
+  }
+
+  @action
+  handleMapLoaded(map) {
+    const buffer = this.get('model.project.projectGeometryBufferSource.data');
+
+    map.fitBounds(turfBbox.default(buffer), {
+      padding: 100,
+      duration: 0,
+    });
   }
 
   @action

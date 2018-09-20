@@ -2,6 +2,7 @@ import DS from 'ember-data';
 import { attr, hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
 import turfBuffer from 'npm:@turf/buffer';
+import turfUnion from 'npm:@turf/union';
 
 const { Model } = DS;
 
@@ -53,12 +54,28 @@ export default class ProjectModel extends Model.extend({}) {
     };
   }
 
+  // union all geometries together, draw a 600 foot buffer around the union
   @computed('projectAreaSource')
-  get projectBufferSource() {
-    const { data } = this.get('projectAreaSource');
+  get projectGeometryBufferSource() {
+    const developmentSite = this.get('developmentSite');
+    const projectArea = this.get('projectArea');
+    const rezoningArea = this.get('rezoningArea');
+
+    let union = null;
+
+    [developmentSite, projectArea, rezoningArea].forEach((geometry) => {
+      if (geometry) {
+        if (union === null) {
+          union = geometry;
+        } else {
+          union = turfUnion.default(union, geometry);
+        }
+      }
+    });
+
     return {
       type: 'geojson',
-      data: turfBuffer(data, 0.113636, { units: 'miles' }),
+      data: turfBuffer(union, 0.113636, { units: 'miles' }),
     };
   }
 }

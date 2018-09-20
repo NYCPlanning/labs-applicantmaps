@@ -9,11 +9,35 @@
       model=model
       mapLoaded=(action 'handleMapLoad') as |map|}}
       {{map.labs-layers model=model}}
-      {{#map.source options=projectAreaSource as |source|}}
-        {{source.layer
-          before='boundary_country'
-        }}
-      {{/map.source}}
+      {{!-- Ad-hoc source and layer for developmentSite --}}
+      {{#if model.developmentSite}}
+        {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
+          {{source.layer
+            layer=projectGeomLayers.developmentSiteLayer
+            before='boundary_country'
+          }}
+        {{/map.source}}
+      {{/if}}
+
+      {{!-- Ad-hoc source and layer for projectArea --}}
+      {{#if model.projectArea}}
+        {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
+          {{source.layer
+            layer=projectGeomLayers.projectAreaLayer
+            before='boundary_country'
+          }}
+        {{/map.source}}
+      {{/if}}
+
+      {{!-- Ad-hoc source and layer for projectArea --}}
+      {{#if model.rezoningArea}}
+        {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
+          {{source.layer
+            layer=projectGeomLayers.rezoningAreaLayer
+            before='boundary_country'
+          }}
+        {{/map.source}}
+      {{/if}}
       {{#map.source options=projectBufferSource as |source|}}
         {{source.layer
           before='boundary_country'

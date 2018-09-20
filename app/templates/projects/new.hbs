@@ -73,7 +73,7 @@
         {{#if model.developmentSite}}
           {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
             {{source.layer
-              layer=developmentSiteLayer
+              layer=projectGeomLayers.developmentSiteLayer
               before='boundary_country'
             }}
           {{/map.source}}
@@ -83,7 +83,7 @@
         {{#if model.projectArea}}
           {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
             {{source.layer
-              layer=projectAreaLayer
+              layer=projectGeomLayers.projectAreaLayer
               before='boundary_country'
             }}
           {{/map.source}}
@@ -93,12 +93,11 @@
         {{#if model.rezoningArea}}
           {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
             {{source.layer
-              layer=rezoningAreaLayer
+              layer=projectGeomLayers.rezoningAreaLayer
               before='boundary_country'
             }}
           {{/map.source}}
         {{/if}}
-
 
         {{!-- Ad-hoc source and layer for showing selected lots in lot selection mode --}}
         {{#map.source options=selectedLotsSource as |source|}}

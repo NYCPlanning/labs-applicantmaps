@@ -34,18 +34,24 @@
           zoom=12
           center=(array -73.983307 40.704977)
         )
-        mapLoaded=(action areaMapForm.handleMapLoad model.project.projectAreaSource.data) as |map|}}
+        mapLoaded=(action handleMapLoaded ) as |map|}}
 
           {{map.labs-layers layerGroups=areaMapForm.model.layerGroups}}
+          {{#map.source options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
+            {{source.layer
+              layer=developmentSiteLayer
+              before='boundary_country'
+            }}
+          {{/map.source}}
 
-          {{#map.source options=model.project.projectAreaSource as |source|}}
+          {{#map.source options=(mapbox-geojson-source model.project.projectArea) as |source|}}
             {{source.layer
               layer=projectAreaLayer
               before='boundary_country'
             }}
           {{/map.source}}
 
-          {{#map.source options=model.project.projectBufferSource as |source|}}
+          {{#map.source options=model.project.projectGeometryBufferSource as |source|}}
             {{source.layer
               layer=projectBufferLayer
               before='boundary_country'

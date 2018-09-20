@@ -3,29 +3,7 @@ import { action, computed } from '@ember-decorators/object';
 import mapboxgl from 'mapbox-gl';
 import { service } from '@ember-decorators/service';
 
-const developmentSiteLayer = {
-  type: 'line',
-  paint: {
-    'line-color': 'green',
-    'line-width': 4,
-  },
-};
-
-const projectAreaLayer = {
-  type: 'line',
-  paint: {
-    'line-color': 'orange',
-    'line-width': 4,
-  },
-};
-
-const rezoningAreaLayer = {
-  type: 'line',
-  paint: {
-    'line-color': 'purple',
-    'line-width': 4,
-  },
-};
+import projectGeomLayers from '../../utils/project-geom-layers';
 
 const selectedLotsLayer = {
   type: 'fill',
@@ -44,11 +22,7 @@ export default class NewProjectController extends Controller {
     });
   }
 
-  developmentSiteLayer = developmentSiteLayer
-
-  projectAreaLayer = projectAreaLayer
-
-  rezoningAreaLayer = rezoningAreaLayer
+  projectGeomLayers = projectGeomLayers
 
   selectedLotsLayer = selectedLotsLayer
 
