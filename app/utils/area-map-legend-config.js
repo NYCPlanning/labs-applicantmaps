@@ -5,9 +5,9 @@ export default {
       type: 'rectangle',
       layers: [
         {
-          fill: 'rgba(70, 130, 180, 0)',
-          stroke: '#000',
-          'stroke-width': 1.5,
+          fill: 'rgb(1,1,1,0)',
+          stroke: 'red',
+          'stroke-width': 1,
         },
       ],
     },
@@ -21,7 +21,8 @@ export default {
         {
           fill: 'rgba(70, 130, 180, 0)',
           stroke: '#000',
-          'stroke-width': 1.5,
+          'stroke-width': 2,
+          'stroke-dasharray': '2 2',
         },
       ],
     },
@@ -48,8 +49,9 @@ export default {
       layers: [
         {
           fill: 'rgba(70, 130, 180, 0)',
-          stroke: '#000',
-          'stroke-width': 1.5,
+          stroke: 'rgba(116, 4, 80, 1)',
+          'stroke-width': 2,
+          'stroke-dasharray': '2 2',
         },
       ],
     },
@@ -57,7 +59,7 @@ export default {
 
 
   landuseLegendItems: [{
-    label: 'One &amp; Two Family Buildings ',
+    label: '1-2 Family Residential',
     icon: {
       type: 'fa-icon',
       layers: [
@@ -69,7 +71,7 @@ export default {
     },
   },
   {
-    label: 'Multi-Family Walk-Up Buildings ',
+    label: 'Multifamily Walkup',
     icon: {
       type: 'fa-icon',
       layers: [
@@ -81,7 +83,7 @@ export default {
     },
   },
   {
-    label: 'Multi-Family Elevator Buildings ',
+    label: 'Multifamily Elevator',
     icon: {
       type: 'fa-icon',
       layers: [
@@ -93,7 +95,7 @@ export default {
     },
   },
   {
-    label: 'Mixed Residential &amp; Commercial Buildings ',
+    label: 'Mixed Commercial/Residential',
     icon: {
       type: 'fa-icon',
       layers: [
@@ -105,7 +107,7 @@ export default {
     },
   },
   {
-    label: 'Commercial &amp; Office Buildings ',
+    label: 'Commercial & Office',
     icon: {
       type: 'fa-icon',
       layers: [
@@ -117,7 +119,7 @@ export default {
     },
   },
   {
-    label: 'Industrial &amp; Manufacturing ',
+    label: 'Industrial & Mfg',
     icon: {
       type: 'fa-icon',
       layers: [
@@ -129,7 +131,7 @@ export default {
     },
   },
   {
-    label: 'Transportation &amp; Utility ',
+    label: 'Transportation & Utility',
     icon: {
       type: 'fa-icon',
       layers: [
@@ -141,7 +143,7 @@ export default {
     },
   },
   {
-    label: 'Public Facilities &amp; Institutions ',
+    label: 'Public Facilities & Institiutions',
     icon: {
       type: 'fa-icon',
       layers: [
@@ -153,7 +155,7 @@ export default {
     },
   },
   {
-    label: 'Open Space &amp; Outdoor Recreation ',
+    label: 'Open Space & Outdoor Recreation ',
     icon: {
       type: 'fa-icon',
       layers: [
@@ -165,7 +167,7 @@ export default {
     },
   },
   {
-    label: 'Parking Facilities ',
+    label: 'Parking',
     icon: {
       type: 'fa-icon',
       layers: [
@@ -177,7 +179,7 @@ export default {
     },
   },
   {
-    label: 'Vacant Land ',
+    label: 'Vacant/No Data',
     icon: {
       type: 'fa-icon',
       layers: [
