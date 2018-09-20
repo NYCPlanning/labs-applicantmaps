@@ -81,7 +81,7 @@ export default class ProjectModel extends Model.extend({}) {
 
   // union all geometries together, draw a 600 foot buffer around the union
   @computed('projectAreaSource')
-  get projectGeometryBufferSource() {
+  get projectGeometryBuffer() {
     const developmentSite = this.get('developmentSite');
     const projectArea = this.get('projectArea');
     const rezoningArea = this.get('rezoningArea');
@@ -98,9 +98,6 @@ export default class ProjectModel extends Model.extend({}) {
       }
     });
 
-    return {
-      type: 'geojson',
-      data: turfBuffer(union, 0.113636, { units: 'miles' }),
-    };
+    return turfBuffer(union, 0.113636, { units: 'miles' });
   }
 }

@@ -48,7 +48,7 @@ export default class NewProjectMapController extends Controller {
 
   @action
   handleMapLoaded(map) {
-    const buffer = this.get('model.project.projectGeometryBufferSource.data');
+    const buffer = this.get('model.project.projectGeometryBuffer');
 
     map.fitBounds(turfBbox.default(buffer), {
       padding: 100,
