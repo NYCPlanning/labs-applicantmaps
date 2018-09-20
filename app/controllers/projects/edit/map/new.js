@@ -41,6 +41,6 @@ export default class NewProjectMapController extends Controller {
 
     this.get('notificationMessages').success('Map added!');
 
-    this.transitionToRoute('projects.edit', map.get('project'));
+    this.transitionToRoute('projects.show', map.get('project'));
   }
 }
