@@ -12,15 +12,15 @@ module('Integration | Component | inset-map', function(hooks) {
 
     await render(hbs`{{inset-map}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.equal(this.element.textContent.trim(), 'Missing Mapbox GL JS CSS');
 
     // Template block usage:
     await render(hbs`
       {{#inset-map}}
-        template block text
+        Missing Mapbox GL JS CSS
       {{/inset-map}}
     `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.equal(this.element.textContent.trim(), 'Missing Mapbox GL JS CSS');
   });
 });
