@@ -2,6 +2,8 @@ import DS from 'ember-data';
 import { attr, hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
 import turfBuffer from 'npm:@turf/buffer';
+import turfUnion from 'npm:@turf/union';
+import turfBbox from 'npm:@turf/bbox';
 
 const { Model } = DS;
 
@@ -53,12 +55,46 @@ export default class ProjectModel extends Model.extend({}) {
     };
   }
 
-  @computed('projectAreaSource')
-  get projectBufferSource() {
-    const { data } = this.get('projectAreaSource');
-    return {
-      type: 'geojson',
-      data: turfBuffer(data, 0.113636, { units: 'miles' }),
-    };
+  @computed('developmentSite', 'projectArea', 'rezoningArea')
+  get projectGeometryBoundingBox() {
+    // build a geojson FeatureCollection from all three project geoms
+    const geometries = this.getProperties('developmentSite', 'projectArea', 'rezoningArea');
+
+    const featureCollection = Object.values(geometries)
+      .reduce((acc, geometry) => {
+        if (geometry) {
+          acc.features.push({
+            type: 'Feature',
+            geometry,
+          });
+        }
+
+        return acc;
+      }, {
+        type: 'FeatureCollection',
+        features: [],
+      });
+
+    return turfBbox.default(featureCollection);
+  }
+
+  // union all geometries together, draw a 600 foot buffer around the union
+  @computed('developmentSite', 'projectArea', 'rezoningArea')
+  get projectGeometryBuffer() {
+    const geometries = this.getProperties('developmentSite', 'projectArea', 'rezoningArea');
+
+    const projectGeometryUnion = Object.values(geometries).reduce((union, geometry) => {
+      if (geometry) {
+        if (union === null) {
+          union = geometry;
+        } else {
+          union = turfUnion.default(union, geometry);
+        }
+      }
+
+      return union;
+    }, null);
+
+    return turfBuffer(projectGeometryUnion, 0.113636, { units: 'miles' });
   }
 }

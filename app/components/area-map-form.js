@@ -10,7 +10,6 @@ export default class AreaMapFormComponent extends Component {
     const store = this.get('store');
     store.query('layer-group', {
       'layer-groups': [
-        { id: 'zoning-districts', visible: true },
         {
           id: 'tax-lots',
           visible: true,
@@ -20,12 +19,12 @@ export default class AreaMapFormComponent extends Component {
             { style: { layout: { 'text-field': '{numfloors}' } } },
           ],
         },
-        { id: 'commercial-overlays', visible: true },
         { id: 'subway', visible: true },
         { id: 'building-footprints', visible: true },
         { id: 'special-purpose-districts', visible: false },
         { id: 'citymap', visible: true },
         { id: 'street-direction-arrows', visible: true },
+        { id: 'commercial-overlay-patterns', visible: true },
       ],
     }).then((layerGroups) => {
       const { meta } = layerGroups;

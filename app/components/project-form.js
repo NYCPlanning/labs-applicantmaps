@@ -4,30 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { tagName } from '@ember-decorators/component';
-
-const developmentSiteLayer = {
-  type: 'line',
-  paint: {
-    'line-color': 'green',
-    'line-width': 4,
-  },
-};
-
-const projectAreaLayer = {
-  type: 'line',
-  paint: {
-    'line-color': 'orange',
-    'line-width': 4,
-  },
-};
-
-const rezoningAreaLayer = {
-  type: 'line',
-  paint: {
-    'line-color': 'purple',
-    'line-width': 4,
-  },
-};
+import projectGeomLayers from '../../utils/project-geom-layers';
 
 const selectedLotsLayer = {
   type: 'fill',
@@ -47,26 +24,20 @@ export default class ProjectFormComponent extends Component {
     });
   }
 
+  @argument
+  model;
+
   @service
   notificationMessages;
 
   @service
   router;
 
-  @argument
-  model
-
-  developmentSiteLayer = developmentSiteLayer
-
-  projectAreaLayer = projectAreaLayer
-
-  rezoningAreaLayer = rezoningAreaLayer
+  projectGeomLayers = projectGeomLayers
 
   selectedLotsLayer = selectedLotsLayer
 
   lotSelectionMode = false
-
-  projectGeometryMode = null
 
   isSelectingLots = false
 
