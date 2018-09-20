@@ -1,4 +1,4 @@
-{{#if (eq projectGeometryMode mode)}}
+{{#if (eq geometryMode mode)}}
   <div class="callout">
     {{#if lotSelectionMode}}
       <p class="text-small">Click individual tax lots to toggle their selection</p>
@@ -18,7 +18,7 @@
 {{else}}
   <button 
     class="button expanded" {{action 'toggleGeometryEditing' mode}}
-    disabled={{projectGeometryMode}} 
+    disabled={{geometryMode}} 
   >
     {{fa-icon 'plus'}} Add {{modeDisplayName}}
   </button>

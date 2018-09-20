@@ -9,13 +9,10 @@ export default class ProjectGeometriesClassComponent extends Component {
   mapInstance
 
   @argument
-  projectGeometryMode
-
-  @argument
   selectedLots
 
   @argument
   lotSelectionMode
 
-  projectGeometryMode = null
+  geometryMode = null
 }
