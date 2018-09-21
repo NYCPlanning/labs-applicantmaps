@@ -6,8 +6,8 @@ export default class ProjectsEditRoute extends Route {
   @service
   notificationMessages;
 
-  model() {
-    return this.modelFor('projects.edit');
+  model({ id }) {
+    return this.store.findRecord('project', id, { include: 'applicant-maps' });
   }
 
   @action

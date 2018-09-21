@@ -16,7 +16,7 @@ const draw = new MapboxDraw({
 
 export default class DrawControlController extends Component {
   @argument
-  projectGeometryMode
+  geometryMode
 
   @argument
   lotSelectionMode
@@ -28,7 +28,7 @@ export default class DrawControlController extends Component {
   modeDisplayName
 
   @argument
-  projectGeometryMode
+  geometryMode
 
   @argument
   toggleGeometryEditing
@@ -55,12 +55,12 @@ export default class DrawControlController extends Component {
   model
 
   @action toggleGeometryEditing(type) {
-    this.set('projectGeometryMode', type);
+    this.set('geometryMode', type);
 
-    const projectGeometryMode = this.get('projectGeometryMode');
+    const geometryMode = this.get('geometryMode');
 
     const map = this.get('mapInstance');
-    if (projectGeometryMode) {
+    if (geometryMode) {
       map.addControl(draw, 'top-right');
       draw.changeMode('draw_polygon');
     } else {
@@ -114,11 +114,11 @@ export default class DrawControlController extends Component {
     draw.deleteAll();
 
     const { geometry } = FeatureCollection.features[0];
-    const projectGeometryMode = this.get('projectGeometryMode');
+    const geometryMode = this.get('geometryMode');
 
     // set geometry depending on mode
     const model = this.get('model');
-    model.set(projectGeometryMode, geometry);
+    model.set(geometryMode, geometry);
 
     // breakdown the draw tools
     this.toggleGeometryEditing(null);
