@@ -16,10 +16,13 @@
     {{/if}}
   </div>
 {{else}}
-  <button 
-    class="button expanded" {{action 'toggleGeometryEditing' mode}}
-    disabled={{geometryMode}} 
+  <button
+    class="button expanded {{if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon')) 'gray'}}"
+    {{action 'toggleGeometryEditing' mode}}
+    disabled={{geometryMode}}
   >
-    {{fa-icon 'plus'}} Add {{modeDisplayName}}
+    {{fa-icon 'pencil-alt'}}
+    {{if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon')) 'Red' 'D'}}raw
+    {{modeDisplayName}}
   </button>
 {{/if}}
