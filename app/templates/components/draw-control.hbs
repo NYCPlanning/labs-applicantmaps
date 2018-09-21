@@ -4,11 +4,11 @@
       <p class="text-small">Click individual tax lots to toggle their selection</p>
       <div class="grid-x grid-margin-x">
         <button class="cell auto button small" {{action 'finishLotSelection'}}>Make Selection</button>
-        <button class="cell shrink button small alert clear">Cancel</button>
+        {{!-- <button class="cell shrink button small alert clear">Cancel</button> --}}{{!-- TODO: make an action to cancel lot selection --}}
       </div>
     {{else}}
-      <p class="text-small">Use the drawing tools on the map to define the development site OR click below to create your site by selecting tax lots</p>
-      <button class="button gray expanded" {{action "startLotSelection"}}>Select Tax Lots</button>
+      <p class="text-small">Use the <strong class="bg-a11y-yellow">&nbsp;drawing tools&nbsp;</strong> on the map to define the {{modeDisplayName}} <em>or&hellip;</em></p>
+      <button class="button gray small expanded" {{action "startLotSelection"}}>Select Tax Lots</button>
       <div class="grid-x grid-margin-x">
         <button class="cell auto button small" {{action 'setProjectGeometry'}}>Done</button>
         <button class="cell shrink button small alert clear" {{action 'toggleGeometryEditing' null}}>Cancel</button>
