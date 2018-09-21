@@ -63,6 +63,8 @@ export default class NewProjectMapController extends Controller {
 
   mapBearing = null
 
+  noZoom = false
+
   @computed('mapBearing', 'mapPitch')
   get northArrowTransforms() {
     const bearing = this.get('mapBearing');
@@ -125,6 +127,18 @@ export default class NewProjectMapController extends Controller {
     });
   }
 
+  @action
+  toggleZoom () {
+    this.toggleProperty('noZoom');
+
+    const noZoom = this.get('noZoom');
+    console.log(noZoom);
+
+    if (noZoom) {
+      const map = this.get('MapInstance');
+      map.scrollZoom.disable();
+    }
+  }
 
   @action
   async save(model) {
