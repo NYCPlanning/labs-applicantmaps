@@ -12,7 +12,7 @@ const requiredFields = [
   'applicantName',
   'developmentSite',
   'projectArea',
-  'description',
+  // 'description',
 ];
 
 export default class ProjectModel extends Model.extend({}) {

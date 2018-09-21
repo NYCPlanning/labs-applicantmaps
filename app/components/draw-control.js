@@ -28,6 +28,9 @@ export default class DrawControlController extends Component {
   modeDisplayName
 
   @argument
+  hasGeom
+
+  @argument
   geometryMode
 
   @argument
