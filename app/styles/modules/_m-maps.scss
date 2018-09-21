@@ -38,6 +38,9 @@
   border-radius: 0;
 }
 
+
+// Geolocate
+// --------------------------------------------------
 .find-me {
   position: absolute;
   top: 108px;
@@ -91,6 +94,7 @@
 }
 
 // Map Tooltip
+// --------------------------------------------------
 .map-tooltip {
   position: absolute;
   background-color: $white;
@@ -102,6 +106,9 @@
   border-radius: 2px;
 }
 
+
+// Map Popup
+// --------------------------------------------------
 .mapboxgl-popup-content, .mapboxgl-popup-tip {
   transition: all 0.2s;
 }
@@ -185,14 +192,28 @@
   pointer-events: none;
 }
 
+
+// Project Map
+// --------------------------------------------------
 #project-map {
   height: 300px;
   margin-bottom: $global-margin
 }
 
 
-// Dynamic North Arrow
+// Inset Map
+// --------------------------------------------------
+.inset-map-container {
+  height: 100%;
+}
+#inset-map {
+  height: 100%;
+  width: 100%;
+}
 
+
+// Dynamic North Arrow
+// --------------------------------------------------
 #north-arrow-container {
   position: absolute;
   z-index: 2;

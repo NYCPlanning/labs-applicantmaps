@@ -37,7 +37,7 @@ module.exports = function (environment) {
     'mapbox-gl': {
       accessToken: '',
       map: {
-        style: '//raw.githubusercontent.com/NYCPlanning/labs-gl-style/master/data/style.json',
+        style: 'https://layers-api-staging.planninglabs.nyc/v1/base/style.json',
         zoom: 12.25,
         center: [-73.9868, 40.724],
       },
@@ -80,6 +80,7 @@ module.exports = function (environment) {
   if (environment === 'production') {
     // here you can enable a production-specific feature
     ENV.host = 'https://layers-api.planninglabs.nyc';
+    ENV['mapbox-gl'].map.style = 'https://layers-api.planninglabs.nyc/v1/base/style.json';
   }
 
   return ENV;

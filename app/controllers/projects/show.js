@@ -1,8 +1,8 @@
 import Controller from '@ember/controller';
 import { action } from '@ember-decorators/object';
-import projectGeomLayers from '../../../utils/project-geom-layers';
+import projectGeomLayers from '../../utils/project-geom-layers';
 
-export default class ProjectIndexController extends Controller {
+export default class NewProjectController extends Controller {
   projectGeomLayers = projectGeomLayers
 
   @action

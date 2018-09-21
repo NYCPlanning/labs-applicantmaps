@@ -47,6 +47,8 @@ export default class NewProjectMapController extends Controller {
   @service
   notificationMessages;
 
+  boundsPolygon = null
+
   developmentSiteLayer = developmentSiteLayer
 
   projectAreaLayer = projectAreaLayer
@@ -84,6 +86,7 @@ export default class NewProjectMapController extends Controller {
     });
 
     this.handleMapRotateOrPitch();
+    this.updateBounds();
   }
 
   @action
@@ -94,11 +97,41 @@ export default class NewProjectMapController extends Controller {
   }
 
   @action
+  updateBounds() {
+    const map = this.get('mapInstance');
+    const canvas = map.getCanvas();
+    let { width, height } = canvas;
+
+    // workaround for retina displays
+    if (window.devicePixelRatio > 1) {
+      width *= 0.5;
+      height *= 0.5;
+    }
+
+    const cUL = map.unproject([0, 0]).toArray();
+    const cUR = map.unproject([width, 0]).toArray();
+    const cLR = map.unproject([width, height]).toArray();
+    const cLL = map.unproject([0, height]).toArray();
+
+    this.set('boundsPolygon', {
+      type: 'Polygon',
+      coordinates: [[cUL, cUR, cLR, cLL, cUL]],
+      crs: {
+        type: 'name',
+        properties: {
+          name: 'EPSG:4326',
+        },
+      },
+    });
+  }
+
+
+  @action
   async save(model) {
     const map = await model.save();
 
     this.get('notificationMessages').success('Map added!');
 
-    this.transitionToRoute('projects.edit', map.get('project'));
+    this.transitionToRoute('projects.show', map.get('project'));
   }
 }

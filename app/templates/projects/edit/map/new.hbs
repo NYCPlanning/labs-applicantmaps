@@ -68,7 +68,9 @@
             </section>
           </div>
           <div class="cell auto">
-            <div style="background:hotpink;height:100%;">THIS IS THE CITY CONTEXT MAP</div>
+            {{#if boundsPolygon}}
+              {{inset-map boundsPolygon=boundsPolygon}}
+            {{/if}}
           </div>
         </div>
       </div>
@@ -107,8 +109,10 @@
               }}
             {{/map.source}}
 
-            {{map.on 'rotate' (action 'handleMapRotateOrPitch')}}
-            {{map.on 'pitch' (action 'handleMapRotateOrPitch')}}
+            {{map.on 'zoom' (action 'updateBounds')}}
+            {{map.on 'drag' (action 'updateBounds')}}
+            {{map.on 'pitch' (action 'updateBounds')}}
+            {{map.on 'rotate' (action 'updateBounds')}}
 
             <div id="north-arrow-container">
               <div id="north-arrow" style={{northArrowTransforms.arrow}} />
