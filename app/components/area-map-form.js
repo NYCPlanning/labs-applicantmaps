@@ -11,16 +11,32 @@ export default class AreaMapFormComponent extends Component {
     store.query('layer-group', {
       'layer-groups': [
         {
+          id: 'building-footprints',
+          visible: true,
+          layers: [
+            {
+              style: {
+                paint: {
+                  'fill-opacity': .35,
+                  'fill-color': '#505050'
+                }
+              },
+            },
+          ],
+        },
+        {
           id: 'tax-lots',
           visible: true,
           layers: [
-            { tooltipable: false },
+            {
+              style: { paint: { 'fill-opacity': .7 } },
+              tooltipable: false,
+            },
             {},
             { style: { layout: { 'text-field': '{numfloors}' } } },
           ],
         },
         { id: 'subway', visible: true },
-        { id: 'building-footprints', visible: true },
         { id: 'special-purpose-districts', visible: false },
         { id: 'citymap', visible: true },
         { id: 'street-direction-arrows', visible: true },
