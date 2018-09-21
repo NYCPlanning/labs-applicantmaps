@@ -21,11 +21,7 @@ export default class AreaMapFormComponent extends Component {
         { id: 'subway', visible: true },
         { id: 'building-footprints', visible: true },
         { id: 'special-purpose-districts', visible: false },
-        {
-          id: 'citymap',
-          visible: true,
-          layers: [],
-        },
+        { id: 'citymap', visible: true },
         { id: 'street-direction-arrows', visible: true },
         { id: 'commercial-overlay-patterns', visible: true },
       ],
