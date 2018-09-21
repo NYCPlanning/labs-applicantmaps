@@ -1,65 +1,130 @@
 <div class="cell medium-5 large-3 sidebar">
-  <h2>{{model.project.projectName}}</h2>
-  <p>!Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-  consequat.</p>
+  <h2 class="header-large">{{model.project.projectName}} Area Map</h2>
 
   <hr/>
 
   <div class="text-left">
-    <input type="radio" name="orientation" value="Portrait" id="Portrait" required/>
-    <label for="Portrait">Portrait</label>
-    <input type="radio" name="orientation" value="Portrait" id="landscape" required/>
-    <label for="landscape">Landscape</label>
+    <input type="radio" name="paper-size" value="letter" id="paper-size--letter" checked />
+    <label for="paper-size--letter">Letter</label>
+    <input type="radio" name="paper-size" value="Portrait" id="paper-size--legal" />
+    <label for="paper-size--legal">Legal</label>
   </div>
 
-  <button
-    type="button"
-    class="button expanded project-save-button"
-    onclick={{action 'save' model}}
-  >
-    Save to this project
-  </button>
+  <hr/>
+
+  <div class="text-left">
+    <input type="radio" name="paper-orientation" value="portrait" id="paper-orientation--portrait" />
+    <label for="paper-orientation--portrait">Portrait</label>
+    <input type="radio" name="paper-orientation" value="landscape" id="paper-orientation--landscape" checked />
+    <label for="paper-orientation--landscape">Landscape</label>
+  </div>
+
+  <hr/>
+
+  <button type="button" class="button project-save-button" onclick={{action 'save' model}}>Save Map</button>
 </div>
 
 <div class="cell medium-7 large-9 paper-container">
-  <div class="paper letter landscape padding-10mm">
-    <h2>{{model.project.projectName}} - Area Map</h2>
-    {{#area-map-form tagName='' as |areaMapForm|}}
-      {{#labs-map
-        id='main-map'
-        initOptions=(hash
-          style=areaMapForm.model.meta.mapboxStyle
-          zoom=12
-          center=(array -73.983307 40.704977)
-        )
-        mapLoaded=(action 'handleMapLoaded') as |map|}}
+  <div class="paper letter landscape padding-7mm">
+    <div class="paper-grid grid-x">
 
-          {{map.labs-layers layerGroups=areaMapForm.model.layerGroups}}
-          {{#map.source options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
-            {{source.layer
-              layer=developmentSiteLayer
-              before='boundary_country'
-            }}
-          {{/map.source}}
+      <div class="cell small-3">
+        <div class="grid-y" style="height:100%;">
+          <div class="cell shrink legend">
+            <section class="legend-section">
+              <h1 class="legend-project-name">{{model.project.projectName}} Area Map</h1>
+              <h2 class="legend-applicant">{{model.project.applicantName}}</h2>
+              {{!-- {{#if model.project.description}}
+                {{model.project.description}}
+                {{/if}} --}}
+            </section>
+            <hr>
+            <section class="legend-section">
+              <h2 class="legend-section-header">Project</h2>
+              {{#if model.project.projectArea}}
+                {{labs-ui/legend-item item=areaMapLegendConfig.projectArea}}
+              {{/if}}
+              {{#if model.project.developmentSite}}
+                {{labs-ui/legend-item item=areaMapLegendConfig.developmentSite}}
+              {{/if}}
+              {{#if model.project.rezoningArea}}
+                {{labs-ui/legend-item item=areaMapLegendConfig.rezoningArea}}
+              {{/if}}
+              {{#if model.project.projectGeometryBuffer}}
+                {{labs-ui/legend-item item=areaMapLegendConfig.projectGeometryBuffer}}
+              {{/if}}
+            </section>
+            <section class="legend-section">
+              <h2 class="legend-section-header">Zoning</h2>
+              {{#each areaMapLegendConfig.zoningLegendItems as |item|}}
+                {{labs-ui/legend-item item=item}}
+              {{/each}}
+            </section>
+            <section class="legend-section">
+              <h2 class="legend-section-header">Land Use</h2>
+              {{#each areaMapLegendConfig.landuseLegendItems as |item|}}
+                {{labs-ui/legend-item item=item}}
+              {{/each}}
+            </section>
+          </div>
+          <div class="cell auto">
+            {{#if boundsPolygon}}
+              {{inset-map boundsPolygon=boundsPolygon}}
+            {{/if}}
+          </div>
+        </div>
+      </div>
 
-          {{#map.source options=(mapbox-geojson-source model.project.projectArea) as |source|}}
-            {{source.layer
-              layer=projectAreaLayer
-              before='boundary_country'
-            }}
-          {{/map.source}}
+      <div class="cell small-9">
+        {{#area-map-form tagName='' as |areaMapForm|}}
+          {{#labs-map
+            id='main-map'
+            initOptions=(hash
+              style=areaMapForm.model.meta.mapboxStyle
+              zoom=12
+              center=(array -73.983307 40.704977)
+            )
+            mapLoaded=(action 'handleMapLoaded') as |map|
+          }}
 
-          {{#map.source options=(mapbox-geojson-source model.project.projectGeometryBuffer) as |source|}}
-            {{source.layer
-              layer=projectBufferLayer
-              before='boundary_country'
-            }}
-          {{/map.source}}
+            {{map.labs-layers layerGroups=areaMapForm.model.layerGroups}}
+            {{#map.source options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
+              {{source.layer
+                layer=developmentSiteLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
 
-      {{/labs-map}}
-    {{/area-map-form}}
+            {{#map.source options=(mapbox-geojson-source model.project.projectArea) as |source|}}
+              {{source.layer
+                layer=projectAreaLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
+
+            {{#map.source options=(mapbox-geojson-source model.project.projectGeometryBuffer) as |source|}}
+              {{source.layer
+                layer=projectBufferLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
+
+            {{map.on 'zoom' (action 'updateBounds')}}
+            {{map.on 'drag' (action 'updateBounds')}}
+            {{map.on 'pitch' (action 'updateBounds')}}
+            {{map.on 'rotate' (action 'updateBounds')}}
+
+            <div id="north-arrow-container">
+              <div id="north-arrow" style={{northArrowTransforms.arrow}} />
+              <div id="north-n" style={{northArrowTransforms.n}}><span class="n" style={{northArrowTransforms.nSpan}}>N</span></div>
+            </div>
+          {{/labs-map}}
+        {{/area-map-form}}
+        {{!-- TODO: print a real permalink --}}<p class="text-tiny text-right"><a href="">localhost:4200/projects/10/area-map</a></p>
+      </div>
+
+    </div>
+
   </div>
 </div>
 

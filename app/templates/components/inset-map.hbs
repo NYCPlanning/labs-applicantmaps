@@ -1,0 +1,13 @@
+{{#mapbox-gl
+    id='inset-map'
+    initOptions=(hash
+      zoom=8
+      center=(array -73.96532400540775 40.709710016659386)
+      interactive=false
+    )
+    mapLoaded=(action 'handleMapLoad') as | map |
+}}
+  {{#map.source options=(mapbox-geojson-source boundsPolygon) as |source|}}
+    {{source.layer}}
+  {{/map.source}}
+{{/mapbox-gl}}

@@ -1,0 +1,37 @@
+// --------------------------------------------------
+// Module: Legend
+// --------------------------------------------------
+
+.legend {
+  font-size: 10pt;
+  padding-bottom: $global-margin/2;
+
+  hr {
+    margin: $global-margin/2 0;
+  }
+}
+
+.legend-project-name {
+  font-size: 14pt;
+  margin-bottom: 0;
+}
+
+.legend-applicant {
+  font-size: 12pt;
+  margin-bottom: 0;
+  font-weight: normal;
+}
+
+.legend-section + .legend-section {
+  margin-top: $global-margin/2;
+}
+
+.legend-section-header {
+  font-size: 10pt;
+  margin: 2pt;
+}
+
+.legend-item {
+  font-size: 7pt;
+  padding: 0;
+}

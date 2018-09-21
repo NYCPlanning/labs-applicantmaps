@@ -76,6 +76,7 @@
     "ember-cli": "~3.0.2",
     "ember-data": "~3.0.0",
     "ember-load-initializers": "^1.0.0",
-    "foundation-sites": "^6.3.1"
+    "foundation-sites": "^6.3.1",
+    "mustache": "^3.0.0"
   }
 }
