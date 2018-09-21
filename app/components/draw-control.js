@@ -28,6 +28,9 @@ export default class DrawControlController extends Component {
   modeDisplayName
 
   @argument
+  hasGeom
+
+  @argument
   geometryMode
 
   @argument
@@ -61,7 +64,7 @@ export default class DrawControlController extends Component {
 
     const map = this.get('mapInstance');
     if (geometryMode) {
-      map.addControl(draw, 'top-right');
+      map.addControl(draw, 'top-left');
       draw.changeMode('draw_polygon');
     } else {
       draw.trash();
