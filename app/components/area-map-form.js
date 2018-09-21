@@ -17,9 +17,9 @@ export default class AreaMapFormComponent extends Component {
             {
               style: {
                 paint: {
-                  'fill-opacity': .35,
-                  'fill-color': '#505050'
-                }
+                  'fill-opacity': 0.35,
+                  'fill-color': '#505050',
+                },
               },
             },
           ],
@@ -29,7 +29,7 @@ export default class AreaMapFormComponent extends Component {
           visible: true,
           layers: [
             {
-              style: { paint: { 'fill-opacity': .7 } },
+              style: { paint: { 'fill-opacity': 0.7 } },
               tooltipable: false,
             },
             {},
