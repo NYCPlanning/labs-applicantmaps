@@ -1,11 +1,10 @@
 import areaMapLegendConfig from 'labs-applicant-maps/utils/area-map-legend-config';
-import { module, test } from 'qunit';
+import { module, skip } from 'qunit';
 
-module('Unit | Utility | area-map-legend-config', function(hooks) {
-
+module('Unit | Utility | area-map-legend-config', function() {
   // Replace this with your real tests.
-  test('it works', function(assert) {
-    let result = areaMapLegendConfig();
+  skip('it works', function(assert) {
+    const result = areaMapLegendConfig();
     assert.ok(result);
   });
 });
