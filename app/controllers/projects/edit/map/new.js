@@ -153,7 +153,8 @@ export default class NewProjectMapController extends Controller {
 
   @action
   reorientPaper(orientation) {
-    this.set('pageOrientationClassNames', orientation[0]);
+    console.log(orientation);
+    this.set('pageOrientationClassNames', orientation);
   }
 
   @action
