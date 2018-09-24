@@ -30,6 +30,11 @@ module.exports = function (environment) {
       route: 'search',
     },
 
+    'ember-mapbox-composer': {
+      host: 'https://layers-api-staging.planninglabs.nyc',
+      namespace: 'v1',
+    },
+
     'ember-cli-notifications': {
       autoClear: true,
     },
@@ -75,6 +80,11 @@ module.exports = function (environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
+  }
+
+  if (environment === 'devlocal') {
+    ENV.host = 'http://localhost:3000';
+    ENV.namespace = '';
   }
 
   if (environment === 'production') {
