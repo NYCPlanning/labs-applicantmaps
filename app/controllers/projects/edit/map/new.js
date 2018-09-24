@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action, computed } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 import turfBbox from 'npm:@turf/bbox';
+import { next } from '@ember/runloop';
 
 import areaMapLegendConfig from '../../../../utils/area-map-legend-config';
 
@@ -153,8 +154,11 @@ export default class NewProjectMapController extends Controller {
 
   @action
   reorientPaper(orientation) {
-    console.log(orientation);
     this.set('pageOrientationClassNames', orientation);
+    next(function() {
+      // not supported in IE 11
+      window.dispatchEvent(new Event('resize'));
+    });
   }
 
   @action
