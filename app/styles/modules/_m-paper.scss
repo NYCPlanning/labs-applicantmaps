@@ -33,6 +33,8 @@
  .paper.letter.landscape { width: 280mm; height: 215mm }
  .paper.legal            { width: 216mm; height: 356mm }
  .paper.legal.landscape  { width: 357mm; height: 215mm }
+ .paper.tabloid          { width: 279mm; height: 432mm }
+ .paper.tabloid.landscape{ width: 432mm; height: 279mm }
 
  /** Padding area **/
  .paper.padding-7mm { padding: 7mm }
