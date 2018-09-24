@@ -131,6 +131,11 @@ export default class NewProjectMapController extends Controller {
   }
 
   @action
+  reorientPaper() {
+    console.log('hi');
+  }
+
+  @action
   async save(model) {
     const map = await model.save();
 
