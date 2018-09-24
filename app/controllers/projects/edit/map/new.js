@@ -155,7 +155,12 @@ export default class NewProjectMapController extends Controller {
   @action
   reorientPaper(orientation) {
     this.set('pageOrientationClassNames', orientation);
-    next(function() {
+    next(() => {
+      // not supported in IE 11
+      window.addEventListener('resize', () => {
+        console.log('updating bounds');
+        this.updateBounds();
+      });
       // not supported in IE 11
       window.dispatchEvent(new Event('resize'));
     });
