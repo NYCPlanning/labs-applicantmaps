@@ -63,6 +63,8 @@ export default class NewProjectMapController extends Controller {
 
   mapBearing = null
 
+  pageOrientationClassNames = 'landscape'
+
   @computed('mapBearing', 'mapPitch')
   get northArrowTransforms() {
     const bearing = this.get('mapBearing');
@@ -150,13 +152,8 @@ export default class NewProjectMapController extends Controller {
   }
 
   @action
-  resizePaper() {
-    console.log('hi');
-  }
-
-  @action
-  reorientPaper() {
-    console.log('hi');
+  reorientPaper(orientation) {
+    this.set('pageOrientationClassNames', orientation[0]);
   }
 
   @action

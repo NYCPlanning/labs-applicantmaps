@@ -4,18 +4,9 @@
   <hr/>
 
   <div class="text-left">
-    <input type="radio" name="paper-size" value="letter" id="paper-size--letter" checked onclick={{action 'resizePaper'}}/>
-    <label for="paper-size--letter">Letter</label>
-    <input type="radio" name="paper-size" value="Portrait" id="paper-size--legal" checked onclick={{action 'resizePaper'}}/>
-    <label for="paper-size--legal">Legal</label>
-  </div>
-
-  <hr/>
-
-  <div class="text-left">
-    <input type="radio" name="paper-orientation" value="portrait" id="paper-orientation--portrait" onclick={{action 'reorientPaper'}}/>
+    <input type="radio" name="paper-orientation" value="portrait" id="paper-orientation--portrait" onclick={{action 'reorientPaper' 'portrait'}}/>
     <label for="paper-orientation--portrait">Portrait</label>
-    <input type="radio" name="paper-orientation" value="landscape" id="paper-orientation--landscape" checked  onclick={{action 'reorientPaper'}}/>
+    <input type="radio" name="paper-orientation" value="landscape" id="paper-orientation--landscape" checked  onclick={{action 'reorientPaper' 'landscape'}}/>
     <label for="paper-orientation--landscape">Landscape</label>
   </div>
 
@@ -25,7 +16,7 @@
 </div>
 
 <div class="cell medium-7 large-9 paper-container">
-  <div class="paper letter landscape padding-7mm">
+  <div class="paper letter padding-7mm {{pageOrientationClassNames}}">
     <div class="paper-grid grid-x">
 
       <div class="cell small-3">
@@ -34,9 +25,6 @@
             <section class="legend-section">
               <h1 class="legend-project-name">{{model.project.projectName}} Area Map</h1>
               <h2 class="legend-applicant">{{model.project.applicantName}}</h2>
-              {{!-- {{#if model.project.description}}
-                {{model.project.description}}
-                {{/if}} --}}
             </section>
             <hr>
             <section class="legend-section">
