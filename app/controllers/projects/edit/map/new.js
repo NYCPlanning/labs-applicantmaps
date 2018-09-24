@@ -125,6 +125,10 @@ export default class NewProjectMapController extends Controller {
     });
   }
 
+  @action
+  resizePaper() {
+    console.log('hi');
+  }
 
   @action
   async save(model) {
