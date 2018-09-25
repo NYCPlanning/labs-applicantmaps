@@ -44,6 +44,8 @@ const projectBufferLayer = {
 };
 
 export default class NewProjectMapController extends Controller {
+  queryParams = ['mapType'];
+
   @service
   notificationMessages;
 
