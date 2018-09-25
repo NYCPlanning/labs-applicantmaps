@@ -63,7 +63,7 @@ export default class NewProjectMapController extends Controller {
 
   mapBearing = null
 
-  noZoom = false
+  preventZoom = true
 
   @computed('mapBearing', 'mapPitch')
   get northArrowTransforms() {
@@ -129,12 +129,12 @@ export default class NewProjectMapController extends Controller {
 
   @action
   toggleZoom () {
-    this.toggleProperty('noZoom');
+    this.toggleProperty('preventZoom');
 
-    const noZoom = this.get('noZoom');
-    console.log(noZoom);
+    const preventZoom = this.get('preventZoom');
+    console.log(preventZoom);
 
-    if (noZoom) {
+    if (preventZoom) {
       const map = this.get('MapInstance');
       map.scrollZoom.disable();
     }

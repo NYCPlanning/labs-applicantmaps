@@ -3,26 +3,34 @@
 
   <hr/>
 
-  <div class="text-left">
-    <input type="radio" name="paper-size" value="letter" id="paper-size--letter" checked />
-    <label for="paper-size--letter">Letter</label>
-    <input type="radio" name="paper-size" value="Portrait" id="paper-size--legal" />
-    <label for="paper-size--legal">Legal</label>
-  </div>
+  <input type="radio" name="paper-size" value="letter" id="paper-size--letter" checked />
+  <label for="paper-size--letter">Letter</label>
+  <input type="radio" name="paper-size" value="Portrait" id="paper-size--legal" />
+  <label for="paper-size--legal">Legal</label>
 
   <hr/>
 
-  <div class="text-left">
-    <input type="radio" name="paper-orientation" value="portrait" id="paper-orientation--portrait" />
-    <label for="paper-orientation--portrait">Portrait</label>
-    <input type="radio" name="paper-orientation" value="landscape" id="paper-orientation--landscape" checked />
-    <label for="paper-orientation--landscape">Landscape</label>
-  </div>
+  <input type="radio" name="paper-orientation" value="portrait" id="paper-orientation--portrait" />
+  <label for="paper-orientation--portrait">Portrait</label>
+  <input type="radio" name="paper-orientation" value="landscape" id="paper-orientation--landscape" checked />
+  <label for="paper-orientation--landscape">Landscape</label>
 
   <hr/>
 
-  <div class="text-left">
-    <button onclick={{action 'toggleZoom'}}>{{#if noZoom}}{{fa-icon 'square'}}{{/if}} Enable Zoom</button>
+  <div class="grid-x grid-margin-x">
+    <div class="cell auto">
+      <label onclick={{action 'toggleZoom'}} class="inline">
+        <span class="fa-layers">
+          {{fa-icon 'square' class='white-smoke'}}
+          {{fa-icon 'square' prefix='far' class='silver'}}
+          {{#if preventZoom}}{{fa-icon 'check' transform='right-2 up-2' class='a11y-orange'}}{{/if}}
+        </span>
+        Lock Map Zoom
+      </label>
+    </div>
+    <div class="cell shrink">
+      <button class="button tiny gray">Reset</button>
+    </div>
   </div>
 
   <hr/>
