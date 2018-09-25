@@ -9,8 +9,8 @@ export default class ProjectsEditRoute extends Route {
   @service
   notificationMessages;
 
-  model({ id }) {
-    return this.store.findRecord('project', id, { include: mapTypes.toString() });
+  model({ project_id }) {
+    return this.store.findRecord('project', project_id, { include: mapTypes.toString() });
   }
 
   @action
