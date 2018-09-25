@@ -99,7 +99,11 @@ export default class MapFormComponent extends Component {
 
   @argument customLayerGroupQuery = null;
 
-  @service store;
+  @service
+  store;
+
+  @service
+  router;
 
   @argument
   model = null;
@@ -218,5 +222,14 @@ export default class MapFormComponent extends Component {
     map.fitBounds(turfBbox.default(projectArea), {
       padding: 100,
     });
+  }
+
+  @action
+  async save(model) {
+    const map = await model.save();
+
+    this.get('notificationMessages').success('Map added!');
+
+    this.get('router').transitionTo('projects.show', map.get('project'));
   }
 }
