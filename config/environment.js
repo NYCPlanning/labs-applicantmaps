@@ -22,8 +22,11 @@ module.exports = function (environment) {
       // when it is created
     },
 
-    host: 'https://layers-api-staging.planninglabs.nyc',
-    namespace: 'v1',
+    host: '',
+
+    'ember-cli-mirage': {
+      enabled: true,
+    },
 
     'labs-search': {
       host: 'https://search-api.planninglabs.nyc',
@@ -85,6 +88,10 @@ module.exports = function (environment) {
   if (environment === 'devlocal') {
     ENV.host = 'http://localhost:3000';
     ENV.namespace = '';
+
+    ENV['ember-cli-mirage'] = {
+      enabled: false,
+    };
   }
 
   if (environment === 'production') {

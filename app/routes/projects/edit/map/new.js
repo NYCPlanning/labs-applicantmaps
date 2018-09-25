@@ -1,10 +1,10 @@
 import Route from '@ember/routing/route';
 
 export default class ProjectsNewRoute extends Route {
-  model() {
+  model({ type = 'area-map' }) {
     const project = this.modelFor('projects.edit');
 
-    return this.store.createRecord('applicant-map', { project });
+    return this.store.createRecord(type, { project });
   }
 
   deactivate() {
