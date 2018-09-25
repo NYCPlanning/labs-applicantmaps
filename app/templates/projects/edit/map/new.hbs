@@ -19,13 +19,13 @@
 
   <div class="grid-x grid-margin-x">
     <div class="cell auto">
-      <label onclick={{action 'toggleZoom'}} class="inline">
+      <label onclick={{action 'toggleMapInteractions'}} class="inline">
         <span class="fa-layers">
           {{fa-icon 'square' class='white-smoke'}}
           {{fa-icon 'square' prefix='far' class='silver'}}
-          {{#if preventZoom}}{{fa-icon 'check' transform='right-2 up-2' class='a11y-orange'}}{{/if}}
+          {{#if preventMapInteractions}}{{fa-icon 'check' transform='right-2 up-2' class='a11y-orange'}}{{/if}}
         </span>
-        Lock Map Zoom
+        Lock Map Interactions
       </label>
     </div>
     <div class="cell shrink">

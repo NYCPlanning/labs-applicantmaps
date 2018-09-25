@@ -63,7 +63,7 @@ export default class NewProjectMapController extends Controller {
 
   mapBearing = null
 
-  preventZoom = true
+  preventMapInteractions = true
 
   @computed('mapBearing', 'mapPitch')
   get northArrowTransforms() {
@@ -89,6 +89,15 @@ export default class NewProjectMapController extends Controller {
 
     this.handleMapRotateOrPitch();
     this.updateBounds();
+
+    // disable interactions
+    map.scrollZoom.disable();
+    map.boxZoom.disable();
+    map.dragRotate.disable();
+    map.dragPan.disable();
+    map.keyboard.disable();
+    map.doubleClickZoom.disable();
+    map.touchZoomRotate.disable();
   }
 
   @action
@@ -128,15 +137,30 @@ export default class NewProjectMapController extends Controller {
   }
 
   @action
-  toggleZoom () {
-    this.toggleProperty('preventZoom');
+  toggleMapInteractions () {
+    const map = this.get('mapInstance');
+    const preventMapInteractions = this.get('preventMapInteractions');
 
-    const preventZoom = this.get('preventZoom');
-    console.log(preventZoom);
-
-    if (preventZoom) {
-      const map = this.get('MapInstance');
+    if (preventMapInteractions === true) {
+      this.set('preventMapInteractions', false);
+      // enable all interactions
+      map.scrollZoom.enable();
+      map.boxZoom.enable();
+      map.dragRotate.enable();
+      map.dragPan.enable();
+      map.keyboard.enable();
+      map.doubleClickZoom.enable();
+      map.touchZoomRotate.enable();
+    } else {
+      this.set('preventMapInteractions', true);
+      // disable all interactions
       map.scrollZoom.disable();
+      map.boxZoom.disable();
+      map.dragRotate.disable();
+      map.dragPan.disable();
+      map.keyboard.disable();
+      map.doubleClickZoom.disable();
+      map.touchZoomRotate.disable();
     }
   }
 
