@@ -1,4 +1,4 @@
-{{#map-form tagName='' as |areaMapForm|}}
+{{#map-form model=model tagName='' as |areaMapForm|}}
   <div class="cell medium-5 large-3 sidebar">
     <h2 class="header-large">{{model.project.projectName}} Area Map</h2>
 
@@ -80,14 +80,13 @@
           {{#labs-map
             id='main-map'
             initOptions=(hash
-              style=areaMapForm.model.meta.mapboxStyle
+              style=areaMapForm.mapConfiguration.meta.mapboxStyle
               zoom=12
               center=(array -73.983307 40.704977)
             )
-            mapLoaded=(action 'handleMapLoaded') as |map|
+            mapLoaded=(action areaMapForm.handleMapLoaded) as |map|
           }}
-
-            {{map.labs-layers layerGroups=areaMapForm.model.layerGroups}}
+            {{map.labs-layers layerGroups=areaMapForm.mapConfiguration.layerGroups}}
             {{#map.source options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
               {{source.layer
                 layer=developmentSiteLayer
@@ -109,10 +108,10 @@
               }}
             {{/map.source}}
 
-            {{map.on 'zoom' (action 'updateBounds')}}
-            {{map.on 'drag' (action 'updateBounds')}}
-            {{map.on 'pitch' (action 'updateBounds')}}
-            {{map.on 'rotate' (action 'updateBounds')}}
+            {{map.on 'zoom' (action areaMapForm.updateBounds)}}
+            {{map.on 'drag' (action areaMapForm.updateBounds)}}
+            {{map.on 'pitch' (action areaMapForm.updateBounds)}}
+            {{map.on 'rotate' (action areaMapForm.updateBounds)}}
 
             <div id="north-arrow-container">
               <div id="north-arrow" style={{northArrowTransforms.arrow}} />

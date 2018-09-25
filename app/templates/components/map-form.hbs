@@ -1,7 +1,9 @@
-{{#if model}}
+{{#if mapConfiguration}}
   {{yield (hash 
     model=model
+    mapConfiguration=mapConfiguration
     projectAreaSource=projectAreaSource 
     projectBufferSource=projectBufferSource
-    handleMapLoad=handleMapLoad)}}
+    handleMapLoaded=(action 'handleMapLoaded')
+    updateBounds=(action 'updateBounds'))}}
 {{/if}}
