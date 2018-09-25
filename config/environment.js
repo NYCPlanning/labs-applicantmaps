@@ -17,6 +17,9 @@ module.exports = function (environment) {
       },
     },
 
+    // reusable list of named map types
+    mapTypes: ['area-maps', 'tax-maps', 'zoning-change-maps', 'zoning-section-maps'],
+
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
