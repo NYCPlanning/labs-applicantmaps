@@ -217,4 +217,12 @@ body {
 // --------------------------------------------------
 .shadowed {
   box-shadow: 0 0 1rem rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.03);
+
+  &.top-right {
+    box-shadow: rem-calc(4) rem-calc(4) 0 0 rgba(0,0,0,0.1);
+  }
+
+  &.top-left {
+    box-shadow: rem-calc(-4) rem-calc(4) 0 0 rgba(0,0,0,0.1);
+  }
 }

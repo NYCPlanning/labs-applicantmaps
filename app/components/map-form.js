@@ -21,9 +21,9 @@ const projectAreaLayer = {
     'line-cap': 'round',
   },
   paint: {
-    'line-width': 6,
+    'line-width': 3,
     'line-dasharray': [
-      0.1,
+      0,
       2,
     ],
   },
@@ -33,11 +33,11 @@ const projectBufferLayer = {
   id: 'project-buffer-line',
   type: 'line',
   paint: {
-    'line-color': 'rgba(116, 4, 80, 1)',
-    'line-width': 6,
+    'line-color': 'rgba(122, 0, 72, 1)',
+    'line-width': 3,
     'line-dasharray': [
-      0.5,
-      0.5,
+      0.75,
+      0.75,
     ],
   },
 };
