@@ -1,91 +1,60 @@
+// --------------------------------------------------
+// Module: Paper
+// --------------------------------------------------
+
 /* paper.css https://github.com/cognitom/paper-css/blob/master/paper.css */
- @page { margin: 0 }
 
- @media print {
-   body {
-     background: White;
-     margin: 0;
-   }
+@page { margin: 0 }
 
-   // Don't print this stuff...
-   .site-header,
-   .site-main > :not(.paper-container) {
-     display: none;
-   }
- }
+@media print {
+  body {
+    background: White;
+    margin: 0;
+  }
 
- .paper {
-   margin: 0;
-   overflow: hidden;
-   position: relative;
-   box-sizing: border-box;
-   page-break-after: always;
- }
+  // Don't print this stuff...
+  .site-header,
+  .site-main > :not(.paper-container) {
+    display: none;
+  }
+}
 
- /** Paper sizes **/
- .paper.A3               { width: 297mm; height: 419mm }
- .paper.A3.landscape     { width: 420mm; height: 296mm }
- .paper.A4               { width: 210mm; height: 296mm }
- .paper.A4.landscape     { width: 297mm; height: 209mm }
- .paper.A5               { width: 148mm; height: 209mm }
- .paper.A5.landscape     { width: 210mm; height: 147mm }
- .paper.letter           { width: 216mm; height: 279mm }
- .paper.letter.landscape { width: 280mm; height: 215mm }
- .paper.legal            { width: 216mm; height: 356mm }
- .paper.legal.landscape  { width: 357mm; height: 215mm }
- .paper.tabloid          { width: 279mm; height: 432mm }
- .paper.tabloid.landscape{ width: 432mm; height: 279mm }
+.paper {
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  page-break-after: always;
+}
 
- /** Padding area **/
- .paper.padding-7mm { padding: 7mm }
- .paper.padding-10mm { padding: 10mm }
- .paper.padding-15mm { padding: 15mm }
- .paper.padding-20mm { padding: 20mm }
- .paper.padding-25mm { padding: 25mm }
+/** Paper sizes **/
+.paper.A3               { width: 297mm; height: 419mm }
+.paper.A3.landscape     { width: 420mm; height: 296mm }
+.paper.A4               { width: 210mm; height: 296mm }
+.paper.A4.landscape     { width: 297mm; height: 209mm }
+.paper.A5               { width: 148mm; height: 209mm }
+.paper.A5.landscape     { width: 210mm; height: 147mm }
+.paper.letter           { width: 216mm; height: 279mm }
+.paper.letter.landscape { width: 280mm; height: 215mm }
+.paper.legal            { width: 216mm; height: 356mm }
+.paper.legal.landscape  { width: 357mm; height: 215mm }
+.paper.tabloid          { width: 279mm; height: 432mm }
+.paper.tabloid.landscape{ width: 432mm; height: 279mm }
 
- /** For screen preview **/
- @media screen {
-   .paper {
-     @include horizontal-center;
+/** Padding area **/
+.paper.padding-7mm { padding: 7mm }
+.paper.padding-10mm { padding: 10mm }
+.paper.padding-15mm { padding: 15mm }
+.paper.padding-20mm { padding: 20mm }
+.paper.padding-25mm { padding: 25mm }
 
-     background: White;
-     box-shadow: 0 0.5mm 2mm rgba(0,0,0,0.3);
-     margin-bottom: 2rem;
-
-     &.letter {
-       zoom: 0.3;
-       -moz-transform: scale(0.3);
-
-       @include breakpoint(45rem) { zoom: 0.4; -moz-transform: scale(0.4); }
-       @include breakpoint(64rem) { zoom: 0.6; -moz-transform: scale(0.6); }
-       @include breakpoint(70rem) { zoom: 0.7; -moz-transform: scale(0.7); }
-       @include breakpoint(75rem) { zoom: 0.8; -moz-transform: scale(0.8); }
-       @include breakpoint(85rem) { zoom: 0.9; -moz-transform: scale(0.9); }
-       @include breakpoint(90rem) { zoom: 1;   -moz-transform: scale(1);   }
-     }
-
-     &.tabloid {
-       zoom: 0.3;
-       -moz-transform: scale(0.3);
-
-       @include breakpoint(45rem) { zoom: 0.25; -moz-transform: scale(0.25); }
-       @include breakpoint(64rem) { zoom: 0.4; -moz-transform: scale(0.4); }
-       @include breakpoint(70rem) { zoom: 0.45; -moz-transform: scale(0.45); }
-       @include breakpoint(75rem) { zoom: 0.5; -moz-transform: scale(0.5); }
-       @include breakpoint(85rem) { zoom: 0.55; -moz-transform: scale(0.55); }
-       @include breakpoint(90rem) { zoom: 0.7;   -moz-transform: scale(0.7);   }
-       @include breakpoint(120rem) { zoom: 0.8;   -moz-transform: scale(0.8);   }
-     }     
-   }
- }
-
- /** Fix for Chrome issue #273306 **/
- @media print {
-   .paper.A3.landscape            { width: 420mm }
-   .paper.A3, .paper.A4.landscape { width: 297mm }
-   .paper.A4, .paper.A5.landscape { width: 210mm }
-   .paper.A5                      { width: 148mm }
-   .paper.letter, .paper.legal    { width: 216mm }
-   .paper.letter.landscape        { width: 280mm }
-   .paper.legal.landscape         { width: 357mm }
- }
+/** Fix for Chrome issue #273306 **/
+@media print {
+  .paper.A3.landscape            { width: 420mm }
+  .paper.A3, .paper.A4.landscape { width: 297mm }
+  .paper.A4, .paper.A5.landscape { width: 210mm }
+  .paper.A5                      { width: 148mm }
+  .paper.letter, .paper.legal    { width: 216mm }
+  .paper.letter.landscape        { width: 280mm }
+  .paper.legal.landscape         { width: 357mm }
+}

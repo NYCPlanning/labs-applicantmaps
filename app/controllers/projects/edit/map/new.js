@@ -64,7 +64,9 @@ export default class NewProjectMapController extends Controller {
 
   mapBearing = null
 
-  pageOrientationClassNames = 'landscape'
+  paperSize = 'tabloid'
+
+  paperOrientation = 'landscape'
 
   @computed('mapBearing', 'mapPitch')
   get northArrowTransforms() {
@@ -154,11 +156,23 @@ export default class NewProjectMapController extends Controller {
 
   @action
   reorientPaper(orientation) {
-    this.set('pageOrientationClassNames', orientation);
+    this.set('paperOrientation', orientation);
     next(() => {
       // not supported in IE 11
       window.addEventListener('resize', () => {
-        console.log('updating bounds');
+        this.updateBounds();
+      });
+      // not supported in IE 11
+      window.dispatchEvent(new Event('resize'));
+    });
+  }
+
+  @action
+  scalePaper(size) {
+    this.set('paperSize', size);
+    next(() => {
+      // not supported in IE 11
+      window.addEventListener('resize', () => {
         this.updateBounds();
       });
       // not supported in IE 11
