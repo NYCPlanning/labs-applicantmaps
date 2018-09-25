@@ -1,8 +1,3 @@
-import DS from 'ember-data';
-import { belongsTo } from '@ember-decorators/data';
+import ApplicantMap from './applicant-map';
 
-const { Model } = DS;
-
-export default class AreaMapModel extends Model {
-  @belongsTo('project') project;
-}
+export default class AreaMapModel extends ApplicantMap {}
