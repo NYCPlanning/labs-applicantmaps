@@ -26,26 +26,24 @@
       mapInstance=mapInstance
       selectedLots=selectedLots
       lotSelectionMode=lotSelectionMode
+      geometryMode=geometryMode
       as |menu|}}
       {{menu.draw-control
         mode="developmentSite"
         modeDisplayName="Development Site"
         hasGeom=model.developmentSite
-        geometryMode=geometryMode
       }}
 
       {{menu.draw-control
         mode="projectArea"
         modeDisplayName="Project Area"
         hasGeom=model.projectArea
-        geometryMode=geometryMode
       }}
 
       {{menu.draw-control
         mode="rezoningArea"
         modeDisplayName="Rezoning Area"
         hasGeom=model.rezoningArea
-        geometryMode=geometryMode
       }}
     {{/project-geometries-menu}}
   {{/if}}
