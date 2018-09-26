@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action, computed } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 import turfBbox from 'npm:@turf/bbox';
+import { next } from '@ember/runloop';
 
 import areaMapLegendConfig from '../../../../utils/area-map-legend-config';
 
@@ -62,6 +63,10 @@ export default class NewProjectMapController extends Controller {
   mapPitch = null
 
   mapBearing = null
+
+  paperSize = 'tabloid'
+
+  paperOrientation = 'landscape'
 
   @computed('mapBearing', 'mapPitch')
   get northArrowTransforms() {
@@ -149,6 +154,31 @@ export default class NewProjectMapController extends Controller {
     });
   }
 
+  @action
+  reorientPaper(orientation) {
+    this.set('paperOrientation', orientation);
+    next(() => {
+      // not supported in IE 11
+      window.addEventListener('resize', () => {
+        this.updateBounds();
+      });
+      // not supported in IE 11
+      window.dispatchEvent(new Event('resize'));
+    });
+  }
+
+  @action
+  scalePaper(size) {
+    this.set('paperSize', size);
+    next(() => {
+      // not supported in IE 11
+      window.addEventListener('resize', () => {
+        this.updateBounds();
+      });
+      // not supported in IE 11
+      window.dispatchEvent(new Event('resize'));
+    });
+  }
 
   @action
   async save(model) {
