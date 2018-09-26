@@ -66,13 +66,17 @@
       mapLoaded=(action handleMapLoad) as |map|}}
 
       {{#labs-search
-          onSelect=(action 'handleSearchSelect')
-          onClear='handleSearchClear'
-          searchTerms=searchTerms
-          typeTitleLookup=(hash
-          ) as |search|}}
-          <small class="dark-gray">{{search.result.label}}</small>
+        searchPlaceholder='Search for Address...'
+        onSelect=(action 'selectSearchResult')
+        onClear=(action (mut geocodedFeature null)) as |search|}}
+        <small class="dark-gray">{{search.result.label}}</small>
       {{/labs-search}}
+
+      {{#if geocodedFeature}}
+        {{#map.source options=geocodedFeature as |source|}}
+          {{source.layer layer=geocodedLayer}}
+        {{/map.source}}
+      {{/if}}
 
         {{!-- labs-layers (includes tax-lots layer) --}}
         {{#map.labs-layers
