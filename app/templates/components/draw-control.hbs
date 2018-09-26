@@ -1,4 +1,4 @@
-{{#if (eq geometryMode mode)}}
+{{#if (eq model.geometryMode mode)}}
   <div class="callout shadowed top-right">
     <h3 class="header-small small-margin-bottom">{{modeDisplayName}}</h3>
     {{#if lotSelectionMode}}
@@ -28,7 +28,7 @@
       <button
         class="button small expanded no-margin {{if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon')) 'gray'}}"
         {{action 'toggleGeometryEditing' mode}}
-        disabled={{geometryMode}}
+        disabled={{model.geometryMode}}
       >
         {{fa-icon 'pencil-alt'}}
         {{if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon')) 'Red' 'D'}}raw

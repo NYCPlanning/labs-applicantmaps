@@ -18,14 +18,7 @@ const requiredFields = [
 export default class ProjectModel extends Model.extend({}) {
   @hasMany('applicant-map', { polymorphic: true, async: false }) applicantMaps;
 
-  @attr({
-    defaultValue() {
-      return {
-        type: 'Point',
-        coordinates: [-73.983307, 40.704977],
-      };
-    },
-  }) projectArea; // geojson
+  @attr() projectArea
 
   @attr() developmentSite
 
