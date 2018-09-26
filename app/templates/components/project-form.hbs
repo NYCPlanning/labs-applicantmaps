@@ -26,6 +26,7 @@
       mapInstance=mapInstance
       selectedLots=selectedLots
       lotSelectionMode=lotSelectionMode
+      geometryMode=geometryMode
       as |menu|}}
       {{menu.draw-control
         mode="developmentSite"
@@ -72,7 +73,7 @@
         {{/map.labs-layers}}
 
         {{!-- Ad-hoc source and layer for developmentSite --}}
-        {{#if model.developmentSite}}
+        {{#if (and model.developmentSite (not-eq geometryMode "developmentSite"))}}
           {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
             {{source.layer
               layer=projectGeomLayers.developmentSiteLayer
@@ -82,7 +83,7 @@
         {{/if}}
 
         {{!-- Ad-hoc source and layer for projectArea --}}
-        {{#if model.projectArea}}
+        {{#if (and model.projectArea (not-eq geometryMode "projectArea"))}}
           {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
             {{source.layer
               layer=projectGeomLayers.projectAreaLayer
@@ -92,7 +93,7 @@
         {{/if}}
 
         {{!-- Ad-hoc source and layer for projectArea --}}
-        {{#if model.rezoningArea}}
+        {{#if (and model.rezoningArea (not-eq geometryMode "rezoningArea"))}}
           {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
             {{source.layer
               layer=projectGeomLayers.rezoningAreaLayer
