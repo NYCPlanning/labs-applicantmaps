@@ -18,6 +18,7 @@ const selectedLotsLayer = {
 export default class ProjectFormComponent extends Component {
   constructor(...args) {
     super(...args);
+
     this.set('selectedLots', {
       type: 'FeatureCollection',
       features: [],
