@@ -15,13 +15,28 @@ export default class AreaMapFormComponent extends Component {
           visible: true,
           layers: [
             { tooltipable: false, highlightable: false },
+            {},
             { style: { layout: { 'text-field': '{numfloors}' } } },
           ],
         },
         { id: 'subway', visible: true },
         { id: 'building-footprints', visible: true },
         { id: 'special-purpose-districts', visible: false },
-        { id: 'citymap', visible: true },
+        {
+          id: 'citymap',
+          visible: true,
+          layers: [
+            {}, // citymap-mapped-streets-line
+            { tooltipable: false }, // citymap-streets-tooltip-line
+            {}, // citymap-street-treatments-line
+            {}, // citymap-underpass-tunnel-line
+            {}, // citymap-street-not-mapped-line
+            { tooltipable: false }, // borough-boundaries
+            {}, // citymap-underpass-tunnel-line
+            { tooltipable: false }, // railway-lines
+            {}, // railway-cross-lines
+          ],
+        },
         { id: 'street-direction-arrows', visible: true },
         { id: 'commercial-overlay-patterns', visible: true },
       ],
