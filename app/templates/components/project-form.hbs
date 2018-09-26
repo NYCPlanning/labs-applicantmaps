@@ -51,6 +51,9 @@
 
 </div>
 <div class="cell medium-7 large-9 map-container">
+  {{labs-search
+    onSelect=(action 'handleSearchSelect')
+    onClear=(action 'handleSearchClear')}}
   {{#project-map-form tagName='' as |projectMapForm|}}
     {{#labs-map
       id='main-map'
@@ -60,9 +63,6 @@
         center=(array -73.983307 40.704977)
       )
       mapLoaded=(action handleMapLoad) as |map|}}
-      {{labs-search
-        onSelect=(action 'handleSearchSelect')
-        onClear=(action 'handleSearchClear')}}
 
       {{#if searchedAddressSource}}
         {{#map.source options=searchedAddressSource as |source|}}

@@ -1,5 +1,10 @@
 import { module, test } from 'qunit';
-import { visit, click, currentURL } from '@ember/test-helpers';
+import {
+  visit,
+  click,
+  fillIn,
+  currentURL,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 
 module('Acceptance | user can search', function(hooks) {
@@ -7,7 +12,8 @@ module('Acceptance | user can search', function(hooks) {
 
   test('User can start new project and search for something', async function(assert) {
     await visit('/');
-    await 
+    await click('.get-started');
+    await fillIn('.map-search-input', '120 broadway');
 
     assert.equal(currentURL(), '/projects/new');
   });
