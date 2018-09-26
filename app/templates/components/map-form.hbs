@@ -24,18 +24,16 @@
   <div class="cell large-auto paper-container text-center">
     <div class="paper {{paperSize}} {{paperOrientation}} padding-7mm text-left">
       <div class="paper-grid grid-x">
-
-      {{yield (hash 
-        model=model
-        mapConfiguration=mapConfiguration
-        projectAreaSource=projectAreaSource 
-        projectBufferSource=projectBufferSource
-        handleMapLoaded=(action 'handleMapLoaded')
-        updateBounds=(action 'updateBounds')
-        saveProject=(action 'saveProject'))}}
+        {{yield (hash 
+          model=model
+          mapConfiguration=mapConfiguration
+          projectAreaSource=projectAreaSource 
+          projectBufferSource=projectBufferSource
+          handleMapLoaded=(action 'handleMapLoaded')
+          updateBounds=(action 'updateBounds')
+          saveProject=(action 'saveProject'))}}
 
         <div class="cell auto">
-          {{log boundsPolygon}}
           {{#if boundsPolygon}}
             {{inset-map boundsPolygon=boundsPolygon}}
           {{/if}}
