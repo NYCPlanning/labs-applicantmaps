@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import { action, computed } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
+import { next } from '@ember/runloop';
 import turfBbox from 'npm:@turf/bbox';
 
 const developmentSiteLayer = {
@@ -97,6 +98,16 @@ export default class MapFormComponent extends Component {
     });
   }
 
+  boundsPolygon = null
+
+  mapPitch = null
+
+  mapBearing = null
+
+  paperSize = 'tabloid'
+
+  paperOrientation = 'landscape'
+
   @argument customLayerGroupQuery = null;
 
   @service
@@ -112,8 +123,6 @@ export default class MapFormComponent extends Component {
   notificationMessages;
 
   mapConfiguration = null;
-
-  boundsPolygon = null
 
   developmentSiteLayer = developmentSiteLayer
 
@@ -213,6 +222,32 @@ export default class MapFormComponent extends Component {
     });
   }
 
+  @action
+  reorientPaper(orientation) {
+    this.set('paperOrientation', orientation);
+    next(() => {
+      // not supported in IE 11
+      window.addEventListener('resize', () => {
+        this.updateBounds();
+      });
+      // not supported in IE 11
+      window.dispatchEvent(new Event('resize'));
+    });
+  }
+
+  @action
+  scalePaper(size) {
+    this.set('paperSize', size);
+    next(() => {
+      // not supported in IE 11
+      window.addEventListener('resize', () => {
+        this.updateBounds();
+      });
+      // not supported in IE 11
+      window.dispatchEvent(new Event('resize'));
+    });
+  }
+
   // TODO for some reason I have to pass in the projectArea instead
   // of just calling this.get('projectAreaSource') ('this' is not available in the action)
   @action
@@ -225,11 +260,10 @@ export default class MapFormComponent extends Component {
   }
 
   @action
-  async save(model) {
+  async saveProject(model) {
     const map = await model.save();
 
     this.get('notificationMessages').success('Map added!');
-
     this.get('router').transitionTo('projects.show', map.get('project'));
   }
 }

@@ -6,7 +6,7 @@ import turfBbox from 'npm:@turf/bbox';
 import turfBuffer from 'npm:@turf/buffer';
 
 @classNames('inset-map-container')
-export default class extends Component {
+export default class InsetMap extends Component {
   @argument
   boundsPolygon
 
