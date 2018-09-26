@@ -60,6 +60,25 @@
         center=(array -73.983307 40.704977)
       )
       mapLoaded=(action handleMapLoad) as |map|}}
+      {{labs-search
+        onSelect=(action 'handleSearchSelect')
+        onClear=(action 'handleSearchClear')}}
+
+      {{#if searchedAddressSource}}
+        {{#map.source options=searchedAddressSource as |source|}}
+          {{source.layer layer=(hash
+              type='circle'
+              paint=(hash
+                circle-radius=8
+                circle-color="#00A1F9"
+                circle-stroke-width=2
+                circle-stroke-color="#FFFFFF"
+              )
+            )
+            before='boundary_country'
+          }}
+        {{/map.source}}
+      {{/if}}
 
         {{!-- labs-layers (includes tax-lots layer) --}}
         {{#map.labs-layers
