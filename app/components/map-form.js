@@ -4,6 +4,7 @@ import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { next } from '@ember/runloop';
 import turfBbox from 'npm:@turf/bbox';
+import mapboxgl from 'mapbox-gl';
 
 const developmentSiteLayer = {
   id: 'development-site-line',
@@ -176,6 +177,9 @@ export default class MapFormComponent extends Component {
     this.fitBoundsToBuffer();
     this.updateBounds();
     this.toggleMapInteractions();
+
+    const scaleControl = new mapboxgl.ScaleControl({ maxWidth: 200, unit: 'imperial' });
+    map.addControl(scaleControl, 'bottom-left');
 
     const basemapLayersToHide = [
       'highway_path',
