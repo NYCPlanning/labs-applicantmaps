@@ -138,7 +138,6 @@ export default class NewProjectMapController extends Controller {
   toggleMapInteractions () {
     const map = this.get('mapInstance');
     const preventMapInteractions = this.get('preventMapInteractions');
-    console.log(preventMapInteractions);
 
     if (preventMapInteractions === true) {
       this.set('preventMapInteractions', false);
