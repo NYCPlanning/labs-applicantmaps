@@ -151,12 +151,11 @@ export default class MapFormComponent extends Component {
   @action
   handleMapLoaded(map) {
     this.set('mapInstance', map);
-    const buffer = this.get('model.project.projectGeometryBuffer');
 
-    map.fitBounds(turfBbox.default(buffer), {
-      padding: 50,
-      duration: 0,
-    });
+    this.fitBoundsToBuffer();
+    this.handleMapRotateOrPitch();
+    this.updateBounds();
+    this.toggleMapInteractions();
 
     const basemapLayersToHide = [
       'highway_path',
@@ -181,9 +180,6 @@ export default class MapFormComponent extends Component {
       'railway_dashline',
     ];
     basemapLayersToHide.forEach(layer => map.removeLayer(layer));
-
-    this.handleMapRotateOrPitch();
-    this.updateBounds();
   }
 
   @action
@@ -246,6 +242,49 @@ export default class MapFormComponent extends Component {
       // not supported in IE 11
       window.dispatchEvent(new Event('resize'));
     });
+  }
+
+  @action
+  fitBoundsToBuffer() {
+    const buffer = this.get('model.project.projectGeometryBuffer');
+    const map = this.get('mapInstance');
+
+    map.setBearing(0);
+    map.fitBounds(turfBbox.default(buffer), {
+      padding: 50,
+      duration: 0,
+    });
+
+    this.handleMapRotateOrPitch();
+    this.updateBounds();
+  }
+
+  @action
+  toggleMapInteractions () {
+    const map = this.get('mapInstance');
+    const preventMapInteractions = this.get('preventMapInteractions');
+
+    if (preventMapInteractions === true) {
+      this.set('preventMapInteractions', false);
+      // enable all interactions
+      map.scrollZoom.enable();
+      map.boxZoom.enable();
+      map.dragRotate.enable();
+      map.dragPan.enable();
+      map.keyboard.enable();
+      map.doubleClickZoom.enable();
+      map.touchZoomRotate.enable();
+    } else {
+      this.set('preventMapInteractions', true);
+      // disable all interactions
+      map.scrollZoom.disable();
+      map.boxZoom.disable();
+      map.dragRotate.disable();
+      map.dragPan.disable();
+      map.keyboard.disable();
+      map.doubleClickZoom.disable();
+      map.touchZoomRotate.disable();
+    }
   }
 
   // TODO for some reason I have to pass in the projectArea instead

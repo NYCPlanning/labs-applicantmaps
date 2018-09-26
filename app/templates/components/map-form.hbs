@@ -18,6 +18,23 @@
 
     <hr/>
 
+
+    <div class="grid-x grid-margin-x">
+      <div class="cell auto">
+        <label onclick={{action 'toggleMapInteractions'}} class="inline">
+          <span class="fa-layers">
+            {{fa-icon 'square' class='white-smoke'}}
+            {{fa-icon 'square' prefix='far' class='silver'}}
+            {{#if preventMapInteractions}}{{fa-icon 'check' transform='right-2 up-2' class='a11y-orange'}}{{/if}}
+          </span>
+          Lock Map Interactions
+        </label>
+      </div>
+      <div class="cell shrink">
+        <button class="button tiny gray" onclick={{action 'fitBoundsToBuffer'}}>Reset</button>
+      </div>
+    </div>
+
     <button type="button" class="button project-save-button" onclick={{action 'saveProject' model}}>Save Map</button>
   </div>
 
