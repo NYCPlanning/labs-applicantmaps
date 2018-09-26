@@ -1,9 +1,11 @@
 import Component from '@ember/component';
-import { action } from '@ember-decorators/object';
+import { action, computed } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
 import MapboxDraw from 'mapbox-gl-draw';
 import turfUnion from 'npm:@turf/union';
 import turfBuffer from 'npm:@turf/buffer';
+import projectGeomLayers from '../utils/project-geom-layers';
+
 
 const draw = new MapboxDraw({
   displayControlsDefault: false,
@@ -13,6 +15,7 @@ const draw = new MapboxDraw({
   },
   // styles: drawStyles, TODO modify default draw styles
 });
+
 
 export default class DrawControlController extends Component {
   @argument
@@ -56,6 +59,27 @@ export default class DrawControlController extends Component {
 
   @argument
   model
+
+  @argument
+  developmentSiteIcon = projectGeomLayers.developmentSiteIcon
+
+  @argument
+  projectAreaIcon = projectGeomLayers.projectAreaIcon
+
+  @argument
+  rezoningAreaIcon = projectGeomLayers.rezoningAreaIcon
+
+  @computed('mode')
+  get modeIcon() {
+    const mode = this.get('mode');
+    const rezoningAreaIcon = this.get('rezoningAreaIcon');
+    const projectAreaIcon = this.get('projectAreaIcon');
+    const developmentSiteIcon = this.get('developmentSiteIcon');
+
+    if (mode === 'rezoningArea') { return rezoningAreaIcon; }
+    if (mode === 'projectArea') { return projectAreaIcon; }
+    return developmentSiteIcon;
+  }
 
   @action toggleGeometryEditing(type) {
     this.set('geometryMode', type);
