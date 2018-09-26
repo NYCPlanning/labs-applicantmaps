@@ -215,13 +215,13 @@
 // Dynamic North Arrow
 // --------------------------------------------------
 #north-arrow-container {
-  position: absolute;
-  z-index: 2;
-  top: 18pt;
-  left: 16pt;
+  position: relative;
+  top: 15pt;
+  left: 0;
   width: 16pt;
   height: 16pt;
   box-sizing: border-box;
+  margin: 0 1em 0 1.5em;
 }
 
 #north-arrow {
