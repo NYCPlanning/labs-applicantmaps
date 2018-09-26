@@ -1,47 +1,36 @@
 {{#map-form model=model tagName='' as |areaMapForm|}}
-  <div class="cell small-3">
-    <div class="grid-y" style="height:100%;">
-      <div class="cell shrink legend">
-        <section class="legend-section">
-          <h1 class="legend-project-name">{{model.project.projectName}} Area Map</h1>
-          <h2 class="legend-applicant">{{model.project.applicantName}}</h2>
-        </section>
-        <hr>
-        <section class="legend-section">
-          <h2 class="legend-section-header">Project</h2>
-          {{#if model.project.projectArea}}
-            {{labs-ui/legend-item item=areaMapLegendConfig.projectArea}}
-          {{/if}}
-          {{#if model.project.developmentSite}}
-            {{labs-ui/legend-item item=areaMapLegendConfig.developmentSite}}
-          {{/if}}
-          {{#if model.project.rezoningArea}}
-            {{labs-ui/legend-item item=areaMapLegendConfig.rezoningArea}}
-          {{/if}}
-          {{#if model.project.projectGeometryBuffer}}
-            {{labs-ui/legend-item item=areaMapLegendConfig.projectGeometryBuffer}}
-          {{/if}}
-        </section>
-        <section class="legend-section">
-          <h2 class="legend-section-header">Zoning</h2>
-          {{#each areaMapLegendConfig.zoningLegendItems as |item|}}
-            {{labs-ui/legend-item item=item}}
-          {{/each}}
-        </section>
-        <section class="legend-section">
-          <h2 class="legend-section-header">Land Use</h2>
-          {{#each areaMapLegendConfig.landuseLegendItems as |item|}}
-            {{labs-ui/legend-item item=item}}
-          {{/each}}
-        </section>
-      </div>
-      <div class="cell auto">
-        {{#if boundsPolygon}}
-          {{inset-map boundsPolygon=boundsPolygon}}
-        {{/if}}
-      </div>
-    </div>
-  </div>
+  <section class="legend-section">
+    <h1 class="legend-project-name">{{model.project.projectName}} Area Map</h1>
+    <h2 class="legend-applicant">{{model.project.applicantName}}</h2>
+  </section>
+  <hr>
+  <section class="legend-section">
+    <h2 class="legend-section-header">Project</h2>
+    {{#if model.project.projectArea}}
+      {{labs-ui/legend-item item=areaMapLegendConfig.projectArea}}
+    {{/if}}
+    {{#if model.project.developmentSite}}
+      {{labs-ui/legend-item item=areaMapLegendConfig.developmentSite}}
+    {{/if}}
+    {{#if model.project.rezoningArea}}
+      {{labs-ui/legend-item item=areaMapLegendConfig.rezoningArea}}
+    {{/if}}
+    {{#if model.project.projectGeometryBuffer}}
+      {{labs-ui/legend-item item=areaMapLegendConfig.projectGeometryBuffer}}
+    {{/if}}
+  </section>
+  <section class="legend-section">
+    <h2 class="legend-section-header">Zoning</h2>
+    {{#each areaMapLegendConfig.zoningLegendItems as |item|}}
+      {{labs-ui/legend-item item=item}}
+    {{/each}}
+  </section>
+  <section class="legend-section">
+    <h2 class="legend-section-header">Land Use</h2>
+    {{#each areaMapLegendConfig.landuseLegendItems as |item|}}
+      {{labs-ui/legend-item item=item}}
+    {{/each}}
+  </section>
 {{/map-form}}
 
 {{outlet}}
