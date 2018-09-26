@@ -6,30 +6,54 @@
   <hr>
   <section class="legend-section">
     <h2 class="legend-section-header">Project</h2>
-    {{#if model.project.projectArea}}
-      {{labs-ui/legend-item item=areaMapLegendConfig.projectArea}}
-    {{/if}}
-    {{#if model.project.developmentSite}}
-      {{labs-ui/legend-item item=areaMapLegendConfig.developmentSite}}
-    {{/if}}
-    {{#if model.project.rezoningArea}}
-      {{labs-ui/legend-item item=areaMapLegendConfig.rezoningArea}}
-    {{/if}}
-    {{#if model.project.projectGeometryBuffer}}
-      {{labs-ui/legend-item item=areaMapLegendConfig.projectGeometryBuffer}}
-    {{/if}}
+    <div class="grid-x grid-margin-x">
+      {{#if model.project.projectArea}}
+        <div class="cell small-5">
+          {{labs-ui/legend-item item=areaMapLegendConfig.projectArea}}
+        </div>
+      {{/if}}
+      {{#if model.project.developmentSite}}
+        <div class="cell small-5">
+          {{labs-ui/legend-item item=areaMapLegendConfig.developmentSite}}
+        </div>
+      {{/if}}
+      {{#if model.project.rezoningArea}}
+        <div class="cell small-5">
+          {{labs-ui/legend-item item=areaMapLegendConfig.rezoningArea}}
+        </div>
+      {{/if}}
+      {{#if model.project.projectGeometryBuffer}}
+        <div class="cell small-5">
+          {{labs-ui/legend-item item=areaMapLegendConfig.projectGeometryBuffer}}
+        </div>
+      {{/if}}
+    </div>
   </section>
   <section class="legend-section">
-    <h2 class="legend-section-header">Zoning</h2>
-    {{#each areaMapLegendConfig.zoningLegendItems as |item|}}
-      {{labs-ui/legend-item item=item}}
-    {{/each}}
-  </section>
-  <section class="legend-section">
-    <h2 class="legend-section-header">Land Use</h2>
-    {{#each areaMapLegendConfig.landuseLegendItems as |item|}}
-      {{labs-ui/legend-item item=item}}
-    {{/each}}
+    <div class="grid-x grid-margin-x">
+      <div class="cell shrink">
+        <h2 class="legend-section-header">Zoning</h2>
+
+        <div class="legend-item"><div class="legend-icon"><div class="zoning-district"></div></div> Zoning District</div>
+
+        <div class="legend-item"><div class="legend-icon"><div class="sprite c1-1"></div></div> C1-1</div>
+        <div class="legend-item"><div class="legend-icon"><div class="sprite c1-2"></div></div> C1-2</div>
+        <div class="legend-item"><div class="legend-icon"><div class="sprite c1-3"></div></div> C1-3</div>
+        <div class="legend-item"><div class="legend-icon"><div class="sprite c1-4"></div></div> C1-4</div>
+        <div class="legend-item"><div class="legend-icon"><div class="sprite c1-5"></div></div> C1-5</div>
+        <div class="legend-item"><div class="legend-icon"><div class="sprite c2-1"></div></div> C2-1</div>
+        <div class="legend-item"><div class="legend-icon"><div class="sprite c2-2"></div></div> C2-2</div>
+        <div class="legend-item"><div class="legend-icon"><div class="sprite c2-3"></div></div> C2-3</div>
+        <div class="legend-item"><div class="legend-icon"><div class="sprite c2-4"></div></div> C2-4</div>
+        <div class="legend-item"><div class="legend-icon"><div class="sprite c2-5"></div></div> C2-5</div>
+      </div>
+      <div class="cell auto">
+        <h2 class="legend-section-header">Land Use</h2>
+        {{#each areaMapLegendConfig.landuseLegendItems as |item|}}
+          {{labs-ui/legend-item item=item}}
+        {{/each}}
+      </div>
+    </div>
   </section>
 {{/map-form}}
 

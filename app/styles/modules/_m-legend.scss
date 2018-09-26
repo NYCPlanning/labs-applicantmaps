@@ -3,12 +3,14 @@
 // --------------------------------------------------
 
 .legend {
-  font-size: 10pt;
-  padding-bottom: $global-margin/2;
+  padding-bottom: $global-margin;
 
   hr {
-    margin: $global-margin/2 0;
+    margin: $global-margin 0;
   }
+}
+.legend-item {
+  margin-bottom: rem-calc(4);
 }
 
 .legend-project-name {
@@ -23,15 +25,15 @@
 }
 
 .legend-section + .legend-section {
-  margin-top: $global-margin/2;
+  margin-top: $global-margin;
 }
 
 .legend-section-header {
-  font-size: 10pt;
-  margin: 2pt;
+  font-size: 12pt;
+  margin-bottom: rem-calc(6);
 }
 
 .legend-item {
-  font-size: 7pt;
+  font-size: 8pt;
   padding: 0;
 }
