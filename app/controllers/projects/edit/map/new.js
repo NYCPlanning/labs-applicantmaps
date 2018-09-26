@@ -63,7 +63,7 @@ export default class NewProjectMapController extends Controller {
 
   mapBearing = null
 
-  preventMapInteractions = true
+  preventMapInteractions = false
 
   @computed('mapBearing', 'mapPitch')
   get northArrowTransforms() {
@@ -80,24 +80,22 @@ export default class NewProjectMapController extends Controller {
   @action
   handleMapLoaded(map) {
     this.set('mapInstance', map);
-    const buffer = this.get('model.project.projectGeometryBuffer');
+    this.fitBoundsToBuffer();
+    this.handleMapRotateOrPitch();
+    this.updateBounds();
+    this.toggleMapInteractions();
+  }
 
+  @action
+  fitBoundsToBuffer() {
+    const buffer = this.get('model.project.projectGeometryBuffer');
+    const map = this.get('mapInstance');
+
+    map.setBearing(0);
     map.fitBounds(turfBbox.default(buffer), {
       padding: 100,
       duration: 0,
     });
-
-    this.handleMapRotateOrPitch();
-    this.updateBounds();
-
-    // disable interactions
-    map.scrollZoom.disable();
-    map.boxZoom.disable();
-    map.dragRotate.disable();
-    map.dragPan.disable();
-    map.keyboard.disable();
-    map.doubleClickZoom.disable();
-    map.touchZoomRotate.disable();
   }
 
   @action
@@ -140,6 +138,7 @@ export default class NewProjectMapController extends Controller {
   toggleMapInteractions () {
     const map = this.get('mapInstance');
     const preventMapInteractions = this.get('preventMapInteractions');
+    console.log(preventMapInteractions);
 
     if (preventMapInteractions === true) {
       this.set('preventMapInteractions', false);
