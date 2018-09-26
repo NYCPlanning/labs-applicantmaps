@@ -19,7 +19,8 @@ export default function() {
   this.get('/projects/:id');
   this.patch('/projects/:id');
   this.post('/projects');
-  this.post('/applicant-maps');
+  this.post('/area-maps');
+  this.patch('/area-maps/:id');
   /*
     Config (with defaults).
 

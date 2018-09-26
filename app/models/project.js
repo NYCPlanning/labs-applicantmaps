@@ -4,7 +4,10 @@ import { computed } from '@ember-decorators/object';
 import turfBuffer from 'npm:@turf/buffer';
 import turfUnion from 'npm:@turf/union';
 import turfBbox from 'npm:@turf/bbox';
+import { camelize } from '@ember/string';
+import config from '../config/environment';
 
+const { mapTypes } = config;
 const { Model } = DS;
 
 const requiredFields = [
@@ -12,11 +15,22 @@ const requiredFields = [
   'applicantName',
   'developmentSite',
   'projectArea',
-  // 'description',
 ];
 
 export default class ProjectModel extends Model.extend({}) {
-  @hasMany('applicant-map', { polymorphic: true, async: false }) applicantMaps;
+  @hasMany('area-map', { async: false }) areaMaps;
+
+  @hasMany('tax-map', { async: false }) taxMaps;
+
+  @hasMany('zoning-change-map', { async: false }) zoningChangeMaps;
+
+  @hasMany('zoning-section-map', { async: false }) zoningSectionMaps;
+
+  @computed(...mapTypes.map(type => `${camelize(type)}.@each.length`))
+  get applicantMaps() {
+    const maps = this.getProperties('areaMaps', 'taxMaps', 'zoningChangeMaps', 'zoningSectionMaps');
+    return Object.values(maps).reduce((acc, curr) => acc.concat(...curr.toArray()), []);
+  }
 
   @attr({
     defaultValue() {

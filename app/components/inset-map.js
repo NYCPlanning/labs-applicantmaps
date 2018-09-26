@@ -5,8 +5,10 @@ import { classNames } from '@ember-decorators/component';
 import turfBbox from 'npm:@turf/bbox';
 import turfBuffer from 'npm:@turf/buffer';
 
+
+export default
 @classNames('inset-map-container')
-export default class extends Component {
+class InsetMap extends Component {
   @argument
   boundsPolygon
 

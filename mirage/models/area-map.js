@@ -1,4 +1,5 @@
-import ApplicantMapModel from './applicant-map';
+import { Model, belongsTo } from 'ember-cli-mirage';
 
-export default ApplicantMapModel.extend({
+export default Model.extend({
+  project: belongsTo('project'),
 });
