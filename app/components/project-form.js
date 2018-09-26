@@ -87,8 +87,17 @@ export default class ProjectFormComponent extends Component {
 
     // setup controls
     const navigationControl = new mapboxgl.NavigationControl();
-
     map.addControl(navigationControl, 'top-left');
+
+    // fitbounds if there are geometries
+    const projectGeometryBoundingBox = this.get('model.projectGeometryBoundingBox');
+    console.log(projectGeometryBoundingBox);
+    if (projectGeometryBoundingBox) {
+      map.fitBounds(projectGeometryBoundingBox, {
+        padding: 50,
+        duration: 0,
+      });
+    }
   }
 
   @action

@@ -53,6 +53,11 @@ export default class ProjectModel extends Model.extend({}) {
     // build a geojson FeatureCollection from all three project geoms
     const geometries = this.getProperties('developmentSite', 'projectArea', 'rezoningArea');
 
+    // if all three are undefined, return undefined
+    const allUndefined = Object.values(geometries)
+      .reduce((acc, geometry) => acc && !geometry, true);
+    if (allUndefined) return undefined;
+
     const featureCollection = Object.values(geometries)
       .reduce((acc, geometry) => {
         if (geometry) {
