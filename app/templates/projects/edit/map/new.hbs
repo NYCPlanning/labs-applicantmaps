@@ -6,32 +6,32 @@
   <hr>
   <section class="legend-section">
     <h2 class="legend-section-header">Project</h2>
-    <div class="grid-x grid-margin-x">
+    <div class="grid-x">
       {{#if model.project.projectArea}}
-        <div class="cell small-5">
+        <div class="cell project-geom-cell">
           {{labs-ui/legend-item item=areaMapLegendConfig.projectArea}}
         </div>
       {{/if}}
       {{#if model.project.developmentSite}}
-        <div class="cell small-5">
+        <div class="cell project-geom-cell">
           {{labs-ui/legend-item item=areaMapLegendConfig.developmentSite}}
         </div>
       {{/if}}
       {{#if model.project.rezoningArea}}
-        <div class="cell small-5">
+        <div class="cell project-geom-cell">
           {{labs-ui/legend-item item=areaMapLegendConfig.rezoningArea}}
         </div>
       {{/if}}
       {{#if model.project.projectGeometryBuffer}}
-        <div class="cell small-5">
+        <div class="cell project-geom-cell">
           {{labs-ui/legend-item item=areaMapLegendConfig.projectGeometryBuffer}}
         </div>
       {{/if}}
     </div>
   </section>
   <section class="legend-section">
-    <div class="grid-x grid-margin-x">
-      <div class="cell shrink">
+    <div class="grid-x">
+      <div class="cell zoning-section-cell">
         <h2 class="legend-section-header">Zoning</h2>
 
         <div class="legend-item"><div class="legend-icon"><div class="zoning-district"></div></div> Zoning District</div>
@@ -47,7 +47,7 @@
         <div class="legend-item"><div class="legend-icon"><div class="sprite c2-4"></div></div> C2-4</div>
         <div class="legend-item"><div class="legend-icon"><div class="sprite c2-5"></div></div> C2-5</div>
       </div>
-      <div class="cell auto">
+      <div class="cell land-use-section-cell">
         <h2 class="legend-section-header">Land Use</h2>
         {{#each areaMapLegendConfig.landuseLegendItems as |item|}}
           {{labs-ui/legend-item item=item}}
