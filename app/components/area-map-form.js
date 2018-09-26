@@ -33,7 +33,8 @@ export default class AreaMapFormComponent extends Component {
                 paint: { 'fill-opacity': 0.7 },
                 minzoom: 8,
               },
-              tooltipable: false, highlightable: false
+              tooltipable: false,
+              highlightable: false,
             },
             {},
             { style: { layout: { 'text-field': '{numfloors}' } } },
