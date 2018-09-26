@@ -30,6 +30,8 @@ export default class ProjectFormComponent extends Component {
   @service
   notificationMessages;
 
+  geometryMode = null
+
   @service
   router;
 
@@ -87,8 +89,16 @@ export default class ProjectFormComponent extends Component {
 
     // setup controls
     const navigationControl = new mapboxgl.NavigationControl();
-
     map.addControl(navigationControl, 'top-left');
+
+    // fitbounds if there are geometries
+    const projectGeometryBoundingBox = this.get('model.projectGeometryBoundingBox');
+    if (projectGeometryBoundingBox) {
+      map.fitBounds(projectGeometryBoundingBox, {
+        padding: 50,
+        duration: 0,
+      });
+    }
 
     const basemapLayersToHide = [
       'highway_path',

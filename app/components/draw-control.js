@@ -19,9 +19,6 @@ const draw = new MapboxDraw({
 
 export default class DrawControlController extends Component {
   @argument
-  geometryMode
-
-  @argument
   lotSelectionMode
 
   @argument
@@ -90,6 +87,13 @@ export default class DrawControlController extends Component {
     if (geometryMode) {
       map.addControl(draw, 'top-left');
       draw.changeMode('draw_polygon');
+
+      // if geometry exists for this mode, add it to the drawing canvas
+      const model = this.get('model');
+      if (model.get(geometryMode)) {
+        draw.add(model.get(geometryMode));
+        draw.changeMode('simple_select');
+      }
     } else {
       draw.trash();
       map.removeControl(draw);
