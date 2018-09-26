@@ -1,125 +1,36 @@
-<div class="cell sidebar">
-  <h2 class="header-large">{{model.project.projectName}} Area Map</h2>
-
-  <hr/>
-
-  <input type="radio" name="paper-orientation" value="portrait" id="paper-orientation--portrait" onclick={{action 'reorientPaper' 'portrait'}}/>
-  <label for="paper-orientation--portrait">Portrait</label>
-  <input type="radio" name="paper-orientation" value="landscape" id="paper-orientation--landscape" checked  onclick={{action 'reorientPaper' 'landscape'}}/>
-  <label for="paper-orientation--landscape">Landscape</label>
-
-  <hr/>
-
-  <input type="radio" name="paper-size" value="tabloid" id="paper-size--tabloid" onclick={{action 'scalePaper' 'tabloid'}} checked />
-  <label for="paper-size--tabloid">Tabloid</label>
-  <input type="radio" name="paper-size" value="letter" id="paper-size--letter" onclick={{action  'scalePaper' 'letter'}}/>
-  <label for="paper-size--letter">Letter</label>
-
-  <hr/>
-
-  <button type="button" class="button project-save-button" onclick={{action 'save' model}}>Save Map</button>
-</div>
-
-<div class="cell large-auto paper-container text-center">
-  <div class="paper {{paperSize}} {{paperOrientation}} padding-7mm text-left">
-    <div class="paper-grid grid-x">
-
-      <div class="cell small-3">
-        <div class="grid-y" style="height:100%;">
-          <div class="cell shrink legend">
-            <section class="legend-section">
-              <h1 class="legend-project-name">{{model.project.projectName}} Area Map</h1>
-              <h2 class="legend-applicant">{{model.project.applicantName}}</h2>
-            </section>
-            <hr>
-            <section class="legend-section">
-              <h2 class="legend-section-header">Project</h2>
-              {{#if model.project.projectArea}}
-                {{labs-ui/legend-item item=areaMapLegendConfig.projectArea}}
-              {{/if}}
-              {{#if model.project.developmentSite}}
-                {{labs-ui/legend-item item=areaMapLegendConfig.developmentSite}}
-              {{/if}}
-              {{#if model.project.rezoningArea}}
-                {{labs-ui/legend-item item=areaMapLegendConfig.rezoningArea}}
-              {{/if}}
-              {{#if model.project.projectGeometryBuffer}}
-                {{labs-ui/legend-item item=areaMapLegendConfig.projectGeometryBuffer}}
-              {{/if}}
-            </section>
-            <section class="legend-section">
-              <h2 class="legend-section-header">Zoning</h2>
-              {{#each areaMapLegendConfig.zoningLegendItems as |item|}}
-                {{labs-ui/legend-item item=item}}
-              {{/each}}
-            </section>
-            <section class="legend-section">
-              <h2 class="legend-section-header">Land Use</h2>
-              {{#each areaMapLegendConfig.landuseLegendItems as |item|}}
-                {{labs-ui/legend-item item=item}}
-              {{/each}}
-            </section>
-          </div>
-          <div class="cell auto">
-            {{#if boundsPolygon}}
-              {{inset-map boundsPolygon=boundsPolygon}}
-            {{/if}}
-          </div>
-        </div>
-      </div>
-
-      <div class="cell small-9">
-        {{#area-map-form tagName='' as |areaMapForm|}}
-          {{#labs-map
-            id='main-map'
-            initOptions=(hash
-              style=areaMapForm.model.meta.mapboxStyle
-              zoom=12
-              center=(array -73.983307 40.704977)
-            )
-            mapLoaded=(action 'handleMapLoaded') as |map|
-          }}
-
-            {{map.labs-layers layerGroups=areaMapForm.model.layerGroups}}
-            {{#map.source options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
-              {{source.layer
-                layer=developmentSiteLayer
-                before='boundary_country'
-              }}
-            {{/map.source}}
-
-            {{#map.source options=(mapbox-geojson-source model.project.projectArea) as |source|}}
-              {{source.layer
-                layer=projectAreaLayer
-                before='boundary_country'
-              }}
-            {{/map.source}}
-
-            {{#map.source options=(mapbox-geojson-source model.project.projectGeometryBuffer) as |source|}}
-              {{source.layer
-                layer=projectBufferLayer
-                before='boundary_country'
-              }}
-            {{/map.source}}
-
-            {{map.on 'zoom' (action 'updateBounds')}}
-            {{map.on 'drag' (action 'updateBounds')}}
-            {{map.on 'pitch' (action 'updateBounds')}}
-            {{map.on 'rotate' (action 'updateBounds')}}
-
-            <div id="north-arrow-container">
-              <div id="north-arrow" style={{northArrowTransforms.arrow}} />
-              <div id="north-n" style={{northArrowTransforms.n}}><span class="n" style={{northArrowTransforms.nSpan}}>N</span></div>
-            </div>
-          {{/labs-map}}
-        {{/area-map-form}}
-        {{!-- TODO: print a real permalink --}}<p class="text-tiny text-right"><a href="">localhost:4200/projects/10/area-map</a></p>
-      </div>
-
-    </div>
-
-  </div>
-  <div class="size-display"></div>
-</div>
+{{#map-form model=model tagName='' as |areaMapForm|}}
+  <section class="legend-section">
+    <h1 class="legend-project-name">{{model.project.projectName}} Area Map</h1>
+    <h2 class="legend-applicant">{{model.project.applicantName}}</h2>
+  </section>
+  <hr>
+  <section class="legend-section">
+    <h2 class="legend-section-header">Project</h2>
+    {{#if model.project.projectArea}}
+      {{labs-ui/legend-item item=areaMapLegendConfig.projectArea}}
+    {{/if}}
+    {{#if model.project.developmentSite}}
+      {{labs-ui/legend-item item=areaMapLegendConfig.developmentSite}}
+    {{/if}}
+    {{#if model.project.rezoningArea}}
+      {{labs-ui/legend-item item=areaMapLegendConfig.rezoningArea}}
+    {{/if}}
+    {{#if model.project.projectGeometryBuffer}}
+      {{labs-ui/legend-item item=areaMapLegendConfig.projectGeometryBuffer}}
+    {{/if}}
+  </section>
+  <section class="legend-section">
+    <h2 class="legend-section-header">Zoning</h2>
+    {{#each areaMapLegendConfig.zoningLegendItems as |item|}}
+      {{labs-ui/legend-item item=item}}
+    {{/each}}
+  </section>
+  <section class="legend-section">
+    <h2 class="legend-section-header">Land Use</h2>
+    {{#each areaMapLegendConfig.landuseLegendItems as |item|}}
+      {{labs-ui/legend-item item=item}}
+    {{/each}}
+  </section>
+{{/map-form}}
 
 {{outlet}}

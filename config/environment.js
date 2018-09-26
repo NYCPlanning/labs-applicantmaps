@@ -17,17 +17,28 @@ module.exports = function (environment) {
       },
     },
 
+    // reusable list of named map types
+    mapTypes: ['area-maps', 'tax-maps', 'zoning-change-maps', 'zoning-section-maps'],
+
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
 
-    host: 'https://layers-api-staging.planninglabs.nyc',
-    namespace: 'v1',
+    host: '',
+
+    'ember-cli-mirage': {
+      enabled: true,
+    },
 
     'labs-search': {
       host: 'https://search-api.planninglabs.nyc',
       route: 'search',
+    },
+
+    'ember-mapbox-composer': {
+      host: 'https://layers-api-staging.planninglabs.nyc',
+      namespace: 'v1',
     },
 
     'ember-cli-notifications': {
@@ -75,6 +86,15 @@ module.exports = function (environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
+  }
+
+  if (environment === 'devlocal') {
+    ENV.host = 'http://localhost:3000';
+    ENV.namespace = '';
+
+    ENV['ember-cli-mirage'] = {
+      enabled: false,
+    };
   }
 
   if (environment === 'production') {
