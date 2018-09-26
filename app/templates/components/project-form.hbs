@@ -2,6 +2,10 @@
 
   <h2 class="header-small">Project Information</h2>
 
+  {{bbl-lookup flyTo=(action 'flyTo')}}
+
+  <hr/>
+
   <label class="text-small">Title
     {{input type="text" class='project-name-field' value=model.projectName}}
   </label>
@@ -60,6 +64,15 @@
         center=(array -73.983307 40.704977)
       )
       mapLoaded=(action handleMapLoad) as |map|}}
+
+      {{#labs-search
+          onSelect=(action 'handleSearchSelect')
+          onClear='handleSearchClear'
+          searchTerms=searchTerms
+          typeTitleLookup=(hash
+          ) as |search|}}
+          <small class="dark-gray">{{search.result.label}}</small>
+      {{/labs-search}}
 
         {{!-- labs-layers (includes tax-lots layer) --}}
         {{#map.labs-layers

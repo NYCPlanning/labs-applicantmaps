@@ -123,4 +123,13 @@ export default class ProjectFormComponent extends Component {
 
     this.get('router').transitionTo('projects.show', project);
   }
+
+  @action
+  flyTo(center, zoom) {
+    // Fly to the lot
+    this.get('map').flyTo({ center, zoom });
+
+    // Turn on the Tax Lots layer group
+    this.set('tax-lots', true);
+  }
 }
