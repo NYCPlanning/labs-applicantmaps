@@ -69,6 +69,7 @@ const defaultLayerGroups = {
             minzoom: 8,
           },
           tooltipable: false,
+          highlightable: false,
         },
         {},
         { style: { layout: { 'text-field': '{numfloors}' } } },
@@ -76,7 +77,21 @@ const defaultLayerGroups = {
     },
     { id: 'subway', visible: true },
     { id: 'special-purpose-districts', visible: false },
-    { id: 'citymap', visible: true },
+    {
+      id: 'citymap',
+      visible: true,
+      layers: [
+        {}, // citymap-mapped-streets-line
+        { tooltipable: false }, // citymap-streets-tooltip-line
+        {}, // citymap-street-treatments-line
+        {}, // citymap-underpass-tunnel-line
+        {}, // citymap-street-not-mapped-line
+        { tooltipable: false }, // borough-boundaries
+        {}, // citymap-underpass-tunnel-line
+        { tooltipable: false }, // railway-lines
+        {}, // railway-cross-lines
+      ],
+    },
     { id: 'street-direction-arrows', visible: true },
     { id: 'commercial-overlay-patterns', visible: true },
   ],
@@ -153,7 +168,6 @@ export default class MapFormComponent extends Component {
     this.set('mapInstance', map);
 
     this.fitBoundsToBuffer();
-    this.handleMapRotateOrPitch();
     this.updateBounds();
     this.toggleMapInteractions();
 
@@ -183,13 +197,6 @@ export default class MapFormComponent extends Component {
   }
 
   @action
-  handleMapRotateOrPitch() {
-    const map = this.get('mapInstance');
-    this.set('mapBearing', map.getBearing());
-    this.set('mapPitch', map.getPitch());
-  }
-
-  @action
   updateBounds() {
     const map = this.get('mapInstance');
     const canvas = map.getCanvas();
@@ -216,6 +223,9 @@ export default class MapFormComponent extends Component {
         },
       },
     });
+
+    this.set('mapBearing', map.getBearing());
+    this.set('mapPitch', map.getPitch());
   }
 
   @action
@@ -255,7 +265,6 @@ export default class MapFormComponent extends Component {
       duration: 0,
     });
 
-    this.handleMapRotateOrPitch();
     this.updateBounds();
   }
 
