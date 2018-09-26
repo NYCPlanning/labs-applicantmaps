@@ -1,14 +1,15 @@
 {{#if (eq geometryMode mode)}}
-  <div class="callout">
+  <div class="callout shadowed top-right">
+    <h3 class="header-small small-margin-bottom">{{modeDisplayName}}</h3>
     {{#if lotSelectionMode}}
       <p class="text-small">Click individual tax lots to toggle their selection</p>
       <div class="grid-x grid-margin-x">
         <button class="cell auto button small" {{action 'finishLotSelection'}}>Make Selection</button>
-        <button class="cell shrink button small alert clear">Cancel</button>
+        {{!-- <button class="cell shrink button small alert clear">Cancel</button> --}}{{!-- TODO: make an action to cancel lot selection --}}
       </div>
     {{else}}
-      <p class="text-small">Use the drawing tools on the map to define the development site OR click below to create your site by selecting tax lots</p>
-      <button class="button gray expanded" {{action "startLotSelection"}}>Select Tax Lots</button>
+      <p class="text-small">Use the <strong class="bg-a11y-yellow">&nbsp;drawing tools&nbsp;</strong> on the map to define the {{modeDisplayName}} <em>or&hellip;</em></p>
+      <button class="button gray small expanded" {{action "startLotSelection"}}>Select Tax Lots</button>
       <div class="grid-x grid-margin-x">
         <button class="cell auto button small" {{action 'setProjectGeometry'}}>Done</button>
         <button class="cell shrink button small alert clear" {{action 'toggleGeometryEditing' null}}>Cancel</button>
@@ -16,10 +17,22 @@
     {{/if}}
   </div>
 {{else}}
-  <button 
-    class="button expanded" {{action 'toggleGeometryEditing' mode}}
-    disabled={{geometryMode}} 
-  >
-    {{fa-icon 'plus'}} Add {{modeDisplayName}}
-  </button>
+  <p class="grid-x text-small align-middle">
+    <span class="cell small-8">
+      {{modeDisplayName}}
+      {{#if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon'))}}
+        {{labs-ui/legend-icon icon=modeIcon}}
+      {{/if}}
+    </span>
+    <span class="cell small-4">
+      <button
+        class="button small expanded no-margin {{if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon')) 'gray'}}"
+        {{action 'toggleGeometryEditing' mode}}
+        disabled={{geometryMode}}
+      >
+        {{fa-icon 'pencil-alt'}}
+        {{if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon')) 'Red' 'D'}}raw
+      </button>
+    </span>
+  </p>
 {{/if}}

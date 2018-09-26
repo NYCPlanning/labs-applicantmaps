@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action, computed } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 import turfBbox from 'npm:@turf/bbox';
+import { next } from '@ember/runloop';
 
 import areaMapLegendConfig from '../../../../utils/area-map-legend-config';
 
@@ -22,9 +23,9 @@ const projectAreaLayer = {
     'line-cap': 'round',
   },
   paint: {
-    'line-width': 6,
+    'line-width': 3,
     'line-dasharray': [
-      0.1,
+      0,
       2,
     ],
   },
@@ -34,11 +35,11 @@ const projectBufferLayer = {
   id: 'project-buffer-line',
   type: 'line',
   paint: {
-    'line-color': 'rgba(116, 4, 80, 1)',
-    'line-width': 6,
+    'line-color': 'rgba(122, 0, 72, 1)',
+    'line-width': 3,
     'line-dasharray': [
-      0.5,
-      0.5,
+      0.75,
+      0.75,
     ],
   },
 };
@@ -63,6 +64,10 @@ export default class NewProjectMapController extends Controller {
 
   mapBearing = null
 
+  paperSize = 'tabloid'
+
+  paperOrientation = 'landscape'
+
   preventMapInteractions = false
 
   @computed('mapBearing', 'mapPitch')
@@ -84,6 +89,30 @@ export default class NewProjectMapController extends Controller {
     this.handleMapRotateOrPitch();
     this.updateBounds();
     this.toggleMapInteractions();
+
+    const basemapLayersToHide = [
+      'highway_path',
+      'highway_minor',
+      'highway_major_casing',
+      'highway_major_inner',
+      'highway_major_subtle',
+      'highway_motorway_casing',
+      'highway_motorway_inner',
+      'highway_motorway_subtle',
+      'highway_motorway_bridge_casing',
+      'highway_motorway_bridge_inner',
+      // 'highway_name_other',
+      // 'highway_name_motorway',
+      'tunnel_motorway_casing',
+      'tunnel_motorway_inner',
+      'railway_transit',
+      'railway_transit_dashline',
+      'railway_service',
+      'railway_service_dashline',
+      'railway',
+      'railway_dashline',
+    ];
+    basemapLayersToHide.forEach(layer => map.removeLayer(layer));
   }
 
   @action
@@ -93,9 +122,12 @@ export default class NewProjectMapController extends Controller {
 
     map.setBearing(0);
     map.fitBounds(turfBbox.default(buffer), {
-      padding: 100,
+      padding: 50,
       duration: 0,
     });
+
+    this.handleMapRotateOrPitch();
+    this.updateBounds();
   }
 
   @action
@@ -131,6 +163,32 @@ export default class NewProjectMapController extends Controller {
           name: 'EPSG:4326',
         },
       },
+    });
+  }
+
+  @action
+  reorientPaper(orientation) {
+    this.set('paperOrientation', orientation);
+    next(() => {
+      // not supported in IE 11
+      window.addEventListener('resize', () => {
+        this.updateBounds();
+      });
+      // not supported in IE 11
+      window.dispatchEvent(new Event('resize'));
+    });
+  }
+
+  @action
+  scalePaper(size) {
+    this.set('paperSize', size);
+    next(() => {
+      // not supported in IE 11
+      window.addEventListener('resize', () => {
+        this.updateBounds();
+      });
+      // not supported in IE 11
+      window.dispatchEvent(new Event('resize'));
     });
   }
 
