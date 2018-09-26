@@ -46,6 +46,27 @@ const projectBufferLayer = {
 const defaultLayerGroups = {
   'layer-groups': [
     {
+      id: 'tax-lots',
+      visible: true,
+      layers: [
+        {
+          style: {
+            paint: { 'fill-opacity': 0.5 },
+            minzoom: 8,
+          },
+          tooltipable: false,
+          highlightable: false,
+        },
+        {},
+        {
+          style: {
+            layout: { 'text-field': '{numfloors}' },
+            paint: { 'text-color': 'rgba(33, 35, 38, 0.9)' },
+          },
+        },
+      ],
+    },
+    {
       id: 'building-footprints',
       visible: true,
       layers: [
@@ -53,26 +74,11 @@ const defaultLayerGroups = {
           style: {
             paint: {
               'fill-opacity': 0.35,
-              'fill-color': '#505050',
+              'fill-color': 'rgba(33, 35, 38, 0)',
+              'fill-outline-color': 'rgba(33, 35, 38, 0.8)',
             },
           },
         },
-      ],
-    },
-    {
-      id: 'tax-lots',
-      visible: true,
-      layers: [
-        {
-          style: {
-            paint: { 'fill-opacity': 0.7 },
-            minzoom: 8,
-          },
-          tooltipable: false,
-          highlightable: false,
-        },
-        {},
-        { style: { layout: { 'text-field': '{numfloors}' } } },
       ],
     },
     { id: 'subway', visible: true },

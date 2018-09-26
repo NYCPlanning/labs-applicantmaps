@@ -62,4 +62,8 @@
     &.c2-4 { background-position: -60px -50px; }
     &.c2-5 { background-position: -10px -60px; }
   }
+
+  .land-use-section-cell & {
+    opacity: 0.6;
+  }
 }
