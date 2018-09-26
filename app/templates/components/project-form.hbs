@@ -31,18 +31,21 @@
         mode="developmentSite"
         modeDisplayName="Development Site"
         hasGeom=model.developmentSite
+        geometryMode=geometryMode
       }}
 
       {{menu.draw-control
         mode="projectArea"
         modeDisplayName="Project Area"
         hasGeom=model.projectArea
+        geometryMode=geometryMode
       }}
 
       {{menu.draw-control
         mode="rezoningArea"
         modeDisplayName="Rezoning Area"
         hasGeom=model.rezoningArea
+        geometryMode=geometryMode
       }}
     {{/project-geometries-menu}}
   {{/if}}
@@ -72,7 +75,7 @@
         {{/map.labs-layers}}
 
         {{!-- Ad-hoc source and layer for developmentSite --}}
-        {{#if (and model.developmentSite (not-eq model.geometryMode "developmentSite"))}}
+        {{#if (and model.developmentSite (not-eq geometryMode "developmentSite"))}}
           {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
             {{source.layer
               layer=projectGeomLayers.developmentSiteLayer
@@ -82,7 +85,7 @@
         {{/if}}
 
         {{!-- Ad-hoc source and layer for projectArea --}}
-        {{#if (and model.projectArea (not-eq model.geometryMode "projectArea"))}}
+        {{#if (and model.projectArea (not-eq geometryMode "projectArea"))}}
           {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
             {{source.layer
               layer=projectGeomLayers.projectAreaLayer
@@ -92,7 +95,7 @@
         {{/if}}
 
         {{!-- Ad-hoc source and layer for projectArea --}}
-        {{#if (and model.rezoningArea (not-eq model.geometryMode "rezoningArea"))}}
+        {{#if (and model.rezoningArea (not-eq geometryMode "rezoningArea"))}}
           {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
             {{source.layer
               layer=projectGeomLayers.rezoningAreaLayer

@@ -30,6 +30,8 @@ export default class ProjectFormComponent extends Component {
   @service
   notificationMessages;
 
+  geometryMode = null
+
   @service
   router;
 
@@ -91,7 +93,6 @@ export default class ProjectFormComponent extends Component {
 
     // fitbounds if there are geometries
     const projectGeometryBoundingBox = this.get('model.projectGeometryBoundingBox');
-    console.log(projectGeometryBoundingBox);
     if (projectGeometryBoundingBox) {
       map.fitBounds(projectGeometryBoundingBox, {
         padding: 50,

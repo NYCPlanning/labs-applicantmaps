@@ -79,9 +79,9 @@ export default class DrawControlController extends Component {
   }
 
   @action toggleGeometryEditing(type) {
-    this.set('model.geometryMode', type);
+    this.set('geometryMode', type);
 
-    const geometryMode = this.get('model.geometryMode');
+    const geometryMode = this.get('geometryMode');
 
     const map = this.get('mapInstance');
     if (geometryMode) {
@@ -145,7 +145,7 @@ export default class DrawControlController extends Component {
     draw.deleteAll();
 
     const { geometry } = FeatureCollection.features[0];
-    const geometryMode = this.get('model.geometryMode');
+    const geometryMode = this.get('geometryMode');
 
     // set geometry depending on mode
     const model = this.get('model');
