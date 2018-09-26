@@ -102,7 +102,7 @@ module.exports = function (environment) {
       enabled: true,
     };
     // here you can enable a production-specific feature
-    ENV.host = 'https://layers-api-staging.planninglabs.nyc';
+    ENV.host = 'https://applicant-maps-api-staging.planninglabs.nyc';
     ENV['mapbox-gl'].map.style = 'https://layers-api-staging.planninglabs.nyc/v1/base/style.json';
   }
 
