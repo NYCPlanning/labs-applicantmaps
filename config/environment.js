@@ -99,7 +99,7 @@ module.exports = function (environment) {
 
   if (environment === 'staging') {
     ENV['ember-cli-mirage'] = {
-      enabled: true,
+      enabled: false,
     };
     // here you can enable a staging-specific feature
     ENV.host = 'https://applicantmaps-api-staging.planninglabs.nyc';
@@ -108,7 +108,7 @@ module.exports = function (environment) {
 
   if (environment === 'production') {
     ENV['ember-cli-mirage'] = {
-      enabled: true,
+      enabled: false,
     };
     // here you can enable a production-specific feature
     ENV.host = 'https://applicantmaps-api.planninglabs.nyc';
