@@ -153,7 +153,6 @@ export default class MapFormComponent extends Component {
     this.set('mapInstance', map);
 
     this.fitBoundsToBuffer();
-    this.handleMapRotateOrPitch();
     this.updateBounds();
     this.toggleMapInteractions();
 
@@ -183,13 +182,6 @@ export default class MapFormComponent extends Component {
   }
 
   @action
-  handleMapRotateOrPitch() {
-    const map = this.get('mapInstance');
-    this.set('mapBearing', map.getBearing());
-    this.set('mapPitch', map.getPitch());
-  }
-
-  @action
   updateBounds() {
     const map = this.get('mapInstance');
     const canvas = map.getCanvas();
@@ -216,6 +208,9 @@ export default class MapFormComponent extends Component {
         },
       },
     });
+
+    this.set('mapBearing', map.getBearing());
+    this.set('mapPitch', map.getPitch());
   }
 
   @action
@@ -255,7 +250,6 @@ export default class MapFormComponent extends Component {
       duration: 0,
     });
 
-    this.handleMapRotateOrPitch();
     this.updateBounds();
   }
 
