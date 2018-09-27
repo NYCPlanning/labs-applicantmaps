@@ -43,6 +43,47 @@ export default class ProjectFormComponent extends Component {
 
   isSelectingLots = false
 
+  geocodedFeature = null;
+
+  geocodedLayer = {
+    type: 'circle',
+    paint: {
+      'circle-radius': {
+        stops: [
+          [
+            10,
+            5,
+          ],
+          [
+            17,
+            12,
+          ],
+        ],
+      },
+      'circle-color': 'rgba(199, 92, 92, 1)',
+      'circle-stroke-width': {
+        stops: [
+          [
+            10,
+            20,
+          ],
+          [
+            17,
+            18,
+          ],
+        ],
+      },
+      'circle-stroke-color': 'rgba(65, 73, 255, 1)',
+      'circle-opacity': 0,
+      'circle-stroke-opacity': 0.2,
+    },
+  }
+
+  @computed('lat', 'lng')
+  get center() {
+    return [this.get('lat'), this.get('lng')];
+  }
+
   @computed('selectedLots.features.[]')
   get selectedLotsSource() {
     const selectedLots = this.get('selectedLots');
@@ -53,28 +94,12 @@ export default class ProjectFormComponent extends Component {
   }
 
   @action
-  handleSearchSelect(result) {
-    const map = this.get('mapInstance');
+  selectSearchResult({ geometry }) {
+    const { coordinates } = geometry;
+    const { mapInstance: map } = this;
 
-    // handle address search results
-    if (result.type === 'lot') {
-      const center = result.geometry.coordinates;
-      this.set('searchedAddressSource', {
-        type: 'geojson',
-        data: {
-          type: 'Feature',
-          properties: {},
-          geometry: result.geometry,
-        },
-      });
-
-      if (map) {
-        map.flyTo({
-          center,
-          zoom: 15,
-        });
-      }
-    }
+    this.set('geocodedFeature', { type: 'geojson', data: geometry });
+    map.flyTo({ center: coordinates, zoom: 16 });
   }
 
   @action
@@ -157,5 +182,13 @@ export default class ProjectFormComponent extends Component {
     this.get('notificationMessages').success('Project saved!');
 
     this.get('router').transitionTo('projects.show', project);
+  }
+
+  @action
+  flyTo(center, zoom) {
+    // Fly to the lot
+    this.get('mapInstance').flyTo({ center, zoom });
+    // Turn on the Tax Lots layer group
+    this.set('tax-lots', true);
   }
 }
