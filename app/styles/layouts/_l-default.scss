@@ -217,6 +217,17 @@ body {
 
 
 //
+// Search & BBL Lookup Container
+// --------------------------------------------------
+.search-and-bbl-lookup-container {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 50px;
+}
+
+
+//
 // Images
 // --------------------------------------------------
 .shadowed {

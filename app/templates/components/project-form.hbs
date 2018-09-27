@@ -2,8 +2,6 @@
 
   <h2 class="header-small">Project Information</h2>
 
-  {{bbl-lookup flyTo=(action 'flyTo')}}
-
   <hr/>
 
   <label class="text-small">Title
@@ -66,14 +64,17 @@
       )
       mapLoaded=(action handleMapLoad) as |map|}}
 
-      {{#labs-search
-        searchPlaceholder='Search for Address...'
-        onSelect=(action 'selectSearchResult')
-        typeTitleLookup=(hash
-          lot='Addresses')
-        onClear=(action (mut geocodedFeature null)) as |search|}}
-        <small class="dark-gray">{{search.result.label}}</small>
-      {{/labs-search}}
+      <div class="search-and-bbl-lookup-container">
+        {{#labs-search
+          searchPlaceholder='Search for Address...'
+          onSelect=(action 'selectSearchResult')
+          typeTitleLookup=(hash
+            lot='Addresses')
+          onClear=(action (mut geocodedFeature null)) as |search|}}
+          <small class="dark-gray">{{search.result.label}}</small>
+        {{/labs-search}}
+        {{bbl-lookup flyTo=(action 'flyTo')}}
+      </div>
 
       {{#if geocodedFeature}}
         {{#map.source options=geocodedFeature as |source|}}
