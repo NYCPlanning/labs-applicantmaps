@@ -5,9 +5,10 @@ export default {
       type: 'rectangle',
       layers: [
         {
-          fill: 'rgb(1,1,1,0)',
-          stroke: 'red',
-          'stroke-width': 1,
+          fill: 'rgba(0, 0, 0, 0)',
+          stroke: 'rgba(0, 122, 122, 1)',
+          'stroke-width': 1.25,
+          'stroke-dasharray': '3.25,1.75',
         },
       ],
     },
@@ -19,10 +20,10 @@ export default {
       type: 'rectangle',
       layers: [
         {
-          fill: 'rgba(70, 130, 180, 0)',
-          stroke: '#000',
-          'stroke-width': 2,
-          'stroke-dasharray': '2 2',
+          fill: 'rgba(0, 0, 0, 0)',
+          stroke: 'rgba(237, 18, 18, 1)',
+          'stroke-width': 1.25,
+          'stroke-dasharray': '3,1.25,1.25,1.25',
         },
       ],
     },
@@ -34,9 +35,11 @@ export default {
       type: 'rectangle',
       layers: [
         {
-          fill: 'rgba(70, 130, 180, 0)',
-          stroke: '#000',
-          'stroke-width': 1.5,
+          fill: 'rgba(0, 0, 0, 0)',
+          stroke: 'rgba(0, 0, 0, 1)',
+          'stroke-width': 2,
+          'stroke-dasharray': '0.2,4',
+          'stroke-linecap': 'round',
         },
       ],
     },
