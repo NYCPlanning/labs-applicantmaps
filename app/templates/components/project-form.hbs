@@ -2,6 +2,8 @@
 
   <h2 class="header-small">Project Information</h2>
 
+  <hr/>
+
   <label class="text-small">Title
     {{input type="text" class='project-name-field' value=model.projectName}}
   </label>
@@ -61,6 +63,24 @@
         center=(array -73.983307 40.704977)
       )
       mapLoaded=(action handleMapLoad) as |map|}}
+
+      <div class="search-and-bbl-lookup-container">
+        {{#labs-search
+          searchPlaceholder='Search for Address...'
+          onSelect=(action 'selectSearchResult')
+          typeTitleLookup=(hash
+            lot='Addresses')
+          onClear=(action (mut geocodedFeature null)) as |search|}}
+          <small class="dark-gray">{{search.result.label}}</small>
+        {{/labs-search}}
+        {{bbl-lookup flyTo=(action 'flyTo')}}
+      </div>
+
+      {{#if geocodedFeature}}
+        {{#map.source options=geocodedFeature as |source|}}
+          {{source.layer layer=geocodedLayer}}
+        {{/map.source}}
+      {{/if}}
 
         {{!-- labs-layers (includes tax-lots layer) --}}
         {{#map.labs-layers
