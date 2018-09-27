@@ -32,14 +32,7 @@ export default class ProjectModel extends Model.extend({}) {
     return Object.values(maps).reduce((acc, curr) => acc.concat(...curr.toArray()), []);
   }
 
-  @attr({
-    defaultValue() {
-      return {
-        type: 'Point',
-        coordinates: [-73.983307, 40.704977],
-      };
-    },
-  }) projectArea; // geojson
+  @attr() projectArea
 
   @attr() developmentSite
 
@@ -73,6 +66,11 @@ export default class ProjectModel extends Model.extend({}) {
   get projectGeometryBoundingBox() {
     // build a geojson FeatureCollection from all three project geoms
     const geometries = this.getProperties('developmentSite', 'projectArea', 'rezoningArea');
+
+    // if all three are undefined, return undefined
+    const allUndefined = Object.values(geometries)
+      .reduce((acc, geometry) => acc && !geometry, true);
+    if (allUndefined) return undefined;
 
     const featureCollection = Object.values(geometries)
       .reduce((acc, geometry) => {

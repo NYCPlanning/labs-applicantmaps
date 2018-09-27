@@ -98,13 +98,22 @@ module.exports = function (environment) {
     };
   }
 
+  if (environment === 'staging') {
+    ENV['ember-cli-mirage'] = {
+      enabled: false,
+    };
+    // here you can enable a staging-specific feature
+    ENV.host = 'https://applicantmaps-api-staging.planninglabs.nyc';
+    ENV['mapbox-gl'].map.style = 'https://layers-api-staging.planninglabs.nyc/v1/base/style.json';
+  }
+
   if (environment === 'production') {
     ENV['ember-cli-mirage'] = {
-      enabled: true,
+      enabled: false,
     };
     // here you can enable a production-specific feature
-    ENV.host = 'https://layers-api-staging.planninglabs.nyc';
-    ENV['mapbox-gl'].map.style = 'https://layers-api-staging.planninglabs.nyc/v1/base/style.json';
+    ENV.host = 'https://applicantmaps-api.planninglabs.nyc';
+    ENV['mapbox-gl'].map.style = 'https://layers-api.planninglabs.nyc/v1/base/style.json';
   }
 
   return ENV;
