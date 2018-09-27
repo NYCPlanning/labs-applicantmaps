@@ -58,3 +58,16 @@
   .paper.letter.landscape        { width: 280mm }
   .paper.legal.landscape         { width: 357mm }
 }
+
+.paper-sidebar { width: 100mm; }
+.project-geom-cell { width: 40%; }
+.zoning-section-cell { width: 40%; }
+.land-use-section-cell { width: 60%; }
+
+.paper.portrait,
+.paper.portrait {
+  .paper-sidebar { width: 65mm; }
+  .project-geom-cell { width: 100%; }
+  .zoning-section-cell { width: 100%; margin-bottom: $global-margin; }
+  .land-use-section-cell { width: 100%; }
+}
