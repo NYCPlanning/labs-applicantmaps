@@ -110,6 +110,7 @@ export default class MapFormComponent extends Component {
 
     const query = this.get('customLayerGroupQuery') || defaultLayerGroups;
     const store = this.get('store');
+    store.unloadAll('layer');
     store.query('layer-group', query).then((layerGroups) => {
       const { meta } = layerGroups;
 
