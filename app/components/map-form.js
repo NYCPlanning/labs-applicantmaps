@@ -46,6 +46,7 @@ const projectBufferLayer = {
 
 const defaultLayerGroups = {
   'layer-groups': [
+    { id: 'subway', visible: true },
     {
       id: 'tax-lots',
       visible: true,
@@ -82,7 +83,6 @@ const defaultLayerGroups = {
         },
       ],
     },
-    { id: 'subway', visible: true },
     { id: 'special-purpose-districts', visible: false },
     {
       id: 'citymap',
@@ -95,8 +95,21 @@ const defaultLayerGroups = {
         {}, // citymap-street-not-mapped-line
         { tooltipable: false }, // borough-boundaries
         {}, // citymap-underpass-tunnel-line
-        { tooltipable: false }, // railway-lines
-        {}, // railway-cross-lines
+        {
+          style: {
+            paint: {
+              'line-color': 'rgba(0,0,0,0)',
+            },
+          },
+          tooltipable: false,
+        }, // railway-lines
+        {
+          style: {
+            paint: {
+              'line-color': 'rgba(0,0,0,0)',
+            },
+          },
+        }, // railway-cross-lines
       ],
     },
     { id: 'street-direction-arrows', visible: true },
