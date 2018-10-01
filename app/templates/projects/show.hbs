@@ -66,20 +66,35 @@
 
       </div>
       <div class="cell auto">
-
         <h3 class="header-xlarge dark-gray"><small>Project Maps</small></h3>
         <div class="grid-x grid-padding-x large-up-2">
-          <div class="cell">
-            {{#link-to 'projects.edit.map.new' model.id (query-params mapType='area-map') tagName='a' class='card link text-center'}}
-              <div class="card-divider bg-green-muted green-light align-center">
-                {{fa-icon 'plus' size='3x' class=''}}
-              </div>
-              <div class="card-section">
-                <strong class="dark-gray">Area Map</strong>
-              </div>
-            {{/link-to}}
-          </div>
-          <div class="cell">
+          {{#each (array (hash name='Area Map' prop='areaMaps') 
+                          (hash name='Tax Map' prop='taxMaps')
+                          (hash name='Zoning Change Map' prop='zoningChangeMaps')
+                          (hash name='Zoning Section Map' prop='zoningSectionMaps')) as |type|}}
+            <div class="cell">
+              {{#if (get (get model type.prop) 'firstObject')}}
+                {{#link-to 'projects.edit.map.edit' model.id (get (get model type.prop) 'firstObject.id') tagName='a' class='card link text-center'}}
+                  <div class="card-divider bg-a11y-orange orange-light align-center">
+                    {{fa-icon 'pencil-alt' size='3x' class=''}}
+                  </div>
+                  <div class="card-section">
+                    <span class="a11y-orange">{{type.name}}</span>
+                  </div>
+                {{/link-to}}
+              {{else}}
+                {{#link-to 'projects.edit.map.new' model.id (query-params mapType=(dasherize type.name)) tagName='a' class='card link text-center'}}
+                  <div class="card-divider bg-green-muted green-light align-center">
+                    {{fa-icon 'plus' size='3x' class=''}}
+                  </div>
+                  <div class="card-section">
+                    <strong class="dark-gray">{{type.name}}</strong>
+                  </div>
+                {{/link-to}}
+              {{/if}}
+            </div>
+          {{/each}}
+{{!--           <div class="cell">
             <div class="card link text-center">
               <div style="cursor:not-allowed;">
                 <div class="card-divider bg-silver align-center">
@@ -123,7 +138,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> --}}
         </div>
 
       </div>
