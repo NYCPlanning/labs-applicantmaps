@@ -15,11 +15,9 @@ export default class ApplicantMapModel extends Model.extend({}) {
 
   @attr('string', { defaultValue: 'tabloid' }) paperSize;
 
-  // @attr() mapPitch;
+  @attr() mapBearing;
 
-  // @attr() mapBearing;
-
-  // @attr() boundsPolygon;
+  @attr() boundsPolygon;
 
   @attr('string') type;
 
