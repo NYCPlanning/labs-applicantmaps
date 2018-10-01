@@ -5,44 +5,7 @@ import { argument } from '@ember-decorators/argument';
 import { next } from '@ember/runloop';
 import turfBbox from 'npm:@turf/bbox';
 import mapboxgl from 'mapbox-gl';
-
-const developmentSiteLayer = {
-  id: 'development-site-line',
-  type: 'line',
-  paint: {
-    'line-width': 2,
-    'line-color': 'red',
-  },
-};
-
-const projectAreaLayer = {
-  id: 'project-area-line',
-  type: 'line',
-  layout: {
-    visibility: 'visible',
-    'line-cap': 'round',
-  },
-  paint: {
-    'line-width': 3,
-    'line-dasharray': [
-      0,
-      2,
-    ],
-  },
-};
-
-const projectBufferLayer = {
-  id: 'project-buffer-line',
-  type: 'line',
-  paint: {
-    'line-color': 'rgba(122, 0, 72, 1)',
-    'line-width': 3,
-    'line-dasharray': [
-      0.75,
-      0.75,
-    ],
-  },
-};
+import projectGeomLayers from '../utils/project-geom-layers';
 
 const defaultLayerGroups = {
   'layer-groups': [
@@ -159,11 +122,17 @@ export default class MapFormComponent extends Component {
 
   mapConfiguration = null;
 
-  developmentSiteLayer = developmentSiteLayer
+  @argument
+  developmentSiteLayer = projectGeomLayers.developmentSiteLayer
 
-  projectAreaLayer = projectAreaLayer
+  @argument
+  projectAreaLayer = projectGeomLayers.projectAreaLayer
 
-  projectBufferLayer = projectBufferLayer
+  @argument
+  rezoningAreaIcon = projectGeomLayers.rezoningAreaIcon
+
+  @argument
+  projectBufferLayer = projectGeomLayers.projectBufferLayer
 
   mapInstance = null
 
