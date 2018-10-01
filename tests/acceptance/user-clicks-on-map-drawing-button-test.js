@@ -55,6 +55,8 @@ module('Acceptance | user clicks on map drawing button', function(hooks) {
       ],
     );
 
+    await click('.draw-control-done');
+
     await click('.project-save-button');
 
     assert.equal(currentURL(), '/projects/11');

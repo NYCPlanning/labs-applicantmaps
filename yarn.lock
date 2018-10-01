@@ -3910,6 +3910,19 @@ ember-export-application-global@^2.0.0:
   dependencies:
     ember-cli-babel "^6.0.0-beta.7"
 
+ember-fetch@4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/ember-fetch/-/ember-fetch-4.0.1.tgz#0d43517c5e26de7ebd0777c983d675e79ecb40ad"
+  dependencies:
+    abortcontroller-polyfill "^1.1.9"
+    broccoli-concat "^3.2.2"
+    broccoli-merge-trees "^2.0.0"
+    broccoli-stew "^1.4.2"
+    broccoli-templater "^1.0.0"
+    ember-cli-babel "^6.8.2"
+    node-fetch "^2.0.0-alpha.9"
+    yetch "^0.0.1"
+
 ember-fetch@4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/ember-fetch/-/ember-fetch-4.0.2.tgz#865ca90d8aa63b9ebe5bce709aeaa44b35668b5a"
