@@ -122,8 +122,6 @@ export default class MapFormComponent extends Component {
 
   boundsPolygon = null
 
-  mapPitch = null
-
   mapBearing = null
 
   @argument customLayerGroupQuery = null;
@@ -149,8 +147,6 @@ export default class MapFormComponent extends Component {
   projectBufferLayer = projectBufferLayer
 
   mapInstance = null
-
-  mapPitch = null
 
   mapBearing = null
 
