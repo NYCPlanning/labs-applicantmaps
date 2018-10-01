@@ -3,7 +3,6 @@
 // --------------------------------------------------
 
 .bbl-lookup {
-  margin: 0 rem-calc(6);
   position: relative;
   z-index: 1;
 }
@@ -13,17 +12,21 @@
   line-height: 1.5rem;
   padding-top: 0;
   padding-bottom: 0;
+  border: $input-border;
+  border-top: 0;
+  border-top-color: transparent;
 }
 
 .bbl-lookup-form {
   position: absolute;
   top: 100%;
-  right: rem-calc(-6);
+  right: 0;
   bottom: auto;
-  left: rem-calc(-6);
-  background-color: $light-gray;
+  left: 0;
+  background-color: $off-white;
+  margin-top: -1px;
   padding: rem-calc(6);
-  box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 1px 0 2px rgba(0,0,0,0.1);
 
   label {
     font-size: rem-calc(12);

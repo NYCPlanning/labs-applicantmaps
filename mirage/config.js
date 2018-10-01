@@ -21,6 +21,13 @@ export default function() {
   this.post('/projects');
   this.post('/area-maps');
   this.patch('/area-maps/:id');
+  this.post('/tax-maps');
+  this.patch('/tax-maps/:id');
+  this.post('/zoning-change-maps');
+  this.patch('/zoning-change-maps/:id');
+  this.post('/zoning-section-maps');
+  this.patch('/zoning-section-maps/:id');
+
   /*
     Config (with defaults).
 

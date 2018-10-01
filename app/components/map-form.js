@@ -4,6 +4,7 @@ import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { next } from '@ember/runloop';
 import turfBbox from 'npm:@turf/bbox';
+import mapboxgl from 'mapbox-gl';
 
 const developmentSiteLayer = {
   id: 'development-site-line',
@@ -46,6 +47,27 @@ const projectBufferLayer = {
 const defaultLayerGroups = {
   'layer-groups': [
     {
+      id: 'tax-lots',
+      visible: true,
+      layers: [
+        {
+          style: {
+            paint: { 'fill-opacity': 0.5 },
+            minzoom: 8,
+          },
+          tooltipable: false,
+          highlightable: false,
+        },
+        {},
+        {
+          style: {
+            layout: { 'text-field': '{numfloors}' },
+            paint: { 'text-color': 'rgba(33, 35, 38, 0.9)' },
+          },
+        },
+      ],
+    },
+    {
       id: 'building-footprints',
       visible: true,
       layers: [
@@ -53,26 +75,11 @@ const defaultLayerGroups = {
           style: {
             paint: {
               'fill-opacity': 0.35,
-              'fill-color': '#505050',
+              'fill-color': 'rgba(33, 35, 38, 0)',
+              'fill-outline-color': 'rgba(33, 35, 38, 0.8)',
             },
           },
         },
-      ],
-    },
-    {
-      id: 'tax-lots',
-      visible: true,
-      layers: [
-        {
-          style: {
-            paint: { 'fill-opacity': 0.7 },
-            minzoom: 8,
-          },
-          tooltipable: false,
-          highlightable: false,
-        },
-        {},
-        { style: { layout: { 'text-field': '{numfloors}' } } },
       ],
     },
     { id: 'subway', visible: true },
@@ -168,9 +175,11 @@ export default class MapFormComponent extends Component {
     this.set('mapInstance', map);
 
     this.fitBoundsToBuffer();
-    this.handleMapRotateOrPitch();
     this.updateBounds();
     this.toggleMapInteractions();
+
+    const scaleControl = new mapboxgl.ScaleControl({ maxWidth: 200, unit: 'imperial' });
+    map.addControl(scaleControl, 'bottom-left');
 
     const basemapLayersToHide = [
       'highway_path',
@@ -195,13 +204,6 @@ export default class MapFormComponent extends Component {
       'railway_dashline',
     ];
     basemapLayersToHide.forEach(layer => map.removeLayer(layer));
-  }
-
-  @action
-  handleMapRotateOrPitch() {
-    const map = this.get('mapInstance');
-    this.set('mapBearing', map.getBearing());
-    this.set('mapPitch', map.getPitch());
   }
 
   @action
@@ -231,6 +233,9 @@ export default class MapFormComponent extends Component {
         },
       },
     });
+
+    this.set('mapBearing', map.getBearing());
+    this.set('mapPitch', map.getPitch());
   }
 
   @action
@@ -270,7 +275,6 @@ export default class MapFormComponent extends Component {
       duration: 0,
     });
 
-    this.handleMapRotateOrPitch();
     this.updateBounds();
   }
 

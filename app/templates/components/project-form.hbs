@@ -2,6 +2,8 @@
 
   <h2 class="header-small">Project Information</h2>
 
+  <hr/>
+
   <label class="text-small">Title
     {{input type="text" class='project-name-field' value=model.projectName}}
   </label>
@@ -26,6 +28,7 @@
       mapInstance=mapInstance
       selectedLots=selectedLots
       lotSelectionMode=lotSelectionMode
+      geometryMode=geometryMode
       as |menu|}}
       {{menu.draw-control
         mode="developmentSite"
@@ -51,9 +54,6 @@
 
 </div>
 <div class="cell medium-7 large-9 map-container">
-  {{labs-search
-    onSelect=(action 'handleSearchSelect')
-    onClear=(action 'handleSearchClear')}}
   {{#project-map-form tagName='' as |projectMapForm|}}
     {{#labs-map
       id='main-map'
@@ -64,19 +64,21 @@
       )
       mapLoaded=(action handleMapLoad) as |map|}}
 
-      {{#if searchedAddressSource}}
-        {{#map.source options=searchedAddressSource as |source|}}
-          {{source.layer layer=(hash
-              type='circle'
-              paint=(hash
-                circle-radius=8
-                circle-color="#00A1F9"
-                circle-stroke-width=2
-                circle-stroke-color="#FFFFFF"
-              )
-            )
-            before='boundary_country'
-          }}
+      <div class="search-and-bbl-lookup-container">
+        {{#labs-search
+          searchPlaceholder='Search for Address...'
+          onSelect=(action 'selectSearchResult')
+          typeTitleLookup=(hash
+            lot='Addresses')
+          onClear=(action (mut geocodedFeature null)) as |search|}}
+          <small class="dark-gray">{{search.result.label}}</small>
+        {{/labs-search}}
+        {{bbl-lookup flyTo=(action 'flyTo')}}
+      </div>
+
+      {{#if geocodedFeature}}
+        {{#map.source options=geocodedFeature as |source|}}
+          {{source.layer layer=geocodedLayer}}
         {{/map.source}}
       {{/if}}
 
@@ -91,7 +93,7 @@
         {{/map.labs-layers}}
 
         {{!-- Ad-hoc source and layer for developmentSite --}}
-        {{#if model.developmentSite}}
+        {{#if (and model.developmentSite (not-eq geometryMode "developmentSite"))}}
           {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
             {{source.layer
               layer=projectGeomLayers.developmentSiteLayer
@@ -101,7 +103,7 @@
         {{/if}}
 
         {{!-- Ad-hoc source and layer for projectArea --}}
-        {{#if model.projectArea}}
+        {{#if (and model.projectArea (not-eq geometryMode "projectArea"))}}
           {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
             {{source.layer
               layer=projectGeomLayers.projectAreaLayer
@@ -111,7 +113,7 @@
         {{/if}}
 
         {{!-- Ad-hoc source and layer for projectArea --}}
-        {{#if model.rezoningArea}}
+        {{#if (and model.rezoningArea (not-eq geometryMode "rezoningArea"))}}
           {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
             {{source.layer
               layer=projectGeomLayers.rezoningAreaLayer
