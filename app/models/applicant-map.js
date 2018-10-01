@@ -11,6 +11,18 @@ export default class ApplicantMapModel extends Model.extend({}) {
   // area, tax, zoning change, zoning section
   @attr('string') type;
 
+  @attr('string', { defaultValue: 'landscape' }) paperOrientation;
+
+  @attr('string', { defaultValue: 'tabloid' }) paperSize;
+
+  // @attr() mapPitch;
+
+  // @attr() mapBearing;
+
+  // @attr() boundsPolygon;
+
+  @attr('string') type;
+
   @attr() toggledLayers;
 
   @attr() center;

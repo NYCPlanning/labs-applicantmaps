@@ -126,10 +126,6 @@ export default class MapFormComponent extends Component {
 
   mapBearing = null
 
-  paperSize = 'tabloid'
-
-  paperOrientation = 'landscape'
-
   @argument customLayerGroupQuery = null;
 
   @service
@@ -240,7 +236,9 @@ export default class MapFormComponent extends Component {
 
   @action
   reorientPaper(orientation) {
-    this.set('paperOrientation', orientation);
+    this.set('model.paperOrientation', orientation);
+    // const model = this.get('model');
+    // model.set('paperOrientation', orientation);
     next(() => {
       // not supported in IE 11
       window.addEventListener('resize', () => {
@@ -253,7 +251,7 @@ export default class MapFormComponent extends Component {
 
   @action
   scalePaper(size) {
-    this.set('paperSize', size);
+    this.set('model.paperSize', size);
     next(() => {
       // not supported in IE 11
       window.addEventListener('resize', () => {
