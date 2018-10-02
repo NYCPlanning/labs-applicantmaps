@@ -4133,9 +4133,9 @@ ember-lodash@^4.17.3:
     ember-cli-babel "^6.10.0"
     lodash-es "^4.17.4"
 
-ember-mapbox-composer@0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/ember-mapbox-composer/-/ember-mapbox-composer-0.0.6.tgz#096e0607d6289e13016ddc660bb72c7998414667"
+ember-mapbox-composer@0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/ember-mapbox-composer/-/ember-mapbox-composer-0.0.7.tgz#f344cf9fed66e00eeef370c89d804992a3377504"
   dependencies:
     "@ember-decorators/argument" "0.8.15"
     "@ember-decorators/babel-transforms" "^2.0.0"
