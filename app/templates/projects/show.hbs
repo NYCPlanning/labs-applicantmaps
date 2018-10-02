@@ -68,7 +68,7 @@
       <div class="cell auto">
         <h3 class="header-xlarge dark-gray"><small>Project Maps</small></h3>
         <div class="grid-x grid-padding-x large-up-2">
-          {{#each (array (hash name='Area Map' prop='areaMaps') 
+          {{#each (array (hash name='Area Map' prop='areaMaps')
                           (hash name='Tax Map' prop='taxMaps')
                           (hash name='Zoning Change Map' prop='zoningChangeMaps')
                           (hash name='Zoning Section Map' prop='zoningSectionMaps')) as |type|}}
@@ -83,62 +83,35 @@
                   </div>
                 {{/link-to}}
               {{else}}
-                {{#link-to 'projects.edit.map.new' model.id (query-params mapType=(dasherize type.name)) tagName='a' class='card link text-center'}}
-                  <div class="card-divider bg-green-muted green-light align-center">
-                    {{fa-icon 'plus' size='3x' class=''}}
+                {{#if (eq type.name 'Area Map')}}{{!-- TODO: nix this if when all four types of maps can be created --}}
+                  {{!-- Only allow certain types of maps to be created --}}
+                  {{#link-to 'projects.edit.map.new' model.id (query-params mapType=(dasherize type.name)) tagName='a' class='card link text-center'}}
+                    <div class="card-divider bg-green-muted green-light align-center">
+                      {{fa-icon 'plus' size='3x' class=''}}
+                    </div>
+                    <div class="card-section">
+                      <strong class="dark-gray">{{type.name}}</strong>
+                    </div>
+                  {{/link-to}}
+                {{else}}
+                  {{!-- Prevent creating other types of maps --}}
+                  <div class="card link text-center">
+                    <div style="cursor:not-allowed;">
+                      <div class="card-divider bg-silver align-center">
+                        <span class="fa-layers fa-3x">
+                          {{fa-icon 'screwdriver' transform='rotate-270' class='off-white'}}
+                          {{fa-icon 'wrench' class='white-smoke'}}
+                        </span>
+                      </div>
+                      <div class="card-section">
+                        <span class="light-gray">{{type.name}}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div class="card-section">
-                    <strong class="dark-gray">{{type.name}}</strong>
-                  </div>
-                {{/link-to}}
+                {{/if}}
               {{/if}}
             </div>
           {{/each}}
-{{!--           <div class="cell">
-            <div class="card link text-center">
-              <div style="cursor:not-allowed;">
-                <div class="card-divider bg-silver align-center">
-                  <span class="fa-layers fa-3x">
-                    {{fa-icon 'screwdriver' transform='rotate-270' class='off-white'}}
-                    {{fa-icon 'wrench' class='white-smoke'}}
-                  </span>
-                </div>
-                <div class="card-section">
-                  <span class="light-gray">Tax Map</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="cell">
-            <div class="card link text-center">
-              <div style="cursor:not-allowed;">
-                <div class="card-divider bg-silver align-center">
-                  <span class="fa-layers fa-3x">
-                    {{fa-icon 'screwdriver' transform='rotate-270' class='off-white'}}
-                    {{fa-icon 'wrench' class='white-smoke'}}
-                  </span>
-                </div>
-                <div class="card-section">
-                  <span class="light-gray">Zoning Change Map</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="cell">
-            <div class="card link text-center">
-              <div style="cursor:not-allowed;">
-                <div class="card-divider bg-silver align-center">
-                  <span class="fa-layers fa-3x">
-                    {{fa-icon 'screwdriver' transform='rotate-270' class='off-white'}}
-                    {{fa-icon 'wrench' class='white-smoke'}}
-                  </span>
-                </div>
-                <div class="card-section">
-                  <span class="light-gray">Zoning Section Map</span>
-                </div>
-              </div>
-            </div>
-          </div> --}}
         </div>
 
       </div>
