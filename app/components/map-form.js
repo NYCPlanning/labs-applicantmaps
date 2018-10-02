@@ -315,7 +315,11 @@ export default class MapFormComponent extends Component {
   async saveProject(model) {
     const map = await model.save();
 
-    this.get('notificationMessages').success('Map added!');
+    this.get('notificationMessages').success('Map saved to project!');
+  }
+
+  @action
+  goBack(map) {
     this.get('router').transitionTo('projects.show', map.get('project'));
   }
 }

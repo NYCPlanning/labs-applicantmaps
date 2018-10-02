@@ -37,6 +37,15 @@
     </div>
 
     <button type="button" class="button project-save-button" onclick={{action 'saveProject' model}}>Save Map</button>
+    <br>
+    {{!-- goBack function is still saving things to the model --}}
+    <button type="button" class="button" onclick={{action 'goBack' model}}>Go Back to Project</button>
+    <br>
+    {{!-- link-to option is redirectiing to projects/:id/edit instead of projects/:id --}}
+    {{#link-to "projects.show"}}
+      <button type="button" class="button">Go Back to Project</button>
+    {{/link-to}}
+
   </div>
 
   <div class="cell large-auto paper-container text-center">
@@ -70,7 +79,8 @@
                 projectBufferSource=projectBufferSource
                 handleMapLoaded=(action 'handleMapLoaded')
                 updateBounds=(action 'updateBounds')
-                saveProject=(action 'saveProject'))}}
+                saveProject=(action 'saveProject')
+                )}}
             </div>
             <div class="cell auto">
               {{#if boundsPolygon}}
