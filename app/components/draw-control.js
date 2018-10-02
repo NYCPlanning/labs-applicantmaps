@@ -87,9 +87,12 @@ export default class DrawControlController extends Component {
     if (geometryMode) {
       map.addControl(draw, 'top-left');
       draw.changeMode('draw_polygon');
-
-      // if geometry exists for this mode, add it to the drawing canvas
       const model = this.get('model');
+
+      console.log(geometryMode)
+      console.log(model.get('proposedZoning'))
+      console.log(model.get(geometryMode))
+      // if geometry exists for this mode, add it to the drawing canvas
       if (model.get(geometryMode)) {
         draw.add(model.get(geometryMode));
         draw.changeMode('simple_select');
@@ -144,12 +147,16 @@ export default class DrawControlController extends Component {
     // delete the drawn geometry
     draw.deleteAll();
 
-    const { geometry } = FeatureCollection.features[0];
     const geometryMode = this.get('geometryMode');
 
     // set geometry depending on mode
     const model = this.get('model');
-    model.set(geometryMode, geometry);
+    if (geometryMode === 'proposedZoning') {
+      model.set(geometryMode, FeatureCollection);
+    } else {
+      const { geometry } = FeatureCollection.features[0];
+      model.set(geometryMode, geometry);
+    }
 
     // breakdown the draw tools
     this.toggleGeometryEditing(null);

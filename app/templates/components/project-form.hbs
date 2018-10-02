@@ -52,7 +52,7 @@
 
       {{#if model.proposedZoning}}
         {{menu.draw-control
-          mode="propozedZoning"
+          mode="proposedZoning"
           modeDisplayName="Proposed Zoning"
           hasGeom=model.proposedZoning
         }}
@@ -147,7 +147,6 @@
         {{#if (and model.proposedZoning (not-eq geometryMode "proposedZoning"))}}
           {{#map.source options=(mapbox-geojson-source model.proposedZoning) as |source|}}
             {{source.layer
-              layer=projectGeomLayers.projectAreaLayer
               before='boundary_country'
             }}
           {{/map.source}}
