@@ -256,6 +256,7 @@ export default class MapFormComponent extends Component {
     next(() => {
       // not supported in IE 11
       window.addEventListener('resize', () => {
+        this.fitBoundsToBuffer();
         this.updateBounds();
       });
       // not supported in IE 11
@@ -269,6 +270,7 @@ export default class MapFormComponent extends Component {
     next(() => {
       // not supported in IE 11
       window.addEventListener('resize', () => {
+        this.fitBoundsToBuffer();
         this.updateBounds();
       });
       // not supported in IE 11
