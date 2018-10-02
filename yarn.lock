@@ -2493,7 +2493,7 @@ cartobox-promises-utility@nycplanning/cartobox-promises-utility#v1.0.2:
   resolved "https://codeload.github.com/nycplanning/cartobox-promises-utility/tar.gz/57f1c96a0bf03c47e048c30d202643cc49db3c69"
   dependencies:
     ember-cli-babel "^6.6.0"
-    ember-fetch "5.0.0"
+    ember-fetch "4.0.1"
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -3910,6 +3910,19 @@ ember-export-application-global@^2.0.0:
   dependencies:
     ember-cli-babel "^6.0.0-beta.7"
 
+ember-fetch@4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/ember-fetch/-/ember-fetch-4.0.1.tgz#0d43517c5e26de7ebd0777c983d675e79ecb40ad"
+  dependencies:
+    abortcontroller-polyfill "^1.1.9"
+    broccoli-concat "^3.2.2"
+    broccoli-merge-trees "^2.0.0"
+    broccoli-stew "^1.4.2"
+    broccoli-templater "^1.0.0"
+    ember-cli-babel "^6.8.2"
+    node-fetch "^2.0.0-alpha.9"
+    yetch "^0.0.1"
+
 ember-fetch@4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/ember-fetch/-/ember-fetch-4.0.2.tgz#865ca90d8aa63b9ebe5bce709aeaa44b35668b5a"
@@ -4136,6 +4149,13 @@ ember-string-ishtmlsafe-polyfill@2.0.2:
   resolved "https://registry.yarnpkg.com/ember-string-ishtmlsafe-polyfill/-/ember-string-ishtmlsafe-polyfill-2.0.2.tgz#f7c1beb2fcb95599f499af41772477284b16ed74"
   dependencies:
     ember-cli-version-checker "^2.1.0"
+
+ember-test-selectors@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ember-test-selectors/-/ember-test-selectors-1.0.0.tgz#a2f8cd86f4fb4c320004a2bf0e4c450d41668a21"
+  dependencies:
+    ember-cli-babel "^6.8.2"
+    ember-cli-version-checker "^2.0.0"
 
 ember-text-measurer@^0.4.0:
   version "0.4.1"
