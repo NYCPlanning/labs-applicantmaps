@@ -38,6 +38,8 @@ export default class ProjectModel extends Model.extend({}) {
 
   @attr() rezoningArea
 
+  @attr() proposedZoning
+
   @attr('string') projectName;
 
   @attr('string') applicantName;

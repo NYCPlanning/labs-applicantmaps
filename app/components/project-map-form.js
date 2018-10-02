@@ -19,7 +19,7 @@ export default class ProjectMapFormComponent extends Component {
         },
         {
           id: 'zoning-districts',
-          visible: true,
+          visible: false,
           layers: [
             { highlightable: false, tooltipable: false },
             { tooltipable: false },

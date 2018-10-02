@@ -72,6 +72,7 @@
     "@ember-decorators/babel-transforms": "^2.0.0",
     "@turf/bbox": "^6.0.1",
     "@turf/buffer": "^5.1.5",
+    "@turf/centroid": "^6.0.2",
     "@turf/union": "^6.0.3",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
     "cartobox-promises-utility": "nycplanning/cartobox-promises-utility",

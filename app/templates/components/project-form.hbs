@@ -47,6 +47,19 @@
         modeDisplayName="Rezoning Area"
         hasGeom=model.rezoningArea
       }}
+
+      <h2 class="header-small">Proposed Zoning</h2>
+
+      {{#if model.proposedZoning}}
+        {{menu.draw-control
+          mode="propozedZoning"
+          modeDisplayName="Proposed Zoning"
+          hasGeom=model.proposedZoning
+        }}
+      {{else}}
+        {{!-- TODO Make this dependent on the existence of one or more geometries so we know what area to get zoning polygons for --}}
+        <button type="button" class="button expanded" onclick={{action 'addProposedZoning'}}>Add Proposed Zoning</button>
+      {{/if}}
     {{/project-geometries-menu}}
   {{/if}}
 
@@ -129,6 +142,16 @@
             before='boundary_country'
           }}
         {{/map.source}}
+
+        {{!-- Ad-hoc source and layer for showing proposed Zoning --}}
+        {{#if (and model.proposedZoning (not-eq geometryMode "proposedZoning"))}}
+          {{#map.source options=(mapbox-geojson-source model.proposedZoning) as |source|}}
+            {{source.layer
+              layer=projectGeomLayers.projectAreaLayer
+              before='boundary_country'
+            }}
+          {{/map.source}}
+        {{/if}}
     {{/labs-map}}
   {{/project-map-form}}
 </div>
