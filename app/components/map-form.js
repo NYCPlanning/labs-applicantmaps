@@ -152,17 +152,7 @@ export default class MapFormComponent extends Component {
 
   mapConfiguration = null;
 
-  @argument
-  developmentSiteLayer = projectGeomLayers.developmentSiteLayer
-
-  @argument
-  projectAreaLayer = projectGeomLayers.projectAreaLayer
-
-  @argument
-  rezoningAreaIcon = projectGeomLayers.rezoningAreaIcon
-
-  @argument
-  projectBufferLayer = projectGeomLayers.projectBufferLayer
+  projectGeomLayers = projectGeomLayers;
 
   mapInstance = null
 

@@ -1,19 +1,25 @@
 {{#if (eq geometryMode mode)}}
   <div class="callout shadowed top-right">
     <h3 class="header-small small-margin-bottom">{{modeDisplayName}}</h3>
-    {{#if lotSelectionMode}}
-      <p class="text-small">Click individual tax lots to toggle their selection</p>
-      <div class="grid-x grid-margin-x">
-        <button class="cell auto button small" {{action 'finishLotSelection'}}>Make Selection</button>
-        {{!-- <button class="cell shrink button small alert clear">Cancel</button> --}}{{!-- TODO: make an action to cancel lot selection --}}
-      </div>
+    {{#if (eq mode 'proposedZoning')}}
+      Click on a zoning district to edit its boundaries.
+      <button class="cell auto button small draw-control-done" {{action 'setProjectGeometry'}}>Done</button>
+      <button class="cell shrink button small alert clear draw-control-cancel" {{action 'toggleGeometryEditing' null}}>Cancel</button>
     {{else}}
-      <p class="text-small">Use the <strong class="bg-a11y-yellow">&nbsp;drawing tools&nbsp;</strong> on the map to define the {{modeDisplayName}} <em>or&hellip;</em></p>
-      <button class="button gray small expanded select-tax-lots-{{dasherize modeDisplayName}}" {{action "startLotSelection"}}>Select Tax Lots</button>
-      <div class="grid-x grid-margin-x">
-        <button class="cell auto button small draw-control-done" {{action 'setProjectGeometry'}}>Done</button>
-        <button class="cell shrink button small alert clear draw-control-cancel" {{action 'toggleGeometryEditing' null}}>Cancel</button>
-      </div>
+      {{#if lotSelectionMode}}
+        <p class="text-small">Click individual tax lots to toggle their selection</p>
+        <div class="grid-x grid-margin-x">
+          <button class="cell auto button small" {{action 'finishLotSelection'}}>Make Selection</button>
+          {{!-- <button class="cell shrink button small alert clear">Cancel</button> --}}{{!-- TODO: make an action to cancel lot selection --}}
+        </div>
+      {{else}}
+        <p class="text-small">Use the <strong class="bg-a11y-yellow">&nbsp;drawing tools&nbsp;</strong> on the map to define the {{modeDisplayName}} <em>or&hellip;</em></p>
+        <button class="button gray small expanded select-tax-lots-{{dasherize modeDisplayName}}" {{action "startLotSelection"}}>Select Tax Lots</button>
+        <div class="grid-x grid-margin-x">
+          <button class="cell auto button small draw-control-done" {{action 'setProjectGeometry'}}>Done</button>
+          <button class="cell shrink button small alert clear draw-control-cancel" {{action 'toggleGeometryEditing' null}}>Cancel</button>
+        </div>
+      {{/if}}
     {{/if}}
   </div>
 {{else}}
@@ -31,7 +37,11 @@
         disabled={{geometryMode}}
       >
         {{fa-icon 'pencil-alt'}}
-        {{if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon')) 'Red' 'D'}}raw
+        {{#if (eq mode 'proposedZoning')}}
+            Edit Proposed Zoning
+        {{else}}
+          {{if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon')) 'Red' 'D'}}raw
+        {{/if}}
       </button>
     </span>
   </p>

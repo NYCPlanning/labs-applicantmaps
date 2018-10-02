@@ -4,7 +4,6 @@ import mapboxgl from 'mapbox-gl';
 import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { tagName } from '@ember-decorators/component';
-import turfCentroid from 'npm:@turf/centroid';
 import carto from 'cartobox-promises-utility/utils/carto';
 import projectGeomLayers from '../utils/project-geom-layers';
 
@@ -206,25 +205,21 @@ export default class ProjectFormComponent extends Component {
 
   @action
   async addProposedZoning() {
-    console.log('O HAI')
-
     // get the project's development site polygon as a reference for what area of the city to get zoning polygons for
-    const centroid = turfCentroid.default(this.get('model.developmentSite'))
+    const developmentSite = this.get('model.developmentSite');
 
-    // build out API call to get zoning districts that intersect with a around this area
-    console.log(JSON.stringify(centroid))
-
+    // build an API call to get zoning districts that intersect with a around this area
     const query = `
       WITH buffer as (
         SELECT ST_SetSRID(
           ST_Buffer(
-            ST_GeomFromGeoJSON('${JSON.stringify(centroid.geometry)}')::geography,
+            ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
             500
           ),
         4326)::geometry AS the_geom
       )
 
-      SELECT ST_Intersection(zoning.the_geom, buffer.the_geom) AS the_geom
+      SELECT ST_Intersection(zoning.the_geom, buffer.the_geom) AS the_geom, zonedist
       FROM planninglabs.zoning_districts_v201809 zoning, buffer
       WHERE ST_Intersects(zoning.the_geom,buffer.the_geom)
     `;

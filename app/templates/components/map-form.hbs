@@ -89,24 +89,37 @@
             {{map.labs-layers layerGroups=mapConfiguration.layerGroups}}
             {{#map.source options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
               {{source.layer
-                layer=developmentSiteLayer
+                layer=projectGeomLayers.developmentSiteLayer
                 before='boundary_country'
               }}
             {{/map.source}}
 
             {{#map.source options=(mapbox-geojson-source model.project.projectArea) as |source|}}
               {{source.layer
-                layer=projectAreaLayer
+                layer=projectGeomLayers.projectAreaLayer
                 before='boundary_country'
               }}
             {{/map.source}}
 
             {{#map.source options=(mapbox-geojson-source model.project.projectGeometryBuffer) as |source|}}
               {{source.layer
-                layer=projectBufferLayer
+                layer=projectGeomLayers.projectBufferLayer
                 before='boundary_country'
               }}
             {{/map.source}}
+
+            {{#if (and model.project.proposedZoning)}}
+              {{#map.source options=(mapbox-geojson-source model.project.proposedZoning) as |source|}}
+                {{source.layer
+                  layer=projectGeomLayers.proposedZoningLayer
+                  before='boundary_country'
+                }}
+                {{source.layer
+                  layer=projectGeomLayers.proposedZoningLabelsLayer
+                  before='boundary_country'
+                }}
+              {{/map.source}}
+            {{/if}}
 
             {{map.on 'zoom' (action 'updateBounds')}}
             {{map.on 'drag' (action 'updateBounds')}}

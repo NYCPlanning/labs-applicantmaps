@@ -89,9 +89,6 @@ export default class DrawControlController extends Component {
       draw.changeMode('draw_polygon');
       const model = this.get('model');
 
-      console.log(geometryMode)
-      console.log(model.get('proposedZoning'))
-      console.log(model.get(geometryMode))
       // if geometry exists for this mode, add it to the drawing canvas
       if (model.get(geometryMode)) {
         draw.add(model.get(geometryMode));

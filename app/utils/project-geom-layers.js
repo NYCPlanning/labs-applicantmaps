@@ -88,6 +88,46 @@ const projectBufferLayer = {
   },
 };
 
+// Proposed Zoning
+const proposedZoningLayer = {
+  id: 'proposed-zoningdistrict-lines',
+  type: 'line',
+  paint: {
+    'line-opacity': 0.5,
+    'line-width': 3,
+  },
+};
+
+const proposedZoningLabelsLayer = {
+  id: 'proposed-zoningdistrict-labels',
+  type: 'symbol',
+  layout: {
+    'symbol-placement': 'line',
+    'text-field': '{zonedist}',
+    'text-size': 16,
+    visibility: 'visible',
+    'symbol-avoid-edges': false,
+    'text-offset': [
+      1,
+      1,
+    ],
+    'text-keep-upright': true,
+    'symbol-spacing': 200,
+    'text-allow-overlap': true,
+    'text-ignore-placement': true,
+    'text-justify': 'left',
+    'text-anchor': 'center',
+    'text-max-angle': 90,
+  },
+  paint: {
+    'text-color': '#444',
+    'text-halo-color': '#FFFFFF',
+    'text-halo-width': 2,
+    'text-halo-blur': 2,
+    'text-opacity': 1,
+  },
+};
+
 
 export default {
   developmentSiteLayer,
@@ -97,4 +137,6 @@ export default {
   rezoningAreaLayer,
   rezoningAreaIcon,
   projectBufferLayer,
+  proposedZoningLayer,
+  proposedZoningLabelsLayer,
 };

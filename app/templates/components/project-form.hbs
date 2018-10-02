@@ -58,7 +58,7 @@
         }}
       {{else}}
         {{!-- TODO Make this dependent on the existence of one or more geometries so we know what area to get zoning polygons for --}}
-        <button type="button" class="button expanded" onclick={{action 'addProposedZoning'}}>Add Proposed Zoning</button>
+        <button type="button" class="button expanded" disabled={{not model.developmentSite}} onclick={{action 'addProposedZoning'}}>Add Proposed Zoning</button>
       {{/if}}
     {{/project-geometries-menu}}
   {{/if}}
@@ -147,6 +147,11 @@
         {{#if (and model.proposedZoning (not-eq geometryMode "proposedZoning"))}}
           {{#map.source options=(mapbox-geojson-source model.proposedZoning) as |source|}}
             {{source.layer
+              layer=projectGeomLayers.proposedZoningLayer
+              before='boundary_country'
+            }}
+            {{source.layer
+              layer=projectGeomLayers.proposedZoningLabelsLayer
               before='boundary_country'
             }}
           {{/map.source}}
