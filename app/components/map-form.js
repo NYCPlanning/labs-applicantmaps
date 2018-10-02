@@ -9,7 +9,37 @@ import projectGeomLayers from '../utils/project-geom-layers';
 
 const defaultLayerGroups = {
   'layer-groups': [
-    { id: 'subway', visible: true },
+    {
+      id: 'subway',
+      visible: true,
+      layers: [
+        {}, // subway_green
+        {}, // subway_yellow
+        {}, // subway_gray
+        {}, // subway_brown
+        {}, // subway_light_green
+        {}, // subway_orange
+        {}, // subway_blue
+        {}, // subway_purple
+        {}, // subway_red
+        {}, // subway_stations
+        {}, // subway_stations_labels
+        {
+          style: {
+            paint: {
+              'circle-stroke-width': 1.5,
+            },
+          },
+        }, // subway_entrances
+        {
+          style: {
+            paint: {
+              'text-opacity': 0,
+            },
+          },
+        }, // subway_entrances_labels
+      ],
+    },
     {
       id: 'tax-lots',
       visible: true,
