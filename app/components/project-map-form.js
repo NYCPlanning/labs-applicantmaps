@@ -6,7 +6,6 @@ export default class ProjectMapFormComponent extends Component {
     super(...args);
 
     const store = this.get('store');
-    store.unloadAll('layer');
     store.query('layer-group', {
       'layer-groups': [
         {
