@@ -17,7 +17,7 @@ const requiredFields = [
   'projectArea',
 ];
 
-export default class ProjectModel extends Model.extend({}) {
+export default class extends Model {
   @hasMany('area-map', { async: false }) areaMaps;
 
   @hasMany('tax-map', { async: false }) taxMaps;
