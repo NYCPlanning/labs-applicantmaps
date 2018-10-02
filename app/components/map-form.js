@@ -5,47 +5,41 @@ import { argument } from '@ember-decorators/argument';
 import { next } from '@ember/runloop';
 import turfBbox from 'npm:@turf/bbox';
 import mapboxgl from 'mapbox-gl';
-
-const developmentSiteLayer = {
-  id: 'development-site-line',
-  type: 'line',
-  paint: {
-    'line-width': 2,
-    'line-color': 'red',
-  },
-};
-
-const projectAreaLayer = {
-  id: 'project-area-line',
-  type: 'line',
-  layout: {
-    visibility: 'visible',
-    'line-cap': 'round',
-  },
-  paint: {
-    'line-width': 3,
-    'line-dasharray': [
-      0,
-      2,
-    ],
-  },
-};
-
-const projectBufferLayer = {
-  id: 'project-buffer-line',
-  type: 'line',
-  paint: {
-    'line-color': 'rgba(122, 0, 72, 1)',
-    'line-width': 3,
-    'line-dasharray': [
-      0.75,
-      0.75,
-    ],
-  },
-};
+import projectGeomLayers from '../utils/project-geom-layers';
 
 const defaultLayerGroups = {
   'layer-groups': [
+    {
+      id: 'subway',
+      visible: true,
+      layers: [
+        {}, // subway_green
+        {}, // subway_yellow
+        {}, // subway_gray
+        {}, // subway_brown
+        {}, // subway_light_green
+        {}, // subway_orange
+        {}, // subway_blue
+        {}, // subway_purple
+        {}, // subway_red
+        {}, // subway_stations
+        {}, // subway_stations_labels
+        {
+          style: {
+            paint: {
+              'circle-stroke-width': 1.5,
+            },
+          },
+        }, // subway_entrances
+        {
+          style: {
+            paint: {
+              'text-opacity': 0,
+            },
+          },
+        }, // subway_entrances_labels
+      ],
+    },
     {
       id: 'tax-lots',
       visible: true,
@@ -82,7 +76,6 @@ const defaultLayerGroups = {
         },
       ],
     },
-    { id: 'subway', visible: true },
     { id: 'special-purpose-districts', visible: false },
     {
       id: 'citymap',
@@ -95,8 +88,21 @@ const defaultLayerGroups = {
         {}, // citymap-street-not-mapped-line
         { tooltipable: false }, // borough-boundaries
         {}, // citymap-underpass-tunnel-line
-        { tooltipable: false }, // railway-lines
-        {}, // railway-cross-lines
+        {
+          style: {
+            paint: {
+              'line-color': 'rgba(0,0,0,0)',
+            },
+          },
+          tooltipable: false,
+        }, // railway-lines
+        {
+          style: {
+            paint: {
+              'line-color': 'rgba(0,0,0,0)',
+            },
+          },
+        }, // railway-cross-lines
       ],
     },
     { id: 'street-direction-arrows', visible: true },
@@ -146,11 +152,17 @@ export default class MapFormComponent extends Component {
 
   mapConfiguration = null;
 
-  developmentSiteLayer = developmentSiteLayer
+  @argument
+  developmentSiteLayer = projectGeomLayers.developmentSiteLayer
 
-  projectAreaLayer = projectAreaLayer
+  @argument
+  projectAreaLayer = projectGeomLayers.projectAreaLayer
 
-  projectBufferLayer = projectBufferLayer
+  @argument
+  rezoningAreaIcon = projectGeomLayers.rezoningAreaIcon
+
+  @argument
+  projectBufferLayer = projectGeomLayers.projectBufferLayer
 
   mapInstance = null
 
