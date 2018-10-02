@@ -43,7 +43,7 @@
     "ember-cli-uglify": "^2.0.0",
     "ember-decorators": "2.1.0",
     "ember-export-application-global": "^2.0.0",
-    "ember-mapbox-composer": "0.0.6",
+    "ember-mapbox-composer": "0.0.7",
     "ember-mapbox-gl": "^0.10.0",
     "ember-mapbox-gl-draw": "^1.1.0",
     "ember-maybe-import-regenerator": "^0.1.6",
