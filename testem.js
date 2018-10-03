@@ -1,8 +1,8 @@
 'use strict';
 
-const hasBrowserstackKeys = (process.env.BROWSERSTACK_USERNAME && process.env.BROWSERSTACK_ACCESS_KEY);
+const hasBrowserstackKeys = (!!process.env.BROWSERSTACK_USERNAME && !!process.env.BROWSERSTACK_ACCESS_KEY);
 const crossBrowserTargets = ['BS_Firefox_Current', 'BS_Safari_Current', 'BS_MS_Edge', 'BS_IE_11'];
-console.log(hasBrowserstackKeys);
+
 module.exports = {
   test_page: 'tests/index.html?hidepassed&moduleId=92bc6a9b',
   disable_watching: true,
