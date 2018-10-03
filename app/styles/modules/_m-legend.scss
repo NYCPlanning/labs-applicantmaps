@@ -4,17 +4,15 @@
 
 .legend {
   padding-bottom: $global-margin;
-
-  hr {
-    margin: $global-margin 0;
-  }
 }
 .legend-item {
   margin-bottom: rem-calc(4);
 }
 
-.legend-section + .legend-section {
-  margin-top: $global-margin;
+.legend-section {
+  margin-top: rem-calc(10);
+  padding-top: rem-calc(10);
+  border-top: $hr-border;
 }
 
 .legend-section-header {

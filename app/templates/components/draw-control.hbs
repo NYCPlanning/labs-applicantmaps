@@ -9,10 +9,10 @@
       </div>
     {{else}}
       <p class="text-small">Use the <strong class="bg-a11y-yellow">&nbsp;drawing tools&nbsp;</strong> on the map to define the {{modeDisplayName}} <em>or&hellip;</em></p>
-      <button class="button gray small expanded" {{action "startLotSelection"}}>Select Tax Lots</button>
+      <button class="button gray small expanded select-tax-lots-{{dasherize modeDisplayName}}" {{action "startLotSelection"}}>Select Tax Lots</button>
       <div class="grid-x grid-margin-x">
-        <button class="cell auto button small" {{action 'setProjectGeometry'}}>Done</button>
-        <button class="cell shrink button small alert clear" {{action 'toggleGeometryEditing' null}}>Cancel</button>
+        <button class="cell auto button small draw-control-done" {{action 'setProjectGeometry'}}>Done</button>
+        <button class="cell shrink button small alert clear draw-control-cancel" {{action 'toggleGeometryEditing' null}}>Cancel</button>
       </div>
     {{/if}}
   </div>
@@ -26,7 +26,7 @@
     </span>
     <span class="cell small-4">
       <button
-        class="button small expanded no-margin {{if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon')) 'gray'}}"
+        class="button small expanded no-margin draw-control-{{dasherize modeDisplayName}} {{if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon')) 'gray'}}"
         {{action 'toggleGeometryEditing' mode}}
         disabled={{geometryMode}}
       >

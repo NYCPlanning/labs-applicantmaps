@@ -1,4 +1,5 @@
 {{#map-form model=model tagName='' as |areaMapForm|}}
+
   <section class="legend-section">
     <h2 class="legend-section-header">Project</h2>
     <div class="grid-x">
@@ -24,6 +25,7 @@
       {{/if}}
     </div>
   </section>
+
   <section class="legend-section">
     <div class="grid-x">
       <div class="cell zoning-section-cell">
@@ -50,6 +52,37 @@
       </div>
     </div>
   </section>
+
+  <section class="legend-section">
+    <h2 class="legend-section-header">Transportation</h2>
+    <div class="grid-x grid-margin-x">
+      <div class="cell shrink">
+        <div class="legend-item">
+          <div class="legend-icon">
+            <span class="fa-layers">
+              {{fa-icon 'long-arrow-alt-left' class="red" transform="right-7 grow-10"}}
+              {{fa-icon 'long-arrow-alt-right' class="red" transform="left-7 grow-10"}}
+              {{fa-icon 'circle' class="black"}}
+              {{fa-icon 'circle' class="white" transform="shrink-3"}}
+            </span>
+          </div>
+          Subway Stop
+        </div>
+      </div>
+      <div class="cell shrink">
+        <div class="legend-item">
+          <div class="legend-icon">
+            <span class="fa-layers">
+              {{fa-icon 'circle' class="black" transform="shrink-6"}}
+              {{fa-icon 'circle' class="white" transform="shrink-10"}}
+            </span>
+          </div>
+          Subway Entrance
+        </div>
+      </div>
+    </div>
+  </section>
+
 {{/map-form}}
 
 {{outlet}}

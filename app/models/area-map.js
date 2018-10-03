@@ -1,5 +1,5 @@
 import ApplicantMap from './applicant-map';
 
-export default ApplicantMap.extend({
-  mapTypeLabel: 'Area Map',
-});
+export default class extends ApplicantMap {
+  mapTypeLabel = 'Area Map';
+}

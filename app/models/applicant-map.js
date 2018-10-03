@@ -7,7 +7,7 @@ const { Model } = DS;
   Abstract base class for applicant maps. Specific types
   can be found under ./maps
 */
-export default class ApplicantMapModel extends Model.extend({}) {
+export default class extends Model {
   // area, tax, zoning change, zoning section
   @attr('string') type;
 
