@@ -3,6 +3,8 @@
     <h3 class="header-small small-margin-bottom">{{modeDisplayName}}</h3>
     {{#if (eq mode 'proposedZoning')}}
       Click on a zoning district to edit its boundaries.
+      {{input type="text" value=selectedZoningDistrictFeature.properties.zonedist size="10" key-up="updateSelectedZoningDistrictFeature"}}
+
       <button class="cell auto button small draw-control-done" {{action 'setProjectGeometry'}}>Done</button>
       <button class="cell shrink button small alert clear draw-control-cancel" {{action 'toggleGeometryEditing' null}}>Cancel</button>
     {{else}}

@@ -57,6 +57,8 @@ export default class DrawControlController extends Component {
   @argument
   model
 
+  selectedZoningDistrictFeature = undefined
+
   @argument
   developmentSiteIcon = projectGeomLayers.developmentSiteIcon
 
@@ -94,8 +96,15 @@ export default class DrawControlController extends Component {
         draw.add(model.get(geometryMode));
         draw.changeMode('simple_select');
       }
+
+      map.on('draw.selectionchange', ({ features }) => {
+        if ((geometryMode === 'proposedZoning') && (features.length === 1)) {
+          this.set('selectedZoningDistrictFeature', features[0]);
+        }
+      });
     } else {
       draw.trash();
+      map.off('draw.selectionchange');
       map.removeControl(draw);
     }
   }
@@ -157,5 +166,11 @@ export default class DrawControlController extends Component {
 
     // breakdown the draw tools
     this.toggleGeometryEditing(null);
+  }
+
+  @action
+  updateSelectedZoningDistrictFeature(zonedist) {
+    const id = this.get('selectedZoningDistrictFeature.id');
+    draw.setFeatureProperty(id, 'zonedist', zonedist);
   }
 }
