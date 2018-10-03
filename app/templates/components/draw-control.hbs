@@ -2,11 +2,21 @@
   <div class="callout shadowed top-right">
     <h3 class="header-small small-margin-bottom">{{modeDisplayName}}</h3>
     {{#if (eq mode 'proposedZoning')}}
-      Click on a zoning district to edit its boundaries.
-      {{input type="text" value=selectedZoningDistrictFeature.properties.zonedist size="10" key-up="updateSelectedZoningDistrictFeature"}}
-
-      <button class="cell auto button small draw-control-done" {{action 'setProjectGeometry'}}>Done</button>
-      <button class="cell shrink button small alert clear draw-control-cancel" {{action 'toggleGeometryEditing' null}}>Cancel</button>
+      <p class="text-small">Select a zoning district to edit its boundary and label. Use the draw tools to add new districts.</p>
+        <div class="input-group">
+          <span class="input-group-label text-small"><span class="{{unless selectedZoningDistrictFeature 'light-gray'}}">Selected</span></span>
+          {{input
+            type="text"
+            class="input-group-field"
+            value=selectedZoningDistrictFeature.properties.zonedist
+            key-up="updateSelectedZoningDistrictFeature"
+            disabled=(not selectedZoningDistrictFeature)
+          }}
+        </div>
+      <div class="grid-x grid-margin-x">
+        <button class="cell auto button small draw-control-done" {{action 'setProjectGeometry'}}>Done</button>
+        <button class="cell shrink button small alert clear draw-control-cancel" {{action 'toggleGeometryEditing' null}}>Cancel</button>
+      </div>
     {{else}}
       {{#if lotSelectionMode}}
         <p class="text-small">Click individual tax lots to toggle their selection</p>

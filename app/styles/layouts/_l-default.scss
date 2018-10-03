@@ -253,3 +253,22 @@ label.inline {
 .button.green {
   @include button-style($background:$green-dark, $background-hover:auto, $color:$white);
 }
+
+
+
+//
+// HACKS!!! This stuff should be changed in Labs UI
+// --------------------------------------------------
+.input-group-label {
+  background-color: $white-smoke;
+  border-color: $silver;
+  color: $dark-gray;
+}
+
+input:disabled,
+input[readonly],
+textarea:disabled,
+textarea[readonly] {
+  background-color: $white-smoke;
+  box-shadow: none;
+}

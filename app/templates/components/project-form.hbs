@@ -2,11 +2,11 @@
 
   <h2 class="header-medium">Create New Project</h2>
 
-  <label class="text-small">Project Title {{#unless model.projectName}}<strong class="red">{{fa-icon 'asterisk' transform='shrink-4'}}</strong>{{/unless}}
+  <label class="text-small">Project Name {{#unless model.projectName}}<strong class="red">{{fa-icon 'asterisk' transform='shrink-4'}}</strong>{{/unless}}
     {{input type="text" class='project-name-field' value=model.projectName}}
   </label>
 
-  <label class="text-small">Applicant Name {{#unless model.applicantName}}<strong class="red">{{fa-icon 'asterisk' transform='shrink-4'}}</strong>{{/unless}}
+  <label class="text-small">Applicant Name
     {{input type="text" class='applicant-name-field' value=model.applicantName}}
   </label>
 

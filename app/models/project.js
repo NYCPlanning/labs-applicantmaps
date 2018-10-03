@@ -12,7 +12,6 @@ const { Model } = DS;
 
 const requiredFields = [
   'projectName',
-  'applicantName',
   'developmentSite',
 ];
 

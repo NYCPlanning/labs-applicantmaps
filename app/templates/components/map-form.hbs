@@ -87,12 +87,6 @@
             mapLoaded=(action 'handleMapLoaded') as |map|
           }}
             {{map.labs-layers layerGroups=mapConfiguration.layerGroups}}
-            {{#map.source options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
-              {{source.layer
-                layer=projectGeomLayers.developmentSiteLayer
-                before='boundary_country'
-              }}
-            {{/map.source}}
 
             {{#map.source options=(mapbox-geojson-source model.project.projectArea) as |source|}}
               {{source.layer
@@ -108,6 +102,16 @@
               }}
             {{/map.source}}
 
+            {{#if model.project.rezoningArea}}
+              {{#map.source options=(mapbox-geojson-source model.project.rezoningArea) as |source|}}
+                {{source.layer
+                  layer=projectGeomLayers.rezoningAreaLayer
+                  before='boundary_country'
+                }}
+              {{/map.source}}
+            {{/if}}
+
+
             {{#if (and model.project.proposedZoning)}}
               {{#map.source options=(mapbox-geojson-source model.project.proposedZoning) as |source|}}
                 {{source.layer
@@ -120,6 +124,13 @@
                 }}
               {{/map.source}}
             {{/if}}
+
+            {{#map.source options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
+              {{source.layer
+                layer=projectGeomLayers.developmentSiteLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
 
             {{map.on 'zoom' (action 'updateBounds')}}
             {{map.on 'drag' (action 'updateBounds')}}

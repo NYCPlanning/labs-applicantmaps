@@ -52,7 +52,7 @@ const rezoningAreaLayer = {
   type: 'line',
   paint: {
     'line-color': 'rgba(0, 0, 0, 1)',
-    'line-width': 3,
+    'line-width': 9,
     'line-dasharray': [0, 2],
   },
   layout: {

@@ -103,12 +103,16 @@ export default class DrawControlController extends Component {
       map.on('draw.selectionchange', ({ features }) => {
         if ((geometryMode === 'proposedZoning') && (features.length === 1)) {
           this.set('selectedZoningDistrictFeature', features[0]);
+        } else {
+          this.set('selectedZoningDistrictFeature', null);
         }
       });
     } else {
+      // breakdown all the drawing mode stuff
       draw.trash();
       map.off('draw.selectionchange');
       map.removeControl(draw);
+      this.set('selectedZoningDistrictFeature', null);
     }
   }
 
