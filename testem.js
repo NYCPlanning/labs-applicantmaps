@@ -1,18 +1,18 @@
 'use strict';
 
+const hasBrowserstackKeys = (process.env.BROWSERSTACK_USERNAME && process.env.BROWSERSTACK_ACCESS_KEY);
+const crossBrowserTargets = ['BS_Firefox_Current', 'BS_Safari_Current', 'BS_MS_Edge', 'BS_IE_11'];
+
 module.exports = {
-  test_page: 'tests/index.html?hidepassed',
+  test_page: 'tests/index.html?hidepassed&moduleId=92bc6a9b',
   disable_watching: true,
   browser_start_timeout: 2000,
   launch_in_ci: [
     'Chrome',
+    ...(hasBrowserstackKeys ? crossBrowserTargets : []),
   ],
   launch_in_dev: [
     'Chrome',
-    'BS_Firefox_Current',
-    'BS_Safari_Current',
-    'BS_MS_Edge',
-    'BS_IE_11',
   ],
   browser_args: {
     Chrome: {
@@ -22,10 +22,14 @@ module.exports = {
         '--headless',
         '--disable-dev-shm-usage',
         '--disable-software-rasterizer',
+        '--disable-background-timer-throttling',
         '--mute-audio',
         '--remote-debugging-port=0',
         '--window-size=1440,900',
       ].filter(Boolean),
+      dev: [
+        '--disable-background-timer-throttling',
+      ],
     },
   },
   launchers: {
