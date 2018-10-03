@@ -556,6 +556,13 @@
     "@turf/bbox" "^5.1.5"
     "@turf/helpers" "^5.1.5"
 
+"@turf/clean-coords@^5.1.5":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@turf/clean-coords/-/clean-coords-5.1.5.tgz#12800a98a78c9a452a72ec428493c43acf2ada1f"
+  dependencies:
+    "@turf/helpers" "^5.1.5"
+    "@turf/invariant" "^5.1.5"
+
 "@turf/clone@^5.1.5":
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/@turf/clone/-/clone-5.1.5.tgz#253e8d35477181976e33adfab50a0f02a7f0e367"
@@ -576,6 +583,12 @@
   dependencies:
     "@turf/helpers" "6.x"
 
+"@turf/invariant@^5.1.5":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@turf/invariant/-/invariant-5.2.0.tgz#f0150ff7290b38577b73d088b7932c1ee0aa90a7"
+  dependencies:
+    "@turf/helpers" "^5.1.5"
+
 "@turf/meta@6.x":
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/@turf/meta/-/meta-6.0.2.tgz#eb92951126d24a613ac1b7b99d733fcc20fd30cf"
@@ -592,6 +605,15 @@
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/@turf/projection/-/projection-5.1.5.tgz#24517eeeb2f36816ba9f712e7ae6d6a368edf757"
   dependencies:
+    "@turf/clone" "^5.1.5"
+    "@turf/helpers" "^5.1.5"
+    "@turf/meta" "^5.1.5"
+
+"@turf/simplify@^5.1.5":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@turf/simplify/-/simplify-5.1.5.tgz#0ac8f27a2eb4218183edd9998c3275abe408b926"
+  dependencies:
+    "@turf/clean-coords" "^5.1.5"
     "@turf/clone" "^5.1.5"
     "@turf/helpers" "^5.1.5"
     "@turf/meta" "^5.1.5"
@@ -2596,16 +2618,16 @@ cardinal@~0.4.2:
     ansicolors "~0.2.1"
     redeyed "~0.4.0"
 
-"cartobox-promises-utility@github:nycplanning/cartobox-promises-utility#v1.0.2", cartobox-promises-utility@nycplanning/cartobox-promises-utility#v1.0.2:
-  version "0.0.0"
-  resolved "https://codeload.github.com/nycplanning/cartobox-promises-utility/tar.gz/57f1c96a0bf03c47e048c30d202643cc49db3c69"
+cartobox-promises-utility@nycplanning/cartobox-promises-utility:
+  version "1.0.0"
+  resolved "https://codeload.github.com/nycplanning/cartobox-promises-utility/tar.gz/92d586b4132888b6076998ba0e2f60b3d22e68d2"
   dependencies:
     ember-cli-babel "^6.6.0"
     ember-fetch "5.0.0"
 
-cartobox-promises-utility@nycplanning/cartobox-promises-utility:
-  version "1.0.0"
-  resolved "https://codeload.github.com/nycplanning/cartobox-promises-utility/tar.gz/92d586b4132888b6076998ba0e2f60b3d22e68d2"
+cartobox-promises-utility@nycplanning/cartobox-promises-utility#v1.0.2:
+  version "0.0.0"
+  resolved "https://codeload.github.com/nycplanning/cartobox-promises-utility/tar.gz/57f1c96a0bf03c47e048c30d202643cc49db3c69"
   dependencies:
     ember-cli-babel "^6.6.0"
     ember-fetch "5.0.0"
@@ -4027,19 +4049,6 @@ ember-export-application-global@^2.0.0:
   resolved "https://registry.yarnpkg.com/ember-export-application-global/-/ember-export-application-global-2.0.0.tgz#8d6d7619ac8a1a3f8c43003549eb21ebed685bd2"
   dependencies:
     ember-cli-babel "^6.0.0-beta.7"
-
-ember-fetch@4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/ember-fetch/-/ember-fetch-4.0.1.tgz#0d43517c5e26de7ebd0777c983d675e79ecb40ad"
-  dependencies:
-    abortcontroller-polyfill "^1.1.9"
-    broccoli-concat "^3.2.2"
-    broccoli-merge-trees "^2.0.0"
-    broccoli-stew "^1.4.2"
-    broccoli-templater "^1.0.0"
-    ember-cli-babel "^6.8.2"
-    node-fetch "^2.0.0-alpha.9"
-    yetch "^0.0.1"
 
 ember-fetch@4.0.2:
   version "4.0.2"

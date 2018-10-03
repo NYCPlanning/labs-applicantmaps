@@ -4,6 +4,7 @@ import { argument } from '@ember-decorators/argument';
 import MapboxDraw from 'mapbox-gl-draw';
 import turfUnion from 'npm:@turf/union';
 import turfBuffer from 'npm:@turf/buffer';
+import turfSimplify from 'npm:@turf/simplify';
 import projectGeomLayers from '../utils/project-geom-layers';
 
 
@@ -127,6 +128,8 @@ export default class DrawControlController extends Component {
         union = turfUnion.default(union, bufferedGeometry);
       }
     }
+
+    union = turfSimplify(union, { tolerance: 0.000001 });
 
     // set the drawn geom as an editable mapbox-gl-draw geom
     draw.set({
