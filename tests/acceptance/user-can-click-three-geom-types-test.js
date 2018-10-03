@@ -12,6 +12,7 @@ module('Acceptance | user can click three geom types', function(hooks) {
 
   test('User can click three geom types', async function(assert) {
     await visit('/projects/new');
+
     await mapboxGlLoaded();
     await click('.draw-control-development-site');
     await click('.draw-control-cancel');
