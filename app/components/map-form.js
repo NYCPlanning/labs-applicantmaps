@@ -128,8 +128,6 @@ export default class MapFormComponent extends Component {
 
   boundsPolygon = null
 
-  mapBearing = null
-
   @argument customLayerGroupQuery = null;
 
   @service
@@ -159,8 +157,6 @@ export default class MapFormComponent extends Component {
   projectBufferLayer = projectGeomLayers.projectBufferLayer
 
   mapInstance = null
-
-  mapBearing = null
 
   @computed('mapBearing', 'mapPitch')
   get northArrowTransforms() {
@@ -237,16 +233,25 @@ export default class MapFormComponent extends Component {
         },
       },
     });
+    this.set('model.boundsPolygon', {
+      type: 'Polygon',
+      coordinates: [[cUL, cUR, cLR, cLL, cUL]],
+      crs: {
+        type: 'name',
+        properties: {
+          name: 'EPSG:4326',
+        },
+      },
+    });
 
     this.set('mapBearing', map.getBearing());
+    this.set('model.mapBearing', map.getBearing());
     this.set('mapPitch', map.getPitch());
   }
 
   @action
   reorientPaper(orientation) {
     this.set('model.paperOrientation', orientation);
-    // const model = this.get('model');
-    // model.set('paperOrientation', orientation);
     next(() => {
       // not supported in IE 11
       window.addEventListener('resize', () => {

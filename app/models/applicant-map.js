@@ -17,7 +17,8 @@ export default class extends Model {
 
   @attr('string') type;
 
-  @attr() mapBearing;
+  // @attr() mapBearing;
+  @attr('number', { defaultValue: 0 }) mapBearing;
 
   @attr() boundsPolygon;
 
