@@ -32,7 +32,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # connect
-      - run: ember browserstack:connect
+      - run: yarn browserstack-connect
 
       # run tests!
       - run: yarn test
