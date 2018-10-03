@@ -4,7 +4,7 @@ const hasBrowserstackKeys = (!!process.env.BROWSERSTACK_USERNAME && !!process.en
 const crossBrowserTargets = ['BS_Firefox_Current', 'BS_Safari_Current', 'BS_MS_Edge', 'BS_IE_11'];
 
 module.exports = {
-  test_page: 'tests/index.html?hidepassed&moduleId=92bc6a9b',
+  test_page: 'tests/index.html?hidepassed',
   disable_watching: true,
   browser_start_timeout: 2000,
   launch_in_ci: [
