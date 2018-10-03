@@ -1,3 +1,4 @@
 import ApplicantMap from './applicant-map';
 
-export default class extends ApplicantMap {}
+export default ApplicantMap.extend({
+});
