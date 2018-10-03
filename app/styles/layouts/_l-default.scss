@@ -72,7 +72,14 @@ body {
   }
 }
 
-.map-container,
+.map-container {
+  height: 50vh;
+
+  @include breakpoint(large) {
+    height: 100%;
+  }
+}
+
 .paper-container {
   @media screen {
     @include xy-cell-static(full,false,0);
@@ -118,31 +125,6 @@ body {
   @include breakpoint(large) {
     box-shadow: 2px 0 0 rgba(0,0,0,0.1);
     width: 22rem;
-  }
-}
-
-.route-index {
-
-  @include breakpoint(small only) {
-    .map-container {
-      height: calc(100vh - 14.25rem);
-    }
-
-    .sidebar {
-      min-height: 6rem;
-    }
-  }
-
-  @include breakpoint(medium only) {
-    .map-container {
-      height: 100%;
-      max-height: none;
-    }
-
-    .sidebar {
-      height: calc(100% - 5.25rem);
-      max-height: none;
-    }
   }
 }
 
@@ -266,4 +248,8 @@ label.inline {
   font-size: 12pt;
   margin-bottom: 0;
   font-weight: normal;
+}
+
+.button.green {
+  @include button-style($background:$green-dark, $background-hover:auto, $color:$white);
 }

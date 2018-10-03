@@ -26,23 +26,26 @@
   </div>
 {{else}}
   <p class="grid-x text-small align-middle">
-    <span class="cell small-8">
+    <span class="cell small-8 medium-7">
       {{modeDisplayName}}
       {{#if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon'))}}
         {{labs-ui/legend-icon icon=modeIcon}}
+      {{else}}
+        {{#if required}}<strong class="red">{{fa-icon 'asterisk' transform='shrink-4'}}</strong>{{/if}}
       {{/if}}
     </span>
-    <span class="cell small-4">
+    <span class="cell small-4 medium-5">
       <button
-        class="button small expanded no-margin draw-control-{{dasherize modeDisplayName}} {{if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon')) 'gray'}}"
+        class="button small expanded no-margin draw-control-{{dasherize modeDisplayName}} {{if
+          (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon') (eq mode 'proposedZoning')) 'gray'
+        }}"
         {{action 'toggleGeometryEditing' mode}}
         disabled={{geometryMode}}
       >
-        {{fa-icon 'pencil-alt'}}
-        {{#if (eq mode 'proposedZoning')}}
-            Edit Proposed Zoning
+        {{#if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon') (eq mode 'proposedZoning'))}}
+          {{fa-icon 'pencil-alt'}} Edit
         {{else}}
-          {{if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon')) 'Red' 'D'}}raw
+          {{fa-icon 'plus'}} Add
         {{/if}}
       </button>
     </span>

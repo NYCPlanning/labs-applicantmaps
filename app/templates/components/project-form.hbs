@@ -1,14 +1,12 @@
-<div class="cell medium-5 large-3 sidebar">
+<div class="cell sidebar">
 
-  <h2 class="header-small">Project Information</h2>
+  <h2 class="header-medium">Create New Project</h2>
 
-  <hr/>
-
-  <label class="text-small">Title
+  <label class="text-small">Project Title {{#unless model.projectName}}<strong class="red">{{fa-icon 'asterisk' transform='shrink-4'}}</strong>{{/unless}}
     {{input type="text" class='project-name-field' value=model.projectName}}
   </label>
 
-  <label class="text-small">Applicant Name
+  <label class="text-small">Applicant Name {{#unless model.applicantName}}<strong class="red">{{fa-icon 'asterisk' transform='shrink-4'}}</strong>{{/unless}}
     {{input type="text" class='applicant-name-field' value=model.applicantName}}
   </label>
 
@@ -16,11 +14,9 @@
     {{input type="text" class='zap-project-id-field' value=model.zapProjectId}}
   </label>
 
-  <label class="text-small">Description
+  <label class="text-small">Project Description
     {{textarea class='zap-project-description-field' value=model.description rows="3"}}
   </label>
-
-  <h2 class="header-small">Project Geometries</h2>
 
   {{#if mapInstance}}
     {{#project-geometries-menu
@@ -29,44 +25,57 @@
       selectedLots=selectedLots
       lotSelectionMode=lotSelectionMode
       geometryMode=geometryMode
-      as |menu|}}
+      as |menu|
+    }}
+
+      {{!-- Development Site --}}
       {{menu.draw-control
         mode="developmentSite"
         modeDisplayName="Development Site"
         hasGeom=model.developmentSite
+        required=true
       }}
 
-      {{menu.draw-control
-        mode="projectArea"
-        modeDisplayName="Project Area"
-        hasGeom=model.projectArea
-      }}
-
-      {{menu.draw-control
-        mode="rezoningArea"
-        modeDisplayName="Rezoning Area"
-        hasGeom=model.rezoningArea
-      }}
-
-      <h2 class="header-small">Proposed Zoning</h2>
+      {{!-- Project Area --}}
+      {{#if model.developmentSite}}
+        {{menu.draw-control
+          mode="projectArea"
+          modeDisplayName="Project Area"
+          hasGeom=model.projectArea
+        }}
+      {{/if}}
 
       {{#if model.proposedZoning}}
+        {{!-- Proposed Zoning --}}
         {{menu.draw-control
           mode="proposedZoning"
           modeDisplayName="Proposed Zoning"
           hasGeom=model.proposedZoning
         }}
+
+        {{!-- Rezoning Area --}}
+        {{menu.draw-control
+          mode="rezoningArea"
+          modeDisplayName="Rezoning Area"
+          hasGeom=model.rezoningArea
+        }}
       {{else}}
         {{!-- TODO Make this dependent on the existence of one or more geometries so we know what area to get zoning polygons for --}}
-        <button type="button" class="button expanded" disabled={{not model.developmentSite}} onclick={{action 'addProposedZoning'}}>Add Proposed Zoning</button>
+        <p class="text-right">
+          <button type="button" class="button expanded small no-margin" disabled={{not model.developmentSite}} onclick={{action 'addProposedZoning'}}>
+            {{fa-icon 'plus'}} Add Proposed Zoning Changes
+          </button>
+        </p>
       {{/if}}
     {{/project-geometries-menu}}
   {{/if}}
 
-  <button type="button" class="button expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Save Project</button>
+  <hr />
+
+  <button type="button" class="button large green expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Save Project</button>
 
 </div>
-<div class="cell medium-7 large-9 map-container">
+<div class="cell large-auto map-container">
   {{#project-map-form tagName='' as |projectMapForm|}}
     {{#labs-map
       id='main-map'
