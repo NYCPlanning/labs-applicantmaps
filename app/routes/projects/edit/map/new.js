@@ -6,10 +6,6 @@ export default class ProjectsNewRoute extends Route {
 
     return this.store.createRecord(mapType, { project });
   }
-  
-  afterModel(model) {
-    model.reload();
-  }
 
   deactivate() {
     const applicantMap = this.modelFor('projects.edit.map.new');

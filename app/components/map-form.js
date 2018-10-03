@@ -326,11 +326,10 @@ export default class MapFormComponent extends Component {
   }
 
   @action
-  saveProject() {
+  async saveProject() {
     const model = this.get('model');
-    console.log('O HAI')
-    model.save();
-    this.get('router').transitionTo('projects.edit.map.edit', {});
+    await model.save();
+    this.get('router').transitionTo('projects.edit.map.edit', model);
     this.get('notificationMessages').success('Map saved to project!');
   }
 }

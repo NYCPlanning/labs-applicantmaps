@@ -15,11 +15,11 @@ export default class extends Model {
 
   @attr('string', { defaultValue: 'tabloid' }) paperSize;
 
+  @attr('string') type;
+
   @attr() mapBearing;
 
   @attr() boundsPolygon;
-
-  @attr('string') type;
 
   @attr() toggledLayers;
 
