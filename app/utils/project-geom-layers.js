@@ -27,7 +27,6 @@ const projectAreaLayer = {
   type: 'line',
   layout: {
     visibility: 'visible',
-    'line-cap': 'round',
   },
   paint: {
     'line-color': 'rgba(0, 122, 122, 1)',
