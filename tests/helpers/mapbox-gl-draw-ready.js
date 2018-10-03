@@ -7,6 +7,6 @@ export default async function() {
       'mousemove',
     );
 
-    return find('.mouse-add');
+    return find('.mouse-add') || find('.mode-draw_polygon');
   }, { timeout: 30000 });
 }
