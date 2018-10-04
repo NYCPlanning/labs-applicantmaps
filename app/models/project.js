@@ -1,9 +1,9 @@
 import DS from 'ember-data';
 import { attr, hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
-import turfBuffer from 'npm:@turf/buffer';
-import turfUnion from 'npm:@turf/union';
-import turfBbox from 'npm:@turf/bbox';
+import turfBuffer from '@turf/buffer';
+import turfUnion from '@turf/union';
+import turfBbox from '@turf/bbox';
 import { camelize } from '@ember/string';
 import config from '../config/environment';
 
@@ -15,7 +15,7 @@ const requiredFields = [
   'developmentSite',
 ];
 
-export default class ProjectModel extends Model.extend({}) {
+export default class extends Model {
   @hasMany('area-map', { async: false }) areaMaps;
 
   @hasMany('tax-map', { async: false }) taxMaps;
@@ -91,7 +91,7 @@ export default class ProjectModel extends Model.extend({}) {
         features: [],
       });
 
-    return turfBbox.default(featureCollection);
+    return turfBbox(featureCollection);
   }
 
   // union all geometries together, draw a 600 foot buffer around the union
@@ -104,7 +104,7 @@ export default class ProjectModel extends Model.extend({}) {
         if (union === null) {
           union = geometry;
         } else {
-          union = turfUnion.default(union, geometry);
+          union = turfUnion(union, geometry);
         }
       }
 

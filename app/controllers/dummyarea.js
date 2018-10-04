@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action, computed } from '@ember-decorators/object';
-import turfBuffer from 'npm:@turf/buffer';
+import turfBuffer from '@turf/buffer';
 
 export default class DummyAreaController extends Controller {
   projectAreaSource = {

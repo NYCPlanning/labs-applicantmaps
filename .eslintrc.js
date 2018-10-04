@@ -43,7 +43,11 @@ module.exports = {
     {
       files: [
         'testem.js',
-        'ember-cli-build.js'
+        'ember-cli-build.js',
+        '.template-lintrc.js',
+        'blueprints/*/index.js',
+        'config/**/*.js',
+        'lib/*/index.js'
       ],
       parserOptions: {
         sourceType: 'script',
