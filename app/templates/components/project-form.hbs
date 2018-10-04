@@ -4,7 +4,18 @@
 
   <hr/>
 
+  <i class=text-small>The <strong>Project Title</strong> is the only required field to create an Applicant Map.
+    The Project Number, Applicant Name, and Project Description are all optional to include.
+    For the <strong>Project Title</strong>, please use the name provided at the Informational Meeting with the Department of City Planning or the project address.
+    The <strong>Project Number</strong> refers to the unique code provided for a project following an Informational Interest Meeting with the Department of City Planning.
+  </i>
+
+  <hr/>
+
   <label class="text-small">Title
+    <sup>
+      {{icon-tooltip tip='Please use the name provided at the Informational Meeting with the Department of City Planning or the Project Address.'}}
+    </sup>
     {{input type="text" class='project-name-field' value=model.projectName}}
   </label>
 
@@ -13,6 +24,9 @@
   </label>
 
   <label class="text-small">Project Number
+    <sup>
+      {{icon-tooltip tip='The Project Number refers to the unique code provided for a project following an Informational Interest Meeting with the Department of City Planning.'}}
+    </sup>
     {{input type="text" class='zap-project-id-field' value=model.zapProjectId}}
   </label>
 
@@ -33,18 +47,21 @@
       {{menu.draw-control
         mode="developmentSite"
         modeDisplayName="Development Site"
+        tooltip="The Development Site refers to the zoning lot(s) to be improved by the specific development(s) that the land use actions would facilitate."
         hasGeom=model.developmentSite
       }}
 
       {{menu.draw-control
         mode="projectArea"
         modeDisplayName="Project Area"
+        tooltip="The Project Area refers to all properties that would be subject to the proposed actions. The Project Area should only be used if it is larger than the Development Site."
         hasGeom=model.projectArea
       }}
 
       {{menu.draw-control
         mode="rezoningArea"
         modeDisplayName="Rezoning Area"
+        tooltip="When drawing, the Rezoning Area Boundary should be graphically offset from the proposed Zoning District Boundaries. This area refers to all property subject to the proposed amendment to existing Zoning Districts and Boundaries."
         hasGeom=model.rezoningArea
       }}
     {{/project-geometries-menu}}
