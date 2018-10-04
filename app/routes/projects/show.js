@@ -5,7 +5,7 @@ import config from '../../config/environment';
 
 const { mapTypes } = config;
 
-export default class ProjectsEditRoute extends Route {
+export default class ProjectsShowRoute extends Route {
   @service
   notificationMessages;
 

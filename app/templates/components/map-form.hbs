@@ -36,11 +36,16 @@
       </div>
     </div>
 
-    <button type="button" class="button project-save-button" onclick={{action 'saveProject' model}}>Save Map</button>
+    <button type="button" class="button project-save-button" onclick={{action 'saveProject'}}>Save Map</button>
+    <br>
+    {{#link-to "projects.show" model.project}}
+      <button type="button" class="button">Go Back to Project</button>
+    {{/link-to}}
+
   </div>
 
   <div class="cell large-auto paper-container text-center">
-    <div class="paper {{paperSize}} {{paperOrientation}} padding-7mm text-left">
+    <div class="paper {{model.paperSize}} {{model.paperOrientation}} padding-7mm text-left">
       <div class="paper-grid grid-x">
         <div class="cell paper-sidebar">
           <div class="grid-y" style="height:100%;">
@@ -60,14 +65,7 @@
 
             </div>
             <div class="cell shrink legend">
-              {{yield (hash
-                model=model
-                mapConfiguration=mapConfiguration
-                projectAreaSource=projectAreaSource
-                projectBufferSource=projectBufferSource
-                handleMapLoaded=(action 'handleMapLoaded')
-                updateBounds=(action 'updateBounds')
-                saveProject=(action 'saveProject'))}}
+              {{yield}}
             </div>
             <div class="cell auto">
               {{#if boundsPolygon}}
