@@ -60,7 +60,7 @@ export default class DrawControlController extends Component {
   @argument
   model
 
-  selectedZoningDistrictFeature = undefined
+  selectedZoningFeature = undefined
 
   @argument
   developmentSiteIcon = projectGeomLayers.developmentSiteIcon
@@ -83,6 +83,19 @@ export default class DrawControlController extends Component {
     return developmentSiteIcon;
   }
 
+  // if geometryMode is one of the three proposed zoning overlays, this is true
+  @computed('geometryMode')
+  get isProposedZoningMode() {
+    const geometryMode = this.get('geometryMode');
+
+    if (geometryMode === 'proposedZoning'
+      || geometryMode === 'proposedCommercialOverlays'
+      || geometryMode === 'proposedSpecialPurposeDistricts') {
+      return true;
+    }
+    return false;
+  }
+
   @action toggleGeometryEditing(type) {
     this.set('geometryMode', type);
 
@@ -101,10 +114,10 @@ export default class DrawControlController extends Component {
       }
 
       map.on('draw.selectionchange', ({ features }) => {
-        if ((geometryMode === 'proposedZoning') && (features.length === 1)) {
-          this.set('selectedZoningDistrictFeature', features[0]);
+        if (this.get('isProposedZoningMode') && (features.length === 1)) {
+          this.set('selectedZoningFeature', features[0]);
         } else {
-          this.set('selectedZoningDistrictFeature', null);
+          this.set('selectedZoningFeature', null);
         }
       });
     } else {
@@ -112,7 +125,7 @@ export default class DrawControlController extends Component {
       draw.trash();
       map.off('draw.selectionchange');
       map.removeControl(draw);
-      this.set('selectedZoningDistrictFeature', null);
+      this.set('selectedZoningFeature', null);
     }
   }
 
@@ -161,10 +174,11 @@ export default class DrawControlController extends Component {
     draw.deleteAll();
 
     const geometryMode = this.get('geometryMode');
+    const isProposedZoningMode = this.get('isProposedZoningMode');
 
     // set geometry depending on mode
     const model = this.get('model');
-    if (geometryMode === 'proposedZoning') {
+    if (isProposedZoningMode) {
       model.set(geometryMode, FeatureCollection);
     } else {
       const { geometry } = FeatureCollection.features[0];
@@ -176,8 +190,8 @@ export default class DrawControlController extends Component {
   }
 
   @action
-  updateSelectedZoningDistrictFeature(zonedist) {
-    const id = this.get('selectedZoningDistrictFeature.id');
-    draw.setFeatureProperty(id, 'zonedist', zonedist);
+  updateSelectedZoningFeature(label) {
+    const id = this.get('selectedZoningFeature.id');
+    draw.setFeatureProperty(id, 'label', label);
   }
 }
