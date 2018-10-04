@@ -4,14 +4,6 @@
 
   <hr/>
 
-  <i class=text-small>The <strong>Project Title</strong> is the only required field to create an Applicant Map.
-    The Project Number, Applicant Name, and Project Description are all optional to include.
-    For the <strong>Project Title</strong>, please use the name provided at the Informational Meeting with the Department of City Planning or the project address.
-    The <strong>Project Number</strong> refers to the unique code provided for a project following an Informational Interest Meeting with the Department of City Planning.
-  </i>
-
-  <hr/>
-
   <label class="text-small">Title
     <sup>
       {{icon-tooltip tip='Please use the name provided at the Informational Meeting with the Department of City Planning or the Project Address.'}}
@@ -34,7 +26,7 @@
     {{textarea class='zap-project-description-field' value=model.description rows="3"}}
   </label>
 
-  <h2 class="header-small">Project Geometries</h2>
+  <h2 class="header-small">Project Geometries<sup>{{icon-tooltip tip="The Project Area and one other geometry (Development Site or Rezoning Area) are required to create an Applicnat Map."}}</sup></h2>
 
   {{#if mapInstance}}
     {{#project-geometries-menu

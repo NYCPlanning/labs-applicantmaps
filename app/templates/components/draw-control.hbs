@@ -6,16 +6,12 @@
     {{#if lotSelectionMode}}
       <p class="text-small">Click individual tax lots to toggle their selection</p>
       <div class="grid-x grid-margin-x">
-      {{!#tool-tipster title="Click here to finish selecting tax lots."}}
         <button class="cell auto button small" {{action 'finishLotSelection'}}>Make Selection</button>
-      {{!/tool-tipster}}
         {{!-- <button class="cell shrink button small alert clear">Cancel</button> --}}{{!-- TODO: make an action to cancel lot selection --}}
       </div>
     {{else}}
       <p class="text-small">Use the <strong class="bg-a11y-yellow">&nbsp;drawing tools&nbsp;</strong> on the map to define the {{modeDisplayName}} <em>or&hellip;</em></p>
-      {{#tool-tipster title="Zoom in on the map to highlight and select specific tax lots for your project."}}
         <button class="button gray small expanded select-tax-lots-{{dasherize modeDisplayName}}" {{action "startLotSelection"}}>Select Tax Lots</button>
-      {{/tool-tipster}}
       <div class="grid-x grid-margin-x">
         <button class="cell auto button small draw-control-done" {{action 'setProjectGeometry'}}>Done</button>
         <button class="cell shrink button small alert clear draw-control-cancel" {{action 'toggleGeometryEditing' null}}>Cancel</button>
@@ -32,7 +28,6 @@
       {{/if}}
     </span>
     <span class="cell small-4">
-    {{#tool-tipster title="Click on this button to enter draw mode. Click on the map once to create vertices for your shape and double click to finish drawing the shape."}}
       <button
         class="button small expanded no-margin draw-control-{{dasherize modeDisplayName}} {{if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon')) 'gray'}}"
         {{action 'toggleGeometryEditing' mode}}
@@ -41,7 +36,6 @@
         {{fa-icon 'pencil-alt'}}
         {{if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon')) 'Red' 'D'}}raw
       </button>
-    {{/tool-tipster}}
     </span>
   </p>
 {{/if}}
