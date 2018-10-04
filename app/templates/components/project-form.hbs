@@ -30,8 +30,8 @@
 
       {{!-- Development Site --}}
       {{menu.draw-control
-        mode="developmentSite"
-        modeDisplayName="Development Site"
+        mode='developmentSite'
+        modeDisplayName='Development Site'
         hasGeom=model.developmentSite
         required=true
       }}
@@ -39,8 +39,8 @@
       {{!-- Project Area --}}
       {{#if model.developmentSite}}
         {{menu.draw-control
-          mode="projectArea"
-          modeDisplayName="Project Area"
+          mode='projectArea'
+          modeDisplayName='Project Area'
           hasGeom=model.projectArea
         }}
       {{/if}}
@@ -48,29 +48,29 @@
       {{#if model.proposedZoning}}
         {{!-- Proposed Zoning --}}
         {{menu.draw-control
-          mode="proposedZoning"
-          modeDisplayName="Zoning"
+          mode='proposedZoning'
+          modeDisplayName='Zoning'
           hasGeom=model.proposedZoning
         }}
 
         {{!-- Proposed Commercial Overlays --}}
         {{menu.draw-control
-          mode="proposedCommercialOverlays"
-          modeDisplayName="Commercial Overlays"
+          mode='proposedCommercialOverlays'
+          modeDisplayName='Commercial Overlays'
           hasGeom=model.proposedCommercialOverlays
         }}
 
         {{!-- Proposed Special Purpose Districts --}}
         {{menu.draw-control
-          mode="proposedSpecialPurposeDistricts"
-          modeDisplayName="Special Purpose Districts"
+          mode='proposedSpecialPurposeDistricts'
+          modeDisplayName='Special Purpose Districts'
           hasGeom=model.proposedSpecialPurposeDistricts
         }}
 
         {{!-- Rezoning Area --}}
         {{menu.draw-control
-          mode="rezoningArea"
-          modeDisplayName="Rezoning Area"
+          mode='rezoningArea'
+          modeDisplayName='Rezoning Area'
           hasGeom=model.rezoningArea
         }}
       {{else}}
@@ -129,7 +129,7 @@
         {{/map.labs-layers}}
 
         {{!-- Ad-hoc source and layer for developmentSite --}}
-        {{#if (and model.developmentSite (not-eq geometryMode "developmentSite"))}}
+        {{#if (and model.developmentSite (not-eq geometryMode 'developmentSite'))}}
           {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
             {{source.layer
               layer=projectGeomLayers.developmentSiteLayer
@@ -139,7 +139,7 @@
         {{/if}}
 
         {{!-- Ad-hoc source and layer for projectArea --}}
-        {{#if (and model.projectArea (not-eq geometryMode "projectArea"))}}
+        {{#if (and model.projectArea (not-eq geometryMode 'projectArea'))}}
           {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
             {{source.layer
               layer=projectGeomLayers.projectAreaLayer
@@ -149,7 +149,7 @@
         {{/if}}
 
         {{!-- Ad-hoc source and layer for projectArea --}}
-        {{#if (and model.rezoningArea (not-eq geometryMode "rezoningArea"))}}
+        {{#if (and model.rezoningArea (not-eq geometryMode 'rezoningArea'))}}
           {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
             {{source.layer
               layer=projectGeomLayers.rezoningAreaLayer
@@ -167,7 +167,7 @@
         {{/map.source}}
 
         {{!-- Ad-hoc source and layer for showing zoning --}}
-        {{#if (and model.proposedZoning (not-eq geometryMode "proposedZoning"))}}
+        {{#if (and model.proposedZoning (not-eq geometryMode 'proposedZoning'))}}
           {{#map.source options=(mapbox-geojson-source model.proposedZoning) as |source|}}
             {{source.layer
               layer=projectGeomLayers.proposedZoningLayer
@@ -181,21 +181,24 @@
         {{/if}}
 
         {{!-- Ad-hoc source and layer for showing commercial overlays --}}
-        {{#if (and model.proposedCommercialOverlays (not-eq geometryMode "proposedCommercialOverlays"))}}
+        {{#if (and model.proposedCommercialOverlays (not-eq geometryMode 'proposedCommercialOverlays'))}}
           {{#map.source options=(mapbox-geojson-source model.proposedCommercialOverlays) as |source|}}
-            {{source.layer
-              layer=projectGeomLayers.proposedCommercialOverlaysLayer
-              before='boundary_country'
-            }}
-            {{source.layer
-              layer=projectGeomLayers.proposedCommercialOverlaysLabelsLayer
-              before='boundary_country'
-            }}
+            {{source.layer layer=projectGeomLayers.coLayer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c11Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c12Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c13Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c14Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c15Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c21Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c22Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c23Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c24Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c25Layer before='boundary_country'}}
           {{/map.source}}
         {{/if}}
 
         {{!-- Ad-hoc source and layer for showing commercial overlays --}}
-        {{#if (and model.proposedSpecialPurposeDistricts (not-eq geometryMode "proposedSpecialPurposeDistricts"))}}
+        {{#if (and model.proposedSpecialPurposeDistricts (not-eq geometryMode 'proposedSpecialPurposeDistricts'))}}
           {{#map.source options=(mapbox-geojson-source model.proposedSpecialPurposeDistricts) as |source|}}
             {{source.layer
               layer=projectGeomLayers.proposedSpecialPurposeDistrictsLayer

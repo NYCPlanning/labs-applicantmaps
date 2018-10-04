@@ -113,7 +113,7 @@ const defaultLayerGroups = {
       ],
     },
     { id: 'street-direction-arrows', visible: true },
-    { id: 'commercial-overlay-patterns', visible: true },
+    // { id: 'commercial-overlay-patterns', visible: true },
   ],
 };
 
