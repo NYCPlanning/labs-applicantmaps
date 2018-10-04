@@ -2,10 +2,10 @@ import Component from '@ember/component';
 import { action, computed } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
 import MapboxDraw from 'mapbox-gl-draw';
-import turfUnion from 'npm:@turf/union';
-import turfBuffer from 'npm:@turf/buffer';
+import turfUnion from '@turf/union';
+import turfBuffer from '@turf/buffer';
+import turfSimplify from '@turf/simplify';
 import projectGeomLayers from '../utils/project-geom-layers';
-
 
 const draw = new MapboxDraw({
   displayControlsDefault: false,
@@ -15,7 +15,6 @@ const draw = new MapboxDraw({
   },
   // styles: drawStyles, TODO modify default draw styles
 });
-
 
 export default class DrawControlController extends Component {
   @argument
@@ -124,9 +123,11 @@ export default class DrawControlController extends Component {
       for (let i = 1; i < selectedLots.features.length; i += 1) {
         const bufferedGeometry = turfBuffer(selectedLots.features[i].geometry, bufferkm);
 
-        union = turfUnion.default(union, bufferedGeometry);
+        union = turfUnion(union, bufferedGeometry);
       }
     }
+
+    union = turfSimplify(union, { tolerance: 0.000001 });
 
     // set the drawn geom as an editable mapbox-gl-draw geom
     draw.set({
