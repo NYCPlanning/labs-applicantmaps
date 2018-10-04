@@ -23,7 +23,9 @@ export default class extends Model {
 
   @attr() toggledLayers;
 
-  @attr() center;
+  @attr() mapCenter;
+
+  @attr('number') mapZoom;
 
   @belongsTo('project') project;
 }
