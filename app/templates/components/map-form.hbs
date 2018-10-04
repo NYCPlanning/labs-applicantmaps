@@ -1,23 +1,32 @@
 {{#if mapConfiguration}}
-  {{log model}}
   <div class="cell sidebar">
     <h2 class="header-large">{{model.project.projectName}} {{model.mapTypeLabel}}</h2>
 
-    <hr/>
+    <hr>
 
-    <input type="radio" name="paper-orientation" class="portrait-radio-button" value="portrait" id="paper-orientation--portrait" onclick={{action 'reorientPaper' 'portrait'}}/>
-    <label for="paper-orientation--portrait">Portrait</label>
-    <input type="radio" name="paper-orientation" class="landscape-radio-button" value="landscape" id="paper-orientation--landscape" checked  onclick={{action 'reorientPaper' 'landscape'}}/>
-    <label for="paper-orientation--landscape">Landscape</label>
+    <h5>Paper Settings</h5>
+    <p>
+      <input type="radio" name="paper-orientation" class="portrait-radio-button" value="portrait" id="paper-orientation--portrait" onclick={{action 'reorientPaper' 'portrait'}}/>
+      <label for="paper-orientation--portrait">Portrait</label>
+      <input type="radio" name="paper-orientation" class="landscape-radio-button" value="landscape" id="paper-orientation--landscape" checked  onclick={{action 'reorientPaper' 'landscape'}}/>
+      <label for="paper-orientation--landscape">Landscape</label>
+    </p>
+    <p>
+      <input type="radio" name="paper-size" class="tabloid-radio-button" value="tabloid" id="paper-size--tabloid" onclick={{action 'scalePaper' 'tabloid'}} checked />
+      <label for="paper-size--tabloid">Tabloid</label>
+      <input type="radio" name="paper-size" class="letter-radio-button" value="letter" id="paper-size--letter" onclick={{action  'scalePaper' 'letter'}}/>
+      <label for="paper-size--letter">Letter</label>
+    </p>
+    <hr>
 
-    <hr/>
+    <h5>Project Area Buffer</h5>
+    <input type="radio" name="buffer-size" checked={{eq model.bufferSize "600"}} id="buffer-size--600" onclick={{action (mut model.bufferSize) '600'}}>
+    <label for="buffer-size--600">600ft</label>
+    <input type="radio" name="buffer-size" checked={{eq model.bufferSize "400"}} id="buffer-size--400" onclick={{action (mut model.bufferSize) '400'}}>
+    <label for="buffer-size--400">400ft</label>
 
-    <input type="radio" name="paper-size" class="tabloid-radio-button" value="tabloid" id="paper-size--tabloid" onclick={{action 'scalePaper' 'tabloid'}} checked />
-    <label for="paper-size--tabloid">Tabloid</label>
-    <input type="radio" name="paper-size" class="letter-radio-button" value="letter" id="paper-size--letter" onclick={{action  'scalePaper' 'letter'}}/>
-    <label for="paper-size--letter">Letter</label>
-
-    <hr/>
+    <p class="text-tiny">Most ULURP area maps should show a buffer of 600 feet around the project area.  CEQR area maps should show a buffer of 400 feet.</p>
+    <hr>
 
 
     <div class="grid-x grid-margin-x">
@@ -101,7 +110,7 @@
               }}
             {{/map.source}}
 
-            {{#map.source options=(mapbox-geojson-source model.project.projectGeometryBuffer) as |source|}}
+            {{#map.source options=(mapbox-geojson-source projectGeometryBuffer) as |source|}}
               {{source.layer
                 layer=projectBufferLayer
                 before='boundary_country'
