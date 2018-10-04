@@ -161,7 +161,7 @@ export default class MapFormComponent extends Component {
 
   @computed('mapBearing', 'mapPitch')
   get northArrowTransforms() {
-    const bearing = this.get('mapBearing');
+    const bearing = this.get('model.mapBearing');
     const pitch = this.get('mapPitch');
 
     return {
@@ -174,7 +174,6 @@ export default class MapFormComponent extends Component {
   @action
   handleMapLoaded(map) {
     this.set('mapInstance', map);
-
     this.fitBoundsToBuffer();
     this.updateBounds();
     this.toggleMapInteractions();
@@ -282,13 +281,14 @@ export default class MapFormComponent extends Component {
   fitBoundsToBuffer() {
     const buffer = this.get('model.project.projectGeometryBuffer');
     const map = this.get('mapInstance');
+    const bearing = this.get('model.mapBearing');
 
-    map.setBearing(0);
     map.fitBounds(turfBbox(buffer), {
       padding: 50,
       duration: 0,
     });
 
+    map.setBearing(bearing);
     this.updateBounds();
   }
 
@@ -318,17 +318,6 @@ export default class MapFormComponent extends Component {
       map.doubleClickZoom.disable();
       map.touchZoomRotate.disable();
     }
-  }
-
-  // TODO for some reason I have to pass in the projectArea instead
-  // of just calling this.get('projectAreaSource') ('this' is not available in the action)
-  @action
-  handleMapLoad(projectArea, map) { // eslint-disable-line
-    window.map = map;
-
-    map.fitBounds(turfBbox(projectArea), {
-      padding: 100,
-    });
   }
 
   @action
