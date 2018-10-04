@@ -43,7 +43,7 @@ See full documentation here: https://github.com/kategengler/ember-cli-browsersta
 
 * Setup your .env with browserstack information
 * Run `ember browserstack:connect`
-* Run your test server `ember test--server`
+* Run your test server `ember test`
 * Run `ember browserstack:disconnect` When done
 
 ### Linting
