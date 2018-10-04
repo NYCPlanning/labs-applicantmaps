@@ -126,31 +126,26 @@ export default class MapFormComponent extends Component {
     });
   }
 
-  boundsPolygon = null
-
-  mapPitch = null
-
-  mapBearing = null
-
-  paperSize = 'tabloid'
-
-  paperOrientation = 'landscape'
-
-  @argument customLayerGroupQuery = null;
-
   @service
   store;
 
   @service
   router;
 
-  @argument
-  model = null;
-
   @service
   notificationMessages;
 
   mapConfiguration = null;
+
+  mapInstance = null
+
+  boundsPolygon = null
+
+  @argument
+  customLayerGroupQuery = null;
+
+  @argument
+  model = null;
 
   @argument
   developmentSiteLayer = projectGeomLayers.developmentSiteLayer
@@ -164,15 +159,9 @@ export default class MapFormComponent extends Component {
   @argument
   projectBufferLayer = projectGeomLayers.projectBufferLayer
 
-  mapInstance = null
-
-  mapPitch = null
-
-  mapBearing = null
-
   @computed('mapBearing', 'mapPitch')
   get northArrowTransforms() {
-    const bearing = this.get('mapBearing');
+    const bearing = this.get('model.mapBearing');
     const pitch = this.get('mapPitch');
 
     return {
@@ -185,7 +174,6 @@ export default class MapFormComponent extends Component {
   @action
   handleMapLoaded(map) {
     this.set('mapInstance', map);
-
     this.fitBoundsToBuffer();
     this.updateBounds();
     this.toggleMapInteractions();
@@ -245,14 +233,25 @@ export default class MapFormComponent extends Component {
         },
       },
     });
+    this.set('model.boundsPolygon', {
+      type: 'Polygon',
+      coordinates: [[cUL, cUR, cLR, cLL, cUL]],
+      crs: {
+        type: 'name',
+        properties: {
+          name: 'EPSG:4326',
+        },
+      },
+    });
 
     this.set('mapBearing', map.getBearing());
+    this.set('model.mapBearing', map.getBearing());
     this.set('mapPitch', map.getPitch());
   }
 
   @action
   reorientPaper(orientation) {
-    this.set('paperOrientation', orientation);
+    this.set('model.paperOrientation', orientation);
     next(() => {
       // not supported in IE 11
       window.addEventListener('resize', () => {
@@ -266,7 +265,7 @@ export default class MapFormComponent extends Component {
 
   @action
   scalePaper(size) {
-    this.set('paperSize', size);
+    this.set('model.paperSize', size);
     next(() => {
       // not supported in IE 11
       window.addEventListener('resize', () => {
@@ -282,13 +281,14 @@ export default class MapFormComponent extends Component {
   fitBoundsToBuffer() {
     const buffer = this.get('model.project.projectGeometryBuffer');
     const map = this.get('mapInstance');
+    const bearing = this.get('model.mapBearing');
 
-    map.setBearing(0);
     map.fitBounds(turfBbox(buffer), {
       padding: 50,
       duration: 0,
     });
 
+    map.setBearing(bearing);
     this.updateBounds();
   }
 
@@ -320,22 +320,11 @@ export default class MapFormComponent extends Component {
     }
   }
 
-  // TODO for some reason I have to pass in the projectArea instead
-  // of just calling this.get('projectAreaSource') ('this' is not available in the action)
   @action
-  handleMapLoad(projectArea, map) { // eslint-disable-line
-    window.map = map;
-
-    map.fitBounds(turfBbox(projectArea), {
-      padding: 100,
-    });
-  }
-
-  @action
-  async saveProject(model) {
-    const map = await model.save();
-
-    this.get('notificationMessages').success('Map added!');
-    this.get('router').transitionTo('projects.show', map.get('project'));
+  async saveProject() {
+    const model = this.get('model');
+    await model.save();
+    this.get('router').transitionTo('projects.edit.map.edit', model);
+    this.get('notificationMessages').success('Map saved to project!');
   }
 }
