@@ -19,7 +19,6 @@
 
     <hr/>
 
-
     <div class="grid-x grid-margin-x">
       <div class="cell auto">
         <label onclick={{action 'toggleMapInteractions'}} class="inline">
@@ -36,11 +35,12 @@
       </div>
     </div>
 
-    <button type="button" class="button project-save-button" onclick={{action 'saveProject'}}>Save Map</button>
-    <br>
-    {{#link-to "projects.show" model.project}}
-      <button type="button" class="button">Go Back to Project</button>
-    {{/link-to}}
+    <hr/>
+
+    <div class="grid-x grid-margin-x align-middle">
+      {{#link-to "projects.show" model.project class="cell shrink button small clear"}}{{fa-icon 'arrow-left'}} Go Back to Project{{/link-to}}
+      <button class="cell auto button project-save-button" type="button" onclick={{action 'saveProject'}}>Save Map</button>
+    </div>
 
   </div>
 
