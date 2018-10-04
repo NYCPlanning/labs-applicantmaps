@@ -32,7 +32,7 @@
   </div>
 {{else}}
   <p class="grid-x text-small align-middle">
-    <span class="cell small-8 medium-7">
+    <span class="cell auto">
       {{modeDisplayName}}
       {{#if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon'))}}
         {{labs-ui/legend-icon icon=modeIcon}}
@@ -40,9 +40,9 @@
         {{#if required}}<strong class="red">{{fa-icon 'asterisk' transform='shrink-4'}}</strong>{{/if}}
       {{/if}}
     </span>
-    <span class="cell small-4 medium-5">
+    <span class="cell shrink">
       <button
-        class="button small expanded no-margin draw-control-{{dasherize modeDisplayName}} {{if
+        class="button small no-margin draw-control-{{dasherize modeDisplayName}} {{if
           (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon') (eq mode 'proposedZoning')) 'gray'
         }}"
         {{action 'toggleGeometryEditing' mode}}
@@ -55,5 +55,17 @@
         {{/if}}
       </button>
     </span>
+    {{#if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon'))}}
+      <span class="cell shrink geom-delete-container">
+        <button class="dark-gray" style="margin-left:0.875rem;" {{action (mut deleteModalIsOpen) (not deleteModalIsOpen)}}>{{fa-icon 'trash-alt'}}</button>
+        <span class="geom-delete-modal {{unless deleteModalIsOpen 'hide'}}">
+          <strong class="nowrap">Delete the {{modeDisplayName}}?</strong>
+          <span class="grid-x">
+            <button class="cell auto button tiny alert" {{action 'deleteGeom'}}>Delete</button>
+            <button class="cell auto button tiny clear " {{action (mut deleteModalIsOpen) (not deleteModalIsOpen)}}>Cancel</button>
+          </span>
+        </span>
+      </span>
+    {{/if}}
   </p>
 {{/if}}

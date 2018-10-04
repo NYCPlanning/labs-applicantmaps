@@ -61,6 +61,8 @@ export default class DrawControlController extends Component {
 
   selectedZoningFeature = undefined
 
+  deleteModalIsOpen = false
+
   @argument
   developmentSiteIcon = projectGeomLayers.developmentSiteIcon
 
@@ -194,5 +196,14 @@ export default class DrawControlController extends Component {
   updateSelectedZoningFeature(label) {
     const id = this.get('selectedZoningFeature.id');
     draw.setFeatureProperty(id, 'label', label);
+  }
+
+  @action
+  deleteGeom() {
+    const geometryMode = this.get('geometryMode');
+    const model = this.get('model');
+
+    model.set(geometryMode, null);
+    this.set('deleteModalIsOpen', false);
   }
 }
