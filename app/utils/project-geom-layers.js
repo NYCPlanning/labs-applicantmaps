@@ -1,5 +1,6 @@
 // Development Site
 const developmentSiteLayer = {
+  id: 'development-site-line',
   type: 'line',
   paint: {
     'line-color': 'rgba(237, 18, 18, 1)',
@@ -22,7 +23,12 @@ const developmentSiteIcon = {
 
 // Project Area
 const projectAreaLayer = {
+  id: 'project-area-line',
   type: 'line',
+  layout: {
+    visibility: 'visible',
+    'line-cap': 'round',
+  },
   paint: {
     'line-color': 'rgba(0, 122, 122, 1)',
     'line-width': 2.5,
@@ -68,6 +74,21 @@ const rezoningAreaIcon = {
 };
 
 
+// Project Buffer
+const projectBufferLayer = {
+  id: 'project-buffer-line',
+  type: 'line',
+  paint: {
+    'line-color': 'rgba(122, 0, 72, 1)',
+    'line-width': 3,
+    'line-dasharray': [
+      0.75,
+      0.75,
+    ],
+  },
+};
+
+
 export default {
   developmentSiteLayer,
   developmentSiteIcon,
@@ -75,4 +96,5 @@ export default {
   projectAreaIcon,
   rezoningAreaLayer,
   rezoningAreaIcon,
+  projectBufferLayer,
 };
