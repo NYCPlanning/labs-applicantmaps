@@ -287,6 +287,10 @@ export default class MapFormComponent extends Component {
 
     map.setBearing(bearing);
     this.updateBounds();
+    const mapZoom = map.getZoom();
+    this.set('model.mapZoom', mapZoom);
+    const mapCenter = map.getCenter();
+    this.set('model.mapCenter', mapCenter);
   }
 
   @action
