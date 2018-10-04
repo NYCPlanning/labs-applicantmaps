@@ -1,9 +1,9 @@
 import DS from 'ember-data';
 import { attr, hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
-import turfBuffer from 'npm:@turf/buffer';
-import turfUnion from 'npm:@turf/union';
-import turfBbox from 'npm:@turf/bbox';
+import turfBuffer from '@turf/buffer';
+import turfUnion from '@turf/union';
+import turfBbox from '@turf/bbox';
 import { camelize } from '@ember/string';
 import config from '../config/environment';
 
@@ -87,7 +87,7 @@ export default class extends Model {
         features: [],
       });
 
-    return turfBbox.default(featureCollection);
+    return turfBbox(featureCollection);
   }
 
   // union all geometries together, draw a 600 foot buffer around the union
@@ -100,7 +100,7 @@ export default class extends Model {
         if (union === null) {
           union = geometry;
         } else {
-          union = turfUnion.default(union, geometry);
+          union = turfUnion(union, geometry);
         }
       }
 
