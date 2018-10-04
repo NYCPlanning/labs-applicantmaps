@@ -3,7 +3,7 @@ import { action, computed } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { next } from '@ember/runloop';
-import turfBbox from 'npm:@turf/bbox';
+import turfBbox from '@turf/bbox';
 import mapboxgl from 'mapbox-gl';
 import projectGeomLayers from '../utils/project-geom-layers';
 
@@ -284,7 +284,7 @@ export default class MapFormComponent extends Component {
     const map = this.get('mapInstance');
 
     map.setBearing(0);
-    map.fitBounds(turfBbox.default(buffer), {
+    map.fitBounds(turfBbox(buffer), {
       padding: 50,
       duration: 0,
     });
@@ -326,7 +326,7 @@ export default class MapFormComponent extends Component {
   handleMapLoad(projectArea, map) { // eslint-disable-line
     window.map = map;
 
-    map.fitBounds(turfBbox.default(projectArea), {
+    map.fitBounds(turfBbox(projectArea), {
       padding: 100,
     });
   }
