@@ -126,23 +126,26 @@ export default class MapFormComponent extends Component {
     });
   }
 
-  boundsPolygon = null
-
-  @argument customLayerGroupQuery = null;
-
   @service
   store;
 
   @service
   router;
 
-  @argument
-  model = null;
-
   @service
   notificationMessages;
 
   mapConfiguration = null;
+
+  mapInstance = null
+
+  boundsPolygon = null
+
+  @argument
+  customLayerGroupQuery = null;
+
+  @argument
+  model = null;
 
   @argument
   developmentSiteLayer = projectGeomLayers.developmentSiteLayer
@@ -155,8 +158,6 @@ export default class MapFormComponent extends Component {
 
   @argument
   projectBufferLayer = projectGeomLayers.projectBufferLayer
-
-  mapInstance = null
 
   @computed('mapBearing', 'mapPitch')
   get northArrowTransforms() {
