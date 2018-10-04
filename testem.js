@@ -10,11 +10,11 @@ module.exports = {
   launch_in_ci: [
     'Chrome',
     // enable when ready
-    // ...(hasBrowserstackKeys ? crossBrowserTargets : []),
+    ...(hasBrowserstackKeys ? crossBrowserTargets : []),
   ],
   launch_in_dev: [
     'Chrome',
-    ...(hasBrowserstackKeys ? crossBrowserTargets : []),
+    // ...(hasBrowserstackKeys ? crossBrowserTargets : []),
   ],
   browser_args: {
     Chrome: {
