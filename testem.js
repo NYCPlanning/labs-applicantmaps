@@ -1,6 +1,17 @@
 'use strict';
 
-const hasBrowserstackKeys = (!!process.env.BROWSERSTACK_USERNAME && !!process.env.BROWSERSTACK_ACCESS_KEY);
+const fs = require('fs');
+const path = require('path');
+
+const browserstackPid = path.join(process.env.PWD, 'browserstack-local.pid');
+const hasBrowserstackConnection = !!fs.existsSync(browserstackPid);
+
+if (!hasBrowserstackConnection) console.warn('No Browserstack connection detected. Run `ember browserstack:connect` to include cross-browser testing.');
+
+const hasBrowserstackKeys = (!!process.env.BROWSERSTACK_USERNAME
+  && !!process.env.BROWSERSTACK_ACCESS_KEY
+  && hasBrowserstackConnection);
+
 const crossBrowserTargets = [
   'BS_Firefox_Current',
   'BS_Safari_Current',
