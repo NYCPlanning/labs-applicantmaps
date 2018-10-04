@@ -20,7 +20,7 @@
         </p>
 
         {{#link-to 'projects.edit' model.id tagName='div'}}
-          <button class="button expanded gray">Edit Project</button>
+          <button class="button expanded gray edit-project-button">Edit Project</button>
         {{/link-to}}
 
         {{#mapbox-gl
@@ -86,7 +86,7 @@
                 {{#if (eq type.name 'Area Map')}}{{!-- TODO: nix this if when all four types of maps can be created --}}
                   {{!-- Only allow certain types of maps to be created --}}
                   {{#link-to 'projects.edit.map.new' model.id (query-params mapType=(dasherize type.name)) tagName='a' class='card link text-center'}}
-                    <div class="card-divider bg-green-muted green-light align-center">
+                    <div class="card-divider bg-green-muted green-light align-center map-type-{{dasherize type.name}}">
                       {{fa-icon 'plus' size='3x' class=''}}
                     </div>
                     <div class="card-section">
