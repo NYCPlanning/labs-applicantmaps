@@ -140,9 +140,9 @@ export default class MapFormComponent extends Component {
   router;
 
   @service
-  notificationMessages;
+  notificationMessages
 
-  mapConfiguration = null;
+  mapConfiguration = null
 
   mapInstance = null
 
@@ -276,7 +276,7 @@ export default class MapFormComponent extends Component {
 
   @action
   fitBoundsToBuffer() {
-    const buffer = this.get('model.project.projectGeometryBuffer');
+    const buffer = this.get('model.projectGeometryBuffer');
     const map = this.get('mapInstance');
     const bearing = this.get('model.mapBearing');
 
