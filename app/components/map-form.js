@@ -179,6 +179,7 @@ export default class MapFormComponent extends Component {
     map.addControl(scaleControl, 'bottom-left');
 
     const basemapLayersToHide = [
+      'background',
       'highway_path',
       'highway_minor',
       'highway_major_casing',
@@ -189,8 +190,8 @@ export default class MapFormComponent extends Component {
       'highway_motorway_subtle',
       'highway_motorway_bridge_casing',
       'highway_motorway_bridge_inner',
-      // 'highway_name_other',
-      // 'highway_name_motorway',
+      'highway_name_other',
+      'highway_name_motorway',
       'tunnel_motorway_casing',
       'tunnel_motorway_inner',
       'railway_transit',
