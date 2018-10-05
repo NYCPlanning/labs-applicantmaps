@@ -34,58 +34,52 @@
         modeDisplayName='Development Site'
         hasGeom=model.developmentSite
         required=true
+        doneAction=(action 'addProposedZoning')
       }}
 
       {{!-- Project Area --}}
-      {{#if model.developmentSite}}
-        {{menu.draw-control
-          mode='projectArea'
-          modeDisplayName='Project Area'
-          hasGeom=model.projectArea
-        }}
-      {{/if}}
+      {{menu.draw-control
+        mode='projectArea'
+        modeDisplayName='Project Area'
+        hasGeom=model.projectArea
+        disabled=noDevelopmentSite
+      }}
 
-      <hr>
+      {{!-- Proposed Zoning --}}
+      {{menu.draw-control
+        mode='proposedZoning'
+        modeDisplayName='Zoning'
+        hasGeom=model.proposedZoning
+        resetAction=(action 'getClippedZoning')
+        disabled=noDevelopmentSite
+      }}
 
-      {{#if model.proposedZoning}}
-        {{!-- Proposed Zoning --}}
-        {{menu.draw-control
-          mode='proposedZoning'
-          modeDisplayName='Zoning'
-          hasGeom=model.proposedZoning
-          resetAction=getClippedZoning
-        }}
+      {{!-- Proposed Commercial Overlays --}}
+      {{menu.draw-control
+        mode='proposedCommercialOverlays'
+        modeDisplayName='Commercial Overlays'
+        hasGeom=model.proposedCommercialOverlays
+        resetAction=(action 'getClippedCommercialOverlays')
+        disabled=noDevelopmentSite
+      }}
 
-        {{!-- Proposed Commercial Overlays --}}
-        {{menu.draw-control
-          mode='proposedCommercialOverlays'
-          modeDisplayName='Commercial Overlays'
-          hasGeom=model.proposedCommercialOverlays
-          resetAction=getClippedCommercialOverlays
-        }}
+      {{!-- Proposed Special Purpose Districts --}}
+      {{menu.draw-control
+        mode='proposedSpecialPurposeDistricts'
+        modeDisplayName='Special Purpose Districts'
+        hasGeom=model.proposedSpecialPurposeDistricts
+        resetAction=(action 'getClippedSpecialPurposeDistricts')
+        disabled=noDevelopmentSite
+      }}
 
-        {{!-- Proposed Special Purpose Districts --}}
-        {{menu.draw-control
-          mode='proposedSpecialPurposeDistricts'
-          modeDisplayName='Special Purpose Districts'
-          hasGeom=model.proposedSpecialPurposeDistricts
-          resetAction=getClippedSpecialPurposeDistricts
-        }}
+      {{!-- Rezoning Area --}}
+      {{menu.draw-control
+        mode='rezoningArea'
+        modeDisplayName='Rezoning Area'
+        hasGeom=model.rezoningArea
+        disabled=noDevelopmentSite
+      }}
 
-        {{!-- Rezoning Area --}}
-        {{menu.draw-control
-          mode='rezoningArea'
-          modeDisplayName='Rezoning Area'
-          hasGeom=model.rezoningArea
-        }}
-      {{else}}
-        {{!-- TODO Make this dependent on the existence of one or more geometries so we know what area to get zoning polygons for --}}
-        <p class="text-right">
-          <button type="button" class="button expanded small no-margin" disabled={{not model.developmentSite}} onclick={{action 'addProposedZoning'}}>
-            {{fa-icon 'plus'}} Add Proposed Zoning Changes
-          </button>
-        </p>
-      {{/if}}
     {{/project-geometries-menu}}
   {{/if}}
 
@@ -172,7 +166,7 @@
         {{/map.source}}
 
         {{!-- Ad-hoc source and layer for showing zoning --}}
-        {{#if (and model.proposedZoning (not-eq geometryMode 'proposedZoning'))}}
+        {{#if (and model.proposedZoning (not-eq geometryMode 'proposedZoning') (not noDevelopmentSite))}}
           {{#map.source options=(mapbox-geojson-source model.proposedZoning) as |source|}}
             {{source.layer
               layer=projectGeomLayers.proposedZoningLayer
@@ -186,7 +180,7 @@
         {{/if}}
 
         {{!-- Ad-hoc source and layer for showing commercial overlays --}}
-        {{#if (and model.proposedCommercialOverlays (not-eq geometryMode 'proposedCommercialOverlays'))}}
+        {{#if (and model.proposedCommercialOverlays (not-eq geometryMode 'proposedCommercialOverlays') (not noDevelopmentSite))}}
           {{#map.source options=(mapbox-geojson-source model.proposedCommercialOverlays) as |source|}}
             {{source.layer layer=projectGeomLayers.coLayer before='boundary_country'}}
             {{source.layer layer=projectGeomLayers.c11Layer before='boundary_country'}}
@@ -203,7 +197,7 @@
         {{/if}}
 
         {{!-- Ad-hoc source and layer for showing commercial overlays --}}
-        {{#if (and model.proposedSpecialPurposeDistricts (not-eq geometryMode 'proposedSpecialPurposeDistricts'))}}
+        {{#if (and model.proposedSpecialPurposeDistricts (not-eq geometryMode 'proposedSpecialPurposeDistricts') (not noDevelopmentSite))}}
           {{#map.source options=(mapbox-geojson-source model.proposedSpecialPurposeDistricts) as |source|}}
             {{source.layer
               layer=projectGeomLayers.proposedSpecialPurposeDistrictsLayer

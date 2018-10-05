@@ -49,7 +49,7 @@
           (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon') isProposedZoningMode) 'gray'
         }}"
         {{action 'toggleGeometryEditing' mode}}
-        disabled={{geometryMode}}
+        disabled={{disabled}}
       >
         {{#if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon') isProposedZoningMode)}}
           {{fa-icon 'pencil-alt'}} Edit
@@ -62,7 +62,7 @@
     {{!-- Delete Button --}}
     {{#if (or (eq hasGeom.type 'Polygon') (eq hasGeom.type 'MultiPolygon'))}}
       <span class="cell shrink geom-delete-container">
-        <button class="dark-gray" style="margin-left:0.875rem;" {{action (mut deleteModalIsOpen) (not deleteModalIsOpen)}}>{{fa-icon 'trash-alt'}}</button>
+        <button class="button small clear no-margin" disabled={{disabled}} {{action (mut deleteModalIsOpen) (not deleteModalIsOpen)}}>{{fa-icon 'trash-alt' class="dark-gray"}}</button>
         <span class="geom-delete-modal {{unless deleteModalIsOpen 'hide'}}">
           <strong class="nowrap">Delete the {{modeDisplayName}}?</strong>
           <span class="grid-x">
@@ -73,7 +73,7 @@
       </span>
     {{else if isProposedZoningMode}}
       <span class="cell shrink geom-delete-container">
-        <button class="dark-gray" style="margin-left:0.875rem;" {{action (mut deleteModalIsOpen) (not deleteModalIsOpen)}}>{{fa-icon 'sync-alt'}}</button>
+        <button class="button small clear no-margin" disabled={{disabled}} {{action (mut deleteModalIsOpen) (not deleteModalIsOpen)}}>{{fa-icon 'sync-alt' class="dark-gray"}}</button>
         <span class="geom-delete-modal {{unless deleteModalIsOpen 'hide'}}">
           <strong class="nowrap">Reset the {{modeDisplayName}}?</strong>
           <span class="grid-x">
