@@ -110,10 +110,74 @@ const defaultLayerGroups = {
             paint: { 'text-color': 'rgba(33, 35, 38, 1)' },
           },
         },
+        {
+          style: {
+            id: 'block-labels',
+            type: 'symbol',
+            source: 'pluto',
+            'source-layer': 'block-centroids',
+            minzoom: 14,
+            maxzoom: 24,
+            layout: {
+              'text-field': '{block}',
+              'text-font': [
+                'Open Sans Bold',
+                'Arial Unicode MS Regular',
+              ],
+              'text-size': 22,
+            },
+            paint: {
+              'text-halo-color': 'rgba(255, 255, 255, 0.5)',
+              'text-halo-width': 1,
+              'text-color': 'rgba(121, 121, 121, 1)',
+              'text-halo-blur': 0,
+              'text-opacity': {
+                stops: [
+                  [
+                    14,
+                    0,
+                  ],
+                  [
+                    15,
+                    1,
+                  ],
+                ],
+              },
+            },
+          },
+        },
       ],
     },
     { id: 'street-direction-arrows', visible: true },
     // { id: 'commercial-overlay-patterns', visible: true },
+    {
+      id: 'street-centerlines',
+      visible: true,
+      layers: [
+        {},
+        {
+          before: 'place_country_major',
+          style: {
+            id: 'citymap-street-centerlines-line',
+            type: 'line',
+            source: 'digital-citymap',
+            'source-layer': 'street-centerlines',
+            metadata: {
+              'nycplanninglabs:layergroupid': 'street-centerlines',
+            },
+            minzoom: 13,
+            paint: {
+              'line-dasharray': [
+                5,
+                3,
+              ],
+              'line-color': 'rgba(193, 193, 193, 1)',
+              'line-width': 0.5,
+            },
+          },
+        },
+      ],
+    },
   ],
 };
 
@@ -179,6 +243,7 @@ export default class MapFormComponent extends Component {
     map.addControl(scaleControl, 'bottom-left');
 
     const basemapLayersToHide = [
+      'background',
       'highway_path',
       'highway_minor',
       'highway_major_casing',
@@ -189,8 +254,8 @@ export default class MapFormComponent extends Component {
       'highway_motorway_subtle',
       'highway_motorway_bridge_casing',
       'highway_motorway_bridge_inner',
-      // 'highway_name_other',
-      // 'highway_name_motorway',
+      'highway_name_other',
+      'highway_name_motorway',
       'tunnel_motorway_casing',
       'tunnel_motorway_inner',
       'railway_transit',
