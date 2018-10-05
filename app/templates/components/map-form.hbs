@@ -1,32 +1,6 @@
 {{#if mapConfiguration}}
   <div class="cell sidebar">
-    <h2 class="header-large">{{model.project.projectName}} {{model.mapTypeLabel}}</h2>
-
-    <hr>
-
-    <h5>Paper Settings</h5>
-    <p>
-      <input type="radio" name="paper-orientation" class="portrait-radio-button" value="portrait" id="paper-orientation--portrait" checked={{eq model.paperOrientation "portrait"}} onclick={{action 'reorientPaper' 'portrait'}}/>
-      <label for="paper-orientation--portrait">Portrait</label>
-      <input type="radio" name="paper-orientation" class="landscape-radio-button" value="landscape" id="paper-orientation--landscape" checked={{eq model.paperOrientation "landscape"}}  onclick={{action 'reorientPaper' 'landscape'}}/>
-      <label for="paper-orientation--landscape">Landscape</label>
-    </p>
-    <p>
-      <input type="radio" name="paper-size" class="tabloid-radio-button" value="tabloid" id="paper-size--tabloid" checked={{eq model.paperSize "tabloid"}} onclick={{action 'scalePaper' 'tabloid'}}/>
-      <label for="paper-size--tabloid">Tabloid</label>
-      <input type="radio" name="paper-size" class="letter-radio-button" value="letter" id="paper-size--letter" checked={{eq model.paperSize "letter"}} onclick={{action  'scalePaper' 'letter'}}/>
-      <label for="paper-size--letter">Letter</label>
-    </p>
-    <hr>
-
-    <h5>Project Area Buffer</h5>
-    <input type="radio" name="buffer-size" checked={{eq model.bufferSize "600"}} id="buffer-size--600" onclick={{action (mut model.bufferSize) '600'}}>
-    <label for="buffer-size--600">600ft</label>
-    <input type="radio" name="buffer-size" checked={{eq model.bufferSize "400"}} id="buffer-size--400" onclick={{action (mut model.bufferSize) '400'}}>
-    <label for="buffer-size--400">400ft</label>
-
-    <p class="text-tiny">Most ULURP area maps should show a buffer of 600 feet around the project area.  CEQR area maps should show a buffer of 400 feet.</p>
-    <hr>
+    <h2 class="header-large">{{model.project.projectName}} <span class="nowrap">{{model.mapTypeLabel}}</span></h2>
 
     <div class="grid-x grid-margin-x">
       <div class="cell auto">
@@ -44,11 +18,40 @@
       </div>
     </div>
 
+    <h5>Paper Settings</h5>
+    <p>
+      <input type="radio" name="paper-orientation" class="portrait-radio-button" value="portrait" id="paper-orientation--portrait" checked={{eq model.paperOrientation "portrait"}} onclick={{action 'reorientPaper' 'portrait'}}/>
+      <label for="paper-orientation--portrait">Portrait</label>
+      <input type="radio" name="paper-orientation" class="landscape-radio-button" value="landscape" id="paper-orientation--landscape" checked={{eq model.paperOrientation "landscape"}}  onclick={{action 'reorientPaper' 'landscape'}}/>
+      <label for="paper-orientation--landscape">Landscape</label>
+    </p>
+    <p>
+      <input type="radio" name="paper-size" class="tabloid-radio-button" value="tabloid" id="paper-size--tabloid" checked={{eq model.paperSize "tabloid"}} onclick={{action 'scalePaper' 'tabloid'}}/>
+      <label for="paper-size--tabloid">Tabloid</label>
+      <input type="radio" name="paper-size" class="letter-radio-button" value="letter" id="paper-size--letter" checked={{eq model.paperSize "letter"}} onclick={{action  'scalePaper' 'letter'}}/>
+      <label for="paper-size--letter">Letter</label>
+    </p>
+
+    <h5>Project Area Buffer</h5>
+    <input type="radio" name="buffer-size" checked={{eq model.bufferSize "600"}} id="buffer-size--600" onclick={{action (mut model.bufferSize) '600'}}>
+    <label for="buffer-size--600">600ft</label>
+    <input type="radio" name="buffer-size" checked={{eq model.bufferSize "400"}} id="buffer-size--400" onclick={{action (mut model.bufferSize) '400'}}>
+    <label for="buffer-size--400">400ft</label>
+
+    <p class="text-tiny">Most ULURP area maps should show a buffer of 600 feet around the project area.  CEQR area maps should show a buffer of 400 feet.</p>
+
     <hr/>
 
     <div class="grid-x grid-margin-x align-middle">
       {{#link-to "projects.show" model.project class="cell shrink button small clear"}}{{fa-icon 'arrow-left'}} Go Back to Project{{/link-to}}
-      <button class="cell auto button project-save-button" type="button" onclick={{action 'saveProject'}}>Save Map</button>
+      <button class="cell auto button green project-save-button" type="button" onclick={{action 'saveProject'}}>Save Map</button>
+    </div>
+
+    <hr/>
+
+    <div class="grid-x grid-margin-x">
+      <p class="cell shrink medium-5"><button class="button gray expanded" type="button" onClick=print()>{{fa-icon 'print'}} Print</button></p>
+      <p class="cell auto text-tiny dark-gray">Make sure your system's print settings enable printing background graphics and that the paper size and orientation match your map.</p>
     </div>
 
   </div>
