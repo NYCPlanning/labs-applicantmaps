@@ -108,7 +108,7 @@
               }}
             {{/map.source}}
 
-            {{#map.source options=(mapbox-geojson-source projectGeometryBuffer) as |source|}}
+            {{#map.source options=(mapbox-geojson-source model.projectGeometryBuffer) as |source|}}
               {{source.layer
                 layer=projectBufferLayer
                 before='boundary_country'

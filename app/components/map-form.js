@@ -4,8 +4,6 @@ import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { next } from '@ember/runloop';
 import turfBbox from '@turf/bbox';
-import turfBuffer from '@turf/buffer';
-import turfUnion from '@turf/union';
 import mapboxgl from 'mapbox-gl';
 import projectGeomLayers from '../utils/project-geom-layers';
 
@@ -143,14 +141,6 @@ export default class MapFormComponent extends Component {
 
   boundsPolygon = null
 
-  mapPitch = null
-
-  mapBearing = null
-
-  paperSize = 'tabloid'
-
-  paperOrientation = 'landscape'
-
   @argument
   customLayerGroupQuery = null;
 
@@ -179,28 +169,6 @@ export default class MapFormComponent extends Component {
       n: `transform: rotate(${360 - bearing}deg)`,
       nSpan: `transform: rotate(${(360 - bearing) * -1}deg)`,
     };
-  }
-
-  // union all geometries together, draw a 600 foot buffer around the union
-  @computed('model.bufferSize')
-  get projectGeometryBuffer() {
-    const geometries = this.getProperties('model.project.developmentSite', 'model.project.projectArea', 'model.project.rezoningArea');
-    const bufferSize = this.get('model.bufferSize');
-    const bufferSizeMiles = bufferSize * 0.000189394;
-
-    const projectGeometryUnion = Object.values(geometries).reduce((union, geometry) => {
-      if (geometry) {
-        if (union === null) {
-          union = geometry;
-        } else {
-          union = turfUnion(union, geometry);
-        }
-      }
-
-      return union;
-    }, null);
-
-    return turfBuffer(projectGeometryUnion, bufferSizeMiles, { units: 'miles' });
   }
 
   @action
@@ -311,7 +279,7 @@ export default class MapFormComponent extends Component {
 
   @action
   fitBoundsToBuffer() {
-    const buffer = this.get('projectGeometryBuffer');
+    const buffer = this.get('model.projectGeometryBuffer');
     const map = this.get('mapInstance');
     const bearing = this.get('model.mapBearing');
 
