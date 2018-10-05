@@ -88,6 +88,11 @@ export default class ProjectFormComponent extends Component {
     return [this.get('lat'), this.get('lng')];
   }
 
+  @computed('model.developmentSite')
+  get noDevelopmentSite() {
+    return !this.get('model.developmentSite');
+  }
+
   @computed('selectedLots.features.[]')
   get selectedLotsSource() {
     const selectedLots = this.get('selectedLots');
