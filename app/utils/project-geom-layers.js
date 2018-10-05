@@ -4,7 +4,7 @@ const developmentSiteLayer = {
   type: 'line',
   paint: {
     'line-color': 'rgba(237, 18, 18, 1)',
-    'line-width': 2.5,
+    'line-width': 4,
     'line-dasharray': [2.5, 1, 1, 1],
   },
 };
