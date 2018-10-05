@@ -26,7 +26,7 @@
     {{textarea class='zap-project-description-field' value=model.description rows="3"}}
   </label>
 
-  <h2 class="header-small">Project Geometries<sup>{{icon-tooltip tip="The Project Area and one other geometry (Development Site or Rezoning Area) are required to create an Applicnat Map."}}</sup></h2>
+  <h2 class="header-small">Project Geometries</h2>
 
   {{#if mapInstance}}
     {{#project-geometries-menu
@@ -84,6 +84,21 @@
         {{/labs-search}}
         {{bbl-lookup flyTo=(action 'flyTo')}}
       </div>
+
+      {{!#if (eq isDrawing true)}}
+        {{#if (eq drawInstruct true)}}
+          <div class="draw-instruction-box-extend">
+          Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+          when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+          <a onClick={{action "hideDrawInstructions"}} class="text-small"><br>{{fa-icon 'chevron-up'}}</a>
+          </div>
+        {{else}}
+        <div class="draw-instruction-box">
+            Click on the map to begin drawing, finish by double clicking.
+            <a onClick={{action "showDrawInstructions"}} class="text-small"><br>{{fa-icon 'chevron-down'}}</a>
+        </div>
+        {{/if}}
+      {{!/if}}
 
       {{#if geocodedFeature}}
         {{#map.source options=geocodedFeature as |source|}}

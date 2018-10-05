@@ -33,6 +33,8 @@ export default class ProjectFormComponent extends Component {
 
   geometryMode = null
 
+  drawInstruct = false
+
   @service
   router;
 
@@ -183,6 +185,16 @@ export default class ProjectFormComponent extends Component {
     this.get('notificationMessages').success('Project saved!');
 
     this.get('router').transitionTo('projects.show', project);
+  }
+
+  @action
+  showDrawInstructions() {
+    this.set('drawInstruct', true);
+  }
+
+  @action
+  hideDrawInstructions() {
+    this.set('drawInstruct', false);
   }
 
   @action

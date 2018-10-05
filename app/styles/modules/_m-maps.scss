@@ -318,3 +318,41 @@
                 inset 0 2px 0 $a11y-yellow;
   }
 }
+
+// Draw instruction box
+// ---------------------------------------------
+
+
+.draw-instruction-box {
+    height: 90px;
+    width: 188px;
+    position: absolute;
+    top: 80px;
+    left: 70px;
+    z-index: 1;
+    overflow: visible;
+    background-color: rgba(255, 255, 255, .7);
+    padding: 15px;
+    text-align: center;
+}
+
+.draw-instruction-box-extend {
+    height: 180px;
+    width: 188px;
+    position: absolute;
+    top: 80px;
+    left: 70px;
+    z-index: 1;
+    overflow: visible;
+    background-color: rgba(255, 255, 255, .7);
+    padding: 15px;
+    text-align: center;
+}
+
+
+
+/*.draw-instruction-text {
+    font-family: 'Open Sans';
+    margin: 0;
+    font-size: 13px;
+}*/
