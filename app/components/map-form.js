@@ -114,6 +114,34 @@ const defaultLayerGroups = {
     },
     { id: 'street-direction-arrows', visible: true },
     // { id: 'commercial-overlay-patterns', visible: true },
+    {
+      id: 'street-centerlines',
+      visible: true,
+      layers: [
+        {},
+        {
+          before: 'place_country_major',
+          style: {
+            id: 'citymap-street-centerlines-line',
+            type: 'line',
+            source: 'digital-citymap',
+            'source-layer': 'street-centerlines',
+            metadata: {
+              'nycplanninglabs:layergroupid': 'street-centerlines',
+            },
+            minzoom: 13,
+            paint: {
+              'line-dasharray': [
+                5,
+                3,
+              ],
+              'line-color': 'rgba(193, 193, 193, 1)',
+              'line-width': 0.5,
+            },
+          },
+        },
+      ],
+    },
   ],
 };
 
