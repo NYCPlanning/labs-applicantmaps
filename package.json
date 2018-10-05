@@ -81,7 +81,7 @@
     "@turf/simplify": "^5.1.5",
     "@turf/union": "^6.0.3",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
-    "cartobox-promises-utility": "nycplanning/cartobox-promises-utility",
+    "cartobox-promises-utility": "0.0.1",
     "ember-cli": "~3.0.2",
     "ember-data": "~3.4.0",
     "ember-load-initializers": "^1.1.0",
