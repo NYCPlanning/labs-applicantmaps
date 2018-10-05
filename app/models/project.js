@@ -10,9 +10,7 @@ const { Model } = DS;
 
 const requiredFields = [
   'projectName',
-  'applicantName',
   'developmentSite',
-  'projectArea',
 ];
 
 export default class extends Model {
@@ -35,6 +33,12 @@ export default class extends Model {
   @attr() developmentSite
 
   @attr() rezoningArea
+
+  @attr() proposedZoning
+
+  @attr() proposedCommercialOverlays
+
+  @attr() proposedSpecialPurposeDistricts
 
   @attr('string') projectName;
 

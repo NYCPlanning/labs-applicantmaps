@@ -30,6 +30,9 @@ export default class DrawControlController extends Component {
   hasGeom
 
   @argument
+  required = false;
+
+  @argument
   geometryMode
 
   @argument
@@ -57,6 +60,13 @@ export default class DrawControlController extends Component {
   model
 
   @argument
+  resetAction = null
+
+  selectedZoningFeature = undefined
+
+  deleteModalIsOpen = false
+
+  @argument
   developmentSiteIcon = projectGeomLayers.developmentSiteIcon
 
   @argument
@@ -77,8 +87,21 @@ export default class DrawControlController extends Component {
     return developmentSiteIcon;
   }
 
-  @action toggleGeometryEditing(type) {
-    this.set('geometryMode', type);
+  // if geometryMode is one of the three proposed zoning overlays, this is true
+  @computed('mode')
+  get isProposedZoningMode() {
+    const geometryMode = this.get('mode');
+
+    if (geometryMode === 'proposedZoning'
+      || geometryMode === 'proposedCommercialOverlays'
+      || geometryMode === 'proposedSpecialPurposeDistricts') {
+      return true;
+    }
+    return false;
+  }
+
+  @action toggleGeometryEditing(mode) {
+    this.set('geometryMode', mode);
 
     const geometryMode = this.get('geometryMode');
 
@@ -86,16 +109,27 @@ export default class DrawControlController extends Component {
     if (geometryMode) {
       map.addControl(draw, 'top-left');
       draw.changeMode('draw_polygon');
+      const model = this.get('model');
 
       // if geometry exists for this mode, add it to the drawing canvas
-      const model = this.get('model');
       if (model.get(geometryMode)) {
         draw.add(model.get(geometryMode));
         draw.changeMode('simple_select');
       }
+
+      map.on('draw.selectionchange', ({ features }) => {
+        if (this.get('isProposedZoningMode') && (features.length === 1)) {
+          this.set('selectedZoningFeature', features[0]);
+        } else {
+          this.set('selectedZoningFeature', null);
+        }
+      });
     } else {
+      // breakdown all the drawing mode stuff
       draw.trash();
+      map.off('draw.selectionchange');
       map.removeControl(draw);
+      this.set('selectedZoningFeature', null);
     }
   }
 
@@ -145,14 +179,40 @@ export default class DrawControlController extends Component {
     // delete the drawn geometry
     draw.deleteAll();
 
-    const { geometry } = FeatureCollection.features[0];
     const geometryMode = this.get('geometryMode');
+    const isProposedZoningMode = this.get('isProposedZoningMode');
 
     // set geometry depending on mode
     const model = this.get('model');
-    model.set(geometryMode, geometry);
+    if (isProposedZoningMode) {
+      model.set(geometryMode, FeatureCollection);
+    } else {
+      const { geometry } = FeatureCollection.features[0];
+      model.set(geometryMode, geometry);
+    }
 
     // breakdown the draw tools
     this.toggleGeometryEditing(null);
+  }
+
+  @action
+  updateSelectedZoningFeature(label) {
+    const id = this.get('selectedZoningFeature.id');
+    draw.setFeatureProperty(id, 'label', label);
+  }
+
+  @action
+  deleteGeom() {
+    const geometryMode = this.get('mode');
+    const model = this.get('model');
+
+    model.set(geometryMode, null);
+    this.set('deleteModalIsOpen', false);
+  }
+
+  @action
+  resetOverlay() {
+    this.set('deleteModalIsOpen', false);
+    this.resetAction();
   }
 }

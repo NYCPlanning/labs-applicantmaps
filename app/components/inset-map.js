@@ -17,7 +17,7 @@ class InsetMap extends Component {
     this.set('mapInstance', map);
     const bounds = this.get('boundsPolygon');
 
-    map.fitBounds(turfBbox(turfBuffer(bounds, 12)), {
+    map.fitBounds(turfBbox(turfBuffer(bounds, 13)), {
       duration: 0,
     });
   }

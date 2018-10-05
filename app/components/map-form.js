@@ -41,27 +41,6 @@ const defaultLayerGroups = {
       ],
     },
     {
-      id: 'tax-lots',
-      visible: true,
-      layers: [
-        {
-          style: {
-            paint: { 'fill-opacity': 0.5 },
-            minzoom: 8,
-          },
-          tooltipable: false,
-          highlightable: false,
-        },
-        {},
-        {
-          style: {
-            layout: { 'text-field': '{numfloors}' },
-            paint: { 'text-color': 'rgba(33, 35, 38, 0.9)' },
-          },
-        },
-      ],
-    },
-    {
       id: 'building-footprints',
       visible: true,
       layers: [
@@ -81,7 +60,14 @@ const defaultLayerGroups = {
       id: 'citymap',
       visible: true,
       layers: [
-        {}, // citymap-mapped-streets-line
+        {
+          style: {
+            paint: {
+              'line-color': 'rgba(0,0,0,0.9)',
+              'line-width': 2,
+            },
+          },
+        }, // citymap-mapped-streets-line
         { tooltipable: false }, // citymap-streets-tooltip-line
         {}, // citymap-street-treatments-line
         {}, // citymap-underpass-tunnel-line
@@ -105,8 +91,29 @@ const defaultLayerGroups = {
         }, // railway-cross-lines
       ],
     },
+    {
+      id: 'tax-lots',
+      visible: true,
+      layers: [
+        {
+          style: {
+            paint: { 'fill-opacity': 0.5 },
+            minzoom: 8,
+          },
+          tooltipable: false,
+          highlightable: false,
+        },
+        {},
+        {
+          style: {
+            layout: { 'text-field': '{numfloors}' },
+            paint: { 'text-color': 'rgba(33, 35, 38, 1)' },
+          },
+        },
+      ],
+    },
     { id: 'street-direction-arrows', visible: true },
-    { id: 'commercial-overlay-patterns', visible: true },
+    // { id: 'commercial-overlay-patterns', visible: true },
   ],
 };
 
@@ -147,17 +154,7 @@ export default class MapFormComponent extends Component {
   @argument
   model = null;
 
-  @argument
-  developmentSiteLayer = projectGeomLayers.developmentSiteLayer
-
-  @argument
-  projectAreaLayer = projectGeomLayers.projectAreaLayer
-
-  @argument
-  rezoningAreaIcon = projectGeomLayers.rezoningAreaIcon
-
-  @argument
-  projectBufferLayer = projectGeomLayers.projectBufferLayer
+  projectGeomLayers = projectGeomLayers;
 
   @computed('mapBearing', 'mapPitch')
   get northArrowTransforms() {

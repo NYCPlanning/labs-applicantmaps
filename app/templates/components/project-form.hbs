@@ -1,10 +1,8 @@
-<div class="cell medium-5 large-3 sidebar">
+<div class="cell sidebar">
 
-  <h2 class="header-small">Project Information</h2>
+  <h2 class="header-medium">Create New Project</h2>
 
-  <hr/>
-
-  <label class="text-small">Title
+  <label class="text-small">Project Name {{#unless model.projectName}}<strong class="red">{{fa-icon 'asterisk' transform='shrink-4'}}</strong>{{/unless}}
     {{input type="text" class='project-name-field' value=model.projectName}}
   </label>
 
@@ -16,11 +14,9 @@
     {{input type="text" class='zap-project-id-field' value=model.zapProjectId}}
   </label>
 
-  <label class="text-small">Description
+  <label class="text-small">Project Description
     {{textarea class='zap-project-description-field' value=model.description rows="3"}}
   </label>
-
-  <h2 class="header-small">Project Geometries</h2>
 
   {{#if mapInstance}}
     {{#project-geometries-menu
@@ -29,31 +25,76 @@
       selectedLots=selectedLots
       lotSelectionMode=lotSelectionMode
       geometryMode=geometryMode
-      as |menu|}}
+      as |menu|
+    }}
+
+      {{!-- Development Site --}}
       {{menu.draw-control
-        mode="developmentSite"
-        modeDisplayName="Development Site"
+        mode='developmentSite'
+        modeDisplayName='Development Site'
         hasGeom=model.developmentSite
+        required=true
       }}
 
-      {{menu.draw-control
-        mode="projectArea"
-        modeDisplayName="Project Area"
-        hasGeom=model.projectArea
-      }}
+      {{!-- Project Area --}}
+      {{#if model.developmentSite}}
+        {{menu.draw-control
+          mode='projectArea'
+          modeDisplayName='Project Area'
+          hasGeom=model.projectArea
+        }}
+      {{/if}}
 
-      {{menu.draw-control
-        mode="rezoningArea"
-        modeDisplayName="Rezoning Area"
-        hasGeom=model.rezoningArea
-      }}
+      <hr>
+
+      {{#if model.proposedZoning}}
+        {{!-- Proposed Zoning --}}
+        {{menu.draw-control
+          mode='proposedZoning'
+          modeDisplayName='Zoning'
+          hasGeom=model.proposedZoning
+          resetAction=getClippedZoning
+        }}
+
+        {{!-- Proposed Commercial Overlays --}}
+        {{menu.draw-control
+          mode='proposedCommercialOverlays'
+          modeDisplayName='Commercial Overlays'
+          hasGeom=model.proposedCommercialOverlays
+          resetAction=getClippedCommercialOverlays
+        }}
+
+        {{!-- Proposed Special Purpose Districts --}}
+        {{menu.draw-control
+          mode='proposedSpecialPurposeDistricts'
+          modeDisplayName='Special Purpose Districts'
+          hasGeom=model.proposedSpecialPurposeDistricts
+          resetAction=getClippedSpecialPurposeDistricts
+        }}
+
+        {{!-- Rezoning Area --}}
+        {{menu.draw-control
+          mode='rezoningArea'
+          modeDisplayName='Rezoning Area'
+          hasGeom=model.rezoningArea
+        }}
+      {{else}}
+        {{!-- TODO Make this dependent on the existence of one or more geometries so we know what area to get zoning polygons for --}}
+        <p class="text-right">
+          <button type="button" class="button expanded small no-margin" disabled={{not model.developmentSite}} onclick={{action 'addProposedZoning'}}>
+            {{fa-icon 'plus'}} Add Proposed Zoning Changes
+          </button>
+        </p>
+      {{/if}}
     {{/project-geometries-menu}}
   {{/if}}
 
-  <button type="button" class="button expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Save Project</button>
+  <hr />
+
+  <button type="button" class="button large green expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Save Project</button>
 
 </div>
-<div class="cell medium-7 large-9 map-container">
+<div class="cell large-auto map-container">
   {{#project-map-form tagName='' as |projectMapForm|}}
     {{#labs-map
       id='main-map'
@@ -93,7 +134,7 @@
         {{/map.labs-layers}}
 
         {{!-- Ad-hoc source and layer for developmentSite --}}
-        {{#if (and model.developmentSite (not-eq geometryMode "developmentSite"))}}
+        {{#if (and model.developmentSite (not-eq geometryMode 'developmentSite'))}}
           {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
             {{source.layer
               layer=projectGeomLayers.developmentSiteLayer
@@ -103,7 +144,7 @@
         {{/if}}
 
         {{!-- Ad-hoc source and layer for projectArea --}}
-        {{#if (and model.projectArea (not-eq geometryMode "projectArea"))}}
+        {{#if (and model.projectArea (not-eq geometryMode 'projectArea'))}}
           {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
             {{source.layer
               layer=projectGeomLayers.projectAreaLayer
@@ -113,7 +154,7 @@
         {{/if}}
 
         {{!-- Ad-hoc source and layer for projectArea --}}
-        {{#if (and model.rezoningArea (not-eq geometryMode "rezoningArea"))}}
+        {{#if (and model.rezoningArea (not-eq geometryMode 'rezoningArea'))}}
           {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
             {{source.layer
               layer=projectGeomLayers.rezoningAreaLayer
@@ -129,6 +170,51 @@
             before='boundary_country'
           }}
         {{/map.source}}
+
+        {{!-- Ad-hoc source and layer for showing zoning --}}
+        {{#if (and model.proposedZoning (not-eq geometryMode 'proposedZoning'))}}
+          {{#map.source options=(mapbox-geojson-source model.proposedZoning) as |source|}}
+            {{source.layer
+              layer=projectGeomLayers.proposedZoningLayer
+              before='boundary_country'
+            }}
+            {{source.layer
+              layer=projectGeomLayers.proposedZoningLabelsLayer
+              before='boundary_country'
+            }}
+          {{/map.source}}
+        {{/if}}
+
+        {{!-- Ad-hoc source and layer for showing commercial overlays --}}
+        {{#if (and model.proposedCommercialOverlays (not-eq geometryMode 'proposedCommercialOverlays'))}}
+          {{#map.source options=(mapbox-geojson-source model.proposedCommercialOverlays) as |source|}}
+            {{source.layer layer=projectGeomLayers.coLayer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c11Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c12Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c13Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c14Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c15Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c21Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c22Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c23Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c24Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c25Layer before='boundary_country'}}
+          {{/map.source}}
+        {{/if}}
+
+        {{!-- Ad-hoc source and layer for showing commercial overlays --}}
+        {{#if (and model.proposedSpecialPurposeDistricts (not-eq geometryMode 'proposedSpecialPurposeDistricts'))}}
+          {{#map.source options=(mapbox-geojson-source model.proposedSpecialPurposeDistricts) as |source|}}
+            {{source.layer
+              layer=projectGeomLayers.proposedSpecialPurposeDistrictsLayer
+              before='boundary_country'
+            }}
+            {{source.layer
+              layer=projectGeomLayers.proposedSpecialPurposeDistrictsLabelsLayer
+              before='boundary_country'
+            }}
+          {{/map.source}}
+        {{/if}}
     {{/labs-map}}
   {{/project-map-form}}
 </div>
