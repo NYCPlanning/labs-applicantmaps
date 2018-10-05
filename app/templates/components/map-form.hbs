@@ -6,15 +6,15 @@
 
     <h5>Paper Settings</h5>
     <p>
-      <input type="radio" name="paper-orientation" class="portrait-radio-button" value="portrait" id="paper-orientation--portrait" onclick={{action 'reorientPaper' 'portrait'}}/>
+      <input type="radio" name="paper-orientation" class="portrait-radio-button" value="portrait" id="paper-orientation--portrait" checked={{eq model.paperOrientation "portrait"}} onclick={{action 'reorientPaper' 'portrait'}}/>
       <label for="paper-orientation--portrait">Portrait</label>
-      <input type="radio" name="paper-orientation" class="landscape-radio-button" value="landscape" id="paper-orientation--landscape" checked  onclick={{action 'reorientPaper' 'landscape'}}/>
+      <input type="radio" name="paper-orientation" class="landscape-radio-button" value="landscape" id="paper-orientation--landscape" checked={{eq model.paperOrientation "landscape"}}  onclick={{action 'reorientPaper' 'landscape'}}/>
       <label for="paper-orientation--landscape">Landscape</label>
     </p>
     <p>
-      <input type="radio" name="paper-size" class="tabloid-radio-button" value="tabloid" id="paper-size--tabloid" onclick={{action 'scalePaper' 'tabloid'}} checked />
+      <input type="radio" name="paper-size" class="tabloid-radio-button" value="tabloid" id="paper-size--tabloid" checked={{eq model.paperSize "tabloid"}} onclick={{action 'scalePaper' 'tabloid'}}/>
       <label for="paper-size--tabloid">Tabloid</label>
-      <input type="radio" name="paper-size" class="letter-radio-button" value="letter" id="paper-size--letter" onclick={{action  'scalePaper' 'letter'}}/>
+      <input type="radio" name="paper-size" class="letter-radio-button" value="letter" id="paper-size--letter" checked={{eq model.paperSize "letter"}} onclick={{action  'scalePaper' 'letter'}}/>
       <label for="paper-size--letter">Letter</label>
     </p>
     <hr>
@@ -27,7 +27,6 @@
 
     <p class="text-tiny">Most ULURP area maps should show a buffer of 600 feet around the project area.  CEQR area maps should show a buffer of 400 feet.</p>
     <hr>
-
 
     <div class="grid-x grid-margin-x">
       <div class="cell auto">
@@ -45,11 +44,12 @@
       </div>
     </div>
 
-    <button type="button" class="button project-save-button" onclick={{action 'saveProject'}}>Save Map</button>
-    <br>
-    {{#link-to "projects.show" model.project}}
-      <button type="button" class="button">Go Back to Project</button>
-    {{/link-to}}
+    <hr/>
+
+    <div class="grid-x grid-margin-x align-middle">
+      {{#link-to "projects.show" model.project class="cell shrink button small clear"}}{{fa-icon 'arrow-left'}} Go Back to Project{{/link-to}}
+      <button class="cell auto button project-save-button" type="button" onclick={{action 'saveProject'}}>Save Map</button>
+    </div>
 
   </div>
 
