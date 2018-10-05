@@ -1,12 +1,15 @@
 import { computed } from '@ember-decorators/object';
 import turfUnion from '@turf/union';
 import turfBuffer from '@turf/buffer';
+import { attr } from '@ember-decorators/data';
 import ApplicantMap from './applicant-map';
 
 export default class extends ApplicantMap {
-  mapTypeLabel = 'Area Map';
+  @attr('string', { defaultValue: 'Area Map' })
+  mapTypeLabel;
 
-  bufferSize = '600';
+  @attr('string', { defaultValue: '600' })
+  bufferSize;
 
   // union all geometries together, draw a 600 foot buffer around the union
   @computed('bufferSize')
