@@ -110,6 +110,7 @@ const defaultLayerGroups = {
   ],
 };
 
+
 export default class MapFormComponent extends Component {
   constructor(...args) {
     super(...args);
@@ -143,6 +144,9 @@ export default class MapFormComponent extends Component {
 
   @service
   router;
+
+  @argument
+  projectURL = window.location.href;
 
   @argument
   model = null;

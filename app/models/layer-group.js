@@ -1,0 +1,13 @@
+import DS from 'ember-data';
+import LayerGroupModel from 'ember-mapbox-composer/models/layer-group';
+// import { attr } from '@ember-decorators/data';
+import { alias } from '@ember/object/computed';
+// import QueryParamMap from '../mixins/query-param-map';
+
+export default LayerGroupModel.extend(QueryParamMap, {
+  // 'query-param': alias('id'),
+  title: alias('legend.label'),
+  meta: DS.attr(),
+  legend: DS.attr(),
+  sources: DS.hasMany('source', { async: false }),
+});
