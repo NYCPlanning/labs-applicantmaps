@@ -37,7 +37,7 @@ export default class DrawControlController extends Component {
   geometryMode
 
   @argument
-  hideDrawInstructions = true
+  showDrawInstructions = false
 
   @argument
   toggleGeometryEditing
@@ -86,7 +86,7 @@ export default class DrawControlController extends Component {
 
   @action toggleGeometryEditing(type) {
     this.set('geometryMode', type);
-    this.set('hideDrawInstructions', false);
+    this.set('showDrawInstructions', true);
 
     const geometryMode = this.get('geometryMode');
 

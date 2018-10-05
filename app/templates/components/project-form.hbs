@@ -88,7 +88,7 @@
       {{log geometryMode}}
 
       {{#if (and (not-eq geometryMode null) (eq isSelectingLots false))}}
-        {{#if (eq hideDrawInstructions false)}}
+        {{#if (eq showDrawInstructions true)}}
           <div class="text-small draw-instruction-box">
             <div class="content-close-button-container" onclick={{action 'hideInstructions'}}>{{fa-icon 'window-close'}}</div>
             Click on the map to begin drawing, finish drawing by double clicking.

@@ -44,7 +44,7 @@ export default class ProjectFormComponent extends Component {
 
   isSelectingLots = false
 
-  hideDrawInstructions = false
+  showDrawInstructions = true
 
   geocodedFeature = null;
 
@@ -189,7 +189,7 @@ export default class ProjectFormComponent extends Component {
 
   @action
   hideInstructions() {
-    this.set('hideDrawInstructions', true);
+    this.set('showDrawInstructions', false);
   }
 
   @action
