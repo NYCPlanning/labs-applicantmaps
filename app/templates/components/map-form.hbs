@@ -86,6 +86,13 @@
           }}
             {{map.labs-layers layerGroups=mapConfiguration.layerGroups}}
 
+            {{#map.source options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
+              {{source.layer
+                layer=projectGeomLayers.developmentSiteLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
+
             {{#map.source options=(mapbox-geojson-source model.project.projectArea) as |source|}}
               {{source.layer
                 layer=projectGeomLayers.projectAreaLayer
@@ -123,12 +130,36 @@
               {{/map.source}}
             {{/if}}
 
-            {{#map.source options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
-              {{source.layer
-                layer=projectGeomLayers.developmentSiteLayer
-                before='boundary_country'
-              }}
-            {{/map.source}}
+            {{!-- Ad-hoc source and layer for showing commercial overlays --}}
+            {{#if (and model.proposedCommercialOverlays (not-eq geometryMode 'proposedCommercialOverlays'))}}
+              {{#map.source options=(mapbox-geojson-source model.proposedCommercialOverlays) as |source|}}
+                {{source.layer layer=projectGeomLayers.coLayer before='boundary_country'}}
+                {{source.layer layer=projectGeomLayers.c11Layer before='boundary_country'}}
+                {{source.layer layer=projectGeomLayers.c12Layer before='boundary_country'}}
+                {{source.layer layer=projectGeomLayers.c13Layer before='boundary_country'}}
+                {{source.layer layer=projectGeomLayers.c14Layer before='boundary_country'}}
+                {{source.layer layer=projectGeomLayers.c15Layer before='boundary_country'}}
+                {{source.layer layer=projectGeomLayers.c21Layer before='boundary_country'}}
+                {{source.layer layer=projectGeomLayers.c22Layer before='boundary_country'}}
+                {{source.layer layer=projectGeomLayers.c23Layer before='boundary_country'}}
+                {{source.layer layer=projectGeomLayers.c24Layer before='boundary_country'}}
+                {{source.layer layer=projectGeomLayers.c25Layer before='boundary_country'}}
+              {{/map.source}}
+            {{/if}}
+
+            {{!-- Ad-hoc source and layer for showing commercial overlays --}}
+            {{#if (and model.proposedSpecialPurposeDistricts (not-eq geometryMode 'proposedSpecialPurposeDistricts'))}}
+              {{#map.source options=(mapbox-geojson-source model.proposedSpecialPurposeDistricts) as |source|}}
+                {{source.layer
+                  layer=projectGeomLayers.proposedSpecialPurposeDistrictsLayer
+                  before='boundary_country'
+                }}
+                {{source.layer
+                  layer=projectGeomLayers.proposedSpecialPurposeDistrictsLabelsLayer
+                  before='boundary_country'
+                }}
+              {{/map.source}}
+            {{/if}}
 
             {{map.on 'zoom' (action 'updateBounds')}}
             {{map.on 'drag' (action 'updateBounds')}}
