@@ -68,8 +68,9 @@
                 updateBounds=(action 'updateBounds')
                 saveProject=(action 'saveProject'))}}
             </div>
-
-              <div class="text-small">
+            <section>
+              <div>
+                <h2 class="legend-section-header">Data Sources</h2>
                 <ul>
                   {{#each mapConfiguration.sources as |source|}}
                     <li>
@@ -90,6 +91,7 @@
                   {{/each}}
                 </ul>
               </div>
+            </section>
 
 
             <div class="cell auto">
