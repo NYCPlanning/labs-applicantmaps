@@ -1,8 +1,6 @@
 import DS from 'ember-data';
 import { attr, hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
-import turfBuffer from '@turf/buffer';
-import turfUnion from '@turf/union';
 import turfBbox from '@turf/bbox';
 import { camelize } from '@ember/string';
 import config from '../config/environment';
@@ -88,25 +86,5 @@ export default class extends Model {
       });
 
     return turfBbox(featureCollection);
-  }
-
-  // union all geometries together, draw a 600 foot buffer around the union
-  @computed('developmentSite', 'projectArea', 'rezoningArea')
-  get projectGeometryBuffer() {
-    const geometries = this.getProperties('developmentSite', 'projectArea', 'rezoningArea');
-
-    const projectGeometryUnion = Object.values(geometries).reduce((union, geometry) => {
-      if (geometry) {
-        if (union === null) {
-          union = geometry;
-        } else {
-          union = turfUnion(union, geometry);
-        }
-      }
-
-      return union;
-    }, null);
-
-    return turfBuffer(projectGeometryUnion, 0.113636, { units: 'miles' });
   }
 }
