@@ -59,6 +59,9 @@ export default class DrawControlController extends Component {
   @argument
   model
 
+  @argument
+  resetAction = null
+
   selectedZoningFeature = undefined
 
   deleteModalIsOpen = false
@@ -85,9 +88,9 @@ export default class DrawControlController extends Component {
   }
 
   // if geometryMode is one of the three proposed zoning overlays, this is true
-  @computed('geometryMode')
+  @computed('mode')
   get isProposedZoningMode() {
-    const geometryMode = this.get('geometryMode');
+    const geometryMode = this.get('mode');
 
     if (geometryMode === 'proposedZoning'
       || geometryMode === 'proposedCommercialOverlays'
@@ -97,8 +100,8 @@ export default class DrawControlController extends Component {
     return false;
   }
 
-  @action toggleGeometryEditing(type) {
-    this.set('geometryMode', type);
+  @action toggleGeometryEditing(mode) {
+    this.set('geometryMode', mode);
 
     const geometryMode = this.get('geometryMode');
 
@@ -200,10 +203,16 @@ export default class DrawControlController extends Component {
 
   @action
   deleteGeom() {
-    const geometryMode = this.get('geometryMode');
+    const geometryMode = this.get('mode');
     const model = this.get('model');
 
     model.set(geometryMode, null);
     this.set('deleteModalIsOpen', false);
+  }
+
+  @action
+  resetOverlay() {
+    this.set('deleteModalIsOpen', false);
+    this.resetAction();
   }
 }

@@ -15,6 +15,8 @@ const selectedLotsLayer = {
   },
 };
 
+const bufferMeters = 500;
+
 @tagName('')
 export default class ProjectFormComponent extends Component {
   constructor(...args) {
@@ -204,12 +206,16 @@ export default class ProjectFormComponent extends Component {
   }
 
   @action
-  async addProposedZoning() {
+  addProposedZoning() {
+    this.getClippedZoning();
+    this.getClippedCommercialOverlays();
+    this.getClippedSpecialPurposeDistricts();
+  }
+
+  @action
+  async getClippedZoning() {
     // get the project's development site polygon as a reference for what area of the city to get zoning polygons for
     const developmentSite = this.get('model.developmentSite');
-    const bufferMeters = 500;
-
-    // Build API calls to get zoning geometries that intersect with a around this area
 
     // Get zoning districts
     const zoningQuery = `
@@ -227,40 +233,49 @@ export default class ProjectFormComponent extends Component {
     `;
     const clippedZoningDistricts = await carto.SQL(zoningQuery, 'geojson');
     this.set('model.proposedZoning', clippedZoningDistricts);
+  }
 
+  @action
+  async getClippedCommercialOverlays() {
+    const developmentSite = this.get('model.developmentSite');
 
     // Get commercial overlays
     const commercialOverlaysQuery = `
-      WITH buffer as (
-        SELECT ST_SetSRID(
-          ST_Buffer(
-            ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
-            ${bufferMeters}
-          ),
-        4326)::geometry AS the_geom
-      )
-      SELECT ST_Intersection(co.the_geom, buffer.the_geom) AS the_geom, overlay AS label
-      FROM planninglabs.commercial_overlays_v201809 co, buffer
-      WHERE ST_Intersects(co.the_geom,buffer.the_geom)
-    `;
+          WITH buffer as (
+            SELECT ST_SetSRID(
+              ST_Buffer(
+                ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
+                ${bufferMeters}
+              ),
+            4326)::geometry AS the_geom
+          )
+          SELECT ST_Intersection(co.the_geom, buffer.the_geom) AS the_geom, overlay AS label
+          FROM planninglabs.commercial_overlays_v201809 co, buffer
+          WHERE ST_Intersects(co.the_geom,buffer.the_geom)
+        `;
     const clippedCommercialOverlays = await carto.SQL(commercialOverlaysQuery, 'geojson');
     this.set('model.proposedCommercialOverlays', clippedCommercialOverlays);
+  }
 
+
+  @action
+  async getClippedSpecialPurposeDistricts() {
+    const developmentSite = this.get('model.developmentSite');
 
     // Get special purpose districts
     const specialPurposeDistrictsQuery = `
-      WITH buffer as (
-        SELECT ST_SetSRID(
-          ST_Buffer(
-            ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
-            ${bufferMeters}
-          ),
-        4326)::geometry AS the_geom
-      )
-      SELECT ST_Intersection(spd.the_geom, buffer.the_geom) AS the_geom, sdname AS label
-      FROM planninglabs.special_purpose_districts_v201809 spd, buffer
-      WHERE ST_Intersects(spd.the_geom,buffer.the_geom)
-    `;
+          WITH buffer as (
+            SELECT ST_SetSRID(
+              ST_Buffer(
+                ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
+                ${bufferMeters}
+              ),
+            4326)::geometry AS the_geom
+          )
+          SELECT ST_Intersection(spd.the_geom, buffer.the_geom) AS the_geom, sdname AS label
+          FROM planninglabs.special_purpose_districts_v201809 spd, buffer
+          WHERE ST_Intersects(spd.the_geom,buffer.the_geom)
+        `;
     const clippedSpecialPurposeDistricts = await carto.SQL(specialPurposeDistrictsQuery, 'geojson');
     this.set('model.proposedSpecialPurposeDistricts', clippedSpecialPurposeDistricts);
   }
