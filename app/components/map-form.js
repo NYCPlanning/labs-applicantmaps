@@ -110,6 +110,42 @@ const defaultLayerGroups = {
             paint: { 'text-color': 'rgba(33, 35, 38, 1)' },
           },
         },
+        {
+          style: {
+            id: 'block-labels',
+            type: 'symbol',
+            source: 'pluto',
+            'source-layer': 'block-centroids',
+            minzoom: 14,
+            maxzoom: 24,
+            layout: {
+              'text-field': '{block}',
+              'text-font': [
+                'Open Sans Bold',
+                'Arial Unicode MS Regular',
+              ],
+              'text-size': 22,
+            },
+            paint: {
+              'text-halo-color': 'rgba(255, 255, 255, 0.5)',
+              'text-halo-width': 1,
+              'text-color': 'rgba(121, 121, 121, 1)',
+              'text-halo-blur': 0,
+              'text-opacity': {
+                stops: [
+                  [
+                    14,
+                    0,
+                  ],
+                  [
+                    15,
+                    1,
+                  ],
+                ],
+              },
+            },
+          },
+        },
       ],
     },
     { id: 'street-direction-arrows', visible: true },
