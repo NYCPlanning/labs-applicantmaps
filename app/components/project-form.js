@@ -33,8 +33,6 @@ export default class ProjectFormComponent extends Component {
 
   geometryMode = null
 
-  drawInstruct = false
-
   @service
   router;
 
@@ -45,6 +43,8 @@ export default class ProjectFormComponent extends Component {
   lotSelectionMode = false
 
   isSelectingLots = false
+
+  hideDrawInstructions = false
 
   geocodedFeature = null;
 
@@ -188,13 +188,8 @@ export default class ProjectFormComponent extends Component {
   }
 
   @action
-  showDrawInstructions() {
-    this.set('drawInstruct', true);
-  }
-
-  @action
-  hideDrawInstructions() {
-    this.set('drawInstruct', false);
+  hideInstructions() {
+    this.set('hideDrawInstructions', true);
   }
 
   @action
