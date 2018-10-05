@@ -5,11 +5,11 @@ import { attr } from '@ember-decorators/data';
 import ApplicantMap from './applicant-map';
 
 export default class extends ApplicantMap {
-  @attr('string')
-  mapTypeLabel = 'Area Map';
+  @attr('string', { defaultValue: 'Area Map' })
+  mapTypeLabel;
 
-  @attr('string')
-  bufferSize = '600';
+  @attr('string', { defaultValue: '600' })
+  bufferSize;
 
   // union all geometries together, draw a 600 foot buffer around the union
   @computed('bufferSize')
