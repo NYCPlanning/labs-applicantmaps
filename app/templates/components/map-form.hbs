@@ -1,5 +1,4 @@
 {{#if mapConfiguration}}
-  {{log model}}
   <div class="cell sidebar">
     <h2 class="header-large">{{model.project.projectName}} {{model.mapTypeLabel}}</h2>
 
@@ -69,6 +68,30 @@
                 updateBounds=(action 'updateBounds')
                 saveProject=(action 'saveProject'))}}
             </div>
+
+              <div class="text-small">
+                <ul>
+                  {{#each mapConfiguration.sources as |source|}}
+                    <li>
+                      <p>
+                        {{#if source.meta.description}}
+                          <span class="dark-gray text-small"><strong>{{source.meta.description}}</strong></span>
+                        {{/if}}
+                        {{#if source.meta.url}}
+                          {{#each source.meta.url as |url|}}
+                            <span class="no-margin text-small"><a href="{{url}}" target="_blank">{{fa-icon 'external-link-alt'}}</a></span>
+                          {{/each}}
+                        {{/if}}
+                        {{#if source.meta.updated_at}}
+                          <span class="dark-gray text-small">Updated on: {{source.meta.updated_at}}</span>
+                        {{/if}}
+                      </p>
+                    </li>
+                  {{/each}}
+                </ul>
+              </div>
+
+
             <div class="cell auto">
               {{#if boundsPolygon}}
                 {{inset-map boundsPolygon=boundsPolygon}}
