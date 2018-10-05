@@ -117,7 +117,7 @@
             {{/if}}
 
 
-            {{#if (and model.project.proposedZoning)}}
+            {{#if model.project.proposedZoning}}
               {{#map.source options=(mapbox-geojson-source model.project.proposedZoning) as |source|}}
                 {{source.layer
                   layer=projectGeomLayers.proposedZoningLayer
@@ -131,8 +131,8 @@
             {{/if}}
 
             {{!-- Ad-hoc source and layer for showing commercial overlays --}}
-            {{#if (and model.proposedCommercialOverlays (not-eq geometryMode 'proposedCommercialOverlays'))}}
-              {{#map.source options=(mapbox-geojson-source model.proposedCommercialOverlays) as |source|}}
+            {{#if model.project.proposedCommercialOverlays}}
+              {{#map.source options=(mapbox-geojson-source model.project.proposedCommercialOverlays) as |source|}}
                 {{source.layer layer=projectGeomLayers.coLayer before='boundary_country'}}
                 {{source.layer layer=projectGeomLayers.c11Layer before='boundary_country'}}
                 {{source.layer layer=projectGeomLayers.c12Layer before='boundary_country'}}
@@ -148,8 +148,8 @@
             {{/if}}
 
             {{!-- Ad-hoc source and layer for showing commercial overlays --}}
-            {{#if (and model.proposedSpecialPurposeDistricts (not-eq geometryMode 'proposedSpecialPurposeDistricts'))}}
-              {{#map.source options=(mapbox-geojson-source model.proposedSpecialPurposeDistricts) as |source|}}
+            {{#if model.project.proposedSpecialPurposeDistricts}}
+              {{#map.source options=(mapbox-geojson-source model.project.proposedSpecialPurposeDistricts) as |source|}}
                 {{source.layer
                   layer=projectGeomLayers.proposedSpecialPurposeDistrictsLayer
                   before='boundary_country'
