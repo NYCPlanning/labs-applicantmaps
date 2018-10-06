@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 import { camelize } from '@ember/string';
+import { pluralize } from 'ember-inflector';
 
 export default class ProjectsEditMapRoute extends Route {
   @service
@@ -9,8 +10,9 @@ export default class ProjectsEditMapRoute extends Route {
 
   model({ mapType = 'area-map' }) {
     const project = this.modelFor('projects.edit');
+    const keyForLookup = pluralize(camelize(mapType));
 
-    return project.get(`${camelize(mapType)}.firstObject`)
+    return project.get(`${keyForLookup}.firstObject`)
       || this.store.createRecord(mapType, { project });
   }
 
