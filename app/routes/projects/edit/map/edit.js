@@ -1,13 +1,17 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
+import { camelize } from '@ember/string';
 
 export default class ProjectsEditMapRoute extends Route {
   @service
   notificationMessages;
 
-  model({ map_id }) {
-    return this.modelFor('projects.edit').get('applicantMaps').findBy('id', map_id);
+  model({ mapType = 'area-map' }) {
+    const project = this.modelFor('projects.edit');
+
+    return project.get(`${camelize(mapType)}.firstObject`)
+      || this.store.createRecord(mapType, { project });
   }
 
   deactivate() {

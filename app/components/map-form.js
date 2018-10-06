@@ -201,9 +201,6 @@ export default class MapFormComponent extends Component {
   store;
 
   @service
-  router;
-
-  @service
   notificationMessages
 
   mapConfiguration = null
@@ -390,7 +387,6 @@ export default class MapFormComponent extends Component {
   async saveProject() {
     const model = this.get('model');
     await model.save();
-    this.get('router').transitionTo('projects.edit.map.edit', model);
     this.get('notificationMessages').success('Map saved to project!');
   }
 }
