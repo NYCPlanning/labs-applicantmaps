@@ -36,6 +36,8 @@ export default class ProjectFormComponent extends Component {
 
   geometryMode = null
 
+  showDrawInstructions = true
+
   @service
   router;
 
@@ -260,6 +262,11 @@ export default class ProjectFormComponent extends Component {
         `;
     const clippedCommercialOverlays = await carto.SQL(commercialOverlaysQuery, 'geojson');
     this.set('model.proposedCommercialOverlays', clippedCommercialOverlays);
+  }
+
+  @action
+  hideInstructions() {
+    this.set('showDrawInstructions', false);
   }
 
 
