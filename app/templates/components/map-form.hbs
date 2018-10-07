@@ -79,6 +79,32 @@
             <div class="cell shrink legend">
               {{yield}}
             </div>
+
+            <section>
+              <div>
+                <h2 class="legend-section-header">Data Sources</h2>
+                <ul>
+                  {{#each mapConfiguration.sources as |source|}}
+                    <li>
+                      <p>
+                        {{#if source.meta.description}}
+                          <span class="dark-gray text-small"><strong>{{source.meta.description}}</strong></span>
+                        {{/if}}
+                        {{#if source.meta.url}}
+                          {{#each source.meta.url as |url|}}
+                            <span class="no-margin text-small"><a href="{{url}}" target="_blank">{{fa-icon 'external-link-alt'}}</a></span>
+                          {{/each}}
+                        {{/if}}
+                        {{#if source.meta.updated_at}}
+                          <span class="dark-gray text-small">Updated on: {{source.meta.updated_at}}</span>
+                        {{/if}}
+                      </p>
+                    </li>
+                  {{/each}}
+                </ul>
+              </div>
+            </section>
+
             <div class="cell auto">
               {{#if boundsPolygon}}
                 {{inset-map boundsPolygon=boundsPolygon}}
@@ -179,9 +205,8 @@
             {{map.on 'rotate' (action 'updateBounds')}}
           {{/labs-map}}
 
-          {{!-- TODO: print a real permalink --}}
-          <p class="text-tiny text-right">
-            <a href="">localhost:4200/projects/10/area-map</a>
+          <p class="text-medium text-right">
+            <a href="">{{projectURL}}</a>
           </p>
         </div>
 
