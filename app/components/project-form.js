@@ -269,6 +269,11 @@ export default class ProjectFormComponent extends Component {
     this.set('showDrawInstructions', false);
   }
 
+  @action
+  showInstructions() {
+    this.set('showDrawInstructions', true);
+  }
+
 
   @action
   async getClippedSpecialPurposeDistricts() {

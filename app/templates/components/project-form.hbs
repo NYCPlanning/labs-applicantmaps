@@ -123,15 +123,17 @@
         {{bbl-lookup flyTo=(action 'flyTo')}}
       </div>
 
-      {{log geometryMode}}
-
       {{#if (and (not-eq geometryMode null) (eq isSelectingLots false))}}
         {{#if (eq showDrawInstructions true)}}
           <div class="text-small draw-instruction-box">
-            <div class="content-close-button-container" onclick={{action 'hideInstructions'}}>{{fa-icon 'window-close'}}</div>
-            Click on the map to begin drawing, finish drawing by double clicking.
+            <button class="hide-instructions-button" onclick={{action 'hideInstructions'}}>{{fa-icon 'chevron-circle-left'}}</button>
+            <br>Click on the map to begin drawing, finish drawing by double clicking.
             To edit the boundary, select the vertices of the shape and drag to a new location.
             Delete your drawing by clicking on the trash button on the draw controls to the left.
+          </div>
+        {{else}}
+          <div>
+              <button class="draw-instruction-short-box" onclick={{action 'showInstructions'}}>{{fa-icon 'comment-alt'}}</button>
           </div>
         {{/if}}
       {{/if}}

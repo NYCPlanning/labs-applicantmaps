@@ -331,7 +331,31 @@
     left: 70px;
     z-index: 6;
     overflow: visible;
-    background-color: rgba(255, 255, 255, .7);
-    padding: 15px;
+    background-color: rgba(255, 255, 255, .9);
+    border: 5px solid rgba(253, 238, 198, 1);
+    padding: 10px;
     text-align: center;
+}
+
+.draw-instruction-short-box {
+    height: 25px;
+    width: 30px;
+    position: absolute;
+    top: 80px;
+    left: 50px;
+    z-index: 6;
+    overflow: visible;
+    background-color: rgba(255, 255, 255, 1);
+    border: 2px solid rgba(253, 238, 198, 1);
+    text-align: center;
+    &:hover {
+      background-color: rgba(243, 243, 243, 1);
+    }
+  }
+
+  .hide-instructions-button {
+    font-size: 15px;
+    &:hover {
+      color: rgba(163, 90, 45, 1);
+  }
 }

@@ -27,9 +27,6 @@ export default class DrawControlController extends Component {
   tooltip
 
   @argument
-  showDrawInstructions = false
-
-  @argument
   modeDisplayName
 
   @argument
@@ -115,7 +112,6 @@ export default class DrawControlController extends Component {
   @action
   toggleGeometryEditing(mode) {
     this.set('geometryMode', mode);
-    this.set('showDrawInstructions', true);
 
     const geometryMode = this.get('geometryMode');
 
