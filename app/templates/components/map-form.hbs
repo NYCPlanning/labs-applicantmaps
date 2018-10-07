@@ -80,29 +80,31 @@
               {{yield}}
             </div>
 
-            <section>
-              <div>
-                <h2 class="legend-section-header">Data Sources</h2>
-                <ul>
-                  {{#each mapConfiguration.sources as |source|}}
-                    <li>
-                      <p>
-                        {{#if source.meta.description}}
-                          <span class="dark-gray text-small"><strong>{{source.meta.description}}</strong></span>
-                        {{/if}}
-                        {{#if source.meta.url}}
-                          {{#each source.meta.url as |url|}}
-                            <span class="no-margin text-small"><a href="{{url}}" target="_blank">{{fa-icon 'external-link-alt'}}</a></span>
-                          {{/each}}
-                        {{/if}}
-                        {{#if source.meta.updated_at}}
-                          <span class="dark-gray text-small">Updated on: {{source.meta.updated_at}}</span>
-                        {{/if}}
-                      </p>
-                    </li>
-                  {{/each}}
-                </ul>
-              </div>
+            <section class="legend-section">
+              <h2 class="legend-section-header">Data Sources</h2>
+                <div class="grid-x">
+                    <ul>
+                      {{#each mapConfiguration.sources as |source|}}
+                        <div class="data-sources-list">
+                            <li>
+                              <p>
+                                {{#if source.meta.description}}
+                                  <span class="dark-gray"><strong>{{source.meta.description}}</strong></span>
+                                {{/if}}
+                                {{#if source.meta.url}}
+                                  {{#each source.meta.url as |url|}}
+                                    <span class="no-margin"><a href="{{url}}" target="_blank">{{fa-icon 'external-link-alt'}}</a></span>
+                                  {{/each}}
+                                {{/if}}
+                                {{#if source.meta.updated_at}}
+                                  <span class="dark-gray">Updated on: {{source.meta.updated_at}}</span>
+                                {{/if}}
+                              </p>
+                            </li>
+                        </div>
+                      {{/each}}
+                    </ul>
+                </div>
             </section>
 
             <div class="cell auto">
