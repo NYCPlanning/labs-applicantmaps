@@ -17,6 +17,6 @@ module('Acceptance | user can click to add different project map types', functio
     await visit('/projects/10');
     await click('.map-type-area-map');
 
-    assert.equal(currentURL(), '/projects/10/edit/map/new?mapType=area-map');
+    assert.equal(currentURL(), '/projects/10/edit/map/edit');
   });
 });
