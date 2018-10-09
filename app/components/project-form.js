@@ -47,8 +47,6 @@ export default class ProjectFormComponent extends Component {
 
   lotSelectionMode = false
 
-  isSelectingLots = false
-
   geocodedFeature = null;
 
   geocodedLayer = {
