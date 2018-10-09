@@ -131,8 +131,8 @@ body {
 .content-close-button-container {
   position: relative;
   z-index: 4;
-  box-shadow: 0 -2px 0 rgba(0,0,0,0.1);
-  background-color: $body-background;
+  // box-shadow: 0 -2px 0 rgba(0,0,0,0.1);
+  background-color: rgba(255, 255, 255, 0);;
   text-align: right;
   padding: $global-margin $global-margin 0;
 

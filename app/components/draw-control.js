@@ -24,6 +24,9 @@ export default class DrawControlController extends Component {
   mode
 
   @argument
+  tooltip
+
+  @argument
   modeDisplayName
 
   @argument
