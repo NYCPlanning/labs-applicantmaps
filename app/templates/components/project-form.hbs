@@ -2,7 +2,13 @@
 
   <h2 class="header-medium">Create New Project</h2>
 
-  <label class="text-small">Project Name {{#unless model.projectName}}<strong class="red">{{fa-icon 'asterisk' transform='shrink-4'}}</strong>{{/unless}}
+  <label class="text-small">Project Name
+    {{#unless model.projectName}}
+      <strong class="red">{{fa-icon 'asterisk' transform='shrink-4'}}</strong>
+    {{/unless}}
+    <sup>
+      {{icon-tooltip tip='Please use the name provided at the Informational Meeting with the Department of City Planning or the Project Address.'}}
+    </sup>
     {{input type="text" class='project-name-field' value=model.projectName}}
   </label>
 
@@ -11,6 +17,9 @@
   </label>
 
   <label class="text-small">Project Number
+    <sup>
+      {{icon-tooltip tip='The Project Number refers to the unique code provided for a project following an Informational Interest Meeting with the Department of City Planning.'}}
+    </sup>
     {{input type="text" class='zap-project-id-field' value=model.zapProjectId}}
   </label>
 
@@ -32,6 +41,7 @@
       {{menu.draw-control
         mode='developmentSite'
         modeDisplayName='Development Site'
+        tooltip="The Development Site refers to the zoning lot(s) to be improved by the specific development(s) that the land use actions would facilitate."
         hasGeom=model.developmentSite
         required=true
         doneAction=(action 'addProposedZoning')
@@ -41,6 +51,7 @@
       {{menu.draw-control
         mode='projectArea'
         modeDisplayName='Project Area'
+        tooltip="The Project Area refers to all properties that would be subject to the proposed actions. The Project Area should only be used if it is larger than the Development Site."
         hasGeom=model.projectArea
         disabled=noDevelopmentSite
       }}
@@ -76,6 +87,7 @@
       {{menu.draw-control
         mode='rezoningArea'
         modeDisplayName='Rezoning Area'
+        tooltip="When drawing, the Rezoning Area Boundary should be graphically offset from the proposed Zoning District Boundaries. This area refers to all property subject to the proposed amendment to existing Zoning Districts and Boundaries."
         hasGeom=model.rezoningArea
         disabled=noDevelopmentSite
       }}
@@ -110,6 +122,21 @@
         {{/labs-search}}
         {{bbl-lookup flyTo=(action 'flyTo')}}
       </div>
+
+      {{#if (and (not-eq geometryMode null) (eq isSelectingLots false))}}
+        {{#if (eq showDrawInstructions true)}}
+          <div class="text-small draw-instruction-box">
+            <button class="hide-instructions-button" onclick={{action 'hideInstructions'}}>{{fa-icon 'chevron-circle-left'}}</button>
+            <br>Click on the map to begin drawing, finish drawing by double clicking.
+            To edit the boundary, select the vertices of the shape and drag to a new location.
+            Delete your drawing by clicking on the trash button on the draw controls to the left.
+          </div>
+        {{else}}
+          <div>
+              <button class="draw-instruction-short-box" onclick={{action 'showInstructions'}}>{{fa-icon 'comment-alt'}}</button>
+          </div>
+        {{/if}}
+      {{/if}}
 
       {{#if geocodedFeature}}
         {{#map.source options=geocodedFeature as |source|}}
