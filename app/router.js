@@ -12,8 +12,7 @@ Router.map(function () { // eslint-disable-line
     this.route('new');
     this.route('edit', { path: ':project_id/edit' }, function () {
       this.route('map', function () {
-        this.route('new');
-        this.route('edit', { path: 'edit/:map_id' });
+        this.route('edit');
       });
     });
   });

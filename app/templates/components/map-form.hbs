@@ -44,7 +44,7 @@
 
     <div class="grid-x grid-margin-x align-middle">
       {{#link-to "projects.show" model.project class="cell shrink button small clear"}}{{fa-icon 'arrow-left'}} Go Back to Project{{/link-to}}
-      <button class="cell auto button green project-save-button" type="button" onclick={{action 'saveProject'}}>Save Map</button>
+      <button class="cell auto button green project-save-button" type="button" onclick={{action 'saveProject'}} disabled={{not model.hasDirtyAttributes}}>Save Map</button>
     </div>
 
     <hr/>
