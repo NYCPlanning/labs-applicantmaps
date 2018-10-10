@@ -317,45 +317,68 @@
                 inset -4px -4px 0 $a11y-yellow,
                 inset 0 2px 0 $a11y-yellow;
   }
+
+  // &.active {
+  //   background-color: $a11y-yellow;
+  // }
 }
 
 // Draw instruction box
 // ---------------------------------------------
+.draw-instructions {
+  position: absolute;
+  top: 90px;
+  left: 55px;
+  z-index: 2;
+  width: 14rem;
+  max-width: 25%;
+  overflow: visible;
+  background-color: $off-white;
+  border: 4px solid $a11y-yellow;
+  padding: rem-calc(10) rem-calc(4) rem-calc(6);
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
 
+  ul {
+    margin-bottom: 0;
 
-.draw-instruction-box {
-    height: 270px;
-    width: 188px;
-    position: absolute;
-    top: 80px;
-    left: 70px;
-    z-index: 6;
-    overflow: visible;
-    background-color: rgba(255, 255, 255, .9);
-    border: 5px solid rgba(253, 238, 198, 1);
-    padding: 10px;
-    text-align: center;
-}
-
-.draw-instruction-short-box {
-    height: 25px;
-    width: 30px;
-    position: absolute;
-    top: 80px;
-    left: 50px;
-    z-index: 6;
-    overflow: visible;
-    background-color: rgba(255, 255, 255, 1);
-    border: 2px solid rgba(253, 238, 198, 1);
-    text-align: center;
-    &:hover {
-      background-color: rgba(243, 243, 243, 1);
+    li {
+      margin-bottom: rem-calc(6);
     }
   }
-
-  .hide-instructions-button {
-    font-size: 15px;
-    &:hover {
-      color: rgba(163, 90, 45, 1);
-  }
 }
+
+.draw-instructions-button {
+    position: absolute;
+    top: 86px;
+    left: 56px;
+    z-index: 3;
+    height: 28px;
+    overflow: visible;
+    color: $blue-dark;
+    background-color: $a11y-yellow;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    padding: rem-calc(4) rem-calc(5);
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+
+    &:hover {
+      color: $black;
+    }
+
+    &::after,
+    &::before {
+      content: '';
+      position: absolute;
+      top: 100%;
+      right: 100%;
+      height: 4px;
+      width: 4px;
+      margin-right: -2px;
+      background-color: $a11y-yellow;
+    }
+
+    &::before {
+      margin-right: 0;
+      margin-top: -2px;
+    }
+  }
