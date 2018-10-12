@@ -3,68 +3,41 @@ import { action, computed } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { next } from '@ember/runloop';
-import turfBbox from 'npm:@turf/bbox';
+import turfBbox from '@turf/bbox';
 import mapboxgl from 'mapbox-gl';
-
-const developmentSiteLayer = {
-  id: 'development-site-line',
-  type: 'line',
-  paint: {
-    'line-width': 2,
-    'line-color': 'red',
-  },
-};
-
-const projectAreaLayer = {
-  id: 'project-area-line',
-  type: 'line',
-  layout: {
-    visibility: 'visible',
-    'line-cap': 'round',
-  },
-  paint: {
-    'line-width': 3,
-    'line-dasharray': [
-      0,
-      2,
-    ],
-  },
-};
-
-const projectBufferLayer = {
-  id: 'project-buffer-line',
-  type: 'line',
-  paint: {
-    'line-color': 'rgba(122, 0, 72, 1)',
-    'line-width': 3,
-    'line-dasharray': [
-      0.75,
-      0.75,
-    ],
-  },
-};
+import projectGeomLayers from '../utils/project-geom-layers';
 
 const defaultLayerGroups = {
   'layer-groups': [
     {
-      id: 'tax-lots',
+      id: 'subway',
       visible: true,
       layers: [
+        {}, // subway_green
+        {}, // subway_yellow
+        {}, // subway_gray
+        {}, // subway_brown
+        {}, // subway_light_green
+        {}, // subway_orange
+        {}, // subway_blue
+        {}, // subway_purple
+        {}, // subway_red
+        {}, // subway_stations
+        {}, // subway_stations_labels
         {
           style: {
-            paint: { 'fill-opacity': 0.5 },
-            minzoom: 8,
+            paint: {
+              'circle-stroke-width': 1.5,
+            },
           },
-          tooltipable: false,
-          highlightable: false,
-        },
-        {},
+        }, // subway_entrances
         {
           style: {
-            layout: { 'text-field': '{numfloors}' },
-            paint: { 'text-color': 'rgba(33, 35, 38, 0.9)' },
+            paint: {
+              'text-opacity': 0,
+            },
           },
-        },
+        }, // subway_entrances_labels
       ],
     },
     {
@@ -82,25 +55,129 @@ const defaultLayerGroups = {
         },
       ],
     },
-    { id: 'subway', visible: true },
     { id: 'special-purpose-districts', visible: false },
     {
       id: 'citymap',
       visible: true,
       layers: [
-        {}, // citymap-mapped-streets-line
+        {
+          style: {
+            paint: {
+              'line-color': 'rgba(0,0,0,0.9)',
+              'line-width': 2,
+            },
+          },
+        }, // citymap-mapped-streets-line
         { tooltipable: false }, // citymap-streets-tooltip-line
         {}, // citymap-street-treatments-line
         {}, // citymap-underpass-tunnel-line
         {}, // citymap-street-not-mapped-line
         { tooltipable: false }, // borough-boundaries
         {}, // citymap-underpass-tunnel-line
-        { tooltipable: false }, // railway-lines
-        {}, // railway-cross-lines
+        {
+          style: {
+            paint: {
+              'line-color': 'rgba(0,0,0,0)',
+            },
+          },
+          tooltipable: false,
+        }, // railway-lines
+        {
+          style: {
+            paint: {
+              'line-color': 'rgba(0,0,0,0)',
+            },
+          },
+        }, // railway-cross-lines
+      ],
+    },
+    {
+      id: 'tax-lots',
+      visible: true,
+      layers: [
+        {
+          style: {
+            paint: { 'fill-opacity': 0.5 },
+            minzoom: 8,
+          },
+          tooltipable: false,
+          highlightable: false,
+        },
+        {},
+        {
+          style: {
+            layout: { 'text-field': '{numfloors}' },
+            paint: { 'text-color': 'rgba(33, 35, 38, 1)' },
+          },
+        },
+        {
+          style: {
+            id: 'block-labels',
+            type: 'symbol',
+            source: 'pluto',
+            'source-layer': 'block-centroids',
+            minzoom: 14,
+            maxzoom: 24,
+            layout: {
+              'text-field': '{block}',
+              'text-font': [
+                'Open Sans Bold',
+                'Arial Unicode MS Regular',
+              ],
+              'text-size': 22,
+            },
+            paint: {
+              'text-halo-color': 'rgba(255, 255, 255, 0.5)',
+              'text-halo-width': 1,
+              'text-color': 'rgba(121, 121, 121, 1)',
+              'text-halo-blur': 0,
+              'text-opacity': {
+                stops: [
+                  [
+                    14,
+                    0,
+                  ],
+                  [
+                    15,
+                    1,
+                  ],
+                ],
+              },
+            },
+          },
+        },
       ],
     },
     { id: 'street-direction-arrows', visible: true },
-    { id: 'commercial-overlay-patterns', visible: true },
+    // { id: 'commercial-overlay-patterns', visible: true },
+    {
+      id: 'street-centerlines',
+      visible: true,
+      layers: [
+        {},
+        {
+          before: 'place_country_major',
+          style: {
+            id: 'citymap-street-centerlines-line',
+            type: 'line',
+            source: 'digital-citymap',
+            'source-layer': 'street-centerlines',
+            metadata: {
+              'nycplanninglabs:layergroupid': 'street-centerlines',
+            },
+            minzoom: 13,
+            paint: {
+              'line-dasharray': [
+                5,
+                3,
+              ],
+              'line-color': 'rgba(193, 193, 193, 1)',
+              'line-width': 0.5,
+            },
+          },
+        },
+      ],
+    },
   ],
 };
 
@@ -120,47 +197,29 @@ export default class MapFormComponent extends Component {
     });
   }
 
-  boundsPolygon = null
-
-  mapPitch = null
-
-  mapBearing = null
-
-  paperSize = 'tabloid'
-
-  paperOrientation = 'landscape'
-
-  @argument customLayerGroupQuery = null;
-
   @service
   store;
 
   @service
-  router;
+  notificationMessages
+
+  mapConfiguration = null
+
+  mapInstance = null
+
+  boundsPolygon = null
+
+  @argument
+  customLayerGroupQuery = null;
 
   @argument
   model = null;
 
-  @service
-  notificationMessages;
-
-  mapConfiguration = null;
-
-  developmentSiteLayer = developmentSiteLayer
-
-  projectAreaLayer = projectAreaLayer
-
-  projectBufferLayer = projectBufferLayer
-
-  mapInstance = null
-
-  mapPitch = null
-
-  mapBearing = null
+  projectGeomLayers = projectGeomLayers;
 
   @computed('mapBearing', 'mapPitch')
   get northArrowTransforms() {
-    const bearing = this.get('mapBearing');
+    const bearing = this.get('model.mapBearing');
     const pitch = this.get('mapPitch');
 
     return {
@@ -173,7 +232,6 @@ export default class MapFormComponent extends Component {
   @action
   handleMapLoaded(map) {
     this.set('mapInstance', map);
-
     this.fitBoundsToBuffer();
     this.updateBounds();
     this.toggleMapInteractions();
@@ -182,6 +240,7 @@ export default class MapFormComponent extends Component {
     map.addControl(scaleControl, 'bottom-left');
 
     const basemapLayersToHide = [
+      'background',
       'highway_path',
       'highway_minor',
       'highway_major_casing',
@@ -192,8 +251,8 @@ export default class MapFormComponent extends Component {
       'highway_motorway_subtle',
       'highway_motorway_bridge_casing',
       'highway_motorway_bridge_inner',
-      // 'highway_name_other',
-      // 'highway_name_motorway',
+      'highway_name_other',
+      'highway_name_motorway',
       'tunnel_motorway_casing',
       'tunnel_motorway_inner',
       'railway_transit',
@@ -233,17 +292,29 @@ export default class MapFormComponent extends Component {
         },
       },
     });
+    this.set('model.boundsPolygon', {
+      type: 'Polygon',
+      coordinates: [[cUL, cUR, cLR, cLL, cUL]],
+      crs: {
+        type: 'name',
+        properties: {
+          name: 'EPSG:4326',
+        },
+      },
+    });
 
     this.set('mapBearing', map.getBearing());
+    this.set('model.mapBearing', map.getBearing());
     this.set('mapPitch', map.getPitch());
   }
 
   @action
   reorientPaper(orientation) {
-    this.set('paperOrientation', orientation);
+    this.set('model.paperOrientation', orientation);
     next(() => {
       // not supported in IE 11
       window.addEventListener('resize', () => {
+        this.fitBoundsToBuffer();
         this.updateBounds();
       });
       // not supported in IE 11
@@ -253,10 +324,11 @@ export default class MapFormComponent extends Component {
 
   @action
   scalePaper(size) {
-    this.set('paperSize', size);
+    this.set('model.paperSize', size);
     next(() => {
       // not supported in IE 11
       window.addEventListener('resize', () => {
+        this.fitBoundsToBuffer();
         this.updateBounds();
       });
       // not supported in IE 11
@@ -266,16 +338,21 @@ export default class MapFormComponent extends Component {
 
   @action
   fitBoundsToBuffer() {
-    const buffer = this.get('model.project.projectGeometryBuffer');
+    const buffer = this.get('model.projectGeometryBuffer');
     const map = this.get('mapInstance');
+    const bearing = this.get('model.mapBearing');
 
-    map.setBearing(0);
-    map.fitBounds(turfBbox.default(buffer), {
+    map.fitBounds(turfBbox(buffer), {
       padding: 50,
       duration: 0,
     });
 
+    map.setBearing(bearing);
     this.updateBounds();
+    const mapZoom = map.getZoom();
+    this.set('model.mapZoom', mapZoom);
+    const mapCenter = map.getCenter();
+    this.set('model.mapCenter', mapCenter);
   }
 
   @action
@@ -306,22 +383,10 @@ export default class MapFormComponent extends Component {
     }
   }
 
-  // TODO for some reason I have to pass in the projectArea instead
-  // of just calling this.get('projectAreaSource') ('this' is not available in the action)
   @action
-  handleMapLoad(projectArea, map) { // eslint-disable-line
-    window.map = map;
-
-    map.fitBounds(turfBbox.default(projectArea), {
-      padding: 100,
-    });
-  }
-
-  @action
-  async saveProject(model) {
-    const map = await model.save();
-
-    this.get('notificationMessages').success('Map added!');
-    this.get('router').transitionTo('projects.show', map.get('project'));
+  async saveProject() {
+    const model = this.get('model');
+    await model.save();
+    this.get('notificationMessages').success('Map saved to project!');
   }
 }

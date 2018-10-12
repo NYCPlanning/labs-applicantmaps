@@ -1,9 +1,7 @@
 import DS from 'ember-data';
 import { attr, hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
-import turfBuffer from 'npm:@turf/buffer';
-import turfUnion from 'npm:@turf/union';
-import turfBbox from 'npm:@turf/bbox';
+import turfBbox from '@turf/bbox';
 import { camelize } from '@ember/string';
 import config from '../config/environment';
 
@@ -12,12 +10,10 @@ const { Model } = DS;
 
 const requiredFields = [
   'projectName',
-  'applicantName',
   'developmentSite',
-  'projectArea',
 ];
 
-export default class ProjectModel extends Model.extend({}) {
+export default class extends Model {
   @hasMany('area-map', { async: false }) areaMaps;
 
   @hasMany('tax-map', { async: false }) taxMaps;
@@ -37,6 +33,12 @@ export default class ProjectModel extends Model.extend({}) {
   @attr() developmentSite
 
   @attr() rezoningArea
+
+  @attr() proposedZoning
+
+  @attr() proposedCommercialOverlays
+
+  @attr() proposedSpecialPurposeDistricts
 
   @attr('string') projectName;
 
@@ -87,26 +89,6 @@ export default class ProjectModel extends Model.extend({}) {
         features: [],
       });
 
-    return turfBbox.default(featureCollection);
-  }
-
-  // union all geometries together, draw a 600 foot buffer around the union
-  @computed('developmentSite', 'projectArea', 'rezoningArea')
-  get projectGeometryBuffer() {
-    const geometries = this.getProperties('developmentSite', 'projectArea', 'rezoningArea');
-
-    const projectGeometryUnion = Object.values(geometries).reduce((union, geometry) => {
-      if (geometry) {
-        if (union === null) {
-          union = geometry;
-        } else {
-          union = turfUnion.default(union, geometry);
-        }
-      }
-
-      return union;
-    }, null);
-
-    return turfBuffer(projectGeometryUnion, 0.113636, { units: 'miles' });
+    return turfBbox(featureCollection);
   }
 }

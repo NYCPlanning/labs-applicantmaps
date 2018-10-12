@@ -7,13 +7,25 @@ const { Model } = DS;
   Abstract base class for applicant maps. Specific types
   can be found under ./maps
 */
-export default class ApplicantMapModel extends Model.extend({}) {
+export default class extends Model {
   // area, tax, zoning change, zoning section
   @attr('string') type;
 
+  @attr('string', { defaultValue: 'landscape' }) paperOrientation;
+
+  @attr('string', { defaultValue: 'tabloid' }) paperSize;
+
+  @attr('string') type;
+
+  @attr('number', { defaultValue: 0 }) mapBearing;
+
+  @attr() boundsPolygon;
+
   @attr() toggledLayers;
 
-  @attr() center;
+  @attr() mapCenter;
+
+  @attr('number') mapZoom;
 
   @belongsTo('project') project;
 }

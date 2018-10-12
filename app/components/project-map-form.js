@@ -15,14 +15,72 @@ export default class ProjectMapFormComponent extends Component {
             { tooltipable: true, tooltipTemplate: '{{address}} (BBL: {{bbl}})' },
             {},
             { style: { layout: { 'text-field': '{numfloors}' } } },
+            {
+              style: {
+                id: 'block-labels',
+                type: 'symbol',
+                source: 'pluto',
+                'source-layer': 'block-centroids',
+                minzoom: 14,
+                maxzoom: 24,
+                layout: {
+                  'text-field': '{block}',
+                  'text-font': [
+                    'Open Sans Bold',
+                    'Arial Unicode MS Regular',
+                  ],
+                  'text-size': 22,
+                },
+                paint: {
+                  'text-halo-color': 'rgba(255, 255, 255, 0.5)',
+                  'text-halo-width': 1,
+                  'text-color': 'rgba(121, 121, 121, 1)',
+                  'text-halo-blur': 0,
+                  'text-opacity': {
+                    stops: [
+                      [
+                        14,
+                        0,
+                      ],
+                      [
+                        15,
+                        1,
+                      ],
+                    ],
+                  },
+                },
+              },
+            },
           ],
         },
         {
           id: 'zoning-districts',
           visible: true,
           layers: [
-            { highlightable: false, tooltipable: false },
-            { tooltipable: false },
+            {
+              highlightable: false,
+              tooltipable: false,
+              style: {
+                paint: {
+                  'fill-opacity': 0,
+                },
+              },
+            },
+            {
+              tooltipable: false,
+              style: {
+                paint: {
+                  'line-opacity': 0.05,
+                },
+              },
+            },
+            {
+              style: {
+                paint: {
+                  'text-opacity': 0,
+                },
+              },
+            },
           ],
         },
         {

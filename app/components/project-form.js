@@ -4,6 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { tagName } from '@ember-decorators/component';
+import carto from 'cartobox-promises-utility/utils/carto';
 import projectGeomLayers from '../utils/project-geom-layers';
 
 const selectedLotsLayer = {
@@ -14,10 +15,13 @@ const selectedLotsLayer = {
   },
 };
 
+const bufferMeters = 500;
+
 @tagName('')
 export default class ProjectFormComponent extends Component {
   constructor(...args) {
     super(...args);
+
     this.set('selectedLots', {
       type: 'FeatureCollection',
       features: [],
@@ -32,6 +36,8 @@ export default class ProjectFormComponent extends Component {
 
   geometryMode = null
 
+  showDrawInstructions = true
+
   @service
   router;
 
@@ -40,8 +46,6 @@ export default class ProjectFormComponent extends Component {
   selectedLotsLayer = selectedLotsLayer
 
   lotSelectionMode = false
-
-  isSelectingLots = false
 
   geocodedFeature = null;
 
@@ -84,12 +88,26 @@ export default class ProjectFormComponent extends Component {
     return [this.get('lat'), this.get('lng')];
   }
 
+  @computed('model.developmentSite')
+  get noDevelopmentSite() {
+    return !this.get('model.developmentSite');
+  }
+
   @computed('selectedLots.features.[]')
   get selectedLotsSource() {
     const selectedLots = this.get('selectedLots');
     return {
       type: 'geojson',
       data: selectedLots,
+    };
+  }
+
+  @computed('proposedZoning.features.[]')
+  get proposedZoningSource() {
+    const proposedZoning = this.get('proposedZoning');
+    return {
+      type: 'geojson',
+      data: proposedZoning,
     };
   }
 
@@ -190,5 +208,90 @@ export default class ProjectFormComponent extends Component {
     this.get('mapInstance').flyTo({ center, zoom });
     // Turn on the Tax Lots layer group
     this.set('tax-lots', true);
+  }
+
+  @action
+  addProposedZoning() {
+    this.getClippedZoning();
+    this.getClippedCommercialOverlays();
+    this.getClippedSpecialPurposeDistricts();
+  }
+
+  @action
+  async getClippedZoning() {
+    // get the project's development site polygon as a reference for what area of the city to get zoning polygons for
+    const developmentSite = this.get('model.developmentSite');
+
+    // Get zoning districts
+    const zoningQuery = `
+      WITH buffer as (
+        SELECT ST_SetSRID(
+          ST_Buffer(
+            ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
+            ${bufferMeters}
+          ),
+        4326)::geometry AS the_geom
+      )
+      SELECT ST_Intersection(zoning.the_geom, buffer.the_geom) AS the_geom, zonedist AS label
+      FROM planninglabs.zoning_districts_v201809 zoning, buffer
+      WHERE ST_Intersects(zoning.the_geom,buffer.the_geom)
+    `;
+    const clippedZoningDistricts = await carto.SQL(zoningQuery, 'geojson');
+    this.set('model.proposedZoning', clippedZoningDistricts);
+  }
+
+  @action
+  async getClippedCommercialOverlays() {
+    const developmentSite = this.get('model.developmentSite');
+
+    // Get commercial overlays
+    const commercialOverlaysQuery = `
+          WITH buffer as (
+            SELECT ST_SetSRID(
+              ST_Buffer(
+                ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
+                ${bufferMeters}
+              ),
+            4326)::geometry AS the_geom
+          )
+          SELECT ST_Intersection(co.the_geom, buffer.the_geom) AS the_geom, overlay AS label
+          FROM planninglabs.commercial_overlays_v201809 co, buffer
+          WHERE ST_Intersects(co.the_geom,buffer.the_geom)
+        `;
+    const clippedCommercialOverlays = await carto.SQL(commercialOverlaysQuery, 'geojson');
+    this.set('model.proposedCommercialOverlays', clippedCommercialOverlays);
+  }
+
+  @action
+  hideInstructions() {
+    this.set('showDrawInstructions', false);
+  }
+
+  @action
+  showInstructions() {
+    this.set('showDrawInstructions', true);
+  }
+
+
+  @action
+  async getClippedSpecialPurposeDistricts() {
+    const developmentSite = this.get('model.developmentSite');
+
+    // Get special purpose districts
+    const specialPurposeDistrictsQuery = `
+          WITH buffer as (
+            SELECT ST_SetSRID(
+              ST_Buffer(
+                ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
+                ${bufferMeters}
+              ),
+            4326)::geometry AS the_geom
+          )
+          SELECT ST_Intersection(spd.the_geom, buffer.the_geom) AS the_geom, sdname AS label
+          FROM planninglabs.special_purpose_districts_v201809 spd, buffer
+          WHERE ST_Intersects(spd.the_geom,buffer.the_geom)
+        `;
+    const clippedSpecialPurposeDistricts = await carto.SQL(specialPurposeDistrictsQuery, 'geojson');
+    this.set('model.proposedSpecialPurposeDistricts', clippedSpecialPurposeDistricts);
   }
 }

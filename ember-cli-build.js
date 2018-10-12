@@ -14,6 +14,9 @@ module.exports = function (defaults) {
       enabled: true,
       extensions: ['js'],
     },
+    'ember-cli-babel': {
+      includePolyfill: true,
+    },
   });
 
   // Use `app.import` to add additional libraries to the generated

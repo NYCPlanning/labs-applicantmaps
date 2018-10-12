@@ -30,7 +30,7 @@ export default {
   },
 
   rezoningArea: {
-    label: 'Development Site',
+    label: 'Rezoning Area',
     icon: {
       type: 'rectangle',
       layers: [

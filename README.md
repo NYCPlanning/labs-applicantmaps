@@ -37,8 +37,18 @@ Make use of the many generators for code, try `ember help generate` for more det
 * `ember test`
 * `ember test --server`
 
+### Browserstack testing
+
+See full documentation here: https://github.com/kategengler/ember-cli-browserstack#how-to-set-up-automated-testing-with-browserstack-using-this-addon
+
+* Setup your .env with browserstack information
+* Run `ember browserstack:connect`
+* Run your test server `ember test`
+* Run `ember browserstack:disconnect` When done
+
 ### Linting
 
+* `npm run lint:hbs`
 * `npm run lint:js`
 * `npm run lint:js -- --fix`
 
