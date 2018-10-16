@@ -4,7 +4,7 @@ const developmentSiteLayer = {
   type: 'line',
   paint: {
     'line-color': 'rgba(237, 18, 18, 1)',
-    'line-width': 4,
+    'line-width': 4.5,
     'line-dasharray': [2.5, 1, 1, 1],
   },
 };
@@ -271,15 +271,6 @@ const proposedSpecialPurposeDistrictsLabelsLayer = {
 
 
 export default {
-  developmentSiteLayer,
-  developmentSiteIcon,
-  projectAreaLayer,
-  projectAreaIcon,
-  rezoningAreaLayer,
-  rezoningAreaIcon,
-  projectBufferLayer,
-  proposedZoningLayer,
-  proposedZoningLabelsLayer,
   coLayer,
   c11Layer,
   c12Layer,
@@ -291,6 +282,15 @@ export default {
   c23Layer,
   c24Layer,
   c25Layer,
+  developmentSiteLayer,
+  developmentSiteIcon,
+  projectAreaLayer,
+  projectAreaIcon,
+  rezoningAreaLayer,
+  rezoningAreaIcon,
+  projectBufferLayer,
+  proposedZoningLayer,
+  proposedZoningLabelsLayer,
   proposedSpecialPurposeDistrictsLayer,
   proposedSpecialPurposeDistrictsLabelsLayer,
 };
