@@ -81,30 +81,14 @@
             </div>
 
             <section class="legend-section">
-              <h2 class="legend-section-header">Data Sources</h2>
-                <div class="grid-x">
-                    <ul>
-                      {{#each mapConfiguration.sources as |source|}}
-                        <div class="data-sources-list">
-                            <li>
-                              <p>
-                                {{#if source.meta.description}}
-                                  <span class="dark-gray">{{source.meta.description}}</span>
-                                {{/if}}
-                                {{#if source.meta.url}}
-                                  {{#each source.meta.url as |url|}}
-                                    <span class="no-margin"><a href="{{url}}" target="_blank">{{fa-icon 'external-link-alt'}}</a></span>
-                                  {{/each}}
-                                {{/if}}
-                                {{#if source.meta.updated_at}}
-                                  <span class="dark-gray">Updated on: {{source.meta.updated_at}}</span>
-                                {{/if}}
-                              </p>
-                            </li>
-                        </div>
-                      {{/each}}
-                    </ul>
-                </div>
+              <div>
+                <h2 class="legend-section-header">Sourced Data:</h2>
+                  {{#each mapConfiguration.sources as |source|}}
+                        {{~if source.id " "}}<strong><span class="dark-gray text-small">{{source.id}}</span></strong>
+                        {{~if source.meta.updated_at ", "}}<span class="dark-gray text-small">updated on {{source.meta.updated_at}};</span>
+                  {{/each}}
+                  <span class="text-small"><a href="https://layers-api.planninglabs.nyc/v1/sources" target="_blank">https://layers-api.planninglabs.nyc/v1/sources</a></span>
+              </div>
             </section>
 
             <div class="cell auto">
