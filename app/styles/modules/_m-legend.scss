@@ -18,11 +18,19 @@
 .legend-section-header {
   font-size: 12pt;
   margin-bottom: rem-calc(6);
+
+  .paper.letter & {
+    font-size: 10pt;
+  }
 }
 
 .legend-item {
   font-size: 8pt;
   padding: 0;
+
+  .paper.letter & {
+    font-size: 7pt;
+  }
 }
 
 
@@ -63,5 +71,16 @@
 
   .land-use-section-cell & {
     opacity: 0.6;
+  }
+}
+
+
+// Data Sources list
+//---------------------------------------------------
+.data-sources {
+  font-size: 8pt;
+
+  .paper.letter & {
+    font-size: 6pt;
   }
 }
