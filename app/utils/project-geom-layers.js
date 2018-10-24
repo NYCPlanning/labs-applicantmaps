@@ -4,7 +4,7 @@ const developmentSiteLayer = {
   type: 'line',
   paint: {
     'line-color': 'rgba(237, 18, 18, 1)',
-    'line-width': 4,
+    'line-width': 4.5,
     'line-dasharray': [2.5, 1, 1, 1],
   },
 };
@@ -143,6 +143,7 @@ const c11Layer = {
   type: 'fill',
   paint: {
     'fill-pattern': 'black-45',
+    'fill-opacity': 0.7,
   },
   filter: ['all', ['==', 'label', 'C1-1']],
 };
@@ -151,6 +152,7 @@ const c12Layer = {
   type: 'fill',
   paint: {
     'fill-pattern': 'black-45-135',
+    'fill-opacity': 0.7,
   },
   filter: ['all', ['==', 'label', 'C1-2']],
 };
@@ -159,6 +161,7 @@ const c13Layer = {
   type: 'fill',
   paint: {
     'fill-pattern': 'black-45_altbold',
+    'fill-opacity': 0.7,
   },
   filter: ['all', ['==', 'label', 'C1-3']],
 };
@@ -167,6 +170,7 @@ const c14Layer = {
   type: 'fill',
   paint: {
     'fill-pattern': 'black-45_altbold-135_altbold',
+    'fill-opacity': 0.7,
   },
   filter: ['all', ['==', 'label', 'C1-4']],
 };
@@ -175,6 +179,7 @@ const c15Layer = {
   type: 'fill',
   paint: {
     'fill-pattern': 'black-45_dash',
+    'fill-opacity': 0.7,
   },
   filter: ['all', ['==', 'label', 'C1-5']],
 };
@@ -183,6 +188,7 @@ const c21Layer = {
   type: 'fill',
   paint: {
     'fill-pattern': 'black-45-dot',
+    'fill-opacity': 0.7,
   },
   filter: ['all', ['==', 'label', 'C2-1']],
 };
@@ -191,6 +197,7 @@ const c22Layer = {
   type: 'fill',
   paint: {
     'fill-pattern': 'black-45-135-dot',
+    'fill-opacity': 0.7,
   },
   filter: ['all', ['==', 'label', 'C2-2']],
 };
@@ -199,6 +206,7 @@ const c23Layer = {
   type: 'fill',
   paint: {
     'fill-pattern': 'black-45_altbold-dot',
+    'fill-opacity': 0.7,
   },
   filter: ['all', ['==', 'label', 'C2-3']],
 };
@@ -207,6 +215,7 @@ const c24Layer = {
   type: 'fill',
   paint: {
     'fill-pattern': 'black-45_altbold-135_altbold-dot',
+    'fill-opacity': 0.7,
   },
   filter: ['all', ['==', 'label', 'C2-4']],
 };
@@ -215,6 +224,7 @@ const c25Layer = {
   type: 'fill',
   paint: {
     'fill-pattern': 'black-45_dash-dot',
+    'fill-opacity': 0.7,
   },
   filter: ['all', ['==', 'label', 'C2-5']],
 };
@@ -261,15 +271,6 @@ const proposedSpecialPurposeDistrictsLabelsLayer = {
 
 
 export default {
-  developmentSiteLayer,
-  developmentSiteIcon,
-  projectAreaLayer,
-  projectAreaIcon,
-  rezoningAreaLayer,
-  rezoningAreaIcon,
-  projectBufferLayer,
-  proposedZoningLayer,
-  proposedZoningLabelsLayer,
   coLayer,
   c11Layer,
   c12Layer,
@@ -281,6 +282,15 @@ export default {
   c23Layer,
   c24Layer,
   c25Layer,
+  developmentSiteLayer,
+  developmentSiteIcon,
+  projectAreaLayer,
+  projectAreaIcon,
+  rezoningAreaLayer,
+  rezoningAreaIcon,
+  projectBufferLayer,
+  proposedZoningLayer,
+  proposedZoningLabelsLayer,
   proposedSpecialPurposeDistrictsLayer,
   proposedSpecialPurposeDistrictsLabelsLayer,
 };

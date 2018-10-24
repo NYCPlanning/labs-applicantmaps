@@ -203,9 +203,6 @@ export default class MapFormComponent extends Component {
   @service
   store;
 
-  @service
-  router;
-
   @argument
   projectURL = window.location.href;
 
@@ -396,7 +393,6 @@ export default class MapFormComponent extends Component {
   async saveProject() {
     const model = this.get('model');
     await model.save();
-    this.get('router').transitionTo('projects.edit.map.edit', model);
     this.get('notificationMessages').success('Map saved to project!');
   }
 }

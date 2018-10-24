@@ -74,7 +74,7 @@
                           (hash name='Zoning Section Map' prop='zoningSectionMaps')) as |type|}}
             <div class="cell">
               {{#if (get (get model type.prop) 'firstObject')}}
-                {{#link-to 'projects.edit.map.edit' model.id (get (get model type.prop) 'firstObject.id') tagName='a' class='card link text-center'}}
+                {{#link-to 'projects.edit.map.edit' model.id (query-params mapType=(dasherize type.name)) tagName='a' class='card link text-center'}}
                   <div class="card-divider bg-a11y-orange orange-light align-center">
                     {{fa-icon 'pencil-alt' size='3x' class=''}}
                   </div>
@@ -85,7 +85,7 @@
               {{else}}
                 {{#if (eq type.name 'Area Map')}}{{!-- TODO: nix this if when all four types of maps can be created --}}
                   {{!-- Only allow certain types of maps to be created --}}
-                  {{#link-to 'projects.edit.map.new' model.id (query-params mapType=(dasherize type.name)) tagName='a' class='card link text-center'}}
+                  {{#link-to 'projects.edit.map.edit' model.id (query-params mapType=(dasherize type.name)) tagName='a' class='card link text-center'}}
                     <div class="card-divider bg-green-muted green-light align-center map-type-{{dasherize type.name}}">
                       {{fa-icon 'plus' size='3x' class=''}}
                     </div>

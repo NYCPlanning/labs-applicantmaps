@@ -2,28 +2,28 @@
 
   <h2 class="header-medium">Create New Project</h2>
 
-  <label class="text-small">Project Name
+  <label class="text-small">
     {{#unless model.projectName}}
-      <strong class="red">{{fa-icon 'asterisk' transform='shrink-4'}}</strong>
+      {{fa-icon 'asterisk' transform='shrink-4' class="red"}}
     {{/unless}}
-    <sup>
-      {{icon-tooltip tip='Please use the name provided at the Informational Meeting with the Department of City Planning or the Project Address.'}}
-    </sup>
+    Project Name
+    {{icon-tooltip tip='Please use the name provided at the Informational Meeting with the Department of City Planning or the Project Address.' class="blue-dark"}}
     {{input type="text" class='project-name-field' value=model.projectName}}
   </label>
 
-  <label class="text-small">Applicant Name
+  <label class="text-small">
+    Applicant Name
     {{input type="text" class='applicant-name-field' value=model.applicantName}}
   </label>
 
-  <label class="text-small">Project Number
-    <sup>
-      {{icon-tooltip tip='The Project Number refers to the unique code provided for a project following an Informational Interest Meeting with the Department of City Planning.'}}
-    </sup>
+  <label class="text-small">
+    Project Number
+    {{icon-tooltip tip='The Project Number refers to the unique code provided for a project following an Informational Interest Meeting with the Department of City Planning.' class="blue-dark"}}
     {{input type="text" class='zap-project-id-field' value=model.zapProjectId}}
   </label>
 
-  <label class="text-small">Project Description
+  <label class="text-small">
+    Project Description
     {{textarea class='zap-project-description-field' value=model.description rows="3"}}
   </label>
 
@@ -123,18 +123,22 @@
         {{bbl-lookup flyTo=(action 'flyTo')}}
       </div>
 
-      {{#if (and (not-eq geometryMode null) (eq isSelectingLots false))}}
-        {{#if (eq showDrawInstructions true)}}
-          <div class="text-small draw-instruction-box">
-            <button class="hide-instructions-button" onclick={{action 'hideInstructions'}}>{{fa-icon 'chevron-circle-left'}}</button>
-            <br>Click on the map to begin drawing, finish drawing by double clicking.
-            To edit the boundary, select the vertices of the shape and drag to a new location.
-            Delete your drawing by clicking on the trash button on the draw controls to the left.
+      {{#if (and geometryMode (not lotSelectionMode))}}
+        {{#if showDrawInstructions}}
+          <div class="draw-instructions">
+            <button class="float-right" type="button" onclick={{action 'hideInstructions'}} style="margin:0 6px 0 10px;">
+              {{fa-icon 'times' class="red-dark"}}
+            </button>
+            <ul class="text-tiny">
+              <li>Select the polygon tool to begin drawing a new shape (you can draw multiple shapes)</li>
+              <li>Complete a shape by clicking the final vertex a second time</li>
+              <li>Edit a completed shape by selecting then dragging vertices</li>
+              <li>Delete a shape by clicking on the trash button on the draw controls to the left</li>
+              <li>Use the trash button (or delete key) to delete the shape or a selected vertex</li>
+            </ul>
           </div>
         {{else}}
-          <div>
-              <button class="draw-instruction-short-box" onclick={{action 'showInstructions'}}>{{fa-icon 'comment-alt'}}</button>
-          </div>
+          <button class="draw-instructions-button" onclick={{action 'showInstructions'}}>{{fa-icon 'comment-alt'}}</button>
         {{/if}}
       {{/if}}
 
