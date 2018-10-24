@@ -14,7 +14,7 @@ export default class ProjectMapFormComponent extends Component {
           layers: [
             { tooltipable: true, tooltipTemplate: '{{address}} (BBL: {{bbl}})' },
             {},
-            { style: { layout: { 'text-field': '{numfloors}' } } },
+            { style: { layout: { 'text-field': '{lot}' } } },
             {
               style: {
                 id: 'block-labels',
