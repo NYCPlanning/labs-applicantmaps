@@ -4,8 +4,7 @@ import { attr, belongsTo } from '@ember-decorators/data';
 const { Model } = DS;
 
 /*
-  Abstract base class for applicant maps. Specific types
-  can be found under ./maps
+  Abstract base class for applicant maps.
 */
 export default class extends Model {
   // area, tax, zoning change, zoning section

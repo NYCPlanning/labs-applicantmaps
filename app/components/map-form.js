@@ -187,18 +187,24 @@ export default class MapFormComponent extends Component {
 
     const query = this.get('customLayerGroupQuery') || defaultLayerGroups;
     const store = this.get('store');
+
     store.query('layer-group', query).then((layerGroups) => {
       const { meta } = layerGroups;
+      const sources = store.peekAll('source').toArray().uniqBy('meta.description');
 
       this.set('mapConfiguration', {
         layerGroups,
         meta,
+        sources,
       });
     });
   }
 
   @service
   store;
+
+  @argument
+  projectURL = window.location.href;
 
   @service
   notificationMessages
@@ -217,7 +223,7 @@ export default class MapFormComponent extends Component {
 
   projectGeomLayers = projectGeomLayers;
 
-  @computed('mapBearing', 'mapPitch')
+  @computed('model.mapBearing', 'mapPitch')
   get northArrowTransforms() {
     const bearing = this.get('model.mapBearing');
     const pitch = this.get('mapPitch');
@@ -303,9 +309,10 @@ export default class MapFormComponent extends Component {
       },
     });
 
-    this.set('mapBearing', map.getBearing());
+    // this.set('mapBearing', map.getBearing());
     this.set('model.mapBearing', map.getBearing());
-    this.set('mapPitch', map.getPitch());
+    this.set('model.mapCenter', map.getCenter());
+    this.set('model.mapZoom', map.getZoom());
   }
 
   @action
@@ -338,21 +345,32 @@ export default class MapFormComponent extends Component {
 
   @action
   fitBoundsToBuffer() {
-    const buffer = this.get('model.projectGeometryBuffer');
     const map = this.get('mapInstance');
-    const bearing = this.get('model.mapBearing');
 
-    map.fitBounds(turfBbox(buffer), {
-      padding: 50,
-      duration: 0,
-    });
+    const buffer = this.get('model.projectGeometryBuffer');
+    const bearing = this.get('model.mapBearing');
+    const mapZoom = this.get('model.mapZoom');
+    const mapCenter = this.get('model.mapCenter');
 
     map.setBearing(bearing);
+
+    if (mapZoom && mapCenter) {
+      map.setZoom(mapZoom);
+      map.setCenter(mapCenter);
+    } else {
+      map.fitBounds(turfBbox(buffer), {
+        padding: 50,
+        duration: 0,
+      });
+    }
+
     this.updateBounds();
-    const mapZoom = map.getZoom();
-    this.set('model.mapZoom', mapZoom);
-    const mapCenter = map.getCenter();
-    this.set('model.mapCenter', mapCenter);
+
+    // this already happens in updateBounds...
+    // const mapZoom = map.getZoom();
+    // this.set('model.mapZoom', mapZoom);
+    // const mapCenter = map.getCenter();
+    // this.set('model.mapCenter', mapCenter);
   }
 
   @action
