@@ -11,7 +11,7 @@
           type="text"
           class="input-group-field"
           value=selectedZoningFeature.properties.label
-          key-up="updateSelectedZoningFeature"
+          key-up=(action "updateSelectedZoningFeature")
           disabled=(not selectedZoningFeature)
         }}
       </div>
