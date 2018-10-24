@@ -78,19 +78,21 @@
             </div>
             <div class="cell shrink legend">
               {{yield}}
-            </div>
 
-            <section class="legend-section">
-              <div>
-                <h2 class="legend-section-header">Sourced Data:</h2>
-                  {{#each mapConfiguration.sources as |source|}}
-                        {{~if source.id " "}}<strong><span class="dark-gray text-small">{{source.id}}</span></strong>
-                        {{~if source.meta.updated_at ", "}}<span class="dark-gray text-small">updated on {{source.meta.updated_at}};</span>
+              <section class="legend-section">
+                <div class="data-sources">
+                  <strong>Data Sources:</strong>
+                  <a href="https://layers-api.planninglabs.nyc/v1/sources" target="_blank" class="nowrap black">layers-api.planninglabs.nyc/v1/sources</a>
+                  <br />
+                  {{#each mapConfiguration.sources as |source index|}}
+                    {{~if index ';'}}
+                    {{source.id}}
+                    {{if source.meta.updated_at (concat '(' source.meta.updated_at ')')~}}
                   {{/each}}
-                  <span class="text-small"><a href="https://layers-api.planninglabs.nyc/v1/sources" target="_blank">https://layers-api.planninglabs.nyc/v1/sources</a></span>
-              </div>
-            </section>
+                </div>
+              </section>
 
+            </div>
             <div class="cell auto">
               {{#if boundsPolygon}}
                 {{inset-map boundsPolygon=boundsPolygon}}
