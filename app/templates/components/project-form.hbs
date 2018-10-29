@@ -1,13 +1,16 @@
-<div class="cell sidebar">
-
-  <h2 class="header-medium">Create New Project</h2>
+<div class="cell small-6">
+  <h2 class="header-medium">
+    Create New Project
+  </h2>
 
   <label class="text-small">
     {{#unless model.projectName}}
       {{fa-icon 'asterisk' transform='shrink-4' class="red"}}
     {{/unless}}
     Project Name
-    {{labs-ui/icon-tooltip tip='Please use the name provided at the Informational Meeting with the Department of City Planning or the Project Address.' class="blue-dark"}}
+    {{labs-ui/icon-tooltip
+      tip='Please use the name provided at the Informational Meeting with the Department of City Planning or the Project Address.'
+      class="blue-dark"}}
     {{input type="text" class='project-name-field' value=model.projectName}}
   </label>
 
@@ -18,10 +21,25 @@
 
   <label class="text-small">
     Project Number
-    {{labs-ui/icon-tooltip tip='The Project Number refers to the unique code provided for a project following an Informational Interest Meeting with the Department of City Planning.' class="blue-dark"}}
-    {{input type="text" class='zap-project-id-field' value=model.zapProjectId}}
+    {{labs-ui/icon-tooltip
+      tip='The Project Number refers to the unique code provided for a project following an Informational Interest Meeting with the Department of City Planning.'
+      class="blue-dark"}}
+    {{input
+      type="text"
+      class='zap-project-id-field'
+      value=model.zapProjectId}}
   </label>
 
-  <button type="button" class="button large green expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Save Project</button>
-
+  <button
+    type="button"
+    class="button large green expanded project-save-button" 
+    disabled={{not model.isValid}} 
+    onclick={{action 'save' model}}
+  >
+    Save Project
+  </button>
 </div>
+
+<div class="cell small-6">
+</div>
+

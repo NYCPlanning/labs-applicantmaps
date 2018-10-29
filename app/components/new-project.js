@@ -9,8 +9,8 @@ export default class NewProjectComponent extends Component {
 
   @service router;
 
-  constructor() {
-    super(...arguments); // eslint-disable-line
+  constructor(...args) {
+    super(...args);
 
     this.set('projectModel', this.get('store').createRecord('project'));
   }
