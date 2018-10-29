@@ -55,6 +55,11 @@ export default class extends Model {
     return requiredFields.every(field => this.get(field));
   }
 
+  @computed(...requiredFields)
+  get requiredFieldsCompleted() {
+    return requiredFields.filter(field => this.get(field));
+  }
+
   @computed('projectArea')
   get projectAreaSource() {
     const projectArea = this.get('projectArea');
