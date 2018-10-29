@@ -1,0 +1,245 @@
+<div class="cell sidebar">
+
+  <h2 class="header-medium">Please select your...</h2>
+
+  <label class="text-small">
+    {{#unless model.projectName}}
+      {{fa-icon 'asterisk' transform='shrink-4' class="red"}}
+    {{/unless}}
+    Project Name
+    {{labs-ui/icon-tooltip tip='Please use the name provided at the Informational Meeting with the Department of City Planning or the Project Address.' class="blue-dark"}}
+    {{input type="text" class='project-name-field' value=model.projectName}}
+  </label>
+
+  <label class="text-small">
+    Applicant Name
+    {{input type="text" class='applicant-name-field' value=model.applicantName}}
+  </label>
+
+  <label class="text-small">
+    Project Number
+    {{labs-ui/icon-tooltip tip='The Project Number refers to the unique code provided for a project following an Informational Interest Meeting with the Department of City Planning.' class="blue-dark"}}
+    {{input type="text" class='zap-project-id-field' value=model.zapProjectId}}
+  </label>
+
+  <label class="text-small">
+    Project Description
+    {{textarea class='zap-project-description-field' value=model.description rows="3"}}
+  </label>
+
+  {{#if mapInstance}}
+    {{#project-geometries-menu
+      model=model
+      mapInstance=mapInstance
+      selectedLots=selectedLots
+      lotSelectionMode=lotSelectionMode
+      geometryMode=geometryMode
+      as |menu|
+    }}
+
+      {{!-- Development Site --}}
+      {{menu.draw-control
+        mode='developmentSite'
+        modeDisplayName='Development Site'
+        tooltip="The Development Site refers to the zoning lot(s) to be improved by the specific development(s) that the land use actions would facilitate."
+        hasGeom=model.developmentSite
+        required=true
+        doneAction=(action 'addProposedZoning')
+      }}
+
+      {{!-- Project Area --}}
+      {{menu.draw-control
+        mode='projectArea'
+        modeDisplayName='Project Area'
+        tooltip="The Project Area refers to all properties that would be subject to the proposed actions. The Project Area should only be used if it is larger than the Development Site."
+        hasGeom=model.projectArea
+        disabled=noDevelopmentSite
+      }}
+
+      {{!-- Proposed Zoning --}}
+      {{menu.draw-control
+        mode='proposedZoning'
+        modeDisplayName='Zoning'
+        hasGeom=model.proposedZoning
+        resetAction=(action 'getClippedZoning')
+        disabled=noDevelopmentSite
+      }}
+
+      {{!-- Proposed Commercial Overlays --}}
+      {{menu.draw-control
+        mode='proposedCommercialOverlays'
+        modeDisplayName='Commercial Overlays'
+        hasGeom=model.proposedCommercialOverlays
+        resetAction=(action 'getClippedCommercialOverlays')
+        disabled=noDevelopmentSite
+      }}
+
+      {{!-- Proposed Special Purpose Districts --}}
+      {{menu.draw-control
+        mode='proposedSpecialPurposeDistricts'
+        modeDisplayName='Special Purpose Districts'
+        hasGeom=model.proposedSpecialPurposeDistricts
+        resetAction=(action 'getClippedSpecialPurposeDistricts')
+        disabled=noDevelopmentSite
+      }}
+
+      {{!-- Rezoning Area --}}
+      {{menu.draw-control
+        mode='rezoningArea'
+        modeDisplayName='Rezoning Area'
+        tooltip="When drawing, the Rezoning Area Boundary should be graphically offset from the proposed Zoning District Boundaries. This area refers to all property subject to the proposed amendment to existing Zoning Districts and Boundaries."
+        hasGeom=model.rezoningArea
+        disabled=noDevelopmentSite
+      }}
+
+    {{/project-geometries-menu}}
+  {{/if}}
+
+  <hr />
+
+  <button type="button" class="button large green expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Save Project</button>
+
+</div>
+<div class="cell large-auto map-container">
+  {{#project-map-form tagName='' as |projectMapForm|}}
+    {{#labs-map
+      id='main-map'
+      initOptions=(hash
+        style=projectMapForm.model.meta.mapboxStyle
+        zoom=12
+        center=(array -73.983307 40.704977)
+      )
+      mapLoaded=(action handleMapLoad) as |map|}}
+
+      <div class="search-and-bbl-lookup-container">
+        {{#labs-search
+          searchPlaceholder='Search for Address...'
+          onSelect=(action 'selectSearchResult')
+          typeTitleLookup=(hash
+            lot='Addresses')
+          onClear=(action (mut geocodedFeature null)) as |search|}}
+          <small class="dark-gray">{{search.result.label}}</small>
+        {{/labs-search}}
+        {{labs-bbl-lookup flyTo=(action 'flyTo')}}
+      </div>
+
+      {{#if (and geometryMode (not lotSelectionMode))}}
+        {{#if showDrawInstructions}}
+          <div class="draw-instructions">
+            <button class="float-right" type="button" onclick={{action 'hideInstructions'}} style="margin:0 6px 0 10px;">
+              {{fa-icon 'times' class="red-dark"}}
+            </button>
+            <ul class="text-tiny">
+              <li>Select the polygon tool to begin drawing a new shape (you can draw multiple shapes)</li>
+              <li>Complete a shape by clicking the final vertex a second time</li>
+              <li>Edit a completed shape by selecting then dragging vertices</li>
+              <li>Delete a shape by clicking on the trash button on the draw controls to the left</li>
+              <li>Use the trash button (or delete key) to delete the shape or a selected vertex</li>
+            </ul>
+          </div>
+        {{else}}
+          <button class="draw-instructions-button" onclick={{action 'showInstructions'}}>{{fa-icon 'comment-alt'}}</button>
+        {{/if}}
+      {{/if}}
+
+      {{#if geocodedFeature}}
+        {{#map.source options=geocodedFeature as |source|}}
+          {{source.layer layer=geocodedLayer}}
+        {{/map.source}}
+      {{/if}}
+
+        {{!-- labs-layers (includes tax-lots layer) --}}
+        {{#map.labs-layers
+          layerGroups=projectMapForm.model.layerGroups
+          onLayerClick=(action 'handleLayerClick')
+          as |layers|}}
+            {{#layers.tooltip as |tooltip|}}
+              {{tooltip-renderer feature=tooltip.feature template=tooltip.layer.tooltipTemplate}}
+            {{/layers.tooltip}}
+        {{/map.labs-layers}}
+
+        {{!-- Ad-hoc source and layer for developmentSite --}}
+        {{#if (and model.developmentSite (not-eq geometryMode 'developmentSite'))}}
+          {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
+            {{source.layer
+              layer=projectGeomLayers.developmentSiteLayer
+              before='boundary_country'
+            }}
+          {{/map.source}}
+        {{/if}}
+
+        {{!-- Ad-hoc source and layer for projectArea --}}
+        {{#if (and model.projectArea (not-eq geometryMode 'projectArea'))}}
+          {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
+            {{source.layer
+              layer=projectGeomLayers.projectAreaLayer
+              before='boundary_country'
+            }}
+          {{/map.source}}
+        {{/if}}
+
+        {{!-- Ad-hoc source and layer for projectArea --}}
+        {{#if (and model.rezoningArea (not-eq geometryMode 'rezoningArea'))}}
+          {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
+            {{source.layer
+              layer=projectGeomLayers.rezoningAreaLayer
+              before='boundary_country'
+            }}
+          {{/map.source}}
+        {{/if}}
+
+        {{!-- Ad-hoc source and layer for showing selected lots in lot selection mode --}}
+        {{#map.source options=selectedLotsSource as |source|}}
+          {{source.layer
+            layer=selectedLotsLayer
+            before='boundary_country'
+          }}
+        {{/map.source}}
+
+        {{!-- Ad-hoc source and layer for showing zoning --}}
+        {{#if (and model.proposedZoning (not-eq geometryMode 'proposedZoning') (not noDevelopmentSite))}}
+          {{#map.source options=(mapbox-geojson-source model.proposedZoning) as |source|}}
+            {{source.layer
+              layer=projectGeomLayers.proposedZoningLayer
+              before='boundary_country'
+            }}
+            {{source.layer
+              layer=projectGeomLayers.proposedZoningLabelsLayer
+              before='boundary_country'
+            }}
+          {{/map.source}}
+        {{/if}}
+
+        {{!-- Ad-hoc source and layer for showing commercial overlays --}}
+        {{#if (and model.proposedCommercialOverlays (not-eq geometryMode 'proposedCommercialOverlays') (not noDevelopmentSite))}}
+          {{#map.source options=(mapbox-geojson-source model.proposedCommercialOverlays) as |source|}}
+            {{source.layer layer=projectGeomLayers.coLayer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c11Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c12Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c13Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c14Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c15Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c21Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c22Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c23Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c24Layer before='boundary_country'}}
+            {{source.layer layer=projectGeomLayers.c25Layer before='boundary_country'}}
+          {{/map.source}}
+        {{/if}}
+
+        {{!-- Ad-hoc source and layer for showing commercial overlays --}}
+        {{#if (and model.proposedSpecialPurposeDistricts (not-eq geometryMode 'proposedSpecialPurposeDistricts') (not noDevelopmentSite))}}
+          {{#map.source options=(mapbox-geojson-source model.proposedSpecialPurposeDistricts) as |source|}}
+            {{source.layer
+              layer=projectGeomLayers.proposedSpecialPurposeDistrictsLayer
+              before='boundary_country'
+            }}
+            {{source.layer
+              layer=projectGeomLayers.proposedSpecialPurposeDistrictsLabelsLayer
+              before='boundary_country'
+            }}
+          {{/map.source}}
+        {{/if}}
+    {{/labs-map}}
+  {{/project-map-form}}
+</div>

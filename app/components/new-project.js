@@ -1,3 +1,5 @@
+// This file can probably be deleted. It's not being referenced except in its test.
+
 import Component from '@ember/component';
 import { service } from '@ember-decorators/service';
 import { action } from '@ember-decorators/object';
