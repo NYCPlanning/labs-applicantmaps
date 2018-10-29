@@ -50,6 +50,7 @@ export default class extends Model {
 
   @attr('number', { defaultValue: 0 }) datePrepared;
 
+  // ******** VALIDATION CHECKS / STEPS ********
   @computed(...requiredFields)
   get isValid() {
     return requiredFields.every(field => this.get(field));
@@ -60,6 +61,17 @@ export default class extends Model {
     return requiredFields.filter(field => this.get(field));
   }
 
+  @computed
+  get currentStep() {
+    return 'development-site';
+  }
+
+  @computed()
+  get hasCompletedSteps() {
+    // need a way to compute this
+    return false;
+  }
+
   @computed('projectArea')
   get projectAreaSource() {
     const projectArea = this.get('projectArea');
@@ -68,6 +80,7 @@ export default class extends Model {
       data: projectArea,
     };
   }
+  // ********************************
 
   @computed('developmentSite', 'projectArea', 'rezoningArea')
   get projectGeometryBoundingBox() {

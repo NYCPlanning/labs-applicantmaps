@@ -272,7 +272,6 @@ export default class ProjectFormComponent extends Component {
     this.set('showDrawInstructions', true);
   }
 
-
   @action
   async getClippedSpecialPurposeDistricts() {
     const developmentSite = this.get('model.developmentSite');
