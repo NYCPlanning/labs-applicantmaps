@@ -14,11 +14,11 @@ Router.map(function () { // eslint-disable-line
       this.route('map', function () {
         this.route('edit');
       });
-    });
-    this.route('steps', { path: ':project_id/steps' }, function() {
-      this.route('development-site');
-      this.route('project-area');
-      this.route('rezoning');
+      this.route('steps', { path: '/' }, function() {
+        this.route('development-site');
+        this.route('project-area');
+        this.route('rezoning');
+      });
     });
     this.route('geometry-edit', { path: ':project_id/geometry-edit' });
   });

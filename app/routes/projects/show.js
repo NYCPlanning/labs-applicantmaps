@@ -19,7 +19,7 @@ export default class ProjectsShowRoute extends Route {
 
     // has the user completed the steps? if not, transition to that step.
     if (!model.get('hasCompletedSteps')) {
-      this.transitionTo(`projects.steps.${step}`, model.get('id'));
+      this.transitionTo(`projects.edit.steps.${step}`, model.get('id'));
     }
   }
 
