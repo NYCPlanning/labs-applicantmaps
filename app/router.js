@@ -19,8 +19,8 @@ Router.map(function () { // eslint-disable-line
         this.route('project-area');
         this.route('rezoning');
       });
+      this.route('geometry-edit', { path: '/geometry' });
     });
-    this.route('geometry-edit', { path: ':project_id/geometry-edit' });
   });
 });
 
