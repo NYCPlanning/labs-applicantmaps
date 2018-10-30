@@ -2,5 +2,11 @@
   <p>First, let’s define your Development Site.</p>
   <p>The Development Site refers to the zoning lot(s) to be improved by the specific development(s) that the land use actions would facilitate.</p>
   <p>To create a Development Site, you can either:</p>
-  <span class="button">Select Lots</span>
-  <span class="button">Draw Manually</span>
+
+  {{link-to 'Select Lots' 'projects.edit.geometry-edit' model.id (query-params mode='lots')
+    tagName='span'
+    class='button'}}
+
+  {{link-to 'Draw Manually' 'projects.edit.geometry-edit' model.id (query-params mode='draw')
+    tagName='span'
+    class='button'}}
