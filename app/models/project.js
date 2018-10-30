@@ -64,7 +64,7 @@ export default class extends Model {
   @attr() proposedSpecialDistricts
 
   // ******** VALIDATION CHECKS / STEPS ********
-  
+
   // @computed(...requiredFields)
   // get isValid() {
   //   return requiredFields.every(field => this.get(field));
