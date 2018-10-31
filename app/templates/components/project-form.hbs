@@ -3,43 +3,70 @@
     Create New Project
   </h2>
 
-  <label class="text-small">
-    {{#unless model.projectName}}
-      {{fa-icon 'asterisk' transform='shrink-4' class="red"}}
-    {{/unless}}
-    Project Name
-    {{labs-ui/icon-tooltip
-      tip='Please use the name provided at the Informational Meeting with the Department of City Planning or the Project Address.'
-      class="blue-dark"}}
-    {{input type="text" class='project-name-field' value=model.projectName}}
-  </label>
+  <form>
 
-  <label class="text-small">
-    Applicant Name
-    {{input type="text" class='applicant-name-field' value=model.applicantName}}
-  </label>
+    <div class="grid-x grid-margin-x">
+      <div class="small-3 cell">
+        <label for="project-name-field" class="text-right middle">
+          Project Name
+          {{fa-icon 'asterisk' transform='shrink-4' class="red"}}
+        </label>
+      </div>
+      <div class="small-9 cell">
+        {{input
+          type="text"
+          value=model.projectName
+          id="project-name-field"
+          class="project-name-field"
+          aria-describedby="project-name-field-help-text"
+        }}
+        <p class="help-text" id="project-name-field-help-text">The name provided at the Informational Meeting with the Department of City Planning or the project address</p>
+      </div>
+    </div>
 
-  <label class="text-small">
-    Project Number
-    {{labs-ui/icon-tooltip
-      tip='The Project Number refers to the unique code provided for a project following an Informational Interest Meeting with the Department of City Planning.'
-      class="blue-dark"}}
-    {{input
-      type="text"
-      class='zap-project-id-field'
-      value=model.zapProjectId}}
-  </label>
+    <div class="grid-x grid-margin-x">
+      <div class="small-3 cell">
+        <label for="applicant-name-field" class="text-right middle">
+          Applicant Name
+        </label>
+      </div>
+      <div class="small-9 cell">
+        {{input
+          type="text"
+          value=model.applicantName
+          id="applicant-name-field"
+          class="applicant-name-field"
+        }}
+      </div>
+    </div>
 
-  <button
-    type="button"
-    class="button large green expanded project-save-button" 
-    disabled={{eq model.currentStep 'project-creation'}} 
-    onclick={{action 'save' model}}
-  >
-    Save Project
-  </button>
+    <div class="grid-x grid-margin-x">
+      <div class="small-3 cell">
+        <label for="zap-project-id-field" class="text-right middle">
+          Project Number
+        </label>
+      </div>
+      <div class="small-9 cell">
+        {{input
+          type="text"
+          value=model.zapProjectId
+          id="zap-project-id-field"
+          class="zap-project-id-field"
+          aria-describedby="zap-project-id-field-help-text"
+        }}
+        <p class="help-text" id="zap-project-id-field-help-text">The unique code provided by the Department of City Planning following an Informational Interest Meeting</p>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="button large expanded project-save-button"
+      disabled={{not (includes model.requiredFieldsCompleted 'projectName')}}
+      onclick={{action 'save' model}}
+    >
+      Create New Project
+    </button>
+
+  </form>
+
 </div>
-
-<div class="cell small-6">
-</div>
-
