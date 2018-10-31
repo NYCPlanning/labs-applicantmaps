@@ -8,10 +8,10 @@ import config from '../config/environment';
 const { mapTypes } = config;
 const { Model } = DS;
 
-const requiredFields = [
-  'projectName',
-  'developmentSite',
-];
+// const requiredFields = [
+//   'projectName',
+//   'developmentSite',
+// ];
 
 export default class extends Model {
   @hasMany('area-map', { async: false }) areaMaps;
@@ -28,18 +28,7 @@ export default class extends Model {
     return Object.values(maps).reduce((acc, curr) => acc.concat(...curr.toArray()), []);
   }
 
-  @attr() projectArea
-
-  @attr() developmentSite
-
-  @attr() rezoningArea
-
-  @attr() proposedZoning
-
-  @attr() proposedCommercialOverlays
-
-  @attr() proposedSpecialPurposeDistricts
-
+  // ******** BASIC PROJECT CREATION INFO ********
   @attr('string') projectName;
 
   @attr('string') applicantName;
@@ -50,27 +39,75 @@ export default class extends Model {
 
   @attr('number', { defaultValue: 0 }) datePrepared;
 
+  // ******** REQUIRED ANSWERS ********
+  @attr('boolean', { defaultValue: null }) needProjectArea;
+
+  @attr('boolean', { defaultValue: null }) needRezoning;
+
+  @attr('boolean', { defaultValue: null }) needUnderlyingZoning;
+
+  @attr('boolean', { defaultValue: null }) needCommercialOverlay;
+
+  @attr('boolean', { defaultValue: null }) needSpecialDistrict;
+
+  // ******** GEOMETRIES ********
+  @attr() developmentSite
+
+  @attr() projectArea
+
+  @attr() rezoningArea
+
+  @attr() proposedZoning
+
+  @attr() proposedCommercialOverlays
+
+  @attr() proposedSpecialDistricts
+
   // ******** VALIDATION CHECKS / STEPS ********
-  @computed(...requiredFields)
-  get isValid() {
-    return requiredFields.every(field => this.get(field));
-  }
 
-  @computed(...requiredFields)
-  get requiredFieldsCompleted() {
-    return requiredFields.filter(field => this.get(field));
-  }
+  // @computed(...requiredFields)
+  // get isValid() {
+  //   return requiredFields.every(field => this.get(field));
+  // }
 
-  @computed
+  // @computed(...requiredFields)
+  // get requiredFieldsCompleted() {
+  //   return requiredFields.filter(field => this.get(field));
+  // }
+
+  @computed('developmentSite', 'projectArea', 'rezoningArea', 'proposedZoning', 'proposedCommercialOverlays', 'proposedSpecialDistricts', 'needProjectArea', 'needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
   get currentStep() {
-    return 'development-site';
+    const developmentSite = this.get('developmentSite');
+    const projectArea = this.get('projectArea');
+    const rezoningArea = this.get('rezoningArea');
+    const proposedZoning = this.get('proposedZoning');
+    const proposedCommercialOverlays = this.get('proposedCommercialOverlays');
+    const proposedSpecialDistricts = this.get('proposedSpecialDistricts');
+    const needProjectArea = this.get('needProjectArea');
+    const needRezoning = this.get('needRezoning');
+    const needUnderlyingZoning = this.get('needUnderlyingZoning');
+    const needCommercialOverlay = this.get('needCommercialOverlay');
+    const needSpecialDistrict = this.get('needSpecialDistrict');
+    if (developmentSite == null) {
+      return 'development-site';
+    } if ((needProjectArea === true || needProjectArea === null) && projectArea === null) {
+      return 'project-area';
+    } if ((needRezoning === true || needRezoning === null) && rezoningArea === null) {
+      return 'project-area';
+    } if ((needUnderlyingZoning === true || needUnderlyingZoning === null) && proposedZoning === null) {
+      return 'underlying-zoning';
+    } if ((needCommercialOverlay === true || needCommercialOverlay === null) && proposedCommercialOverlays === null) {
+      return 'commercial-overlay';
+    } if ((needSpecialDistrict === true || needSpecialDistrict === null) && proposedSpecialDistricts === null) {
+      return 'special-district';
+    } return 'complete';
   }
 
-  @computed()
-  get hasCompletedSteps() {
-    // need a way to compute this
-    return false;
-  }
+  // @computed()
+  // get hasCompletedSteps() {
+  //   // need a way to compute this
+  //   return false;
+  // }
 
   @computed('projectArea')
   get projectAreaSource() {
@@ -80,6 +117,7 @@ export default class extends Model {
       data: projectArea,
     };
   }
+
   // ********************************
 
   @computed('developmentSite', 'projectArea', 'rezoningArea')
