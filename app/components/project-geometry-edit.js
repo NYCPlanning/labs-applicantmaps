@@ -15,40 +15,6 @@ const selectedLotsLayer = {
   },
 };
 
-const geocodedLayer = {
-  type: 'circle',
-  paint: {
-    'circle-radius': {
-      stops: [
-        [
-          10,
-          5,
-        ],
-        [
-          17,
-          12,
-        ],
-      ],
-    },
-    'circle-color': 'rgba(199, 92, 92, 1)',
-    'circle-stroke-width': {
-      stops: [
-        [
-          10,
-          20,
-        ],
-        [
-          17,
-          18,
-        ],
-      ],
-    },
-    'circle-stroke-color': 'rgba(65, 73, 255, 1)',
-    'circle-opacity': 0,
-    'circle-stroke-opacity': 0.2,
-  },
-};
-
 const bufferMeters = 500;
 
 @tagName('')
@@ -152,37 +118,6 @@ export default class ProjectGeometryEditComponent extends Component {
     this.get('notificationMessages').success('Project saved!');
 
     this.get('router').transitionTo('projects.show', project);
-  }
-
-  // search
-  geocodedFeature = null;
-
-  // search
-  @action
-  selectSearchResult({ geometry }) {
-    const { coordinates } = geometry;
-    const { mapInstance: map } = this;
-
-    this.set('geocodedFeature', { type: 'geojson', data: geometry });
-    map.flyTo({ center: coordinates, zoom: 16 });
-  }
-
-  // search
-  @action
-  handleSearchClear() {
-    this.set('searchedAddressSource', null);
-  }
-
-  // search
-  geocodedLayer = geocodedLayer;
-
-  // search
-  @action
-  flyTo(center, zoom) {
-    // Fly to the lot
-    this.get('mapInstance').flyTo({ center, zoom });
-    // Turn on the Tax Lots layer group
-    this.set('tax-lots', true);
   }
 
   // development site
