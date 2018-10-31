@@ -75,7 +75,7 @@ export default class extends Model {
   //   return requiredFields.filter(field => this.get(field));
   // }
 
-  @computed('developmentSite', 'projectArea', 'rezoningArea', 'proposedZoning', 'proposedCommercialOverlays', 'proposedSpecialDistricts', 'needProjectArea', 'needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
+  @computed('developmentSite', 'projectName', 'projectArea', 'rezoningArea', 'proposedZoning', 'proposedCommercialOverlays', 'proposedSpecialDistricts', 'needProjectArea', 'needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
   get currentStep() {
     const projectName = this.get('projectName');
     const developmentSite = this.get('developmentSite');
