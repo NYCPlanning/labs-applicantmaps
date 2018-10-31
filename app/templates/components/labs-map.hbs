@@ -3,6 +3,7 @@
   {{#if map}}
     <div style="display:none" class="labs-map-loaded"></div>
     {{yield (hash
+      mapInstance=map
       call=(component 'mapbox-gl-call' obj=map)
       control=(component 'mapbox-gl-control' map=map)
       image=(component 'mapbox-gl-image' map=map)

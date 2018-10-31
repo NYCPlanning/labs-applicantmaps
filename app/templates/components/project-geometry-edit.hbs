@@ -20,56 +20,56 @@
       }}
 
       {{!-- Project Area --}}
-      {{menu.draw-control
+{{!--       {{menu.draw-control
         mode='projectArea'
         modeDisplayName='Project Area'
         tooltip="The Project Area refers to all properties that would be subject to the proposed actions. The Project Area should only be used if it is larger than the Development Site."
         hasGeom=model.projectArea
-        disabled=noDevelopmentSite
-      }}
+        disabled=model.developmentSite
+      }} --}}
 
       {{!-- Proposed Zoning --}}
-      {{menu.draw-control
+{{!--       {{menu.draw-control
         mode='proposedZoning'
         modeDisplayName='Zoning'
         hasGeom=model.proposedZoning
         resetAction=(action 'getClippedZoning')
-        disabled=noDevelopmentSite
-      }}
+        disabled=model.developmentSite
+      }} --}}
 
       {{!-- Proposed Commercial Overlays --}}
-      {{menu.draw-control
+{{!--       {{menu.draw-control
         mode='proposedCommercialOverlays'
         modeDisplayName='Commercial Overlays'
         hasGeom=model.proposedCommercialOverlays
         resetAction=(action 'getClippedCommercialOverlays')
-        disabled=noDevelopmentSite
-      }}
+        disabled=model.developmentSite
+      }} --}}
 
       {{!-- Proposed Special Purpose Districts --}}
-      {{menu.draw-control
+{{!--       {{menu.draw-control
         mode='proposedSpecialPurposeDistricts'
         modeDisplayName='Special Purpose Districts'
         hasGeom=model.proposedSpecialPurposeDistricts
         resetAction=(action 'getClippedSpecialPurposeDistricts')
-        disabled=noDevelopmentSite
+        disabled=model.developmentSite
       }}
-
+ --}}
       {{!-- Rezoning Area --}}
-      {{menu.draw-control
+{{!--       {{menu.draw-control
         mode='rezoningArea'
         modeDisplayName='Rezoning Area'
         tooltip="When drawing, the Rezoning Area Boundary should be graphically offset from the proposed Zoning District Boundaries. This area refers to all property subject to the proposed amendment to existing Zoning Districts and Boundaries."
         hasGeom=model.rezoningArea
-        disabled=noDevelopmentSite
+        disabled=model.developmentSite
       }}
-
+ --}}
     {{/project-geometries-menu}}
   {{/if}}
 
-  <hr />
+{{!--   <hr />
 
-  <button type="button" class="button large green expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Save Project</button>
+  <button type="button" class="button large green expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Save Project</button> --}}
 
 </div>
 <div class="cell large-auto map-container">
@@ -83,7 +83,8 @@
       )
       mapLoaded=(action handleMapLoad) as |map|}}
 
-      <div class="search-and-bbl-lookup-container">
+      {{search-handler map=map}}
+{{!--       <div class="search-and-bbl-lookup-container">
         {{#labs-search
           searchPlaceholder='Search for Address...'
           onSelect=(action 'selectSearchResult')
@@ -93,7 +94,7 @@
           <small class="dark-gray">{{search.result.label}}</small>
         {{/labs-search}}
         {{labs-bbl-lookup flyTo=(action 'flyTo')}}
-      </div>
+      </div> --}}
 
       {{#if (and geometryMode (not lotSelectionMode))}}
         {{#if showDrawInstructions}}
@@ -112,12 +113,6 @@
         {{else}}
           <button class="draw-instructions-button" onclick={{action 'showInstructions'}}>{{fa-icon 'comment-alt'}}</button>
         {{/if}}
-      {{/if}}
-
-      {{#if geocodedFeature}}
-        {{#map.source options=geocodedFeature as |source|}}
-          {{source.layer layer=geocodedLayer}}
-        {{/map.source}}
       {{/if}}
 
         {{!-- labs-layers (includes tax-lots layer) --}}
@@ -169,7 +164,7 @@
         {{/map.source}}
 
         {{!-- Ad-hoc source and layer for showing zoning --}}
-        {{#if (and model.proposedZoning (not-eq geometryMode 'proposedZoning') (not noDevelopmentSite))}}
+        {{#if (and model.proposedZoning (not-eq geometryMode 'proposedZoning') model.developmentSite)}}
           {{#map.source options=(mapbox-geojson-source model.proposedZoning) as |source|}}
             {{source.layer
               layer=projectGeomLayers.proposedZoningLayer
@@ -183,7 +178,7 @@
         {{/if}}
 
         {{!-- Ad-hoc source and layer for showing commercial overlays --}}
-        {{#if (and model.proposedCommercialOverlays (not-eq geometryMode 'proposedCommercialOverlays') (not noDevelopmentSite))}}
+        {{#if (and model.proposedCommercialOverlays (not-eq geometryMode 'proposedCommercialOverlays') model.developmentSite)}}
           {{#map.source options=(mapbox-geojson-source model.proposedCommercialOverlays) as |source|}}
             {{source.layer layer=projectGeomLayers.coLayer before='boundary_country'}}
             {{source.layer layer=projectGeomLayers.c11Layer before='boundary_country'}}
@@ -200,7 +195,7 @@
         {{/if}}
 
         {{!-- Ad-hoc source and layer for showing commercial overlays --}}
-        {{#if (and model.proposedSpecialPurposeDistricts (not-eq geometryMode 'proposedSpecialPurposeDistricts') (not noDevelopmentSite))}}
+        {{#if (and model.proposedSpecialPurposeDistricts (not-eq geometryMode 'proposedSpecialPurposeDistricts') model.developmentSite)}}
           {{#map.source options=(mapbox-geojson-source model.proposedSpecialPurposeDistricts) as |source|}}
             {{source.layer
               layer=projectGeomLayers.proposedSpecialPurposeDistrictsLayer

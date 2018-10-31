@@ -17,48 +17,59 @@ const draw = new MapboxDraw({
 });
 
 export default class DrawControlController extends Component {
-  @argument
-  lotSelectionMode
-
-  @argument
-  mode
-
+  // ui
   @argument
   tooltip
 
-  @argument
-  modeDisplayName
-
-  @argument
-  hasGeom
-
-  @argument
-  required = false;
-
-  @argument
-  geometryMode
-
-  @argument
-  toggleGeometryEditing
-
-  @argument
-  startLotSelection
-
-  @argument
-  finishLotSelection
-
-  @argument
-  selectedLots
-
+  // development site
   @argument
   lotSelectionMode
 
+  // development site
+  @argument
+  geometryMode
+
+  // general mode
+  @argument
+  modeDisplayName
+
+  // general mode
+  @argument
+  mode
+
+  // general mode
+  @argument
+  hasGeom
+
+  // general mode
+  @argument
+  required = false;
+
+  // development site
+  @argument
+  startLotSelection
+
+  // development site
+  @argument
+  finishLotSelection
+
+  // development site
+  @argument
+  selectedLots
+
+  // development site
+  @argument
+  lotSelectionMode
+
+  // development site
   @argument
   setProjectGeometry
 
+  // general map
   @argument
   mapInstance
 
+  // general map
   @argument
   model
 

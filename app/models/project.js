@@ -51,7 +51,7 @@ export default class extends Model {
   @attr('boolean', { defaultValue: null }) needSpecialDistrict;
 
   // ******** GEOMETRIES ********
-  @attr() developmentSite
+  @attr({ defaultValue: null }) developmentSite
 
   @attr() projectArea
 
