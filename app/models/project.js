@@ -77,9 +77,9 @@ export default class extends Model {
 
   @computed('developmentSite', 'projectName', 'projectArea', 'rezoningArea', 'proposedZoning', 'proposedCommercialOverlays', 'proposedSpecialDistricts', 'needProjectArea', 'needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
   get currentStep() {
+    const projectName = this.get('projectName');
     const developmentSite = this.get('developmentSite');
     const projectArea = this.get('projectArea');
-    const projectName = this.get('projectName');
     const rezoningArea = this.get('rezoningArea');
     const proposedZoning = this.get('proposedZoning');
     const proposedCommercialOverlays = this.get('proposedCommercialOverlays');
@@ -89,21 +89,20 @@ export default class extends Model {
     const needUnderlyingZoning = this.get('needUnderlyingZoning');
     const needCommercialOverlay = this.get('needCommercialOverlay');
     const needSpecialDistrict = this.get('needSpecialDistrict');
-
     if (projectName == null) {
-      return 'project-creation';
+      return { label: 'project-creation', route: 'projects.new' };
     } if (developmentSite == null) {
-      return 'development-site';
+      return { label: 'development-site', route: 'projects.edit.development-site' };
     } if ((needProjectArea === true || needProjectArea === null) && projectArea === null) {
-      return 'project-area';
+      return { label: 'project-area', route: 'projects.edit.project-area' };
     } if ((needRezoning === true || needRezoning === null) && rezoningArea === null) {
-      return 'project-area';
+      return { label: 'rezoning', route: 'projects.edit.rezoning' };
     } if ((needUnderlyingZoning === true || needUnderlyingZoning === null) && proposedZoning === null) {
-      return 'underlying-zoning';
+      return { label: 'rezoning-underlying', route: 'projects.edit.rezoning' };
     } if ((needCommercialOverlay === true || needCommercialOverlay === null) && proposedCommercialOverlays === null) {
-      return 'commercial-overlay';
+      return { label: 'rezoning-commercial', route: 'projects.edit.rezoning' };
     } if ((needSpecialDistrict === true || needSpecialDistrict === null) && proposedSpecialDistricts === null) {
-      return 'special-district';
+      return { label: 'rezoning-special', route: 'projects.edit.rezoning' };
     } return 'complete';
   }
 

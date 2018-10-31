@@ -6,7 +6,7 @@ module('Unit | Controller | projects/edit/geometry-edit', function(hooks) {
 
   // Replace this with your real tests.
   test('it exists', function(assert) {
-    let controller = this.owner.lookup('controller:projects/edit/geometry-edit');
+    const controller = this.owner.lookup('controller:projects/edit/geometry-edit');
     assert.ok(controller);
   });
 });
