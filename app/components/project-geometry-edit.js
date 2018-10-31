@@ -31,6 +31,9 @@ export default class ProjectGeometryEditComponent extends Component {
   @argument
   model;
 
+  @argument
+  mode;
+
   @service
   notificationMessages;
 

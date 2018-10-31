@@ -1,32 +1,4 @@
 <div class="cell sidebar">
-
-  <h2 class="header-medium">Please select your...</h2>
-
-  <label class="text-small">
-    {{#unless model.projectName}}
-      {{fa-icon 'asterisk' transform='shrink-4' class="red"}}
-    {{/unless}}
-    Project Name
-    {{labs-ui/icon-tooltip tip='Please use the name provided at the Informational Meeting with the Department of City Planning or the Project Address.' class="blue-dark"}}
-    {{input type="text" class='project-name-field' value=model.projectName}}
-  </label>
-
-  <label class="text-small">
-    Applicant Name
-    {{input type="text" class='applicant-name-field' value=model.applicantName}}
-  </label>
-
-  <label class="text-small">
-    Project Number
-    {{labs-ui/icon-tooltip tip='The Project Number refers to the unique code provided for a project following an Informational Interest Meeting with the Department of City Planning.' class="blue-dark"}}
-    {{input type="text" class='zap-project-id-field' value=model.zapProjectId}}
-  </label>
-
-  <label class="text-small">
-    Project Description
-    {{textarea class='zap-project-description-field' value=model.description rows="3"}}
-  </label>
-
   {{#if mapInstance}}
     {{#project-geometries-menu
       model=model
