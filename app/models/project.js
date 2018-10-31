@@ -93,17 +93,17 @@ export default class extends Model {
       return { label: 'project-creation', route: 'projects.new' };
     } if (developmentSite == null) {
       return { label: 'development-site', route: 'projects.edit.development-site' };
-    } if ((needProjectArea === true || needProjectArea === null) && projectArea === null) {
+    } if ((needProjectArea === true || needProjectArea == null) && projectArea == null) {
       return { label: 'project-area', route: 'projects.edit.project-area' };
-    } if ((needRezoning === true || needRezoning === null) && rezoningArea === null) {
+    } if ((needRezoning === true || needRezoning == null) && rezoningArea == null) {
       return { label: 'rezoning', route: 'projects.edit.rezoning' };
-    } if ((needUnderlyingZoning === true || needUnderlyingZoning === null) && proposedZoning === null) {
+    } if ((needRezoning === true && (needUnderlyingZoning === true || needUnderlyingZoning == null)) && proposedZoning == null) {
       return { label: 'rezoning-underlying', route: 'projects.edit.rezoning' };
-    } if ((needCommercialOverlay === true || needCommercialOverlay === null) && proposedCommercialOverlays === null) {
+    } if ((needRezoning === true && (needCommercialOverlay === true || needCommercialOverlay == null)) && proposedCommercialOverlays == null) {
       return { label: 'rezoning-commercial', route: 'projects.edit.rezoning' };
-    } if ((needSpecialDistrict === true || needSpecialDistrict === null) && proposedSpecialDistricts === null) {
+    } if ((needRezoning === true && (needSpecialDistrict === true || needSpecialDistrict == null)) && proposedSpecialDistricts == null) {
       return { label: 'rezoning-special', route: 'projects.edit.rezoning' };
-    } return 'complete';
+    } return { label: 'complete', route: 'projects.show' };
   }
 
   // @computed()

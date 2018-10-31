@@ -30,11 +30,11 @@ module('Unit | Model | project', (hooks) => {
       needProjectArea: false,
       needRezoning: false,
     }));
-    assert.equal(model.get('currentStep.label'), 'rezoning');
+    assert.equal(model.get('currentStep.label'), 'complete');
   });
 
   // Test for project incomplete project that hasn't answered rezoning question
-  test('it produces development-site step', function (assert) {
+  test('it produces rezoning step', function (assert) {
     const store = this.owner.lookup('service:store');
     const model = run(() => store.createRecord('project', {
       projectName: 'some project',
@@ -42,6 +42,6 @@ module('Unit | Model | project', (hooks) => {
       needProjectArea: false,
       needRezoning: null,
     }));
-    assert.equal(model.get('currentStep.label'), 'project-creation');
+    assert.equal(model.get('currentStep.label'), 'rezoning');
   });
 });
