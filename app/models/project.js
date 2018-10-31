@@ -75,10 +75,11 @@ export default class extends Model {
   //   return requiredFields.filter(field => this.get(field));
   // }
 
-  @computed('developmentSite', 'projectArea', 'rezoningArea', 'proposedZoning', 'proposedCommercialOverlays', 'proposedSpecialDistricts', 'needProjectArea', 'needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
+  @computed('developmentSite', 'projectName', 'projectArea', 'rezoningArea', 'proposedZoning', 'proposedCommercialOverlays', 'proposedSpecialDistricts', 'needProjectArea', 'needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
   get currentStep() {
     const developmentSite = this.get('developmentSite');
     const projectArea = this.get('projectArea');
+    const projectName = this.get('projectName');
     const rezoningArea = this.get('rezoningArea');
     const proposedZoning = this.get('proposedZoning');
     const proposedCommercialOverlays = this.get('proposedCommercialOverlays');
@@ -88,7 +89,10 @@ export default class extends Model {
     const needUnderlyingZoning = this.get('needUnderlyingZoning');
     const needCommercialOverlay = this.get('needCommercialOverlay');
     const needSpecialDistrict = this.get('needSpecialDistrict');
-    if (developmentSite == null) {
+
+    if (projectName == null) {
+      return 'project-creation';
+    } if (developmentSite == null) {
       return 'development-site';
     } if ((needProjectArea === true || needProjectArea === null) && projectArea === null) {
       return 'project-area';
