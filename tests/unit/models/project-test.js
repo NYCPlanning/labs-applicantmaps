@@ -9,7 +9,7 @@ module('Unit | Model | project', (hooks) => {
   test('it produces project-creation step', function (assert) {
     const store = this.owner.lookup('service:store');
     const model = run(() => store.createRecord('project'));
-    assert.equal(model.get('currentStep'), 'project-creation');
+    assert.equal(model.get('currentStep.label'), 'project-creation');
   });
 
   // Test for project created but development site not yet defined
@@ -18,11 +18,11 @@ module('Unit | Model | project', (hooks) => {
     const model = run(() => store.createRecord('project', {
       projectName: 'some project',
     }));
-    assert.equal(model.get('currentStep'), 'development-site');
+    assert.equal(model.get('currentStep.label'), 'development-site');
   });
 
   // Test for project completion when only development site is required
-  test('it produces development-site step', function (assert) {
+  test('it produces complete status', function (assert) {
     const store = this.owner.lookup('service:store');
     const model = run(() => store.createRecord('project', {
       projectName: 'some project',
@@ -30,7 +30,7 @@ module('Unit | Model | project', (hooks) => {
       needProjectArea: false,
       needRezoning: false,
     }));
-    assert.equal(model.get('currentStep'), 'complete');
+    assert.equal(model.get('currentStep.label'), 'rezoning');
   });
 
   // Test for project incomplete project that hasn't answered rezoning question
@@ -42,6 +42,6 @@ module('Unit | Model | project', (hooks) => {
       needProjectArea: false,
       needRezoning: null,
     }));
-    assert.equal(model.get('currentStep'), 'project-creation');
+    assert.equal(model.get('currentStep.label'), 'project-creation');
   });
 });
