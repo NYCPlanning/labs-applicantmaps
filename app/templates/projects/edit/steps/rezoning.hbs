@@ -2,41 +2,44 @@
 
 <p>Do you need rezoning?</p>
 <p>
-    <input type="radio" name="rezoning-question" checked={{eq model.needRezoning true}} id="rezoning-question--yes" onclick={{action (mut model.needRezoning) true}}>
-    <label for="rezoning-question--yes">Yes</label>
-    <input type="radio" name="rezoning-question" checked={{eq model.needRezoning false}} id="rezoning-question--no" onclick={{action (mut model.needRezoning) false}}>
-    <label for="rezoning-question--no">No</label>
+  <input type="radio" name="rezoning-question" checked={{eq model.needRezoning true}} id="rezoning-question--yes" onclick={{action (mut model.needRezoning) true}}>
+  <label for="rezoning-question--yes">Yes</label>
+  <input type="radio" name="rezoning-question" checked={{eq model.needRezoning false}} id="rezoning-question--no" onclick={{action (mut model.needRezoning) false}}>
+  <label for="rezoning-question--no">No</label>
 </p>
 <br>
 
 {{#if (eq model.needRezoning true)}}
-<p>For each of the following, please indicate if you are proposing changes:</p>
-<p>Underlying Zoning<br>
+{{!-- Note: We will want form validation here that requires them to say yes to at least one of these three --}}
+	<p>For each of the following, please indicate if you are proposing changes:</p>
+	<p>Underlying Zoning<br>
     <input type="radio" name="underlying-question" checked={{eq model.needUnderlyingZoning true}} id="underlying-question--yes" onclick={{action (mut model.needUnderlyingZoning) true}}>
     <label for="underlying-question--yes">Yes</label>
     <input type="radio" name="underlying-question" checked={{eq model.needUnderlyingZoning false}} id="underlying-question--no" onclick={{action (mut model.needUnderlyingZoning) false}}>
     <label for="underlying-question--no">No</label>
-</p>
-<p>Commercial Overlays<br>
+	</p>
+	<p>Commercial Overlays<br>
     <input type="radio" name="commercial-question" checked={{eq model.needCommercialOverlay true}} id="commercial-question--yes" onclick={{action (mut model.needCommercialOverlay) true}}>
     <label for="commercial-question--yes">Yes</label>
     <input type="radio" name="commercial-question" checked={{eq model.needCommercialOverlay false}} id="commercial-question--no" onclick={{action (mut model.needCommercialOverlay) false}}>
     <label for="commercial-question--no">No</label>
-</p>
-<p>Special Purpose Districts<br>
+	</p>
+	<p>Special Purpose Districts<br>
     <input type="radio" name="special-question" checked={{eq model.needSpecialDistrict true}} id="special-question--yes" onclick={{action (mut model.needSpecialDistrict) true}}>
     <label for="special-question--yes">Yes</label>
     <input type="radio" name="special-question" checked={{eq model.needSpecialDistrict false}} id="special-question--no" onclick={{action (mut model.needSpecialDistrict) false}}>
     <label for="special-question--no">No</label>
-</p>
+	</p>
 {{/if}}
 
-{{link-to 'Select Lots' 'projects.edit.geometry-edit' model.id (query-params mode='lots' type='development-site')
-tagName='span'
-class='button'}}
+{{#if hasAnsweredAll}}
+	{{link-to 'Select Lots' 'projects.edit.geometry-edit' model.id (query-params mode='lots' type='development-site')
+	tagName='span'
+	class='button'}}
 
-{{link-to 'Draw Manually' 'projects.edit.geometry-edit' model.id (query-params mode='draw' type='development-site')
-tagName='span'
-class='button'}}
+	{{link-to 'Draw Manually' 'projects.edit.geometry-edit' model.id (query-params mode='draw' type='development-site')
+	tagName='span'
+	class='button'}}
+{{/if}}
 
 {{outlet}}
