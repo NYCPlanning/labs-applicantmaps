@@ -1,2 +1,20 @@
-Placeholder for page asking if you need to define a project area
+<p>Placeholder for page asking if you need to define a project area</p>
+
+<p>Do you need a project area?</p>
+<p>
+    <input type="radio" name="project-area-question" checked={{eq model.needProjectArea true}} id="project-area-question--yes" onclick={{action (mut model.needProjectArea) true}}>
+    <label for="project-area-question--yes">Yes</label>
+    <input type="radio" name="project-area-question" checked={{eq model.needProjectArea false}} id="project-area-question--no" onclick={{action (mut model.needProjectArea) false}}>
+    <label for="buffer-size--no">No</label>
+</p>
+<br>
+
+{{link-to 'Select Lots' 'projects.edit.geometry-edit' model.id (query-params mode='lots' type='project-area')
+tagName='span'
+class='button'}}
+
+{{link-to 'Draw Manually' 'projects.edit.geometry-edit' model.id (query-params mode='draw' type='project-area')
+tagName='span'
+class='button'}}
+
 {{outlet}}
