@@ -37,6 +37,7 @@ module.exports = {
     'no-param-reassign': 0,
     'ember/avoid-leaking-state-in-ember-objects': 0,
     'ember-best-practices/require-dependent-keys': 0,
+    'class-methods-use-this': 0,
   },
   overrides: [
     // node files

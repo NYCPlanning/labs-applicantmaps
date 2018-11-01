@@ -18,10 +18,11 @@ const selectedLotsLayer = {
 const bufferMeters = 500;
 
 @tagName('')
-export default class ProjectFormComponent extends Component {
+export default class ProjectGeometryEditComponent extends Component {
   constructor(...args) {
     super(...args);
 
+    // selectedLots
     this.set('selectedLots', {
       type: 'FeatureCollection',
       features: [],
@@ -31,100 +32,40 @@ export default class ProjectFormComponent extends Component {
   @argument
   model;
 
+  @argument
+  mode;
+
   @service
   notificationMessages;
-
-  geometryMode = null
-
-  showDrawInstructions = true
 
   @service
   router;
 
-  projectGeomLayers = projectGeomLayers
+  // general map
+  showDrawInstructions = true;
 
-  selectedLotsLayer = selectedLotsLayer
-
-  lotSelectionMode = false
-
-  geocodedFeature = null;
-
-  geocodedLayer = {
-    type: 'circle',
-    paint: {
-      'circle-radius': {
-        stops: [
-          [
-            10,
-            5,
-          ],
-          [
-            17,
-            12,
-          ],
-        ],
-      },
-      'circle-color': 'rgba(199, 92, 92, 1)',
-      'circle-stroke-width': {
-        stops: [
-          [
-            10,
-            20,
-          ],
-          [
-            17,
-            18,
-          ],
-        ],
-      },
-      'circle-stroke-color': 'rgba(65, 73, 255, 1)',
-      'circle-opacity': 0,
-      'circle-stroke-opacity': 0.2,
-    },
-  }
-
+  // general map
   @computed('lat', 'lng')
   get center() {
     return [this.get('lat'), this.get('lng')];
   }
 
-  @computed('model.developmentSite')
-  get noDevelopmentSite() {
-    return !this.get('model.developmentSite');
-  }
-
-  @computed('selectedLots.features.[]')
-  get selectedLotsSource() {
-    const selectedLots = this.get('selectedLots');
-    return {
-      type: 'geojson',
-      data: selectedLots,
-    };
-  }
-
-  @computed('proposedZoning.features.[]')
-  get proposedZoningSource() {
-    const proposedZoning = this.get('proposedZoning');
-    return {
-      type: 'geojson',
-      data: proposedZoning,
-    };
-  }
-
+  // general map
   @action
-  selectSearchResult({ geometry }) {
-    const { coordinates } = geometry;
-    const { mapInstance: map } = this;
-
-    this.set('geocodedFeature', { type: 'geojson', data: geometry });
-    map.flyTo({ center: coordinates, zoom: 16 });
+  hideInstructions() {
+    this.set('showDrawInstructions', false);
   }
 
+  // general map
   @action
-  handleSearchClear() {
-    this.set('searchedAddressSource', null);
+  showInstructions() {
+    this.set('showDrawInstructions', true);
   }
 
+  // general map, but could be split up
+  projectGeomLayers = projectGeomLayers;
+
+  // general map
   @action
   handleMapLoad(map) {
     this.set('mapInstance', map);
@@ -169,11 +110,41 @@ export default class ProjectFormComponent extends Component {
     basemapLayersToHide.forEach(layer => map.removeLayer(layer));
   }
 
+  // general map
+  @action
+  async save(model) {
+    const project = await model.save();
+
+    this.get('notificationMessages').success('Project saved!');
+
+    this.get('router').transitionTo('projects.show', project);
+  }
+
+  // development site
+  lotSelectionMode = false
+
+  // development site
+  @computed('selectedLots.features.[]')
+  get selectedLotsSource() {
+    const selectedLots = this.get('selectedLots');
+    return {
+      type: 'geojson',
+      data: selectedLots,
+    };
+  }
+
+  // development site
+  selectedLotsLayer = selectedLotsLayer;
+
+  // development site
+  geometryMode = null;
+
+  // development site
   @action
   handleLayerClick(feature) {
     const { id: layerId } = feature.layer;
 
-    // if lot was clicked when in lot selection mode, handle the clicl
+    // if lot was clicked when in lot selection mode, handle the click
     if (layerId === 'pluto-fill' && this.get('lotSelectionMode')) {
       const { type, geometry, properties } = feature;
       const selectedLots = this.get('selectedLots');
@@ -193,23 +164,7 @@ export default class ProjectFormComponent extends Component {
     }
   }
 
-  @action
-  async save(model) {
-    const project = await model.save();
-
-    this.get('notificationMessages').success('Project saved!');
-
-    this.get('router').transitionTo('projects.show', project);
-  }
-
-  @action
-  flyTo(center, zoom) {
-    // Fly to the lot
-    this.get('mapInstance').flyTo({ center, zoom });
-    // Turn on the Tax Lots layer group
-    this.set('tax-lots', true);
-  }
-
+  // zoning districts edit
   @action
   addProposedZoning() {
     this.getClippedZoning();
@@ -217,6 +172,7 @@ export default class ProjectFormComponent extends Component {
     this.getClippedSpecialPurposeDistricts();
   }
 
+  // zoning districts edit
   @action
   async getClippedZoning() {
     // get the project's development site polygon as a reference for what area of the city to get zoning polygons for
@@ -262,34 +218,26 @@ export default class ProjectFormComponent extends Component {
     this.set('model.proposedCommercialOverlays', clippedCommercialOverlays);
   }
 
-  @action
-  hideInstructions() {
-    this.set('showDrawInstructions', false);
-  }
-
-  @action
-  showInstructions() {
-    this.set('showDrawInstructions', true);
-  }
-
+  // zoning districts edit
   @action
   async getClippedSpecialPurposeDistricts() {
     const developmentSite = this.get('model.developmentSite');
 
     // Get special purpose districts
     const specialPurposeDistrictsQuery = `
-          WITH buffer as (
-            SELECT ST_SetSRID(
-              ST_Buffer(
-                ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
-                ${bufferMeters}
-              ),
-            4326)::geometry AS the_geom
-          )
-          SELECT ST_Intersection(spd.the_geom, buffer.the_geom) AS the_geom, sdname AS label
-          FROM planninglabs.special_purpose_districts_v201809 spd, buffer
-          WHERE ST_Intersects(spd.the_geom,buffer.the_geom)
-        `;
+      WITH buffer as (
+        SELECT ST_SetSRID(
+          ST_Buffer(
+            ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
+            ${bufferMeters}
+          ),
+        4326)::geometry AS the_geom
+      )
+      SELECT ST_Intersection(spd.the_geom, buffer.the_geom) AS the_geom, sdname AS label
+      FROM planninglabs.special_purpose_districts_v201809 spd, buffer
+      WHERE ST_Intersects(spd.the_geom,buffer.the_geom)
+    `;
+
     const clippedSpecialPurposeDistricts = await carto.SQL(specialPurposeDistrictsQuery, 'geojson');
     this.set('model.proposedSpecialPurposeDistricts', clippedSpecialPurposeDistricts);
   }
