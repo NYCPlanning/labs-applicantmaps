@@ -92,7 +92,7 @@ export default class extends Model {
     if (projectName == null) {
       return { label: 'project-creation', route: 'projects.new' };
     } if (developmentSite == null) {
-      return { label: 'development-site', route: 'projects.edit.development-site' };
+      return { label: 'development-site', route: 'projects.edit.steps.development-site' };
     } if ((needProjectArea === true || needProjectArea == null) && projectArea == null) {
       return { label: 'project-area', route: 'projects.edit.project-area' };
     } if ((needRezoning === true || needRezoning == null) && rezoningArea == null) {

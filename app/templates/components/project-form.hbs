@@ -54,14 +54,16 @@
           class="zap-project-id-field"
           aria-describedby="zap-project-id-field-help-text"
         }}
-        <p class="help-text" id="zap-project-id-field-help-text">The unique code provided by the Department of City Planning following an Informational Interest Meeting</p>
+        <p class="help-text" id="zap-project-id-field-help-text">
+          The unique code provided by the Department of City Planning following an Informational Interest Meeting
+        </p>
       </div>
     </div>
 
     <button
       type="button"
       class="button large expanded project-save-button"
-      disabled={{eq model.currentStep 'project-creation'}} 
+      disabled={{eq model.currentStep.label 'project-creation'}} 
       onclick={{action 'save' model}}
     >
       Create New Project

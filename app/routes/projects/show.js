@@ -15,11 +15,11 @@ export default class ProjectsShowRoute extends Route {
 
   afterModel(model) {
     // here we check which step we're on so that we can route
-    const step = model.get('currentStep');
+    const { route } = model.get('currentStep');
 
     // has the user completed the steps? if not, transition to that step.
     if (model.get('currentStep') !== 'complete') {
-      this.transitionTo(`projects.edit.steps.${step}`, model.get('id'));
+      this.transitionTo(route, model.get('id'));
     }
   }
 
