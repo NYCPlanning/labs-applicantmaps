@@ -112,8 +112,9 @@ export default class ProjectMapFormComponent extends Component {
           ],
         },
       ],
-    }).then((layerGroups) => {
-      const { meta } = layerGroups;
+    }).then((allLayerGroups) => {
+      const { meta } = allLayerGroups;
+      const layerGroups = allLayerGroups.filter(layerGroup => layerGroup.get('id') !== 'tax-lots');
 
       this.set('model', {
         layerGroups,

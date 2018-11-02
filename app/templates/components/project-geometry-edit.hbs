@@ -10,14 +10,14 @@
     }}
 
       {{!-- Development Site --}}
-      {{menu.draw-control
+{{!--       {{menu.draw-control
         mode='developmentSite'
         modeDisplayName='Development Site'
         tooltip="The Development Site refers to the zoning lot(s) to be improved by the specific development(s) that the land use actions would facilitate."
         hasGeom=model.developmentSite
         required=true
         doneAction=(action 'addProposedZoning')
-      }}
+      }} --}}
 
       {{!-- Project Area --}}
 {{!--       {{menu.draw-control
@@ -67,9 +67,11 @@
     {{/project-geometries-menu}}
   {{/if}}
 
-{{!--   <hr />
+  {{!-- The geometry type component will fill this div with markup once invoked --}}
+  <div id="geometry-type-draw-explainer">
+  </div>
 
-  <button type="button" class="button large green expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Save Project</button> --}}
+  <button type="button" class="button large green expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Save Project</button>
 
 </div>
 <div class="cell large-auto map-container">
@@ -84,17 +86,20 @@
       mapLoaded=(action handleMapLoad) as |map|}}
 
       {{search-handler map=map}}
-{{!--       <div class="search-and-bbl-lookup-container">
-        {{#labs-search
-          searchPlaceholder='Search for Address...'
-          onSelect=(action 'selectSearchResult')
-          typeTitleLookup=(hash
-            lot='Addresses')
-          onClear=(action (mut geocodedFeature null)) as |search|}}
-          <small class="dark-gray">{{search.result.label}}</small>
-        {{/labs-search}}
-        {{labs-bbl-lookup flyTo=(action 'flyTo')}}
-      </div> --}}
+
+      {{!-- invoke the component for the specified draw mode --}}
+      {{project-geometry-edit/development-site
+        model=model
+        map=map}}
+
+      {{!-- labs-layers (includes tax-lots layer) --}}
+      {{#map.labs-layers
+        layerGroups=projectMapForm.model.layerGroups
+        as |layers|}}
+        {{#layers.tooltip as |tooltip|}}
+          {{tooltip-renderer feature=tooltip.feature template=tooltip.layer.tooltipTemplate}}
+        {{/layers.tooltip}}
+      {{/map.labs-layers}}
 
       {{#if (and geometryMode (not lotSelectionMode))}}
         {{#if showDrawInstructions}}
@@ -115,98 +120,78 @@
         {{/if}}
       {{/if}}
 
-        {{!-- labs-layers (includes tax-lots layer) --}}
-        {{#map.labs-layers
-          layerGroups=projectMapForm.model.layerGroups
-          onLayerClick=(action 'handleLayerClick')
-          as |layers|}}
-            {{#layers.tooltip as |tooltip|}}
-              {{tooltip-renderer feature=tooltip.feature template=tooltip.layer.tooltipTemplate}}
-            {{/layers.tooltip}}
-        {{/map.labs-layers}}
-
-        {{!-- Ad-hoc source and layer for developmentSite --}}
-        {{#if (and model.developmentSite (not-eq geometryMode 'developmentSite'))}}
-          {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
-            {{source.layer
-              layer=projectGeomLayers.developmentSiteLayer
-              before='boundary_country'
-            }}
-          {{/map.source}}
-        {{/if}}
-
-        {{!-- Ad-hoc source and layer for projectArea --}}
-        {{#if (and model.projectArea (not-eq geometryMode 'projectArea'))}}
-          {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
-            {{source.layer
-              layer=projectGeomLayers.projectAreaLayer
-              before='boundary_country'
-            }}
-          {{/map.source}}
-        {{/if}}
-
-        {{!-- Ad-hoc source and layer for projectArea --}}
-        {{#if (and model.rezoningArea (not-eq geometryMode 'rezoningArea'))}}
-          {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
-            {{source.layer
-              layer=projectGeomLayers.rezoningAreaLayer
-              before='boundary_country'
-            }}
-          {{/map.source}}
-        {{/if}}
-
-        {{!-- Ad-hoc source and layer for showing selected lots in lot selection mode --}}
-        {{#map.source options=selectedLotsSource as |source|}}
+      {{!-- Ad-hoc source and layer for projectArea --}}
+      {{#if (and model.projectArea (not-eq geometryMode 'projectArea'))}}
+        {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
           {{source.layer
-            layer=selectedLotsLayer
+            layer=projectGeomLayers.projectAreaLayer
             before='boundary_country'
           }}
         {{/map.source}}
+      {{/if}}
 
-        {{!-- Ad-hoc source and layer for showing zoning --}}
-        {{#if (and model.proposedZoning (not-eq geometryMode 'proposedZoning') model.developmentSite)}}
-          {{#map.source options=(mapbox-geojson-source model.proposedZoning) as |source|}}
-            {{source.layer
-              layer=projectGeomLayers.proposedZoningLayer
-              before='boundary_country'
-            }}
-            {{source.layer
-              layer=projectGeomLayers.proposedZoningLabelsLayer
-              before='boundary_country'
-            }}
-          {{/map.source}}
-        {{/if}}
+      {{!-- Ad-hoc source and layer for projectArea --}}
+      {{#if (and model.rezoningArea (not-eq geometryMode 'rezoningArea'))}}
+        {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
+          {{source.layer
+            layer=projectGeomLayers.rezoningAreaLayer
+            before='boundary_country'
+          }}
+        {{/map.source}}
+      {{/if}}
 
-        {{!-- Ad-hoc source and layer for showing commercial overlays --}}
-        {{#if (and model.proposedCommercialOverlays (not-eq geometryMode 'proposedCommercialOverlays') model.developmentSite)}}
-          {{#map.source options=(mapbox-geojson-source model.proposedCommercialOverlays) as |source|}}
-            {{source.layer layer=projectGeomLayers.coLayer before='boundary_country'}}
-            {{source.layer layer=projectGeomLayers.c11Layer before='boundary_country'}}
-            {{source.layer layer=projectGeomLayers.c12Layer before='boundary_country'}}
-            {{source.layer layer=projectGeomLayers.c13Layer before='boundary_country'}}
-            {{source.layer layer=projectGeomLayers.c14Layer before='boundary_country'}}
-            {{source.layer layer=projectGeomLayers.c15Layer before='boundary_country'}}
-            {{source.layer layer=projectGeomLayers.c21Layer before='boundary_country'}}
-            {{source.layer layer=projectGeomLayers.c22Layer before='boundary_country'}}
-            {{source.layer layer=projectGeomLayers.c23Layer before='boundary_country'}}
-            {{source.layer layer=projectGeomLayers.c24Layer before='boundary_country'}}
-            {{source.layer layer=projectGeomLayers.c25Layer before='boundary_country'}}
-          {{/map.source}}
-        {{/if}}
+      {{!-- Ad-hoc source and layer for showing selected lots in lot selection mode --}}
+      {{#map.source options=selectedLotsSource as |source|}}
+        {{source.layer
+          layer=selectedLotsLayer
+          before='boundary_country'
+        }}
+      {{/map.source}}
 
-        {{!-- Ad-hoc source and layer for showing commercial overlays --}}
-        {{#if (and model.proposedSpecialPurposeDistricts (not-eq geometryMode 'proposedSpecialPurposeDistricts') model.developmentSite)}}
-          {{#map.source options=(mapbox-geojson-source model.proposedSpecialPurposeDistricts) as |source|}}
-            {{source.layer
-              layer=projectGeomLayers.proposedSpecialPurposeDistrictsLayer
-              before='boundary_country'
-            }}
-            {{source.layer
-              layer=projectGeomLayers.proposedSpecialPurposeDistrictsLabelsLayer
-              before='boundary_country'
-            }}
-          {{/map.source}}
-        {{/if}}
+      {{!-- Ad-hoc source and layer for showing zoning --}}
+      {{#if (and model.proposedZoning (not-eq geometryMode 'proposedZoning') model.developmentSite)}}
+        {{#map.source options=(mapbox-geojson-source model.proposedZoning) as |source|}}
+          {{source.layer
+            layer=projectGeomLayers.proposedZoningLayer
+            before='boundary_country'
+          }}
+          {{source.layer
+            layer=projectGeomLayers.proposedZoningLabelsLayer
+            before='boundary_country'
+          }}
+        {{/map.source}}
+      {{/if}}
+
+      {{!-- Ad-hoc source and layer for showing commercial overlays --}}
+      {{#if (and model.proposedCommercialOverlays (not-eq geometryMode 'proposedCommercialOverlays') model.developmentSite)}}
+        {{#map.source options=(mapbox-geojson-source model.proposedCommercialOverlays) as |source|}}
+          {{source.layer layer=projectGeomLayers.coLayer before='boundary_country'}}
+          {{source.layer layer=projectGeomLayers.c11Layer before='boundary_country'}}
+          {{source.layer layer=projectGeomLayers.c12Layer before='boundary_country'}}
+          {{source.layer layer=projectGeomLayers.c13Layer before='boundary_country'}}
+          {{source.layer layer=projectGeomLayers.c14Layer before='boundary_country'}}
+          {{source.layer layer=projectGeomLayers.c15Layer before='boundary_country'}}
+          {{source.layer layer=projectGeomLayers.c21Layer before='boundary_country'}}
+          {{source.layer layer=projectGeomLayers.c22Layer before='boundary_country'}}
+          {{source.layer layer=projectGeomLayers.c23Layer before='boundary_country'}}
+          {{source.layer layer=projectGeomLayers.c24Layer before='boundary_country'}}
+          {{source.layer layer=projectGeomLayers.c25Layer before='boundary_country'}}
+        {{/map.source}}
+      {{/if}}
+
+      {{!-- Ad-hoc source and layer for showing commercial overlays --}}
+      {{#if (and model.proposedSpecialPurposeDistricts (not-eq geometryMode 'proposedSpecialPurposeDistricts') model.developmentSite)}}
+        {{#map.source options=(mapbox-geojson-source model.proposedSpecialPurposeDistricts) as |source|}}
+          {{source.layer
+            layer=projectGeomLayers.proposedSpecialPurposeDistrictsLayer
+            before='boundary_country'
+          }}
+          {{source.layer
+            layer=projectGeomLayers.proposedSpecialPurposeDistrictsLabelsLayer
+            before='boundary_country'
+          }}
+        {{/map.source}}
+      {{/if}}
     {{/labs-map}}
   {{/project-map-form}}
 </div>

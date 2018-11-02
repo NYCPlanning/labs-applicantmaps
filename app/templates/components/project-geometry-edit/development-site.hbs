@@ -1,1 +1,17 @@
+{{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
+  {{source.layer
+    layer=developmentSiteLayer
+    before='boundary_country'
+  }}
+{{/map.source}}
+{{log taxLots}}
+{{!-- add the development-specific tax-lots layergroup --}}
+{{#map.labs-layers
+  layerGroups=(array taxLots)
+  as |layers|}}
+  {{#layers.tooltip as |tooltip|}}
+    {{tooltip-renderer feature=tooltip.feature template=tooltip.layer.tooltipTemplate}}
+  {{/layers.tooltip}}
+{{/map.labs-layers}}
+
 {{yield}}

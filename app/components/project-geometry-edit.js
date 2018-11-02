@@ -7,30 +7,15 @@ import { tagName } from '@ember-decorators/component';
 import carto from 'cartobox-promises-utility/utils/carto';
 import projectGeomLayers from '../utils/project-geom-layers';
 
-const selectedLotsLayer = {
-  type: 'fill',
-  paint: {
-    'fill-color': 'rgba(217, 216, 1, 1)',
-    'fill-outline-color': 'rgba(255, 255, 255, 1)',
-  },
-};
-
 const bufferMeters = 500;
 
 @tagName('')
 export default class ProjectGeometryEditComponent extends Component {
-  constructor(...args) {
-    super(...args);
-
-    // selectedLots
-    this.set('selectedLots', {
-      type: 'FeatureCollection',
-      features: [],
-    });
-  }
-
   @argument
   model;
+
+  @argument
+  type;
 
   @argument
   mode;
@@ -41,31 +26,26 @@ export default class ProjectGeometryEditComponent extends Component {
   @service
   router;
 
-  // general map
+  /* ----------  General Map  ---------- */
   showDrawInstructions = true;
 
-  // general map
   @computed('lat', 'lng')
   get center() {
     return [this.get('lat'), this.get('lng')];
   }
 
-  // general map
   @action
   hideInstructions() {
     this.set('showDrawInstructions', false);
   }
 
-  // general map
   @action
   showInstructions() {
     this.set('showDrawInstructions', true);
   }
 
-  // general map, but could be split up
   projectGeomLayers = projectGeomLayers;
 
-  // general map
   @action
   handleMapLoad(map) {
     this.set('mapInstance', map);
@@ -110,7 +90,6 @@ export default class ProjectGeometryEditComponent extends Component {
     basemapLayersToHide.forEach(layer => map.removeLayer(layer));
   }
 
-  // general map
   @action
   async save(model) {
     const project = await model.save();
@@ -120,51 +99,7 @@ export default class ProjectGeometryEditComponent extends Component {
     this.get('router').transitionTo('projects.show', project);
   }
 
-  // development site
-  lotSelectionMode = false
-
-  // development site
-  @computed('selectedLots.features.[]')
-  get selectedLotsSource() {
-    const selectedLots = this.get('selectedLots');
-    return {
-      type: 'geojson',
-      data: selectedLots,
-    };
-  }
-
-  // development site
-  selectedLotsLayer = selectedLotsLayer;
-
-  // development site
-  geometryMode = null;
-
-  // development site
-  @action
-  handleLayerClick(feature) {
-    const { id: layerId } = feature.layer;
-
-    // if lot was clicked when in lot selection mode, handle the click
-    if (layerId === 'pluto-fill' && this.get('lotSelectionMode')) {
-      const { type, geometry, properties } = feature;
-      const selectedLots = this.get('selectedLots');
-
-      // if the lot is not in the selection, push it, if it is, remove it
-      const inSelection = selectedLots.features.find(lot => lot.properties.bbl === properties.bbl);
-
-      if (inSelection === undefined) {
-        this.get('selectedLots.features').pushObject({
-          type,
-          geometry,
-          properties,
-        });
-      } else {
-        this.set('selectedLots.features', selectedLots.features.filter(lot => lot.properties.bbl !== properties.bbl));
-      }
-    }
-  }
-
-  // zoning districts edit
+  /* ----------  Zoning Districts Edit  ---------- */
   @action
   addProposedZoning() {
     this.getClippedZoning();
@@ -172,7 +107,6 @@ export default class ProjectGeometryEditComponent extends Component {
     this.getClippedSpecialPurposeDistricts();
   }
 
-  // zoning districts edit
   @action
   async getClippedZoning() {
     // get the project's development site polygon as a reference for what area of the city to get zoning polygons for
@@ -218,7 +152,6 @@ export default class ProjectGeometryEditComponent extends Component {
     this.set('model.proposedCommercialOverlays', clippedCommercialOverlays);
   }
 
-  // zoning districts edit
   @action
   async getClippedSpecialPurposeDistricts() {
     const developmentSite = this.get('model.developmentSite');

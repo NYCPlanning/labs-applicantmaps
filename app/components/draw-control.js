@@ -17,109 +17,65 @@ const draw = new MapboxDraw({
 });
 
 export default class DrawControlController extends Component {
-  // ui
+  /* ----------  UI  ---------- */
   @argument
   tooltip
 
-  // development site
-  @argument
-  lotSelectionMode
-
-  // development site
-  @argument
-  geometryMode
-
-  // general mode
+  /* ----------  General Mode  ---------- */
   @argument
   modeDisplayName
 
-  // general mode
   @argument
   mode
 
-  // general mode
   @argument
   hasGeom
 
-  // general mode
   @argument
   required = false;
-
-  // development site
-  @argument
-  startLotSelection
-
-  // development site
-  @argument
-  finishLotSelection
-
-  // development site
-  @argument
-  selectedLots
-
-  // development site
-  @argument
-  lotSelectionMode
-
-  // development site
-  @argument
-  setProjectGeometry
-
-  // general map
-  @argument
-  mapInstance
-
-  // general map
-  @argument
-  model
-
-  @argument
-  resetAction = null
-
-  @argument
-  doneAction = null
-
-  selectedZoningFeature = undefined
 
   deleteModalIsOpen = false
 
   @argument
   disabled = false
 
-  @argument
-  developmentSiteIcon = projectGeomLayers.developmentSiteIcon
+  @action
+  setProjectGeometry() {
+    const FeatureCollection = draw.getAll();
 
-  @argument
-  projectAreaIcon = projectGeomLayers.projectAreaIcon
+    // delete the drawn geometry
+    draw.deleteAll();
 
-  @argument
-  rezoningAreaIcon = projectGeomLayers.rezoningAreaIcon
+    const geometryMode = this.get('geometryMode');
+    const isProposedZoningMode = this.get('isProposedZoningMode');
+    const model = this.get('model');
 
-  @computed('mode')
-  get modeIcon() {
-    const mode = this.get('mode');
-    const rezoningAreaIcon = this.get('rezoningAreaIcon');
-    const projectAreaIcon = this.get('projectAreaIcon');
-    const developmentSiteIcon = this.get('developmentSiteIcon');
-
-    if (mode === 'rezoningArea') { return rezoningAreaIcon; }
-    if (mode === 'projectArea') { return projectAreaIcon; }
-    return developmentSiteIcon;
-  }
-
-  // if geometryMode is one of the three proposed zoning overlays, this is true
-  @computed('mode')
-  get isProposedZoningMode() {
-    const geometryMode = this.get('mode');
-
-    if (geometryMode === 'proposedZoning'
-      || geometryMode === 'proposedCommercialOverlays'
-      || geometryMode === 'proposedSpecialPurposeDistricts') {
-      return true;
+    // set geometry depending on mode
+    if (isProposedZoningMode) {
+      model.set(geometryMode, FeatureCollection);
+    } else {
+      const { geometry } = FeatureCollection.features[0];
+      model.set(geometryMode, geometry);
     }
-    return false;
+
+    const doneAction = this.get('doneAction');
+    if (doneAction) {
+      this.handleDone();
+    }
+
+    // breakdown the draw tools
+    this.toggleGeometryEditing(null);
   }
 
+
+  /* ----------  General Map  ---------- */
+  @argument
+  mapInstance
+
+  @argument
+  model
+
+  // general map
   @action
   toggleGeometryEditing(mode) {
     this.set('geometryMode', mode);
@@ -153,6 +109,28 @@ export default class DrawControlController extends Component {
       this.set('selectedZoningFeature', null);
     }
   }
+
+  /* ----------  Development Site  ---------- */
+  @argument
+  lotSelectionMode
+
+  @argument
+  geometryMode
+
+  @argument
+  startLotSelection
+
+  @argument
+  finishLotSelection
+
+  @argument
+  selectedLots
+
+  @argument
+  lotSelectionMode
+
+  @argument
+  developmentSiteIcon = projectGeomLayers.developmentSiteIcon
 
   @action
   startLotSelection() {
@@ -193,32 +171,48 @@ export default class DrawControlController extends Component {
     this.set('selectedLots.features', []);
   }
 
-  @action
-  setProjectGeometry() {
-    const FeatureCollection = draw.getAll();
+  @argument
+  setProjectGeometry
 
-    // delete the drawn geometry
-    draw.deleteAll();
+  /* ----------  Project Area  ---------- */
+  @argument
+  projectAreaIcon = projectGeomLayers.projectAreaIcon
 
-    const geometryMode = this.get('geometryMode');
-    const isProposedZoningMode = this.get('isProposedZoningMode');
-    const model = this.get('model');
+  /* ----------  Zoning  ---------- */
+  @argument
+  resetAction = null
 
-    // set geometry depending on mode
-    if (isProposedZoningMode) {
-      model.set(geometryMode, FeatureCollection);
-    } else {
-      const { geometry } = FeatureCollection.features[0];
-      model.set(geometryMode, geometry);
+  @argument
+  doneAction = null
+
+  @argument
+  rezoningAreaIcon = projectGeomLayers.rezoningAreaIcon
+
+  selectedZoningFeature = undefined
+
+  @computed('mode')
+  get modeIcon() {
+    const mode = this.get('mode');
+    const rezoningAreaIcon = this.get('rezoningAreaIcon');
+    const projectAreaIcon = this.get('projectAreaIcon');
+    const developmentSiteIcon = this.get('developmentSiteIcon');
+
+    if (mode === 'rezoningArea') { return rezoningAreaIcon; }
+    if (mode === 'projectArea') { return projectAreaIcon; }
+    return developmentSiteIcon;
+  }
+
+  // if geometryMode is one of the three proposed zoning overlays, this is true
+  @computed('mode')
+  get isProposedZoningMode() {
+    const geometryMode = this.get('mode');
+
+    if (geometryMode === 'proposedZoning'
+      || geometryMode === 'proposedCommercialOverlays'
+      || geometryMode === 'proposedSpecialPurposeDistricts') {
+      return true;
     }
-
-    const doneAction = this.get('doneAction');
-    if (doneAction) {
-      this.handleDone();
-    }
-
-    // breakdown the draw tools
-    this.toggleGeometryEditing(null);
+    return false;
   }
 
   @action
