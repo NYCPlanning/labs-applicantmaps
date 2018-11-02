@@ -64,175 +64,179 @@
 {{#if (eq model.needRezoning true)}}
   {{!-- Note: We will want form validation here that requires them to say yes to at least one of these three --}}
 
-  <h2 class="header-medium">Indicate which types of zoning you are altering:</h2>
+  <h2 class="header-medium">Are you altering these types of zoning?</h2>
 
   {{!-- Underlying Zoning --}}
-  <div class="grid-x grid-padding-x">
+  <div class="grid-x grid-margin-x">
     <div class="cell medium-5 xlarge-4 xxlarge-3">
       <p>Underlying Zoning</p>
     </div>
-    <div class="cell medium-shrink">
-      <button
-        type="button"
-        class="button gray small expanded"
-        onclick={{action (mut model.needUnderlyingZoning) true}}
-      >
-        <span class="dark-gray">
-          {{#if (eq model.needUnderlyingZoning true)}}
-            {{fa-icon 'check-circle'
-              fixedWidth=true
-              transform='left-3 grow-3'
-            }}
-          {{else}}
-            {{fa-icon 'circle'
-              prefix='far'
-              fixedWidth=true
-              transform='left-3 grow-3'
-            }}
-          {{/if}}
-        </span>
-        <strong>Yes</strong>
-      </button>
-    </div>
-    <div class="cell medium-shrink">
-      <button
-        type="button"
-        class="button gray small expanded"
-        onclick={{action (mut model.needUnderlyingZoning) false}}
-      >
-        <span class="dark-gray">
-          {{#if (eq model.needUnderlyingZoning false)}}
-            {{fa-icon 'check-circle'
-              fixedWidth=true
-              transform='left-3 grow-3'
-            }}
-          {{else}}
-            {{fa-icon 'circle'
-              prefix='far'
-              fixedWidth=true
-              transform='left-3 grow-3'
-            }}
-          {{/if}}
-        </span>
-        <strong>No</strong>
-      </button>
+    <div class="cell medium-5 xlarge-4 xxlarge-3">
+      <div class="button-group small expanded">
+        <button
+          type="button"
+          class="button gray"
+          onclick={{action (mut model.needUnderlyingZoning) true}}
+        >
+          <span class="dark-gray">
+            {{#if (eq model.needUnderlyingZoning true)}}
+              {{fa-icon 'check-circle'
+                fixedWidth=true
+                transform='left-3 grow-3'
+              }}
+            {{else}}
+              {{fa-icon 'circle'
+                prefix='far'
+                fixedWidth=true
+                transform='left-3 grow-3'
+              }}
+            {{/if}}
+          </span>
+          <strong>Yes</strong>
+        </button>
+        <button
+          type="button"
+          class="button gray"
+          onclick={{action (mut model.needUnderlyingZoning) false}}
+        >
+          <span class="dark-gray">
+            {{#if (eq model.needUnderlyingZoning false)}}
+              {{fa-icon 'check-circle'
+                fixedWidth=true
+                transform='left-3 grow-3'
+              }}
+            {{else}}
+              {{fa-icon 'circle'
+                prefix='far'
+                fixedWidth=true
+                transform='left-3 grow-3'
+              }}
+            {{/if}}
+          </span>
+          <strong>No</strong>
+        </button>
+      </div>
     </div>
   </div>
 
   {{!-- Commercial Overlays --}}
-  <div class="grid-x grid-padding-x">
+  <div class="grid-x grid-margin-x">
     <div class="cell medium-5 xlarge-4 xxlarge-3">
       <p>Commercial Overlays</p>
     </div>
-    <div class="cell medium-shrink">
-      <button
-        type="button"
-        class="button gray small expanded"
-        onclick={{action (mut model.needCommercialOverlay) true}}
-      >
-        <span class="dark-gray">
-          {{#if (eq model.needCommercialOverlay true)}}
-            {{fa-icon 'check-circle'
-              fixedWidth=true
-              transform='left-3 grow-3'
-            }}
-          {{else}}
-            {{fa-icon 'circle'
-              prefix='far'
-              fixedWidth=true
-              transform='left-3 grow-3'
-            }}
-          {{/if}}
-        </span>
-        <strong>Yes</strong>
-      </button>
-    </div>
-    <div class="cell medium-shrink">
-      <button
-        type="button"
-        class="button gray small expanded"
-        onclick={{action (mut model.needCommercialOverlay) false}}
-      >
-        <span class="dark-gray">
-          {{#if (eq model.needCommercialOverlay false)}}
-            {{fa-icon 'check-circle'
-              fixedWidth=true
-              transform='left-3 grow-3'
-            }}
-          {{else}}
-            {{fa-icon 'circle'
-              prefix='far'
-              fixedWidth=true
-              transform='left-3 grow-3'
-            }}
-          {{/if}}
-        </span>
-        <strong>No</strong>
-      </button>
+    <div class="cell medium-5 xlarge-4 xxlarge-3">
+      <div class="button-group small expanded">
+        <button
+          type="button"
+          class="button gray"
+          onclick={{action (mut model.needCommercialOverlay) true}}
+        >
+          <span class="dark-gray">
+            {{#if (eq model.needCommercialOverlay true)}}
+              {{fa-icon 'check-circle'
+                fixedWidth=true
+                transform='left-3 grow-3'
+              }}
+            {{else}}
+              {{fa-icon 'circle'
+                prefix='far'
+                fixedWidth=true
+                transform='left-3 grow-3'
+              }}
+            {{/if}}
+          </span>
+          <strong>Yes</strong>
+        </button>
+        <button
+          type="button"
+          class="button gray"
+          onclick={{action (mut model.needCommercialOverlay) false}}
+        >
+          <span class="dark-gray">
+            {{#if (eq model.needCommercialOverlay false)}}
+              {{fa-icon 'check-circle'
+                fixedWidth=true
+                transform='left-3 grow-3'
+              }}
+            {{else}}
+              {{fa-icon 'circle'
+                prefix='far'
+                fixedWidth=true
+                transform='left-3 grow-3'
+              }}
+            {{/if}}
+          </span>
+          <strong>No</strong>
+        </button>
+      </div>
     </div>
   </div>
 
   {{!-- Special Purpose Districts --}}
-  <div class="grid-x grid-padding-x">
+  <div class="grid-x grid-margin-x">
     <div class="cell medium-5 xlarge-4 xxlarge-3">
       <p>Special Purpose Districts</p>
     </div>
-    <div class="cell medium-shrink">
-      <button
-        type="button"
-        class="button gray small expanded"
-        onclick={{action (mut model.needSpecialDistrict) true}}
-      >
-        <span class="dark-gray">
-          {{#if (eq model.needSpecialDistrict true)}}
-            {{fa-icon 'check-circle'
-              fixedWidth=true
-              transform='left-3 grow-3'
-            }}
-          {{else}}
-            {{fa-icon 'circle'
-              prefix='far'
-              fixedWidth=true
-              transform='left-3 grow-3'
-            }}
-          {{/if}}
-        </span>
-        <strong>Yes</strong>
-      </button>
-    </div>
-    <div class="cell medium-shrink">
-      <button
-        type="button"
-        class="button gray small expanded"
-        onclick={{action (mut model.needSpecialDistrict) false}}
-      >
-        <span class="dark-gray">
-          {{#if (eq model.needSpecialDistrict false)}}
-            {{fa-icon 'check-circle'
-              fixedWidth=true
-              transform='left-3 grow-3'
-            }}
-          {{else}}
-            {{fa-icon 'circle'
-              prefix='far'
-              fixedWidth=true
-              transform='left-3 grow-3'
-            }}
-          {{/if}}
-        </span>
-        <strong>No</strong>
-      </button>
+    <div class="cell medium-5 xlarge-4 xxlarge-3">
+      <div class="button-group small expanded">
+        <button
+          type="button"
+          class="button gray"
+          onclick={{action (mut model.needSpecialDistrict) true}}
+        >
+          <span class="dark-gray">
+            {{#if (eq model.needSpecialDistrict true)}}
+              {{fa-icon 'check-circle'
+                fixedWidth=true
+                transform='left-3 grow-3'
+              }}
+            {{else}}
+              {{fa-icon 'circle'
+                prefix='far'
+                fixedWidth=true
+                transform='left-3 grow-3'
+              }}
+            {{/if}}
+          </span>
+          <strong>Yes</strong>
+        </button>
+        <button
+          type="button"
+          class="button gray"
+          onclick={{action (mut model.needSpecialDistrict) false}}
+        >
+          <span class="dark-gray">
+            {{#if (eq model.needSpecialDistrict false)}}
+              {{fa-icon 'check-circle'
+                fixedWidth=true
+                transform='left-3 grow-3'
+              }}
+            {{else}}
+              {{fa-icon 'circle'
+                prefix='far'
+                fixedWidth=true
+                transform='left-3 grow-3'
+              }}
+            {{/if}}
+          </span>
+          <strong>No</strong>
+        </button>
+      </div>
     </div>
   </div>
 
-  {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='draw' type=firstGeomType)
-    tagName='span'
-    disabled=(not hasAnsweredAll)
-    class='button large expanded'
-  }}
-    {{fa-icon 'draw-polygon' fixedWidth=true transform='left-3 grow-3'}}
-    Redraw Zoning
-  {{/link-to}}
+  <div class="grid-x grid-margin-x">
+    <div class="cell medium-10 xlarge-8 xxlarge-6">
+      {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='draw' type=firstGeomType)
+        tagName='span'
+        disabled=(not hasAnsweredAll)
+        class='button large expanded'
+      }}
+        {{fa-icon 'draw-polygon' fixedWidth=true transform='left-3 grow-3'}}
+        Alter Zoning
+      {{/link-to}}
+    </div>
+  </div>
 
 {{else if (eq model.needRezoning false)}}
 

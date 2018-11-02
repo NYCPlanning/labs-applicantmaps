@@ -110,6 +110,7 @@ export default class extends Model {
   get currentStepNumber() {
     const currentStep = this.get('currentStep');
     if (currentStep.label === 'rezoning') { return 3; }
+    if (currentStep.label === 'complete') { return 3; }
     if (currentStep.label === 'project-area') { return 2; }
     return 1;
   }
