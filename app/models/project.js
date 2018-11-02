@@ -89,7 +89,7 @@ export default class extends Model {
     const needUnderlyingZoning = this.get('needUnderlyingZoning');
     const needCommercialOverlay = this.get('needCommercialOverlay');
     const needSpecialDistrict = this.get('needSpecialDistrict');
-    if (projectName == null) {
+    if (projectName == null || projectName === '') {
       return { label: 'project-creation', route: 'projects.new' };
     } if (developmentSite == null) {
       return { label: 'development-site', route: 'projects.edit.steps.development-site' };
