@@ -106,6 +106,14 @@ export default class extends Model {
     } return { label: 'complete', route: 'projects.show' };
   }
 
+  @computed('currentStep')
+  get currentStepNumber() {
+    const currentStep = this.get('currentStep');
+    if (currentStep.label === 'rezoning') { return 3; }
+    if (currentStep.label === 'project-area') { return 2; }
+    return 1;
+  }
+
   // @computed()
   // get hasCompletedSteps() {
   //   // need a way to compute this
