@@ -33,11 +33,12 @@
 {{/if}}
 
 {{#if hasAnsweredAll}}
-	{{link-to 'Select Lots' 'projects.edit.geometry-edit' model.id (query-params mode='lots' type='{{get model.firstGeomType}}')
+  <p>{{firstGeomType}}</p>
+	{{link-to 'Select Lots' 'projects.edit.geometry-edit' model.id (query-params mode='lots' type=firstGeomType)
 	tagName='span'
 	class='button'}}
 
-	{{link-to 'Draw Manually' 'projects.edit.geometry-edit' model.id (query-params mode='draw' type='{{get model.firstGeomType}}')
+	{{link-to 'Draw Manually' 'projects.edit.geometry-edit' model.id (query-params mode='draw' type=firstGeomType)
 	tagName='span'
 	class='button'}}
 {{/if}}
