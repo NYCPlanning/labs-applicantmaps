@@ -46,6 +46,7 @@
     "ember-cli-sass": "^6.0.0",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-uglify": "^2.1.0",
+    "ember-cli-what-input": "^1.0.0",
     "ember-decorators": "2.1.0",
     "ember-export-application-global": "^2.0.0",
     "ember-mapbox-composer": "0.0.9",
@@ -87,6 +88,7 @@
     "ember-data": "~3.4.0",
     "ember-load-initializers": "^1.1.0",
     "foundation-sites": "^6.3.1",
-    "mustache": "^3.0.0"
+    "mustache": "^3.0.0",
+    "what-input": "^5.1.2"
   }
 }
