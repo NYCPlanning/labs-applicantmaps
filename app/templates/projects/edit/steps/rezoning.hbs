@@ -1,45 +1,251 @@
-<p>Placeholder for page asking if you are proposing rezoning</p>
+<nav class="step-nav">
+  {{#link-to 'projects.edit.steps.project-area'
+    tagName='span'
+    class='button tiny gray no-margin'
+  }}
+    {{fa-icon 'long-arrow-alt-left'}} Back
+  {{/link-to}}
+</nav>
 
-<p>Do you need rezoning?</p>
-<p>
-  <input type="radio" name="rezoning-question" checked={{eq model.needRezoning true}} id="rezoning-question--yes" onclick={{action (mut model.needRezoning) true}}>
-  <label for="rezoning-question--yes">Yes</label>
-  <input type="radio" name="rezoning-question" checked={{eq model.needRezoning false}} id="rezoning-question--no" onclick={{action (mut model.needRezoning) false}}>
-  <label for="rezoning-question--no">No</label>
+<h1>Are you requesting a rezoning&nbsp;action?</h1>
+
+<p>For projects that request rezoning actions, you will need to define how the zoning is being&nbsp;altered.</p>
+
+<p class="small-bottom-margin">
+  <button
+    type="button"
+    class="button gray large no-margin"
+    onclick={{action (mut model.needRezoning) false}}
+  >
+    <span class="dark-gray">
+      {{#if (eq model.needRezoning false)}}
+        {{fa-icon 'check-circle'
+          fixedWidth=true
+          transform='left-3 grow-3'
+        }}
+      {{else}}
+        {{fa-icon 'circle'
+          prefix='far'
+          fixedWidth=true
+          transform='left-3 grow-3'
+        }}
+      {{/if}}
+    </span>
+    <strong>No</strong>
+    <small>(there are no rezoning actions)</small>
+  </button>
 </p>
-<br>
+
+<p class="small-bottom-margin">
+  <button
+    type="button"
+    class="button gray large no-margin"
+    onclick={{action (mut model.needRezoning) true}}
+  >
+    <span class="dark-gray">
+      {{#if (eq model.needRezoning true)}}
+        {{fa-icon 'check-circle'
+          fixedWidth=true
+          transform='left-3 grow-3'
+        }}
+      {{else}}
+        {{fa-icon 'circle'
+          prefix='far'
+          fixedWidth=true
+          transform='left-3 grow-3'
+        }}
+      {{/if}}
+    </span>
+    <strong>Yes</strong>
+    <small>(I need to alter the zoning)</small>
+  </button>
+</p>
 
 {{#if (eq model.needRezoning true)}}
-{{!-- Note: We will want form validation here that requires them to say yes to at least one of these three --}}
-	<p>For each of the following, please indicate if you are proposing changes:</p>
-	<p>Underlying Zoning<br>
-    <input type="radio" name="underlying-question" checked={{eq model.needUnderlyingZoning true}} id="underlying-question--yes" onclick={{action (mut model.needUnderlyingZoning) true}}>
-    <label for="underlying-question--yes">Yes</label>
-    <input type="radio" name="underlying-question" checked={{eq model.needUnderlyingZoning false}} id="underlying-question--no" onclick={{action (mut model.needUnderlyingZoning) false}}>
-    <label for="underlying-question--no">No</label>
-	</p>
-	<p>Commercial Overlays<br>
-    <input type="radio" name="commercial-question" checked={{eq model.needCommercialOverlay true}} id="commercial-question--yes" onclick={{action (mut model.needCommercialOverlay) true}}>
-    <label for="commercial-question--yes">Yes</label>
-    <input type="radio" name="commercial-question" checked={{eq model.needCommercialOverlay false}} id="commercial-question--no" onclick={{action (mut model.needCommercialOverlay) false}}>
-    <label for="commercial-question--no">No</label>
-	</p>
-	<p>Special Purpose Districts<br>
-    <input type="radio" name="special-question" checked={{eq model.needSpecialDistrict true}} id="special-question--yes" onclick={{action (mut model.needSpecialDistrict) true}}>
-    <label for="special-question--yes">Yes</label>
-    <input type="radio" name="special-question" checked={{eq model.needSpecialDistrict false}} id="special-question--no" onclick={{action (mut model.needSpecialDistrict) false}}>
-    <label for="special-question--no">No</label>
-	</p>
-{{/if}}
+  {{!-- Note: We will want form validation here that requires them to say yes to at least one of these three --}}
 
-{{#if hasAnsweredAll}}
-	{{link-to 'Select Lots' 'projects.edit.geometry-edit' model.id (query-params mode='lots' type=firstGeomType)
-	tagName='span'
-	class='button'}}
+  <h2 class="header-medium">Indicate which types of zoning you are altering:</h2>
 
-	{{link-to 'Draw Manually' 'projects.edit.geometry-edit' model.id (query-params mode='draw' type=firstGeomType)
-	tagName='span'
-	class='button'}}
+  {{!-- Underlying Zoning --}}
+  <div class="grid-x grid-padding-x">
+    <div class="cell medium-5 xlarge-4 xxlarge-3">
+      <p>Underlying Zoning</p>
+    </div>
+    <div class="cell medium-shrink">
+      <button
+        type="button"
+        class="button gray small expanded"
+        onclick={{action (mut model.needUnderlyingZoning) true}}
+      >
+        <span class="dark-gray">
+          {{#if (eq model.needUnderlyingZoning true)}}
+            {{fa-icon 'check-circle'
+              fixedWidth=true
+              transform='left-3 grow-3'
+            }}
+          {{else}}
+            {{fa-icon 'circle'
+              prefix='far'
+              fixedWidth=true
+              transform='left-3 grow-3'
+            }}
+          {{/if}}
+        </span>
+        <strong>Yes</strong>
+      </button>
+    </div>
+    <div class="cell medium-shrink">
+      <button
+        type="button"
+        class="button gray small expanded"
+        onclick={{action (mut model.needUnderlyingZoning) false}}
+      >
+        <span class="dark-gray">
+          {{#if (eq model.needUnderlyingZoning false)}}
+            {{fa-icon 'check-circle'
+              fixedWidth=true
+              transform='left-3 grow-3'
+            }}
+          {{else}}
+            {{fa-icon 'circle'
+              prefix='far'
+              fixedWidth=true
+              transform='left-3 grow-3'
+            }}
+          {{/if}}
+        </span>
+        <strong>No</strong>
+      </button>
+    </div>
+  </div>
+
+  {{!-- Commercial Overlays --}}
+  <div class="grid-x grid-padding-x">
+    <div class="cell medium-5 xlarge-4 xxlarge-3">
+      <p>Commercial Overlays</p>
+    </div>
+    <div class="cell medium-shrink">
+      <button
+        type="button"
+        class="button gray small expanded"
+        onclick={{action (mut model.needCommercialOverlay) true}}
+      >
+        <span class="dark-gray">
+          {{#if (eq model.needCommercialOverlay true)}}
+            {{fa-icon 'check-circle'
+              fixedWidth=true
+              transform='left-3 grow-3'
+            }}
+          {{else}}
+            {{fa-icon 'circle'
+              prefix='far'
+              fixedWidth=true
+              transform='left-3 grow-3'
+            }}
+          {{/if}}
+        </span>
+        <strong>Yes</strong>
+      </button>
+    </div>
+    <div class="cell medium-shrink">
+      <button
+        type="button"
+        class="button gray small expanded"
+        onclick={{action (mut model.needCommercialOverlay) false}}
+      >
+        <span class="dark-gray">
+          {{#if (eq model.needCommercialOverlay false)}}
+            {{fa-icon 'check-circle'
+              fixedWidth=true
+              transform='left-3 grow-3'
+            }}
+          {{else}}
+            {{fa-icon 'circle'
+              prefix='far'
+              fixedWidth=true
+              transform='left-3 grow-3'
+            }}
+          {{/if}}
+        </span>
+        <strong>No</strong>
+      </button>
+    </div>
+  </div>
+
+  {{!-- Special Purpose Districts --}}
+  <div class="grid-x grid-padding-x">
+    <div class="cell medium-5 xlarge-4 xxlarge-3">
+      <p>Special Purpose Districts</p>
+    </div>
+    <div class="cell medium-shrink">
+      <button
+        type="button"
+        class="button gray small expanded"
+        onclick={{action (mut model.needSpecialDistrict) true}}
+      >
+        <span class="dark-gray">
+          {{#if (eq model.needSpecialDistrict true)}}
+            {{fa-icon 'check-circle'
+              fixedWidth=true
+              transform='left-3 grow-3'
+            }}
+          {{else}}
+            {{fa-icon 'circle'
+              prefix='far'
+              fixedWidth=true
+              transform='left-3 grow-3'
+            }}
+          {{/if}}
+        </span>
+        <strong>Yes</strong>
+      </button>
+    </div>
+    <div class="cell medium-shrink">
+      <button
+        type="button"
+        class="button gray small expanded"
+        onclick={{action (mut model.needSpecialDistrict) false}}
+      >
+        <span class="dark-gray">
+          {{#if (eq model.needSpecialDistrict false)}}
+            {{fa-icon 'check-circle'
+              fixedWidth=true
+              transform='left-3 grow-3'
+            }}
+          {{else}}
+            {{fa-icon 'circle'
+              prefix='far'
+              fixedWidth=true
+              transform='left-3 grow-3'
+            }}
+          {{/if}}
+        </span>
+        <strong>No</strong>
+      </button>
+    </div>
+  </div>
+
+  {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='draw' type=firstGeomType)
+    tagName='span'
+    disabled=(not hasAnsweredAll)
+    class='button large expanded'
+  }}
+    {{fa-icon 'draw-polygon' fixedWidth=true transform='left-3 grow-3'}}
+    Redraw Zoning
+  {{/link-to}}
+
+{{else if (eq model.needRezoning false)}}
+
+  <p class="text-right">
+    {{#link-to 'projects.show'
+      tagName='span'
+      class='button large'
+    }}
+      Next
+      {{fa-icon 'long-arrow-alt-right' fixedWidth=true transform='right-3 grow-3'}}
+    {{/link-to}}
+  </p>
+
 {{/if}}
 
 {{outlet}}
