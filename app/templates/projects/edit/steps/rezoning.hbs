@@ -33,7 +33,6 @@
 {{/if}}
 
 {{#if hasAnsweredAll}}
-  <p>{{firstGeomType}}</p>
 	{{link-to 'Select Lots' 'projects.edit.geometry-edit' model.id (query-params mode='lots' type=firstGeomType)
 	tagName='span'
 	class='button'}}
