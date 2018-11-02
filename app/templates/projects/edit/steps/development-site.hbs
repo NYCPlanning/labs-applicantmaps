@@ -1,12 +1,28 @@
-  explainer content
-  <p>First, let’s define your Development Site.</p>
-  <p>The Development Site refers to the zoning lot(s) to be improved by the specific development(s) that the land use actions would facilitate.</p>
-  <p>To create a Development Site, you can either:</p>
+<h1>First, let’s define your Development&nbsp;Site.</h1>
 
-  {{link-to 'Select Lots' 'projects.edit.geometry-edit' model.id (query-params mode='lots')
-    tagName='span'
-    class='button'}}
+<p>The Development Site refers to the zoning lot(s) to be improved by the specific development(s) that the land use actions would facilitate.</p>
 
-  {{link-to 'Draw Manually' 'projects.edit.geometry-edit' model.id (query-params mode='draw')
-    tagName='span'
-    class='button'}}
+<h2 class="header-medium">To create a Development Site, you can either:</h2>
+
+<div class="grid-x grid-margin-x">
+  <div class="cell medium-6 large-5 xlarge-4">
+    {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='lots' type='development-site')
+      tagName='span'
+      class='button large expanded'
+    }}
+      {{fa-icon 'hand-pointer' fixedWidth=true transform='left-3 grow-3'}}
+      Select Lots
+    {{/link-to}}
+    <p class="text-small text-center">Create a Development Site that is contiguous with chosen zoning lots</p>
+  </div>
+  <div class="cell medium-6 large-5 xlarge-4">
+    {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='draw' type='development-site')
+      tagName='span'
+      class='button large expanded'
+    }}
+      {{fa-icon 'draw-polygon' fixedWidth=true transform='left-3 grow-3'}}
+      Draw Manually
+    {{/link-to}}
+    <p class="text-small text-center">Use draw tools to create a Development Site that includes partial zoning lots</p>
+  </div>
+</div>
