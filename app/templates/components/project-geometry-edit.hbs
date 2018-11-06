@@ -97,7 +97,9 @@
         layerGroups=projectMapForm.model.layerGroups
         as |layers|}}
         {{#layers.tooltip as |tooltip|}}
-          {{tooltip-renderer feature=tooltip.feature template=tooltip.layer.tooltipTemplate}}
+          {{tooltip-renderer
+            feature=tooltip.feature
+            template=tooltip.layer.tooltipTemplate}}
         {{/layers.tooltip}}
       {{/map.labs-layers}}
 
@@ -121,35 +123,27 @@
       {{/if}}
 
       {{!-- Ad-hoc source and layer for projectArea --}}
-      {{#if (and model.projectArea (not-eq geometryMode 'projectArea'))}}
+{{!--       {{#if (and model.projectArea (not-eq geometryMode 'projectArea'))}}
         {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
           {{source.layer
             layer=projectGeomLayers.projectAreaLayer
             before='boundary_country'
           }}
         {{/map.source}}
-      {{/if}}
+      {{/if}} --}}
 
       {{!-- Ad-hoc source and layer for projectArea --}}
-      {{#if (and model.rezoningArea (not-eq geometryMode 'rezoningArea'))}}
+{{!--       {{#if (and model.rezoningArea (not-eq geometryMode 'rezoningArea'))}}
         {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
           {{source.layer
             layer=projectGeomLayers.rezoningAreaLayer
             before='boundary_country'
           }}
         {{/map.source}}
-      {{/if}}
-
-      {{!-- Ad-hoc source and layer for showing selected lots in lot selection mode --}}
-      {{#map.source options=selectedLotsSource as |source|}}
-        {{source.layer
-          layer=selectedLotsLayer
-          before='boundary_country'
-        }}
-      {{/map.source}}
+      {{/if}} --}}
 
       {{!-- Ad-hoc source and layer for showing zoning --}}
-      {{#if (and model.proposedZoning (not-eq geometryMode 'proposedZoning') model.developmentSite)}}
+{{!--       {{#if (and model.proposedZoning (not-eq geometryMode 'proposedZoning') model.developmentSite)}}
         {{#map.source options=(mapbox-geojson-source model.proposedZoning) as |source|}}
           {{source.layer
             layer=projectGeomLayers.proposedZoningLayer
@@ -160,10 +154,10 @@
             before='boundary_country'
           }}
         {{/map.source}}
-      {{/if}}
+      {{/if}} --}}
 
       {{!-- Ad-hoc source and layer for showing commercial overlays --}}
-      {{#if (and model.proposedCommercialOverlays (not-eq geometryMode 'proposedCommercialOverlays') model.developmentSite)}}
+{{!--       {{#if (and model.proposedCommercialOverlays (not-eq geometryMode 'proposedCommercialOverlays') model.developmentSite)}}
         {{#map.source options=(mapbox-geojson-source model.proposedCommercialOverlays) as |source|}}
           {{source.layer layer=projectGeomLayers.coLayer before='boundary_country'}}
           {{source.layer layer=projectGeomLayers.c11Layer before='boundary_country'}}
@@ -177,10 +171,10 @@
           {{source.layer layer=projectGeomLayers.c24Layer before='boundary_country'}}
           {{source.layer layer=projectGeomLayers.c25Layer before='boundary_country'}}
         {{/map.source}}
-      {{/if}}
+      {{/if}} --}}
 
       {{!-- Ad-hoc source and layer for showing commercial overlays --}}
-      {{#if (and model.proposedSpecialPurposeDistricts (not-eq geometryMode 'proposedSpecialPurposeDistricts') model.developmentSite)}}
+{{!--       {{#if (and model.proposedSpecialPurposeDistricts (not-eq geometryMode 'proposedSpecialPurposeDistricts') model.developmentSite)}}
         {{#map.source options=(mapbox-geojson-source model.proposedSpecialPurposeDistricts) as |source|}}
           {{source.layer
             layer=projectGeomLayers.proposedSpecialPurposeDistrictsLayer
@@ -191,7 +185,7 @@
             before='boundary_country'
           }}
         {{/map.source}}
-      {{/if}}
+      {{/if}} --}}
     {{/labs-map}}
   {{/project-map-form}}
 </div>

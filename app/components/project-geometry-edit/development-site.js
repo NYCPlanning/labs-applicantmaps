@@ -41,7 +41,7 @@ export default class DevelopmentSiteComponent extends Component {
   @argument
   model;
 
-  lotSelectionMode = false
+  lotSelectionMode = true
 
   @computed()
   get taxLots() {

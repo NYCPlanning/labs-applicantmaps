@@ -26,7 +26,6 @@
     "babel-eslint": "^9.0.0",
     "broccoli-asset-rev": "^2.7.0",
     "broccoli-clean-css": "~1.1.0",
-    "ember-ajax": "^3.1.0",
     "ember-auto-import": "1.2.13",
     "ember-cli": "~3.4.3",
     "ember-cli-app-version": "^3.2.0",
@@ -46,9 +45,11 @@
     "ember-cli-sass": "^6.0.0",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-uglify": "^2.1.0",
+    "ember-concurrency-decorators": "0.2.1",
     "ember-decorators": "2.1.0",
     "ember-export-application-global": "^2.0.0",
-    "ember-mapbox-composer": "0.0.19",
+    "ember-mapbox-composer": "NYCPlanning/ember-mapbox-composer#refactor-highlighted-source",
+    "ember-mapbox-gl": "0.12.0",
     "ember-mapbox-gl-draw": "^1.1.0",
     "ember-maybe-import-regenerator": "^0.1.6",
     "ember-power-select": "^2.0.8",
@@ -66,7 +67,7 @@
     "labs-ember-search": "2.4.5",
     "labs-ui": "^0.0.7",
     "loader.js": "^4.7.0",
-    "mapbox-gl": "^0.50.0",
+    "mapbox-gl": "^0.49.0",
     "qunit-dom": "^0.7.1"
   },
   "engines": {
@@ -86,5 +87,8 @@
     "ember-load-initializers": "^1.1.0",
     "foundation-sites": "^6.3.1",
     "mustache": "^3.0.0"
+  },
+  "resolutions": {
+    "ember-css-modules": "1.0.0"
   }
 }
