@@ -241,7 +241,7 @@
 {{else if (eq model.needRezoning false)}}
 
   <p class="text-right">
-    {{#link-to 'projects.show'
+    {{#link-to 'projects.show' model.id
       tagName='span'
       class='button large'
     }}
