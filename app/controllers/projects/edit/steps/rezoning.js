@@ -9,6 +9,13 @@ export default class RezoningController extends Controller {
     return false;
   }
 
+  @computed('hasAnsweredAll', 'model.needUnderlyingZoning', 'model.needCommercialOverlay', 'model.needSpecialDistrict')
+  get hasAnsweredLogically() {
+    if (this.get('hasAnsweredAll') && (this.get('model.needUnderlyingZoning') || this.get('model.needCommercialOverlay') || this.get('model.needSpecialDistrict'))) return true;
+    if (this.get('hasAnsweredAll')) return false;
+    return null;
+  }
+
   @computed('model.needRezoning', 'model.needUnderlyingZoning', 'model.needCommercialOverlay', 'model.needSpecialDistrict')
   get firstGeomType() {
     if ((this.get('model.needRezoning') === true) && (this.get('model.needUnderlyingZoning') === true)) return 'rezoning-underlying';

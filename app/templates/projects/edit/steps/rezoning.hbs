@@ -229,7 +229,7 @@
     <div class="cell medium-10 xlarge-8 xxlarge-6">
       {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='draw' type=firstGeomType)
         tagName='span'
-        disabled=(not hasAnsweredAll)
+        disabled=(not hasAnsweredLogically)
         class='button large expanded'
       }}
         {{fa-icon 'draw-polygon' fixedWidth=true transform='left-3 grow-3'}}
