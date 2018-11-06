@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import { computed } from '@ember-decorators/object';
+import { computed, action } from '@ember-decorators/object';
 
 export default class RezoningController extends Controller {
   @computed('model.needRezoning', 'model.needUnderlyingZoning', 'model.needCommercialOverlay', 'model.needSpecialDistrict')
@@ -23,5 +23,13 @@ export default class RezoningController extends Controller {
     if ((this.get('model.needRezoning') === true) && (this.get('model.needSpecialDistrict') === true)) return 'rezoning-special';
 
     return false;
+  }
+
+  @action
+  setRezoningFalse() {
+    this.set('model.needRezoning', false);
+    this.set('model.needUnderlyingZoning', null);
+    this.set('model.needCommercialOverlay', null);
+    this.set('model.needSpecialDistrict', null);
   }
 }
