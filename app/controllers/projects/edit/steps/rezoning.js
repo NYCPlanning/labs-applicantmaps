@@ -13,7 +13,7 @@ export default class RezoningController extends Controller {
   get firstGeomType() {
     if ((this.get('model.needRezoning') === true) && (this.get('model.needUnderlyingZoning') === true)) return 'rezoning-underlying';
     if ((this.get('model.needRezoning') === true) && (this.get('model.needCommercialOverlay') === true)) return 'rezoning-commercial';
-    if ((this.get('model.needRezoning') === true) && (this.get('model.model.needSpecialDistrict') === true)) return 'rezoning-special';
+    if ((this.get('model.needRezoning') === true) && (this.get('model.needSpecialDistrict') === true)) return 'rezoning-special';
 
     return false;
   }
