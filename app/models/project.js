@@ -89,20 +89,21 @@ export default class extends Model {
     const needUnderlyingZoning = this.get('needUnderlyingZoning');
     const needCommercialOverlay = this.get('needCommercialOverlay');
     const needSpecialDistrict = this.get('needSpecialDistrict');
+
     if (projectName == null || projectName === '') {
       return { label: 'project-creation', route: 'projects.new' };
     } if (developmentSite == null) {
       return { label: 'development-site', route: 'projects.edit.steps.development-site' };
     } if ((needProjectArea === true || needProjectArea == null) && projectArea == null) {
-      return { label: 'project-area', route: 'projects.edit.project-area' };
+      return { label: 'project-area', route: 'projects.edit.steps.project-area' };
     } if ((needRezoning === true || needRezoning == null) && rezoningArea == null) {
-      return { label: 'rezoning', route: 'projects.edit.rezoning' };
+      return { label: 'rezoning', route: 'projects.edit.steps.rezoning' };
     } if ((needRezoning === true && (needUnderlyingZoning === true || needUnderlyingZoning == null)) && proposedZoning == null) {
-      return { label: 'rezoning-underlying', route: 'projects.edit.rezoning' };
+      return { label: 'rezoning-underlying', route: 'projects.edit.steps.rezoning' };
     } if ((needRezoning === true && (needCommercialOverlay === true || needCommercialOverlay == null)) && proposedCommercialOverlays == null) {
-      return { label: 'rezoning-commercial', route: 'projects.edit.rezoning' };
+      return { label: 'rezoning-commercial', route: 'projects.edit.steps.rezoning' };
     } if ((needRezoning === true && (needSpecialDistrict === true || needSpecialDistrict == null)) && proposedSpecialDistricts == null) {
-      return { label: 'rezoning-special', route: 'projects.edit.rezoning' };
+      return { label: 'rezoning-special', route: 'projects.edit.steps.rezoning' };
     } return { label: 'complete', route: 'projects.show' };
   }
 
