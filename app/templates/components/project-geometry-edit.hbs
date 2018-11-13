@@ -67,11 +67,14 @@
     {{/project-geometries-menu}}
   {{/if}}
 
+  {{!-- EMBER WORMHOLE CONTAINER --}}
   {{!-- The geometry type component will fill this div with markup once invoked --}}
   <div id="geometry-type-draw-explainer">
   </div>
 
-  <button type="button" class="button large green expanded project-save-button" disabled={{not model.isValid}} onclick={{action 'save' model}}>Save Project</button>
+  {{!-- EMBER WORMHOLE CONTAINER --}}
+  <div id="geometry-type-save-box">
+  </div>
 
 </div>
 <div class="cell large-auto map-container">
@@ -87,11 +90,6 @@
 
       {{search-handler map=map}}
 
-      {{!-- invoke the component for the specified draw mode --}}
-      {{project-geometry-edit/development-site
-        model=model
-        map=map}}
-
       {{!-- labs-layers (includes tax-lots layer) --}}
       {{#map.labs-layers
         layerGroups=projectMapForm.model.layerGroups
@@ -102,6 +100,12 @@
             template=tooltip.layer.tooltipTemplate}}
         {{/layers.tooltip}}
       {{/map.labs-layers}}
+
+      {{!-- invoke the component for the specified draw mode --}}
+      {{project-geometry-edit/development-site
+        model=model
+        mode=mode
+        map=map}}
 
       {{#if (and geometryMode (not lotSelectionMode))}}
         {{#if showDrawInstructions}}
