@@ -1,7 +1,7 @@
 {{#project-geometry-edit/draw-lots-to-union
   mode=mode
   map=map
-  geometricProperty=model.developmentSite as |selectedLots finalGeometry|
+  geometricProperty=model.projectArea as |selectedLots finalGeometry|
 }}
   {{#ember-wormhole to='geometry-type-save-box'}}
     <button
@@ -10,7 +10,7 @@
       disabled={{if (eq mode 'draw') false (or (not selectedLots.features.length))}}
       onclick={{action 'save' model finalGeometry}}
     >
-      Save Development Site
+      Save Project Area
     </button>
   {{/ember-wormhole}}
 {{/project-geometry-edit/draw-lots-to-union}}
@@ -19,11 +19,14 @@
   Explainer Text here
 {{/ember-wormhole}}
 
-{{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
-  {{source.layer
-    layer=developmentSiteLayer
-    before='boundary_country'
-  }}
-{{/map.source}}
+{{!-- Ad-hoc source and layer for projectArea --}}
+{{#if (and model.projectArea (not-eq geometryMode 'projectArea'))}}
+  {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
+    {{source.layer
+      layer=projectAreaLayer
+      before='boundary_country'
+    }}
+  {{/map.source}}
+{{/if}}
 
 {{yield}}

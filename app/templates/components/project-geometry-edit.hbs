@@ -127,16 +127,6 @@
       {{/if}} --}}
 
       {{!-- Ad-hoc source and layer for projectArea --}}
-{{!--       {{#if (and model.projectArea (not-eq geometryMode 'projectArea'))}}
-        {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
-          {{source.layer
-            layer=projectGeomLayers.projectAreaLayer
-            before='boundary_country'
-          }}
-        {{/map.source}}
-      {{/if}} --}}
-
-      {{!-- Ad-hoc source and layer for projectArea --}}
 {{!--       {{#if (and model.rezoningArea (not-eq geometryMode 'rezoningArea'))}}
         {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
           {{source.layer

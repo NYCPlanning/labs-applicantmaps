@@ -24,23 +24,6 @@ export const selectedLotsLayer = {
 };
 
 export default class DrawLotsToUnion extends Component {
-  @argument
-  map;
-
-  @argument
-  model;
-
-  @argument
-  mode;
-
-  @service
-  store;
-
-  @computed()
-  get taxLots() {
-    return this.get('store').peekRecord('layer-group', 'tax-lots');
-  }
-
   constructor(...args) {
     super(...args);
 
@@ -54,21 +37,37 @@ export default class DrawLotsToUnion extends Component {
   init(...args) {
     super.init(...args);
     const { mapInstance } = this.get('map');
-    const model = this.get('model');
     const mode = this.get('mode');
+    const geometricProperty = this.get('geometricProperty');
 
     mapInstance.addControl(draw, 'top-left');
     if (mode === 'draw') {
       draw.changeMode('draw_polygon');
 
       // if geometry exists for this mode, add it to the drawing canvas
-      if (model.get('developmentSite')) {
-        draw.add(model.get('developmentSite'));
+      if (geometricProperty) {
+        draw.add(geometricProperty);
         draw.changeMode('simple_select');
       }
     }
   }
 
+  @argument
+  geometricProperty;
+
+  @argument
+  map;
+
+  @argument
+  mode;
+
+  @service
+  store;
+
+  @computed()
+  get taxLots() {
+    return this.get('store').peekRecord('layer-group', 'tax-lots');
+  }
 
   lotSelectionMode = true;
 
