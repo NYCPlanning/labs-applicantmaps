@@ -1,7 +1,7 @@
 {{!-- add the development-specific tax-lots layergroup --}}
 {{#map.labs-layers
   layerGroups=(array taxLots)
-  onLayerClick=(if (eq mode 'lots') (action 'handleLayerClick') noop)
+  onLayerClick=(if (eq mode 'lots') (action 'handleLayerClick') (action 'noop'))
   as |layers|}}
   {{#layers.tooltip as |tooltip|}}
     {{tooltip-renderer
@@ -31,7 +31,7 @@
   <button
     type="button"
     class="button large green expanded project-save-button"
-    disabled={{not selectedLots.features.length}}
+    disabled={{if (eq mode 'draw') false (or (not selectedLots.features.length))}}
     onclick={{action 'save' model}}
   >
     Save Project

@@ -165,6 +165,9 @@ export default class DevelopmentSiteComponent extends Component {
     }
   }
 
+  @action
+  noop() {}
+
   extractFinalGeometry() {
     const finalGeometry = (this.get('mode') === 'lots') ? this.get('selectedLotsBuffer') : draw.getAll();
     const { features: [{ geometry }] } = finalGeometry;

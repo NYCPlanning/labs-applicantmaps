@@ -102,12 +102,12 @@
       {{/map.labs-layers}}
 
       {{!-- invoke the component for the specified draw mode --}}
-      {{project-geometry-edit/development-site
+      {{component (concat 'project-geometry-edit/' type)
         model=model
         mode=mode
         map=map}}
 
-      {{#if (and geometryMode (not lotSelectionMode))}}
+{{!--       {{#if (and geometryMode (not lotSelectionMode))}}
         {{#if showDrawInstructions}}
           <div class="draw-instructions">
             <button class="float-right" type="button" onclick={{action 'hideInstructions'}} style="margin:0 6px 0 10px;">
@@ -124,7 +124,7 @@
         {{else}}
           <button class="draw-instructions-button" onclick={{action 'showInstructions'}}>{{fa-icon 'comment-alt'}}</button>
         {{/if}}
-      {{/if}}
+      {{/if}} --}}
 
       {{!-- Ad-hoc source and layer for projectArea --}}
 {{!--       {{#if (and model.projectArea (not-eq geometryMode 'projectArea'))}}
