@@ -31,7 +31,7 @@
   <button
     type="button"
     class="button large green expanded project-save-button"
-    disabled={{not model.isValid}}
+    disabled={{not selectedLots.features.length}}
     onclick={{action 'save' model}}
   >
     Save Project
