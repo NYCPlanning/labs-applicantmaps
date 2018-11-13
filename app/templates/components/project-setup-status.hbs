@@ -1,10 +1,38 @@
-<h1 class="header-large">{{project.projectName}}</h1>
+<h1 class="header-large">
+  {{ember-inline-edit
+    value=(readonly project.projectName)
+    onSave=(action 'updateProjectName')
+    saveButtonClass='button tiny'
+    cancelButtonClass='button tiny'
+    showEditButton=true
+    editButtonClass='button tiny no-margin clear'
+  }}
+</h1>
 
 <h6>Applicant:</h6>
-<p>{{project.applicantName}}</p>
+<p class="header-small">
+  {{ember-inline-edit
+    value=(readonly project.applicantName)
+    onSave=(action 'updateApplicantName')
+    saveButtonClass='button tiny'
+    cancelButtonClass='button tiny'
+    showEditButton=true
+    editButtonClass='button tiny no-margin clear'
+  }}
+</p>
 
 <h6>Project Number:</h6>
-<p>{{project.zapProjectId}}</p>
+<p class="header-small">
+  {{ember-inline-edit
+    value=(readonly project.zapProjectId)
+    onSave=(action 'updateZapProjectId')
+    field='number'
+    saveButtonClass='button tiny'
+    cancelButtonClass='button tiny'
+    showEditButton=true
+    editButtonClass='button tiny no-margin clear'
+  }}
+</p>
 
 <hr />
 
