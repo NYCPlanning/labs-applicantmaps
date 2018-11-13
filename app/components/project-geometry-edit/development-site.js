@@ -13,7 +13,6 @@ const draw = new MapboxDraw({
     polygon: true,
     trash: true,
   },
-  // styles: drawStyles, TODO modify default draw styles
 });
 
 export const developmentSiteLayer = {
@@ -129,7 +128,7 @@ export default class DevelopmentSiteComponent extends Component {
     const { layer: { id: layerId } } = feature;
 
     // if lot was clicked when in lot selection mode, handle the click
-    if (layerId === 'pluto-fill' && this.get('mode') === 'lots') {
+    if (layerId === 'pluto-fill') {
       const { type, geometry, properties } = feature;
       const selectedLots = this.get('selectedLots');
 
@@ -152,33 +151,9 @@ export default class DevelopmentSiteComponent extends Component {
   @action
   async save() {
     const model = this.get('model');
-    // runs when user is done selecting lots
-    // adds a small buffer to all lots to ensure the union will be contiguous
-    // unions all lots together into one feature
-    // TODO simplify the resulting union to get rid of curved corners with many vertices
-    // this.set('lotSelectionMode', false);
+    const finalGeometry = this.extractFinalGeometry();
 
-    // if mode is lots, computed its buffer
-    if (this.get('mode') === 'lots') {
-      const buffer = this.get('selectedLotsBuffer');
-
-      // clear selected features
-      this.set('selectedLots.features', []);
-
-      const { features: [{ geometry }] } = buffer;
-      console.log(geometry);
-      model.set('developmentSite', geometry);
-    }
-
-    // if mode is draw, use the gl-draw feature collection
-    if (this.get('mode') === 'draw') {
-      const FeatureCollection = draw.getAll();
-      const { geometry } = FeatureCollection.features[0];
-      model.set('developmentSite', geometry);
-
-      // delete the drawn geometry
-      draw.deleteAll();
-    }
+    model.set('developmentSite', finalGeometry);
 
     try {
       const savedProject = await model.save();
@@ -190,12 +165,21 @@ export default class DevelopmentSiteComponent extends Component {
     }
   }
 
+  extractFinalGeometry() {
+    const finalGeometry = (this.get('mode') === 'lots') ? this.get('selectedLotsBuffer') : draw.getAll();
+    const { features: [{ geometry }] } = finalGeometry;
+
+    return geometry;
+  }
+
   willDestroyElement(...args) {
     super.willDestroyElement(...args);
 
     const { mapInstance } = this.get('map');
 
+    // drawing cleanup
     draw.trash();
+    draw.deleteAll();
     mapInstance.off('draw.selectionchange');
     mapInstance.removeControl(draw);
   }
