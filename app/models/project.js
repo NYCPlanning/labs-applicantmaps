@@ -58,8 +58,7 @@ export default class extends Model {
 
   @attr() proposedSpecialDistricts
 
-  // ******** VALIDATION CHECKS / STEPS ********
-
+  // ******** COMPUTING THE CURRENT STEP FOR ROUTING ********
   @computed('developmentSite', 'projectName', 'projectArea', 'rezoningArea', 'proposedZoning', 'proposedCommercialOverlays', 'proposedSpecialDistricts', 'needProjectArea', 'needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
   get currentStep() {
     const projectName = this.get('projectName');
@@ -101,10 +100,17 @@ export default class extends Model {
     return 1;
   }
 
+  // ******** CHECKS AND METHODS FOR REZONING QUESTIONS ********
+  setRezoningFalse() {
+    this.set('needRezoning', false);
+    this.set('needUnderlyingZoning', null);
+    this.set('needCommercialOverlay', null);
+    this.set('needSpecialDistrict', null);
+  }
+
   @computed('needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
   get rezoningAnsweredAll() {
     if ((this.get('needRezoning') === true) && (this.get('needUnderlyingZoning') != null) && (this.get('needCommercialOverlay') != null) && (this.get('needSpecialDistrict') != null)) return true;
-
     return false;
   }
 
@@ -120,9 +126,10 @@ export default class extends Model {
     if ((this.get('needRezoning') === true) && (this.get('needUnderlyingZoning') === true)) return 'rezoning-underlying';
     if ((this.get('needRezoning') === true) && (this.get('needCommercialOverlay') === true)) return 'rezoning-commercial';
     if ((this.get('needRezoning') === true) && (this.get('needSpecialDistrict') === true)) return 'rezoning-special';
-
     return false;
   }
+
+  // ********************************
 
   @computed('projectArea')
   get projectAreaSource() {
@@ -132,8 +139,6 @@ export default class extends Model {
       data: projectArea,
     };
   }
-
-  // ********************************
 
   @computed('developmentSite', 'projectArea', 'rezoningArea')
   get projectGeometryBoundingBox() {
