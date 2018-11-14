@@ -344,3 +344,14 @@ textarea[readonly] {
   background-color: $white-smoke;
   box-shadow: none;
 }
+
+.ember-popover {
+  background-color: $charcoal;
+  color: $white;
+  padding: $global-margin/2;
+  border: 0;
+}
+
+.ember-popover[x-placement^="bottom"] .ember-tooltip-arrow {
+    border-bottom-color: $charcoal;
+}

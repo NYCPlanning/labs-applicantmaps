@@ -62,10 +62,20 @@
           <strong>Development Site</strong>
         </div>
         <div class="cell shrink">
-          <button class="button tiny gray no-margin">Edit</button>
+          <button class="button tiny gray no-margin">
+            Edit
+            {{#ember-popover
+              event='click'
+              side='bottom'
+              as |popover|
+            }}
+              <button class="button tiny no-margin">Select Lots</button>
+              <button class="button tiny no-margin">Draw Manually</button>
+            {{/ember-popover}}
+          </button>
         </div>
         <div class="cell shrink">
-          {{fa-icon 'trash' class='dark-gray'}}
+          <a>{{fa-icon 'trash' class='dark-gray'}}</a>
         </div>
       </div>
       <hr />
@@ -74,10 +84,7 @@
           <strong>Project Area </strong>
         </div>
         <div class="cell shrink">
-          <button class="button tiny gray no-margin">Edit</button>
-        </div>
-        <div class="cell shrink">
-          {{fa-icon 'trash' class='dark-gray'}}
+          <a>{{fa-icon 'plus' class='green-muted'}}</a>
         </div>
       </div>
       <hr />
@@ -86,10 +93,7 @@
           <strong>Underlying Zoning</strong>
         </div>
         <div class="cell shrink">
-          <button class="button tiny gray no-margin">Edit</button>
-        </div>
-        <div class="cell shrink">
-          {{fa-icon 'trash' class='dark-gray'}}
+          <a>{{fa-icon 'plus' class='green-muted'}}</a>
         </div>
       </div>
       <hr />
@@ -98,10 +102,7 @@
           <strong>Commercial Overlays</strong>
         </div>
         <div class="cell shrink">
-          <button class="button tiny gray no-margin">Edit</button>
-        </div>
-        <div class="cell shrink">
-          {{fa-icon 'trash' class='dark-gray'}}
+          <a>{{fa-icon 'plus' class='green-muted'}}</a>
         </div>
       </div>
       <hr />
@@ -110,10 +111,7 @@
           <strong>Special Purpose Districts</strong>
         </div>
         <div class="cell shrink">
-          <button class="button tiny gray no-margin">Edit</button>
-        </div>
-        <div class="cell shrink">
-          {{fa-icon 'trash' class='dark-gray'}}
+          <a>{{fa-icon 'plus' class='green-muted'}}</a>
         </div>
       </div>
       <hr />
@@ -122,10 +120,7 @@
           <strong>Rezoning Area </strong>
         </div>
         <div class="cell shrink">
-          <button class="button tiny gray no-margin">Edit</button>
-        </div>
-        <div class="cell shrink">
-          {{fa-icon 'trash' class='dark-gray'}}
+          <a>{{fa-icon 'plus' class='green-muted'}}</a>
         </div>
       </div>
 
