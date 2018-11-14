@@ -4488,12 +4488,6 @@ ember-composable-helpers@2.1.0:
     broccoli-funnel "^1.0.1"
     ember-cli-babel "^6.6.0"
 
-ember-computed-promise-monitor@0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/ember-computed-promise-monitor/-/ember-computed-promise-monitor-0.1.6.tgz#a4b6fcf3e93b89644ed57163e6613a66571e653b"
-  dependencies:
-    ember-cli-babel "^6.16.0"
-
 ember-concurrency-decorators@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/ember-concurrency-decorators/-/ember-concurrency-decorators-0.0.4.tgz#bfd1373bc67f0d42188a89d2133c3c1c2a9ccc5f"
