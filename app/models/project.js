@@ -8,11 +8,6 @@ import config from '../config/environment';
 const { mapTypes } = config;
 const { Model } = DS;
 
-// const requiredFields = [
-//   'projectName',
-//   'developmentSite',
-// ];
-
 export default class extends Model {
   @hasMany('area-map', { async: false }) areaMaps;
 
@@ -65,16 +60,6 @@ export default class extends Model {
 
   // ******** VALIDATION CHECKS / STEPS ********
 
-  // @computed(...requiredFields)
-  // get isValid() {
-  //   return requiredFields.every(field => this.get(field));
-  // }
-
-  // @computed(...requiredFields)
-  // get requiredFieldsCompleted() {
-  //   return requiredFields.filter(field => this.get(field));
-  // }
-
   @computed('developmentSite', 'projectName', 'projectArea', 'rezoningArea', 'proposedZoning', 'proposedCommercialOverlays', 'proposedSpecialDistricts', 'needProjectArea', 'needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
   get currentStep() {
     const projectName = this.get('projectName');
@@ -107,29 +92,37 @@ export default class extends Model {
     } return { label: 'complete', route: 'projects.show' };
   }
 
-  @computed('currentStep')
-  get currentStepNumber() {
-    const currentStep = this.get('currentStep');
-    if (currentStep.label === 'rezoning') { return 3; }
-    if (currentStep.label === 'complete') { return 3; }
-    if (currentStep.label === 'project-area') { return 2; }
-    return 1;
+  @computed('model.needRezoning', 'model.needUnderlyingZoning', 'model.needCommercialOverlay', 'model.needSpecialDistrict')
+  get hasAnsweredAll() {
+    if ((this.get('model.needRezoning') === true) && (this.get('model.needUnderlyingZoning') != null) && (this.get('model.needCommercialOverlay') != null) && (this.get('model.needSpecialDistrict') != null)) return true;
+
+    return false;
   }
 
-  // @computed()
-  // get hasCompletedSteps() {
-  //   // need a way to compute this
-  //   return false;
+  @computed('hasAnsweredAll', 'model.needUnderlyingZoning', 'model.needCommercialOverlay', 'model.needSpecialDistrict')
+  get hasAnsweredLogically() {
+    if (this.get('hasAnsweredAll') && (this.get('model.needUnderlyingZoning') || this.get('model.needCommercialOverlay') || this.get('model.needSpecialDistrict'))) return true;
+    if (this.get('hasAnsweredAll')) return false;
+    return null;
+  }
+
+  @computed('model.needRezoning', 'model.needUnderlyingZoning', 'model.needCommercialOverlay', 'model.needSpecialDistrict')
+  get firstGeomType() {
+    if ((this.get('model.needRezoning') === true) && (this.get('model.needUnderlyingZoning') === true)) return 'rezoning-underlying';
+    if ((this.get('model.needRezoning') === true) && (this.get('model.needCommercialOverlay') === true)) return 'rezoning-commercial';
+    if ((this.get('model.needRezoning') === true) && (this.get('model.needSpecialDistrict') === true)) return 'rezoning-special';
+
+    return false;
+  }
+
+  // @computed('projectArea')
+  // get projectAreaSource() {
+  //   const projectArea = this.get('projectArea');
+  //   return {
+  //     type: 'geojson',
+  //     data: projectArea,
+  //   };
   // }
-
-  @computed('projectArea')
-  get projectAreaSource() {
-    const projectArea = this.get('projectArea');
-    return {
-      type: 'geojson',
-      data: projectArea,
-    };
-  }
 
   // ********************************
 
