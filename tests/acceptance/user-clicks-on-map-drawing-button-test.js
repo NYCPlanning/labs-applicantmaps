@@ -1,64 +1,66 @@
-import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  click,
-  fillIn,
-} from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+// Needs to be redesigned for the refactored geom creation work flow
 
-import mapboxGlLoaded from '../helpers/mapbox-gl-loaded';
-import mapboxGlDrawReady from '../helpers/mapbox-gl-draw-ready';
-import plotVerticies from '../helpers/plot-verticies';
+// import { module, test } from 'qunit';
+// import {
+//   visit,
+//   currentURL,
+//   click,
+//   fillIn,
+// } from '@ember/test-helpers';
+// import { setupApplicationTest } from 'ember-qunit';
+// import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 
-module('Acceptance | user clicks on map drawing button', function(hooks) {
-  setupApplicationTest(hooks);
-  setupMirage(hooks);
+// import mapboxGlLoaded from '../helpers/mapbox-gl-loaded';
+// import mapboxGlDrawReady from '../helpers/mapbox-gl-draw-ready';
+// import plotVerticies from '../helpers/plot-verticies';
 
-  test('user clicks on map drawing button', async function(assert) {
-    server.createList('project', 10);
-    await visit('/projects/new');
+// module('Acceptance | user clicks on map drawing button', function(hooks) {
+//   setupApplicationTest(hooks);
+//   setupMirage(hooks);
 
-    await fillIn('.project-name-field', 'ASDF');
-    await fillIn('.applicant-name-field', 'ASDF');
-    await fillIn('.zap-project-id-field', 'ASDF');
-    await fillIn('.zap-project-description-field', 'Fill out description');
+//   test('user clicks on map drawing button', async function(assert) {
+//     server.createList('project', 10);
+//     await visit('/projects/new');
 
-    await mapboxGlLoaded();
+//     await fillIn('.project-name-field', 'ASDF');
+//     await fillIn('.applicant-name-field', 'ASDF');
+//     await fillIn('.zap-project-id-field', 'ASDF');
+//     await fillIn('.zap-project-description-field', 'Fill out description');
 
-    await click('.draw-control-development-site');
+//     await mapboxGlLoaded();
 
-    await mapboxGlDrawReady();
+//     await click('.draw-control-development-site');
 
-    await plotVerticies(
-      [
-        [550, 388],
-        [590, 444],
-        [604, 369],
-        [604, 369],
-      ],
-    );
+//     await mapboxGlDrawReady();
 
-    await click('.draw-control-done');
+//     await plotVerticies(
+//       [
+//         [550, 388],
+//         [590, 444],
+//         [604, 369],
+//         [604, 369],
+//       ],
+//     );
 
-    await click('.draw-control-project-area');
+//     await click('.draw-control-done');
 
-    await mapboxGlDrawReady();
+//     await click('.draw-control-project-area');
 
-    await plotVerticies(
-      [
-        [550, 388],
-        [590, 444],
-        [604, 369],
-        [604, 369],
-      ],
-    );
+//     await mapboxGlDrawReady();
 
-    await click('.draw-control-done');
+//     await plotVerticies(
+//       [
+//         [550, 388],
+//         [590, 444],
+//         [604, 369],
+//         [604, 369],
+//       ],
+//     );
 
-    await click('.project-save-button');
+//     await click('.draw-control-done');
 
-    assert.equal(currentURL(), '/projects/11');
-  });
-});
+//     await click('.project-save-button');
+
+//     assert.equal(currentURL(), '/projects/11');
+//   });
+// });

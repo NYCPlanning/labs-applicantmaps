@@ -47,6 +47,7 @@
     "ember-cli-uglify": "^2.1.0",
     "ember-concurrency": "0.8.22",
     "ember-concurrency-decorators": "0.2.1",
+    "ember-cli-what-input": "^1.0.0",
     "ember-decorators": "2.1.0",
     "ember-export-application-global": "^2.0.0",
     "ember-mapbox-composer": "NYCPlanning/ember-mapbox-composer#2708495586c5844ccc842b6dd7ee7fc0fc045795",
@@ -87,6 +88,8 @@
     "ember-data": "~3.4.0",
     "ember-load-initializers": "^1.1.0",
     "foundation-sites": "^6.3.1",
+    "mustache": "^3.0.0",
+    "what-input": "^5.1.2",
     "mustache": "^3.0.0"
   },
   "resolutions": {

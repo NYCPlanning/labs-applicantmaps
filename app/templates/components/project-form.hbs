@@ -1,74 +1,68 @@
-<div class="cell small-6">
-  <h2 class="header-medium">
+<div class="cell step large-8 large-offset-2 xxlarge-6 xxlarge-offset-3">
+  <h1>Create New Project</h1>
+
+  <div class="grid-x grid-margin-x">
+    <div class="small-3 cell">
+      <label for="project-name-field" class="text-right middle">
+        Project Name
+        {{fa-icon 'asterisk' transform='shrink-4' class="red"}}
+      </label>
+    </div>
+    <div class="small-9 cell">
+      {{input
+        type="text"
+        value=model.projectName
+        id="project-name-field"
+        class="project-name-field"
+        aria-describedby="project-name-field-help-text"
+      }}
+      <p class="help-text" id="project-name-field-help-text">The name provided at the Informational Meeting with the Department of City Planning or the project address</p>
+    </div>
+  </div>
+
+  <div class="grid-x grid-margin-x">
+    <div class="small-3 cell">
+      <label for="applicant-name-field" class="text-right middle">
+        Applicant Name
+      </label>
+    </div>
+    <div class="small-9 cell">
+      {{input
+        type="text"
+        value=model.applicantName
+        id="applicant-name-field"
+        class="applicant-name-field"
+      }}
+    </div>
+  </div>
+
+  <div class="grid-x grid-margin-x">
+    <div class="small-3 cell">
+      <label for="zap-project-id-field" class="text-right middle">
+        Project Number
+      </label>
+    </div>
+    <div class="small-9 cell">
+      {{input
+        type="text"
+        value=model.zapProjectId
+        id="zap-project-id-field"
+        class="zap-project-id-field"
+        aria-describedby="zap-project-id-field-help-text"
+      }}
+      <p class="help-text" id="zap-project-id-field-help-text">
+        The unique code provided by the Department of City Planning following an Informational Interest Meeting
+      </p>
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="button large expanded project-save-button"
+    disabled={{eq model.currentStep.label 'project-creation'}}
+    onclick={{action 'save' model}}
+  >
     Create New Project
-  </h2>
-
-  <form>
-
-    <div class="grid-x grid-margin-x">
-      <div class="small-3 cell">
-        <label for="project-name-field" class="text-right middle">
-          Project Name
-          {{fa-icon 'asterisk' transform='shrink-4' class="red"}}
-        </label>
-      </div>
-      <div class="small-9 cell">
-        {{input
-          type="text"
-          value=model.projectName
-          id="project-name-field"
-          class="project-name-field"
-          aria-describedby="project-name-field-help-text"
-        }}
-        <p class="help-text" id="project-name-field-help-text">The name provided at the Informational Meeting with the Department of City Planning or the project address</p>
-      </div>
-    </div>
-
-    <div class="grid-x grid-margin-x">
-      <div class="small-3 cell">
-        <label for="applicant-name-field" class="text-right middle">
-          Applicant Name
-        </label>
-      </div>
-      <div class="small-9 cell">
-        {{input
-          type="text"
-          value=model.applicantName
-          id="applicant-name-field"
-          class="applicant-name-field"
-        }}
-      </div>
-    </div>
-
-    <div class="grid-x grid-margin-x">
-      <div class="small-3 cell">
-        <label for="zap-project-id-field" class="text-right middle">
-          Project Number
-        </label>
-      </div>
-      <div class="small-9 cell">
-        {{input
-          type="text"
-          value=model.zapProjectId
-          id="zap-project-id-field"
-          class="zap-project-id-field"
-          aria-describedby="zap-project-id-field-help-text"
-        }}
-        <p class="help-text" id="zap-project-id-field-help-text">
-          The unique code provided by the Department of City Planning following an Informational Interest Meeting
-        </p>
-      </div>
-    </div>
-
-    <button
-      type="button"
-      class="button large expanded project-save-button"
-      disabled={{eq model.currentStep.label 'project-creation'}} 
-      onclick={{action 'save' model}}
-    >
-      Create New Project
-    </button>
-
-  </form>
+  </button>
 
 </div>

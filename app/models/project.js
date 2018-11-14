@@ -89,7 +89,8 @@ export default class extends Model {
     const needUnderlyingZoning = this.get('needUnderlyingZoning');
     const needCommercialOverlay = this.get('needCommercialOverlay');
     const needSpecialDistrict = this.get('needSpecialDistrict');
-    if (projectName == null) {
+
+    if (projectName == null || projectName === '') {
       return { label: 'project-creation', route: 'projects.new' };
     } if (developmentSite == null) {
       return { label: 'development-site', route: 'projects.edit.steps.development-site' };
@@ -102,8 +103,17 @@ export default class extends Model {
     } if ((needRezoning === true && (needCommercialOverlay === true || needCommercialOverlay == null)) && proposedCommercialOverlays == null) {
       return { label: 'rezoning-commercial', route: 'projects.edit.steps.rezoning' };
     } if ((needRezoning === true && (needSpecialDistrict === true || needSpecialDistrict == null)) && proposedSpecialDistricts == null) {
-      return { label: 'rezoning-special', route: 'projects.steps.edit.rezoning' };
+      return { label: 'rezoning-special', route: 'projects.edit.steps.rezoning' };
     } return { label: 'complete', route: 'projects.show' };
+  }
+
+  @computed('currentStep')
+  get currentStepNumber() {
+    const currentStep = this.get('currentStep');
+    if (currentStep.label === 'rezoning') { return 3; }
+    if (currentStep.label === 'complete') { return 3; }
+    if (currentStep.label === 'project-area') { return 2; }
+    return 1;
   }
 
   // @computed()
