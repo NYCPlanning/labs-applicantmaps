@@ -328,14 +328,13 @@ export default class ProjectFormComponent extends Component {
       if (correspondingCurrentZoningFeature) {
         console.log(`${id} exists in current Zoning`)
         console.log(JSON.stringify(geometry), JSON.stringify(correspondingCurrentZoningFeature.geometry))
-        const difference = turfDifference(correspondingCurrentZoningFeature, feature)
-        console.log(difference)
-        if (difference) {
 
-          console.log(geometry, correspondingCurrentZoningFeature.geometry)
-          console.log(difference)
-          differenceFC.features.push(difference);
-        }
+        const difference = turfDifference(correspondingCurrentZoningFeature, feature)
+        if (difference) differenceFC.features.push(difference);
+
+        const inverseDifference = turfDifference(feature, correspondingCurrentZoningFeature)
+        if (difference) differenceFC.features.push(difference);
+
       } else {
         console.log(`${id} DOES NOT exist in current Zoning`)
         differenceFC.features.push(feature);
@@ -358,6 +357,7 @@ export default class ProjectFormComponent extends Component {
         return union;
       }, null);
       console.log(JSON.stringify(differenceUnion))
+      this.set('model.rezoningArea', differenceUnion)
     }
   }
 }
