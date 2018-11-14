@@ -93,12 +93,13 @@ export default class extends Model {
   }
 
   @computed('currentStep')
-   get currentStepNumber() {
-     const currentStep = this.get('currentStep');
-     if (currentStep.label === 'rezoning') { return 3; }
-     if (currentStep.label === 'complete') { return 3; }
-     if (currentStep.label === 'project-area') { return 2; }
-     return 1;
+  get currentStepNumber() {
+    const currentStep = this.get('currentStep');
+    if (currentStep.label === 'rezoning') { return 3; }
+    if (currentStep.label === 'complete') { return 3; }
+    if (currentStep.label === 'project-area') { return 2; }
+    return 1;
+  }
 
   @computed('model.needRezoning', 'model.needUnderlyingZoning', 'model.needCommercialOverlay', 'model.needSpecialDistrict')
   get hasAnsweredAll() {
