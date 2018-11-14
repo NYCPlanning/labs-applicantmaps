@@ -8,42 +8,4 @@
 
 <hr />
 
-<h6>Steps to be completed:</h6>
-<ul class="no-bullet light-gray">
-  <li class="
-    {{if (gte project.currentStepNumber 1) 'black'}}
-    {{if (eq project.currentStepNumber 1) 'text-weight-bold'}}
-  ">
-    {{fa-icon (if (eq project.currentStepNumber 1) 'arrow-alt-circle-right' 'check')
-      fixedWidth=true
-      class=(if (gt project.currentStepNumber 1) 'green-muted' '')
-    }}
-    Development Site
-  </li>
-  <li class="
-    {{if (gte project.currentStepNumber 2) 'black'}}
-    {{if (eq project.currentStepNumber 2) 'text-weight-bold'}}
-  ">
-    {{fa-icon (if (eq project.currentStepNumber 2) 'arrow-alt-circle-right' (if (gt project.currentStepNumber 2) 'check' 'circle'))
-      fixedWidth=true
-      class=(if (gt project.currentStepNumber 2) 'green-muted' '')
-      prefix=(unless (gte project.currentStepNumber 2) 'far' 'fas')
-    }}
-    Project Area
-  </li>
-  <li class="
-    {{if (gte project.currentStepNumber 3) 'black'}}
-    {{if (eq project.currentStepNumber 3) 'text-weight-bold'}}
-  ">
-    {{fa-icon (if (eq project.currentStepNumber 3) 'arrow-alt-circle-right' (if (gt project.currentStepNumber 3) 'check' 'circle'))
-      fixedWidth=true
-      class=(if (gt project.currentStepNumber 3) 'green-muted' '')
-      prefix=(unless (gte project.currentStepNumber 3) 'far' 'fas')
-    }}
-    Rezoning
-  </li>
-</ul>
-
-<hr class="hide-for-large no-margin" />
-
 {{yield}}
