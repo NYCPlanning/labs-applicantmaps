@@ -92,6 +92,14 @@ export default class extends Model {
     } return { label: 'complete', route: 'projects.show' };
   }
 
+  @computed('currentStep')
+   get currentStepNumber() {
+     const currentStep = this.get('currentStep');
+     if (currentStep.label === 'rezoning') { return 3; }
+     if (currentStep.label === 'complete') { return 3; }
+     if (currentStep.label === 'project-area') { return 2; }
+     return 1;
+
   @computed('model.needRezoning', 'model.needUnderlyingZoning', 'model.needCommercialOverlay', 'model.needSpecialDistrict')
   get hasAnsweredAll() {
     if ((this.get('model.needRezoning') === true) && (this.get('model.needUnderlyingZoning') != null) && (this.get('model.needCommercialOverlay') != null) && (this.get('model.needSpecialDistrict') != null)) return true;
