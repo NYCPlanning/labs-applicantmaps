@@ -150,6 +150,30 @@ body {
   }
 }
 
+.dashboard {
+  padding: $global-margin 0;
+
+  @include breakpoint(large) {
+    padding-right: $global-margin*2;
+  }
+}
+
+#dashboard-map {
+  height: 30vh;
+  margin-bottom: $global-margin;
+
+  @include breakpoint(xlarge) {
+    height: calc(100vh - 8rem);
+    margin-bottom: 0;
+  }
+}
+
+.dashboard-controls {
+  @include breakpoint(large) {
+    padding-top: $global-margin;
+  }
+}
+
 .content-close-button-container {
   position: relative;
   z-index: 4;

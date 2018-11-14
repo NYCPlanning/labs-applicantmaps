@@ -1,123 +1,135 @@
-<div class="cell">
+<div class="cell sidebar">
 
-  <div class="grid-container">
+  {{project-setup-status project=model}}
 
-    <div class="grid-x grid-padding-x grid-padding-y">
-      <div class="cell medium-7 large-6">
+  <h4 class="header-small">Project Maps</h4>
+  {{link-to 'Area Map' 'projects.edit.map.edit' model.id (query-params mapType=(dasherize 'Area Map'))
+    class='button large expanded'
+  }}
 
-        <h1 class="header-xlarge small-margin-bottom">{{model.projectName}}</h1>
-        <p class="small-margin-bottom">
-          <strong class="text-tiny dark-gray">Applicant Name</strong> <br />
-          {{model.applicantName}}
-        </p>
-        <p class="small-margin-bottom">
-          <strong class="text-tiny dark-gray">Description</strong> <br />
-          {{model.description}}
-        </p>
-        <p>
-          <strong class="text-tiny dark-gray">Project Number</strong> <br />
-          {{model.zapProjectId}}
-        </p>
+</div>
+<div class="cell large-auto dashboard">
 
-        {{#link-to 'projects.edit' model.id tagName='div'}}
-          <button class="button expanded gray edit-project-button">Edit Project</button>
-        {{/link-to}}
+  <div class="grid-x grid-padding-x">
+    <div class="cell xlarge-auto">
 
-        {{#mapbox-gl
-            id='project-map'
-            mapLoaded=(action 'handleMapLoad')
-            initOptions=(hash
-              zoom=15.479951257235973
-              center=(array -73.96532400540775 40.709710016659386)
-              bearing=20.97777777785973
-            )
-            as | map |
-          }}
-            {{!-- Ad-hoc source and layer for developmentSite --}}
-            {{#if model.developmentSite}}
-              {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
-                {{source.layer
-                  layer=projectGeomLayers.developmentSiteLayer
-                  before='boundary_country'
-                }}
-              {{/map.source}}
-            {{/if}}
+      {{#mapbox-gl
+          id='dashboard-map'
+          mapLoaded=(action 'handleMapLoad')
+          initOptions=(hash
+            zoom=15.479951257235973
+            center=(array -73.96532400540775 40.709710016659386)
+            bearing=20.97777777785973
+          )
+          as | map |
+        }}
+          {{!-- Ad-hoc source and layer for developmentSite --}}
+          {{#if model.developmentSite}}
+            {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
+              {{source.layer
+                layer=projectGeomLayers.developmentSiteLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
+          {{/if}}
 
-            {{!-- Ad-hoc source and layer for projectArea --}}
-            {{#if model.projectArea}}
-              {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
-                {{source.layer
-                  layer=projectGeomLayers.projectAreaLayer
-                  before='boundary_country'
-                }}
-              {{/map.source}}
-            {{/if}}
+          {{!-- Ad-hoc source and layer for projectArea --}}
+          {{#if model.projectArea}}
+            {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
+              {{source.layer
+                layer=projectGeomLayers.projectAreaLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
+          {{/if}}
 
-            {{!-- Ad-hoc source and layer for projectArea --}}
-            {{#if model.rezoningArea}}
-              {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
-                {{source.layer
-                  layer=projectGeomLayers.rezoningAreaLayer
-                  before='boundary_country'
-                }}
-              {{/map.source}}
-            {{/if}}
-        {{/mapbox-gl}}
+          {{!-- Ad-hoc source and layer for rezoningArea --}}
+          {{#if model.rezoningArea}}
+            {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
+              {{source.layer
+                layer=projectGeomLayers.rezoningAreaLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
+          {{/if}}
+      {{/mapbox-gl}}
 
-      </div>
-      <div class="cell auto">
-        <h3 class="header-xlarge dark-gray"><small>Project Maps</small></h3>
-        <div class="grid-x grid-padding-x large-up-2">
-          {{#each (array (hash name='Area Map' prop='areaMaps')
-                          (hash name='Tax Map' prop='taxMaps')
-                          (hash name='Zoning Change Map' prop='zoningChangeMaps')
-                          (hash name='Zoning Section Map' prop='zoningSectionMaps')) as |type|}}
-            <div class="cell">
-              {{#if (get (get model type.prop) 'firstObject')}}
-                {{#link-to 'projects.edit.map.edit' model.id (query-params mapType=(dasherize type.name)) tagName='a' class='card link text-center'}}
-                  <div class="card-divider bg-a11y-orange orange-light align-center">
-                    {{fa-icon 'pencil-alt' size='3x' class=''}}
-                  </div>
-                  <div class="card-section">
-                    <span class="a11y-orange">{{type.name}}</span>
-                  </div>
-                {{/link-to}}
-              {{else}}
-                {{#if (eq type.name 'Area Map')}}{{!-- TODO: nix this if when all four types of maps can be created --}}
-                  {{!-- Only allow certain types of maps to be created --}}
-                  {{#link-to 'projects.edit.map.edit' model.id (query-params mapType=(dasherize type.name)) tagName='a' class='card link text-center'}}
-                    <div class="card-divider bg-green-muted green-light align-center map-type-{{dasherize type.name}}">
-                      {{fa-icon 'plus' size='3x' class=''}}
-                    </div>
-                    <div class="card-section">
-                      <strong class="dark-gray">{{type.name}}</strong>
-                    </div>
-                  {{/link-to}}
-                {{else}}
-                  {{!-- Prevent creating other types of maps --}}
-                  <div class="card link text-center">
-                    <div style="cursor:not-allowed;">
-                      <div class="card-divider bg-silver align-center">
-                        <span class="fa-layers fa-3x">
-                          {{fa-icon 'screwdriver' transform='rotate-270' class='off-white'}}
-                          {{fa-icon 'wrench' class='white-smoke'}}
-                          <span class="fa-layers-text light-gray" style="font-size:0.25em; line-height:1; white-space:nowrap;">Coming Soon</span>
-                        </span>
-                      </div>
-                      <div class="card-section">
-                        <span class="light-gray">{{type.name}}</span>
-                      </div>
-                    </div>
-                  </div>
-                {{/if}}
-              {{/if}}
-            </div>
-          {{/each}}
-        </div>
-
-      </div>
     </div>
+    <div class="cell xlarge-shrink dashboard-controls">
 
+      <div class="grid-x grid-margin-x">
+        <div class="cell auto">
+          <strong>Development Site</strong>
+        </div>
+        <div class="cell shrink">
+          <button class="button tiny gray no-margin">Edit</button>
+        </div>
+        <div class="cell shrink">
+          {{fa-icon 'trash' class='dark-gray'}}
+        </div>
+      </div>
+      <hr />
+      <div class="grid-x grid-margin-x">
+        <div class="cell auto">
+          <strong>Project Area </strong>
+        </div>
+        <div class="cell shrink">
+          <button class="button tiny gray no-margin">Edit</button>
+        </div>
+        <div class="cell shrink">
+          {{fa-icon 'trash' class='dark-gray'}}
+        </div>
+      </div>
+      <hr />
+      <div class="grid-x grid-margin-x">
+        <div class="cell auto">
+          <strong>Underlying Zoning</strong>
+        </div>
+        <div class="cell shrink">
+          <button class="button tiny gray no-margin">Edit</button>
+        </div>
+        <div class="cell shrink">
+          {{fa-icon 'trash' class='dark-gray'}}
+        </div>
+      </div>
+      <hr />
+      <div class="grid-x grid-margin-x">
+        <div class="cell auto">
+          <strong>Commercial Overlays</strong>
+        </div>
+        <div class="cell shrink">
+          <button class="button tiny gray no-margin">Edit</button>
+        </div>
+        <div class="cell shrink">
+          {{fa-icon 'trash' class='dark-gray'}}
+        </div>
+      </div>
+      <hr />
+      <div class="grid-x grid-margin-x">
+        <div class="cell auto">
+          <strong>Special Purpose Districts</strong>
+        </div>
+        <div class="cell shrink">
+          <button class="button tiny gray no-margin">Edit</button>
+        </div>
+        <div class="cell shrink">
+          {{fa-icon 'trash' class='dark-gray'}}
+        </div>
+      </div>
+      <hr />
+      <div class="grid-x grid-margin-x">
+        <div class="cell auto">
+          <strong>Rezoning Area </strong>
+        </div>
+        <div class="cell shrink">
+          <button class="button tiny gray no-margin">Edit</button>
+        </div>
+        <div class="cell shrink">
+          {{fa-icon 'trash' class='dark-gray'}}
+        </div>
+      </div>
+
+    </div>
   </div>
 
 </div>
