@@ -9,8 +9,10 @@ import { set } from '@ember/object';
 import MapboxDraw from 'mapbox-gl-draw';
 import carto from 'cartobox-promises-utility/utils/carto';
 import { task } from 'ember-concurrency-decorators';
+import { waitForProperty } from 'ember-concurrency';
 
 const tolerance = 0.000001;
+const bufferkm = 0.00008;
 const plutoTable = 'mappluto_v18_1';
 
 const draw = new MapboxDraw({
@@ -91,27 +93,30 @@ export default class DrawLotsToUnion extends Component {
   @computed('selectedLots.features.@each.geometry')
   get selectedLotsBuffer() {
     const { features } = this.get('selectedLots');
+    if (!features.length) return {};
     const [{ geometry }] = features;
     const { length } = features;
-    const bufferkm = 0.00008;
 
-    // TODO: this should only begin unioning if hydrateFeatures isIdle
-    let union = turfBuffer(geometry, bufferkm);
+    return waitForProperty(this, 'hydrateFeatures.isIdle')
+      .then(() => {
+        // TODO: this should only begin unioning if hydrateFeatures isIdle
+        let union = turfBuffer(geometry, bufferkm);
 
-    if (length > 1) {
-      for (let i = 1; i < length; i += 1) {
-        const bufferedGeometry = turfBuffer(features[i].geometry, bufferkm);
+        if (length > 1) {
+          for (let i = 1; i < length; i += 1) {
+            const bufferedGeometry = turfBuffer(features[i].geometry, bufferkm);
 
-        union = turfUnion(union, bufferedGeometry);
-      }
-    }
+            union = turfUnion(union, bufferedGeometry);
+          }
+        }
 
-    union = turfSimplify(union, { tolerance });
+        union = turfSimplify(union, { tolerance });
 
-    return {
-      type: 'FeatureCollection',
-      features: [union],
-    };
+        return {
+          type: 'FeatureCollection',
+          features: [union],
+        };
+      });
   }
 
   // Hydrate geometric fragments with true lot data
@@ -155,6 +160,19 @@ export default class DrawLotsToUnion extends Component {
     }
   }
 
+  @computed('mode', 'selectedLots.features.length')
+  get isValid() {
+    const { mode, selectedLots } = this.getProperties('mode', 'selectedLots');
+
+    // button is disabled if mode is not draw and there are no selected features
+    return (mode === 'draw') ? true : (selectedLots.features.length);
+  }
+
+  @computed('isValid', 'hydrateFeatures.isIdle')
+  get isReady() {
+    return this.get('isValid') && this.get('hydrateFeatures.isIdle');
+  }
+
   @action
   noop() {}
 
@@ -163,9 +181,8 @@ export default class DrawLotsToUnion extends Component {
     const bufferedLots = this.get('selectedLotsBuffer');
     const drawnGeometry = draw.getAll();
     const finalGeometry = (this.get('mode') === 'lots') ? bufferedLots : drawnGeometry;
-    const { features: [{ geometry }] } = finalGeometry;
 
-    return geometry;
+    return finalGeometry;
   }
 
   willDestroyElement(...args) {

@@ -10,6 +10,7 @@
   {{/layers.tooltip}}
 {{/map.labs-layers}}
 
+{{!-- if in lot selection mode, add the lot boudnaries --}}
 {{#if (eq mode 'lots')}}
   {{!-- Ad-hoc source and layer for showing selected lots in lot selection mode --}}
   {{#map.source options=selectedLotsSource as |source|}}
@@ -20,4 +21,18 @@
   {{/map.source}}
 {{/if}}
 
-{{yield selectedLots finalGeometry}}
+{{!-- render markup into parent container --}}
+{{#ember-wormhole to='geometry-type-save-box'}}
+  {{#if hasBlock}}
+    {{yield (hash
+      finalGeometry=finalGeometry 
+      button=(component 'project-geometry-edit/draw-lots-to-union/button'
+        enabled=isReady
+        finalGeometry=finalGeometry))}}
+  {{else}}
+    {{project-geometry-edit/draw-lots-to-union/button
+      enabled=isReady
+      finalGeometry=finalGeometry
+    }}
+  {{/if}}
+{{/ember-wormhole}}
