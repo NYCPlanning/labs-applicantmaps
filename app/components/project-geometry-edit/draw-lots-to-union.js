@@ -49,8 +49,19 @@ export default class DrawLotsToUnion extends Component {
     const geometricProperty = this.get('geometricProperty');
 
     mapInstance.addControl(draw, 'top-left');
+
     if (mode === 'draw') {
+      // set up initial drawing mode
       draw.changeMode('draw_polygon');
+
+      // setup events to update draw state
+      mapInstance.on('draw.create', () => {
+        this.set('currentDrawing', draw.getAll());
+      });
+
+      mapInstance.on('draw.update', () => {
+        this.set('currentDrawing', draw.getAll());
+      });
 
       // if geometry exists for this mode, add it to the drawing canvas
       if (geometricProperty) {
@@ -75,6 +86,8 @@ export default class DrawLotsToUnion extends Component {
   lotSelectionMode = true;
 
   selectedLotsLayer = selectedLotsLayer;
+
+  currentDrawing = null;
 
   @computed()
   get taxLots() {
@@ -160,30 +173,32 @@ export default class DrawLotsToUnion extends Component {
     }
   }
 
-  @computed('mode', 'selectedLots.features.length')
+  // validate the existence of properties
+  @computed('mode', 'currentDrawing', 'selectedLots.features.length')
   get isValid() {
-    const { mode, selectedLots } = this.getProperties('mode', 'selectedLots');
+    const { mode, currentDrawing, selectedLots } = this.getProperties('mode', 'currentDrawing', 'selectedLots');
 
     // button is disabled if mode is not draw and there are no selected features
-    return (mode === 'draw') ? true : (selectedLots.features.length);
+    return (mode === 'draw') ? currentDrawing : (selectedLots.features.length);
   }
 
+  // make sure no rehydration tasks are still running
   @computed('isValid', 'hydrateFeatures.isIdle')
   get isReady() {
     return this.get('isValid') && this.get('hydrateFeatures.isIdle');
   }
 
-  @action
-  noop() {}
-
-  @computed('mode', 'selectedLotsBuffer')
+  @computed('mode', 'selectedLotsBuffer', 'currentDrawing')
   get finalGeometry() {
     const bufferedLots = this.get('selectedLotsBuffer');
-    const drawnGeometry = draw.getAll();
+    const drawnGeometry = this.get('currentDrawing');
     const finalGeometry = (this.get('mode') === 'lots') ? bufferedLots : drawnGeometry;
 
     return finalGeometry;
   }
+
+  @action
+  noop() {}
 
   willDestroyElement(...args) {
     super.willDestroyElement(...args);

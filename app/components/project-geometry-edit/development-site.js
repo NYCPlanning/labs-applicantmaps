@@ -35,6 +35,7 @@ export default class DevelopmentSiteComponent extends Component {
   async save(finalGeometry) {
     const model = this.get('model');
     const { features: [{ geometry }] } = await finalGeometry;
+
     model.set('developmentSite', geometry);
 
     try {
