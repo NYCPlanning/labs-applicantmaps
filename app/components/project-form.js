@@ -5,6 +5,10 @@ import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { tagName } from '@ember-decorators/component';
 import carto from 'cartobox-promises-utility/utils/carto';
+import turfDifference from '@turf/difference';
+import turfUnion from '@turf/union';
+
+
 import projectGeomLayers from '../utils/project-geom-layers';
 
 const selectedLotsLayer = {
@@ -232,11 +236,20 @@ export default class ProjectFormComponent extends Component {
           ),
         4326)::geometry AS the_geom
       )
-      SELECT ST_Intersection(zoning.the_geom, buffer.the_geom) AS the_geom, zonedist AS label
+      SELECT ST_Intersection(zoning.the_geom, buffer.the_geom) AS the_geom, zonedist AS label, cartodb_id AS id
       FROM planninglabs.zoning_districts_v201809 zoning, buffer
       WHERE ST_Intersects(zoning.the_geom,buffer.the_geom)
     `;
     const clippedZoningDistricts = await carto.SQL(zoningQuery, 'geojson');
+
+    // add an id to the top level of each feature object, for use by mapbox-gl-draw
+    const { features } = clippedZoningDistricts;
+    clippedZoningDistricts.features = features.map((feature) => {
+      feature.id = feature.properties.id;
+      return feature;
+    });
+
+    this.set('model.currentZoning', clippedZoningDistricts);
     this.set('model.proposedZoning', clippedZoningDistricts);
   }
 
@@ -259,6 +272,7 @@ export default class ProjectFormComponent extends Component {
           WHERE ST_Intersects(co.the_geom,buffer.the_geom)
         `;
     const clippedCommercialOverlays = await carto.SQL(commercialOverlaysQuery, 'geojson');
+    this.set('model.currentCommercialOverlays', clippedCommercialOverlays);
     this.set('model.proposedCommercialOverlays', clippedCommercialOverlays);
   }
 
@@ -292,6 +306,58 @@ export default class ProjectFormComponent extends Component {
           WHERE ST_Intersects(spd.the_geom,buffer.the_geom)
         `;
     const clippedSpecialPurposeDistricts = await carto.SQL(specialPurposeDistrictsQuery, 'geojson');
+    this.set('model.currentSpecialPurposeDistricts', clippedSpecialPurposeDistricts);
     this.set('model.proposedSpecialPurposeDistricts', clippedSpecialPurposeDistricts);
+  }
+
+  @action
+  calculateRezoningArea() {
+    const currentZoning = this.get('model.currentZoning');
+    const proposedZoning = this.get('model.proposedZoning');
+
+    const differenceFC = {
+      type: 'FeatureCollection',
+      features: [],
+    }
+    // flag differences
+    proposedZoning.features.forEach((feature) => {
+      const { id, geometry } = feature;
+      const correspondingCurrentZoningFeature = currentZoning.features.filter(d => d.id === id)[0]
+      console.log('CORRESPONDING FEATURE', correspondingCurrentZoningFeature)
+      // if feature exists in currentZoning, compare the geometries
+      if (correspondingCurrentZoningFeature) {
+        console.log(`${id} exists in current Zoning`)
+        console.log(JSON.stringify(geometry), JSON.stringify(correspondingCurrentZoningFeature.geometry))
+        const difference = turfDifference(correspondingCurrentZoningFeature, feature)
+        console.log(difference)
+        if (difference) {
+
+          console.log(geometry, correspondingCurrentZoningFeature.geometry)
+          console.log(difference)
+          differenceFC.features.push(difference);
+        }
+      } else {
+        console.log(`${id} DOES NOT exist in current Zoning`)
+        differenceFC.features.push(feature);
+      }
+    });
+
+    console.log(differenceFC);
+
+    // union together all difference features
+    if (differenceFC.features.length > 0) {
+      const differenceUnion = differenceFC.features.reduce((union, { geometry }) => {
+
+        if (union === null) {
+          union = geometry;
+        } else {
+          union = turfUnion(union, geometry);
+        }
+
+
+        return union;
+      }, null);
+      console.log(JSON.stringify(differenceUnion))
+    }
   }
 }

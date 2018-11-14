@@ -34,9 +34,15 @@ export default class extends Model {
 
   @attr() rezoningArea
 
+  @attr() currentZoning
+
   @attr() proposedZoning
 
+  @attr() currentCommercialOverlays
+
   @attr() proposedCommercialOverlays
+
+  @attr() currentSpecialPurposeDistricts
 
   @attr() proposedSpecialPurposeDistricts
 
