@@ -102,16 +102,16 @@ export default class extends Model {
   }
 
   @computed('needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
-  get hasAnsweredAll() {
+  get rezoningAnsweredAll() {
     if ((this.get('needRezoning') === true) && (this.get('needUnderlyingZoning') != null) && (this.get('needCommercialOverlay') != null) && (this.get('needSpecialDistrict') != null)) return true;
 
     return false;
   }
 
-  @computed('hasAnsweredAll', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
-  get hasAnsweredLogically() {
-    if (this.get('hasAnsweredAll') && (this.get('needUnderlyingZoning') || this.get('needCommercialOverlay') || this.get('needSpecialDistrict'))) return true;
-    if (this.get('hasAnsweredAll')) return false;
+  @computed('rezoningAnsweredAll', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
+  get rezoningAnsweredLogically() {
+    if (this.get('rezoningAnsweredAll') && (this.get('needUnderlyingZoning') || this.get('needCommercialOverlay') || this.get('needSpecialDistrict'))) return true;
+    if (this.get('rezoningAnsweredAll')) return false;
     return false;
   }
 
