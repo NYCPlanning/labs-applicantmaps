@@ -7,9 +7,11 @@
   {{/link-to}}
 </nav>
 
-<h1>Are you requesting a rezoning&nbsp;action?</h1>
+<h1>Rezoning</h1>
 
-<p>For projects that request rezoning actions, you will need to define how the zoning is being&nbsp;altered.</p>
+<p>For projects with rezoning actions, you will need to define how the zoning is being&nbsp;altered.</p>
+
+<h2 class="header-medium">Are you requesting any rezoning&nbsp;actions?</h2>
 
 <p class="small-bottom-margin">
   <button
@@ -32,7 +34,7 @@
       {{/if}}
     </span>
     <strong>No</strong>
-    <small>(there are no rezoning actions)</small>
+    <small>(Project has no rezoning actions)</small>
   </button>
 </p>
 
@@ -64,7 +66,8 @@
 {{#if (eq model.needRezoning true)}}
   {{!-- Note: We will want form validation here that requires them to say yes to at least one of these three --}}
 
-  <h2 class="header-medium">Are you altering these types of zoning?</h2>
+  {{!-- <h2 class="header-medium">Are you altering these types of zoning?</h2> --}}
+  <h2 class="header-medium">For each type of zoning, are you altering it?</h2>
 
   {{!-- Underlying Zoning --}}
   <div class="grid-x grid-margin-x">
@@ -241,7 +244,7 @@
 {{else if (eq model.needRezoning false)}}
 
   <p class="text-right">
-    {{#link-to 'projects.show'
+    {{#link-to 'projects.show' model.id
       tagName='span'
       class='button large'
     }}
