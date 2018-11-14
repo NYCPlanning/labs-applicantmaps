@@ -1,26 +1,28 @@
-import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
-import hbs from 'htmlbars-inline-precompile';
+// This component isn't being used anymore in the refactor
 
-module('Integration | Component | project-geometry-edit', function(hooks) {
-  setupRenderingTest(hooks);
+// import { module, test } from 'qunit';
+// import { setupRenderingTest } from 'ember-qunit';
+// import { render } from '@ember/test-helpers';
+// import hbs from 'htmlbars-inline-precompile';
 
-  test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+// module('Integration | Component | project-geometry-edit', function(hooks) {
+//   setupRenderingTest(hooks);
 
-    await render(hbs`{{project-geometry-edit}}`);
+//   test('it renders', async function(assert) {
+//     // Set any properties with this.set('myProperty', 'value');
+//     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    assert.equal(this.element.textContent.trim(), '');
+//     await render(hbs`{{project-geometry-edit}}`);
 
-    // Template block usage:
-    await render(hbs`
-      {{#project-geometry-edit}}
-        template block text
-      {{/project-geometry-edit}}
-    `);
+//     assert.equal(this.element.textContent.trim(), '');
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
-  });
-});
+//     // Template block usage:
+//     await render(hbs`
+//       {{#project-geometry-edit}}
+//         template block text
+//       {{/project-geometry-edit}}
+//     `);
+
+//     assert.equal(this.element.textContent.trim(), 'template block text');
+//   });
+// });
