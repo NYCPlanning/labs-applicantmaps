@@ -302,6 +302,11 @@ label.inline {
   @include button-style($background:$green-dark, $background-hover:auto, $color:$white);
 }
 
+//project URL on final map page
+.project-url-text {
+  font-size: rem-calc(11);
+}
+
 
 
 //
