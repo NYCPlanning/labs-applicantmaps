@@ -101,37 +101,37 @@ export default class extends Model {
     return 1;
   }
 
-  @computed('model.needRezoning', 'model.needUnderlyingZoning', 'model.needCommercialOverlay', 'model.needSpecialDistrict')
+  @computed('needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
   get hasAnsweredAll() {
-    if ((this.get('model.needRezoning') === true) && (this.get('model.needUnderlyingZoning') != null) && (this.get('model.needCommercialOverlay') != null) && (this.get('model.needSpecialDistrict') != null)) return true;
+    if ((this.get('needRezoning') === true) && (this.get('needUnderlyingZoning') != null) && (this.get('needCommercialOverlay') != null) && (this.get('needSpecialDistrict') != null)) return true;
 
     return false;
   }
 
-  @computed('hasAnsweredAll', 'model.needUnderlyingZoning', 'model.needCommercialOverlay', 'model.needSpecialDistrict')
+  @computed('hasAnsweredAll', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
   get hasAnsweredLogically() {
-    if (this.get('hasAnsweredAll') && (this.get('model.needUnderlyingZoning') || this.get('model.needCommercialOverlay') || this.get('model.needSpecialDistrict'))) return true;
+    if (this.get('hasAnsweredAll') && (this.get('needUnderlyingZoning') || this.get('needCommercialOverlay') || this.get('needSpecialDistrict'))) return true;
     if (this.get('hasAnsweredAll')) return false;
-    return null;
+    return false;
   }
 
-  @computed('model.needRezoning', 'model.needUnderlyingZoning', 'model.needCommercialOverlay', 'model.needSpecialDistrict')
+  @computed('needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
   get firstGeomType() {
-    if ((this.get('model.needRezoning') === true) && (this.get('model.needUnderlyingZoning') === true)) return 'rezoning-underlying';
-    if ((this.get('model.needRezoning') === true) && (this.get('model.needCommercialOverlay') === true)) return 'rezoning-commercial';
-    if ((this.get('model.needRezoning') === true) && (this.get('model.needSpecialDistrict') === true)) return 'rezoning-special';
+    if ((this.get('needRezoning') === true) && (this.get('needUnderlyingZoning') === true)) return 'rezoning-underlying';
+    if ((this.get('needRezoning') === true) && (this.get('needCommercialOverlay') === true)) return 'rezoning-commercial';
+    if ((this.get('needRezoning') === true) && (this.get('needSpecialDistrict') === true)) return 'rezoning-special';
 
     return false;
   }
 
-  // @computed('projectArea')
-  // get projectAreaSource() {
-  //   const projectArea = this.get('projectArea');
-  //   return {
-  //     type: 'geojson',
-  //     data: projectArea,
-  //   };
-  // }
+  @computed('projectArea')
+  get projectAreaSource() {
+    const projectArea = this.get('projectArea');
+    return {
+      type: 'geojson',
+      data: projectArea,
+    };
+  }
 
   // ********************************
 
