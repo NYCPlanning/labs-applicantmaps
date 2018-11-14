@@ -5,6 +5,7 @@ import { service } from '@ember-decorators/service';
 import turfBuffer from '@turf/buffer';
 import turfUnion from '@turf/union';
 import turfSimplify from '@turf/simplify';
+import { set } from '@ember/object';
 import MapboxDraw from 'mapbox-gl-draw';
 import carto from 'cartobox-promises-utility/utils/carto';
 import { task } from 'ember-concurrency-decorators';
@@ -94,6 +95,7 @@ export default class DrawLotsToUnion extends Component {
     const { length } = features;
     const bufferkm = 0.00008;
 
+    // TODO: this should only begin unioning if hydrateFeatures isIdle
     let union = turfBuffer(geometry, bufferkm);
 
     if (length > 1) {
@@ -112,17 +114,16 @@ export default class DrawLotsToUnion extends Component {
     };
   }
 
+  // Hydrate geometric fragments with true lot data
   @task
   hydrateFeatures = function* (feature) {
     const { properties } = feature;
     const targetFeature = this.get('selectedLots.features')
       .find(({ properties: { bbl } }) => bbl === properties.bbl);
-    console.log(targetFeature);
-
     const bblSelectionQuery = `SELECT the_geom FROM ${plutoTable} WHERE bbl = ${properties.bbl}`;
     const { features: [{ geometry }] } = yield carto.SQL(bblSelectionQuery, 'geojson');
-    Ember.set(targetFeature, 'geometry', geometry);
-    return geometry;
+
+    set(targetFeature, 'geometry', geometry);
   }
 
   @action
@@ -142,6 +143,7 @@ export default class DrawLotsToUnion extends Component {
       if (inSelection === undefined) {
         this.get('selectedLots.features')
           .pushObject(feature);
+
         this.get('hydrateFeatures').perform(feature); // task to fetch full feature;
       } else {
         const newLots = selectedLots
