@@ -8,27 +8,10 @@ import config from '../config/environment';
 const { mapTypes } = config;
 const { Model } = DS;
 
-const questionFields = [
-  'needProjectArea',
-  'needRezoning',
-  'needUnderlyingZoning',
-  'needCommercialOverlay',
-  'needSpecialDistrict',
-];
-
-const fieldsForCurrentStep = [
-  'developmentSite',
-  'projectName',
-  'projectArea',
-  'rezoningArea',
-  'proposedZoning',
-  'proposedCommercialOverlays',
-  'proposedSpecialDistricts',
-  ...questionFields,
-];
-
-// const hasAnswered = property => property !== null;
-const trueOrNull = property => property === true || property === null;
+// const requiredFields = [
+//   'projectName',
+//   'developmentSite',
+// ];
 
 export default class extends Model {
   @hasMany('area-map', { async: false }) areaMaps;
@@ -92,55 +75,35 @@ export default class extends Model {
   //   return requiredFields.filter(field => this.get(field));
   // }
 
-  @computed(...fieldsForCurrentStep)
+  @computed('developmentSite', 'projectName', 'projectArea', 'rezoningArea', 'proposedZoning', 'proposedCommercialOverlays', 'proposedSpecialDistricts', 'needProjectArea', 'needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
   get currentStep() {
-    const {
-      projectName,
-      developmentSite,
-      projectArea,
-      rezoningArea,
-      proposedZoning,
-      proposedCommercialOverlays,
-      proposedSpecialDistricts,
-      needProjectArea,
-      needRezoning,
-      needUnderlyingZoning,
-      needCommercialOverlay,
-      needSpecialDistrict,
-    } = this.getProperties(...fieldsForCurrentStep);
-
-    // const currentQuestion = questionFields.find(q => hasAnswered(q));
-
-    if (!projectName) {
+    const projectName = this.get('projectName');
+    const developmentSite = this.get('developmentSite');
+    const projectArea = this.get('projectArea');
+    const rezoningArea = this.get('rezoningArea');
+    const proposedZoning = this.get('proposedZoning');
+    const proposedCommercialOverlays = this.get('proposedCommercialOverlays');
+    const proposedSpecialDistricts = this.get('proposedSpecialDistricts');
+    const needProjectArea = this.get('needProjectArea');
+    const needRezoning = this.get('needRezoning');
+    const needUnderlyingZoning = this.get('needUnderlyingZoning');
+    const needCommercialOverlay = this.get('needCommercialOverlay');
+    const needSpecialDistrict = this.get('needSpecialDistrict');
+    if (projectName == null) {
       return { label: 'project-creation', route: 'projects.new' };
-    }
-
-    if (!developmentSite) {
+    } if (developmentSite == null) {
       return { label: 'development-site', route: 'projects.edit.steps.development-site' };
-    }
-
-    // questions
-    if (trueOrNull(needProjectArea) && !projectArea) {
+    } if ((needProjectArea === true || needProjectArea == null) && projectArea == null) {
       return { label: 'project-area', route: 'projects.edit.steps.project-area' };
-    }
-
-    if (trueOrNull(needRezoning) && !rezoningArea) {
+    } if ((needRezoning === true || needRezoning == null) && rezoningArea == null) {
       return { label: 'rezoning', route: 'projects.edit.steps.rezoning' };
-    }
-
-    if (trueOrNull(needUnderlyingZoning) && needRezoning && !proposedZoning) {
+    } if ((needRezoning === true && (needUnderlyingZoning === true || needUnderlyingZoning == null)) && proposedZoning == null) {
       return { label: 'rezoning-underlying', route: 'projects.edit.steps.rezoning' };
-    }
-
-    if (trueOrNull(needCommercialOverlay) && needRezoning && !proposedCommercialOverlays) {
+    } if ((needRezoning === true && (needCommercialOverlay === true || needCommercialOverlay == null)) && proposedCommercialOverlays == null) {
       return { label: 'rezoning-commercial', route: 'projects.edit.steps.rezoning' };
-    }
-
-    if (trueOrNull(needSpecialDistrict) && needRezoning && !proposedSpecialDistricts) {
+    } if ((needRezoning === true && (needSpecialDistrict === true || needSpecialDistrict == null)) && proposedSpecialDistricts == null) {
       return { label: 'rezoning-special', route: 'projects.steps.edit.rezoning' };
-    }
-
-    return { label: 'complete', route: 'projects.show' };
+    } return { label: 'complete', route: 'projects.show' };
   }
 
   // @computed()
