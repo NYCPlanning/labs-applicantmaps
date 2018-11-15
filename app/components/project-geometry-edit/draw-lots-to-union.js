@@ -49,11 +49,10 @@ export default class DrawLotsToUnion extends Component {
 
     if (mode === 'draw') {
       // // set up initial drawing mode
-      // draw.changeMode('draw_polygon');
+      draw.changeMode('draw_polygon');
 
       // if geometry exists for this mode, add it to the drawing canvas
       if (geometricProperty) {
-        console.log(geometricProperty);
         this.set('currentDrawing', geometricProperty);
         draw.add(geometricProperty);
         draw.changeMode('simple_select');
@@ -61,12 +60,10 @@ export default class DrawLotsToUnion extends Component {
 
       // setup events to update draw state
       mapInstance.on('draw.create', () => {
-        console.log('draw create');
         this.set('currentDrawing', draw.getAll());
       });
 
       mapInstance.on('draw.update', () => {
-        console.log('draw create');
         this.set('currentDrawing', draw.getAll());
       });
     }
@@ -178,7 +175,6 @@ export default class DrawLotsToUnion extends Component {
   @computed('mode', 'currentDrawing', 'selectedLots.features.length')
   get isValid() {
     const { mode, currentDrawing, selectedLots } = this.getProperties('mode', 'currentDrawing', 'selectedLots');
-    console.log(currentDrawing, !!currentDrawing, mode);
     // button is disabled if mode is not draw and there are no selected features
     return (mode === 'draw') ? (!!currentDrawing) : (selectedLots.features.length);
   }
