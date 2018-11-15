@@ -315,49 +315,42 @@ export default class ProjectFormComponent extends Component {
     const currentZoning = this.get('model.currentZoning');
     const proposedZoning = this.get('model.proposedZoning');
 
+    // create an empty FeatureCollection to hold the difference sections
     const differenceFC = {
       type: 'FeatureCollection',
       features: [],
-    }
+    };
     // flag differences
     proposedZoning.features.forEach((feature) => {
-      const { id, geometry } = feature;
-      const correspondingCurrentZoningFeature = currentZoning.features.filter(d => d.id === id)[0]
-      console.log('CORRESPONDING FEATURE', correspondingCurrentZoningFeature)
+      const { id } = feature;
+      const correspondingCurrentZoningFeature = currentZoning.features.filter(d => d.id === id)[0];
+
       // if feature exists in currentZoning, compare the geometries
       if (correspondingCurrentZoningFeature) {
-        console.log(`${id} exists in current Zoning`)
-        console.log(JSON.stringify(geometry), JSON.stringify(correspondingCurrentZoningFeature.geometry))
-
-        const difference = turfDifference(correspondingCurrentZoningFeature, feature)
+        // get the difference
+        const difference = turfDifference(correspondingCurrentZoningFeature, feature);
         if (difference) differenceFC.features.push(difference);
 
-        const inverseDifference = turfDifference(feature, correspondingCurrentZoningFeature)
-        if (difference) differenceFC.features.push(difference);
-
+        // get the inverse difference (reverse the order of the polygons)
+        const inverseDifference = turfDifference(feature, correspondingCurrentZoningFeature);
+        if (inverseDifference) differenceFC.features.push(inverseDifference);
       } else {
-        console.log(`${id} DOES NOT exist in current Zoning`)
         differenceFC.features.push(feature);
       }
     });
 
-    console.log(differenceFC);
-
     // union together all difference features
     if (differenceFC.features.length > 0) {
       const differenceUnion = differenceFC.features.reduce((union, { geometry }) => {
-
         if (union === null) {
           union = geometry;
         } else {
           union = turfUnion(union, geometry);
         }
 
-
         return union;
       }, null);
-      console.log(JSON.stringify(differenceUnion))
-      this.set('model.rezoningArea', differenceUnion)
+      this.set('model.rezoningArea', differenceUnion);
     }
   }
 }

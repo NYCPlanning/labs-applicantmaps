@@ -134,9 +134,6 @@ export default class DrawControlController extends Component {
           this.set('selectedZoningFeature', null);
         }
       });
-
-      // temporary
-      map.on('draw.update', (e) => { console.log(e); })
     } else {
       // breakdown all the drawing mode stuff
       draw.trash();
