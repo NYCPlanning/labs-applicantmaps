@@ -1,0 +1,30 @@
+{{#if model.proposedZoning}}
+  {{#project-geometry-edit/draw-lots-to-union
+    mode=mode
+    map=map
+    geometricProperty=model.proposedZoning as |selection|
+  }}
+    {{#selection.button
+      handleClick=(action 'save')}}
+      Save Zoning District
+    {{/selection.button}}
+  {{/project-geometry-edit/draw-lots-to-union}}
+
+  {{#map.source options=(mapbox-geojson-source model.proposedZoning) as |source|}}
+    {{source.layer
+      layer=proposedZoningLayer
+      before='boundary_country'
+    }}
+    {{source.layer
+      layer=proposedZoningLabelsLayer
+      before='boundary_country'
+    }}
+  {{/map.source}}
+{{/if}}
+
+{{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
+  {{source.layer
+    layer=developmentSiteLayer
+    before='boundary_country'
+  }}
+{{/map.source}}

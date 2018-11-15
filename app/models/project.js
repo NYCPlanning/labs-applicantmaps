@@ -3,15 +3,81 @@ import { attr, hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
 import turfBbox from '@turf/bbox';
 import { camelize } from '@ember/string';
+import carto from 'cartobox-promises-utility/utils/carto';
 import config from '../config/environment';
 
+const bufferMeters = 500;
 const { mapTypes } = config;
 const { Model } = DS;
 
-// const requiredFields = [
-//   'projectName',
-//   'developmentSite',
-// ];
+export const INTERSECTING_ZONING_QUERY = (developmentSite) => {
+  if (developmentSite) {
+    // Get zoning districts
+    const zoningQuery = `
+      WITH buffer as (
+        SELECT ST_SetSRID(
+          ST_Buffer(
+            ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
+            ${bufferMeters}
+          ),
+        4326)::geometry AS the_geom
+      )
+      SELECT ST_Intersection(zoning.the_geom, buffer.the_geom) AS the_geom, zonedist AS label
+      FROM planninglabs.zoning_districts_v201809 zoning, buffer
+      WHERE ST_Intersects(zoning.the_geom,buffer.the_geom)
+    `;
+
+    return new carto.SQL(zoningQuery, 'geojson');
+  }
+
+  return null;
+};
+
+export const PROPOSED_COMMERCIAL_OVERLAYS_QUERY = (developmentSite) => {
+  if (developmentSite) {
+    // Get commercial overlays
+    const commercialOverlaysQuery = `
+      WITH buffer as (
+        SELECT ST_SetSRID(
+          ST_Buffer(
+            ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
+            ${bufferMeters}
+          ),
+        4326)::geometry AS the_geom
+      )
+      SELECT ST_Intersection(co.the_geom, buffer.the_geom) AS the_geom, overlay AS label
+      FROM planninglabs.commercial_overlays_v201809 co, buffer
+      WHERE ST_Intersects(co.the_geom,buffer.the_geom)
+    `;
+
+    return new carto.SQL(commercialOverlaysQuery, 'geojson');
+  }
+
+  return null;
+};
+
+export const PROPOSE_SPECIAL_DISTRICTS_QUERY = (developmentSite) => {
+  if (developmentSite) {
+    // Get special purpose districts
+    const specialPurposeDistrictsQuery = `
+      WITH buffer as (
+        SELECT ST_SetSRID(
+          ST_Buffer(
+            ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
+            ${bufferMeters}
+          ),
+        4326)::geometry AS the_geom
+      )
+      SELECT ST_Intersection(spd.the_geom, buffer.the_geom) AS the_geom, sdname AS label
+      FROM planninglabs.special_purpose_districts_v201809 spd, buffer
+      WHERE ST_Intersects(spd.the_geom,buffer.the_geom)
+    `;
+
+    return new carto.SQL(specialPurposeDistrictsQuery, 'geojson');
+  }
+
+  return null;
+};
 
 export default class extends Model {
   @hasMany('area-map', { async: false }) areaMaps;
@@ -55,13 +121,34 @@ export default class extends Model {
 
   @attr() projectArea
 
-  @attr() rezoningArea
-
   @attr() proposedZoning
+
+  async setDefaultProposedZoning() {
+    const developmentSite = this.get('developmentSite');
+    const result = await INTERSECTING_ZONING_QUERY(developmentSite);
+
+    this.set('proposedZoning', result);
+  }
 
   @attr() proposedCommercialOverlays
 
+  async setDefaultProposedCommercialOverlays() {
+    const developmentSite = this.get('developmentSite');
+    const result = await PROPOSED_COMMERCIAL_OVERLAYS_QUERY(developmentSite);
+
+    this.set('proposedCommercialOverlays', result);
+  }
+
   @attr() proposedSpecialDistricts
+
+  async setDefaultProposedSpecialDistricts() {
+    const developmentSite = this.get('developmentSite');
+    const result = await PROPOSE_SPECIAL_DISTRICTS_QUERY(developmentSite);
+
+    this.set('proposedSpecialDistricts', result);
+  }
+
+  @attr() rezoningArea
 
   // ******** VALIDATION CHECKS / STEPS ********
 

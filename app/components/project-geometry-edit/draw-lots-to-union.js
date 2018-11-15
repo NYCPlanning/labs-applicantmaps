@@ -40,10 +40,7 @@ export default class DrawLotsToUnion extends Component {
       type: 'FeatureCollection',
       features: [],
     });
-  }
 
-  init(...args) {
-    super.init(...args);
     const { mapInstance } = this.get('map');
     const mode = this.get('mode');
     const geometricProperty = this.get('geometricProperty');
@@ -51,23 +48,27 @@ export default class DrawLotsToUnion extends Component {
     mapInstance.addControl(draw, 'top-left');
 
     if (mode === 'draw') {
-      // set up initial drawing mode
-      draw.changeMode('draw_polygon');
+      // // set up initial drawing mode
+      // draw.changeMode('draw_polygon');
+
+      // if geometry exists for this mode, add it to the drawing canvas
+      if (geometricProperty) {
+        console.log(geometricProperty);
+        this.set('currentDrawing', geometricProperty);
+        draw.add(geometricProperty);
+        draw.changeMode('simple_select');
+      }
 
       // setup events to update draw state
       mapInstance.on('draw.create', () => {
+        console.log('draw create');
         this.set('currentDrawing', draw.getAll());
       });
 
       mapInstance.on('draw.update', () => {
+        console.log('draw create');
         this.set('currentDrawing', draw.getAll());
       });
-
-      // if geometry exists for this mode, add it to the drawing canvas
-      if (geometricProperty) {
-        draw.add(geometricProperty);
-        draw.changeMode('simple_select');
-      }
     }
   }
 
@@ -177,9 +178,9 @@ export default class DrawLotsToUnion extends Component {
   @computed('mode', 'currentDrawing', 'selectedLots.features.length')
   get isValid() {
     const { mode, currentDrawing, selectedLots } = this.getProperties('mode', 'currentDrawing', 'selectedLots');
-
+    console.log(currentDrawing, !!currentDrawing, mode);
     // button is disabled if mode is not draw and there are no selected features
-    return (mode === 'draw') ? currentDrawing : (selectedLots.features.length);
+    return (mode === 'draw') ? (!!currentDrawing) : (selectedLots.features.length);
   }
 
   // make sure no rehydration tasks are still running

@@ -47,9 +47,13 @@ export default class ProjectAreaComponent extends Component {
   projectAreaLayer = projectAreaLayer;
 
   @action
-  async save(model, finalGeometry) {
-    model.set('projectArea', finalGeometry);
+  async save(finalGeometry) {
+    const model = this.get('model');
     const notifications = this.get('notificationMessages');
+    const { features: [{ geometry }] } = await finalGeometry;
+
+    model.set('projectArea', geometry);
+
     try {
       const savedProject = await model.save();
 
