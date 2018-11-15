@@ -202,10 +202,12 @@ export default class DrawLotsToUnion extends Component {
 
     const { mapInstance } = this.get('map');
 
-    // drawing cleanup
-    draw.trash();
-    draw.deleteAll();
-    mapInstance.off('draw.selectionchange');
-    mapInstance.removeControl(draw);
+    if (this.get('mode') === 'draw') {
+      // drawing cleanup
+      draw.trash();
+      draw.deleteAll();
+      mapInstance.off('draw.selectionchange');
+      mapInstance.removeControl(draw);
+    }
   }
 }
