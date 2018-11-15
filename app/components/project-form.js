@@ -7,7 +7,7 @@ import { tagName } from '@ember-decorators/component';
 import carto from 'cartobox-promises-utility/utils/carto';
 import turfDifference from '@turf/difference';
 import turfUnion from '@turf/union';
-
+import turfBuffer from '@turf/buffer';
 
 import projectGeomLayers from '../utils/project-geom-layers';
 
@@ -348,7 +348,8 @@ export default class ProjectFormComponent extends Component {
           union = turfUnion(union, geometry);
         }
 
-        return union;
+        const buffered = turfBuffer(union, -0.0005);
+        return buffered;
       }, null);
       this.set('model.rezoningArea', differenceUnion);
     }
