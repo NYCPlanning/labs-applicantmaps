@@ -45,9 +45,9 @@ export default class DrawLotsToUnion extends Component {
     const mode = this.get('mode');
     const geometricProperty = this.get('geometricProperty');
 
-    mapInstance.addControl(draw, 'top-left');
-
     if (mode === 'draw') {
+      mapInstance.addControl(draw, 'top-left');
+
       // // set up initial drawing mode
       draw.changeMode('draw_polygon');
 
