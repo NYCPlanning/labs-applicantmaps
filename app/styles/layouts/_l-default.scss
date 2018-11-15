@@ -345,13 +345,14 @@ textarea[readonly] {
   box-shadow: none;
 }
 
+// Ember Tooltip Overrides 
 .ember-popover {
-  background-color: $charcoal;
+  background-color: $dark-gray;
   color: $white;
   padding: $global-margin/2;
   border: 0;
 }
-
-.ember-popover[x-placement^="bottom"] .ember-tooltip-arrow {
-    border-bottom-color: $charcoal;
-}
+.ember-popover[x-placement^="top"] .ember-tooltip-arrow { border-top-color: $dark-gray; }
+.ember-popover[x-placement^="right"] .ember-tooltip-arrow { border-right-color: $dark-gray; }
+.ember-popover[x-placement^="bottom"] .ember-tooltip-arrow { border-bottom-color: $dark-gray; }
+.ember-popover[x-placement^="left"] .ember-tooltip-arrow { border-left-color: $dark-gray; }
