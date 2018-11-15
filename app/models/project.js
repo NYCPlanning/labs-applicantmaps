@@ -202,7 +202,7 @@ export default class extends Model {
       needCommercialOverlay,
       needSpecialDistrict,
     } = this.getProperties(...fieldsForCurrentStep);
-    console.log(this.getProperties(...fieldsForCurrentStep));
+
     // const currentQuestion = questionFields.find(q => hasAnswered(q));
 
     if (!projectName) {
