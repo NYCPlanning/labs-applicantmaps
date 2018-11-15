@@ -151,7 +151,7 @@ body {
 }
 
 .dashboard {
-  padding: $global-margin 0;
+  padding: $global-margin;
 
   @include breakpoint(large) {
     padding-right: $global-margin*2;
@@ -171,6 +171,24 @@ body {
 .dashboard-controls {
   @include breakpoint(large) {
     padding-top: $global-margin;
+  }
+  @include breakpoint(xlarge) {
+    padding-left: $global-margin;
+  }
+
+  .control > .cell:not(:first-child) {
+    padding-left: rem-calc(10);
+  }
+
+  .control > .cell {
+    padding-bottom: rem-calc(10);
+  }
+
+  .control + .control {
+    .cell {
+      border-top: $hr-border;
+      padding-top: rem-calc(10);
+    }
   }
 }
 
@@ -345,7 +363,7 @@ textarea[readonly] {
   box-shadow: none;
 }
 
-// Ember Tooltip Overrides 
+// Ember Tooltip Overrides
 .ember-popover {
   background-color: $dark-gray;
   color: $white;
