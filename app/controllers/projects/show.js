@@ -2,11 +2,14 @@ import Controller from '@ember/controller';
 import { action } from '@ember-decorators/object';
 import { developmentSiteLayer } from '../../components/project-geometries/development-site';
 import { projectAreaLayer } from '../../components/project-geometries/project-area';
+import areaMapLegendConfig from '../../utils/area-map-legend-config';
 
 export default class NewProjectController extends Controller {
   projectAreaLayer = projectAreaLayer;
 
   developmentSiteLayer = developmentSiteLayer;
+
+  areaMapLegendConfig = areaMapLegendConfig;
 
   @action
   handleMapLoad(map) {

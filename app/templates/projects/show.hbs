@@ -60,6 +60,7 @@
       <div class="grid-x control">
         <div class="cell auto">
           <strong>Development Site</strong>
+          {{labs-ui/legend-icon icon=areaMapLegendConfig.developmentSite.icon}}
         </div>
         <div class="cell shrink">
           <button class="button tiny gray no-margin">
@@ -75,13 +76,13 @@
               side='bottom'
               as |popover|
             }}
-              {{link-to 'Select Lots' 'projects.edit.geometry-edit' model 
-                (query-params type='development-site' mode='lots') 
+              {{link-to 'Select Lots' 'projects.edit.geometry-edit' model
+                (query-params type='development-site' mode='lots')
                 data-test-lots
                 tagName='button'
                 classNames='button tiny gray no-margin'}}
               {{link-to 'Draw Manually' 'projects.edit.geometry-edit' model
-                (query-params type='development-site' mode='draw') 
+                (query-params type='development-site' mode='draw')
                 data-test-draw
                 tagName='button'
                 classNames='button tiny gray no-margin'}}
@@ -97,6 +98,7 @@
       <div class="grid-x control">
         <div class="cell auto">
           <strong>Project Area</strong>
+          {{labs-ui/legend-icon icon=areaMapLegendConfig.projectArea.icon}}
         </div>
         <div class="cell shrink">
           <button class="button tiny gray no-margin">
@@ -112,13 +114,13 @@
               side='bottom'
               as |popover|
             }}
-              {{link-to 'Select Lots' 'projects.edit.geometry-edit' model 
-                (query-params type='project-area' mode='lots') 
+              {{link-to 'Select Lots' 'projects.edit.geometry-edit' model
+                (query-params type='project-area' mode='lots')
                 data-test-lots
                 tagName='button'
                 classNames='button tiny gray no-margin'}}
               {{link-to 'Draw Manually' 'projects.edit.geometry-edit' model
-                (query-params type='project-area' mode='draw') 
+                (query-params type='project-area' mode='draw')
                 data-test-draw
                 tagName='button'
                 classNames='button tiny gray no-margin'}}
@@ -134,10 +136,11 @@
       <div class="grid-x control">
         <div class="cell auto">
           <strong>Underlying Zoning</strong>
+          {{!-- {{labs-ui/legend-icon icon=areaMapLegendConfig.underlyingZoning.icon}} --}}
         </div>
-        <div class="cell shrink">  
+        <div class="cell shrink">
           {{#link-to 'projects.edit.geometry-edit' model
-            (query-params type='underlying-zoning' mode='draw') 
+            (query-params type='underlying-zoning' mode='draw')
             data-test-underlying-zoning
             tagName='button'
             classNames='button tiny gray no-margin'}}
@@ -152,10 +155,11 @@
       <div class="grid-x control">
         <div class="cell auto">
           <strong>Commercial Overlays</strong>
+          {{!-- {{labs-ui/legend-icon icon=areaMapLegendConfig.commercialOverlays.icon}} --}}
         </div>
         <div class="cell shrink">
           {{#link-to 'projects.edit.geometry-edit' model
-            (query-params type='commercial-overlays' mode='draw') 
+            (query-params type='commercial-overlays' mode='draw')
             data-test-commercial-overlays
             tagName='button'
             classNames='button tiny gray no-margin'}}
@@ -170,10 +174,11 @@
       <div class="grid-x control">
         <div class="cell auto">
           <strong>Special Purpose Districts</strong>
+          {{!-- {{labs-ui/legend-icon icon=areaMapLegendConfig.specialPurposeDistricts.icon}} --}}
         </div>
         <div class="cell shrink">
           {{#link-to 'projects.edit.geometry-edit' model
-            (query-params type='special-purpose-districts' mode='draw') 
+            (query-params type='special-purpose-districts' mode='draw')
             data-test-special-purpose-districts
             tagName='button'
             classNames='button tiny gray no-margin'}}
@@ -187,7 +192,8 @@
       </div>
       <div class="grid-x control">
         <div class="cell auto">
-          <strong>Rezoning Area </strong>
+          <strong>Rezoning Area</strong>
+          {{labs-ui/legend-icon icon=areaMapLegendConfig.rezoningArea.icon}}
         </div>
         <div class="cell shrink">
           <button class="button tiny gray no-margin">
