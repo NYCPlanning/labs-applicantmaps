@@ -245,9 +245,12 @@ export default class extends Model {
       };
     }
 
-    // if (trueOrNull(needRezoning) && !rezoningArea) {
-    //   return { label: 'rezoning', route: 'projects.edit.steps.rezoning' };
-    // }
+    if (trueOrNull(needRezoning)
+      && ((needUnderlyingZoning && !underlyingZoning)
+        || (needCommercialOverlay && !commercialOverlays)
+        || (needSpecialDistrict && !specialPurposeDistricts))) {
+      return { label: 'rezoning', route: 'projects.edit.steps.rezoning' };
+    }
 
     return { label: 'complete', route: 'projects.show' };
   }
