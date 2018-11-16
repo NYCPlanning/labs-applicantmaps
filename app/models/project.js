@@ -25,7 +25,7 @@ const fieldsForCurrentStep = [
   'rezoningArea',
   'underlyingZoning',
   'commercialOverlays',
-  'proposedSpecialDistricts',
+  'specialPurposeDistricts',
   ...questionFields,
 ];
 
@@ -161,13 +161,13 @@ export default class extends Model {
     this.set('commercialOverlays', result);
   }
 
-  @attr() proposedSpecialDistricts
+  @attr() specialPurposeDistricts
 
-  async setDefaultProposedSpecialDistricts() {
+  async setDefaultSpecialPurposeDistricts() {
     const developmentSite = this.get('developmentSite');
     const result = await PROPOSE_SPECIAL_DISTRICTS_QUERY(developmentSite);
 
-    this.set('proposedSpecialDistricts', result);
+    this.set('specialPurposeDistricts', result);
   }
 
   @attr() rezoningArea
@@ -195,7 +195,7 @@ export default class extends Model {
       rezoningArea,
       underlyingZoning,
       commercialOverlays,
-      proposedSpecialDistricts,
+      specialPurposeDistricts,
       needProjectArea,
       needRezoning,
       needUnderlyingZoning,
@@ -230,7 +230,7 @@ export default class extends Model {
       return { label: 'rezoning-commercial', route: 'projects.edit.steps.rezoning' };
     }
 
-    if (trueOrNull(needSpecialDistrict) && needRezoning && !proposedSpecialDistricts) {
+    if (trueOrNull(needSpecialDistrict) && needRezoning && !specialPurposeDistricts) {
       return { label: 'rezoning-special', route: 'projects.steps.edit.rezoning' };
     }
 

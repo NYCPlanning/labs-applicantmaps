@@ -173,11 +173,11 @@
         </div>
         <div class="cell shrink">
           {{#link-to 'projects.edit.geometry-edit' model
-            (query-params type='proposed-special-districts' mode='draw') 
+            (query-params type='special-purpose-districts' mode='draw') 
             data-test-special-purpose-districts
             tagName='button'
             classNames='button tiny gray no-margin'}}
-            {{#if model.proposedSpecialDistricts}}
+            {{#if model.specialPurposeDistricts}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}

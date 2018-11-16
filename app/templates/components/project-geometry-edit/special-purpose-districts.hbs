@@ -1,8 +1,8 @@
-{{#if model.proposedSpecialDistricts}}
+{{#if model.specialPurposeDistricts}}
   {{#project-geometry-edit/draw-lots-to-union
     mode=mode
     map=map
-    geometricProperty=model.proposedSpecialDistricts as |selection|
+    geometricProperty=model.specialPurposeDistricts as |selection|
   }}
     {{#selection.button
       handleClick=(action 'save')}}
@@ -11,7 +11,7 @@
   {{/project-geometry-edit/draw-lots-to-union}}
 
   {{#map.source 
-    options=(mapbox-geojson-source model.proposedSpecialDistricts) as |source|}}
+    options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
     {{source.layer
       layer=proposedSpecialPurposeDistrictsLayer
       before='boundary_country'
