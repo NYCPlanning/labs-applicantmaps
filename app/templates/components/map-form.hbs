@@ -112,8 +112,8 @@
             {{map.labs-layers layerGroups=mapConfiguration.layerGroups}}
 
             {{!-- Ad-hoc source and layer for showing commercial overlays --}}
-            {{#if model.project.proposedCommercialOverlays}}
-              {{#map.source options=(mapbox-geojson-source model.project.proposedCommercialOverlays) as |source|}}
+            {{#if model.project.commercialOverlays}}
+              {{#map.source options=(mapbox-geojson-source model.project.commercialOverlays) as |source|}}
                 {{source.layer layer=projectGeomLayers.coLayer before='boundary_country'}}
                 {{source.layer layer=projectGeomLayers.c11Layer before='boundary_country'}}
                 {{source.layer layer=projectGeomLayers.c12Layer before='boundary_country'}}

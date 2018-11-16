@@ -155,11 +155,11 @@
         </div>
         <div class="cell shrink">
           {{#link-to 'projects.edit.geometry-edit' model
-            (query-params type='proposed-commercial-overlays' mode='draw') 
+            (query-params type='commercial-overlays' mode='draw') 
             data-test-commercial-overlays
             tagName='button'
             classNames='button tiny gray no-margin'}}
-            {{#if model.proposedCommercialOverlays}}
+            {{#if model.commercialOverlays}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
