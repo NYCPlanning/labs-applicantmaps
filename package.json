@@ -52,7 +52,7 @@
     "ember-decorators": "2.1.0",
     "ember-export-application-global": "^2.0.0",
     "ember-inline-edit": "^1.1.1",
-    "ember-mapbox-composer": "NYCPlanning/ember-mapbox-composer#2708495586c5844ccc842b6dd7ee7fc0fc045795",
+    "ember-mapbox-composer": "NYCPlanning/ember-mapbox-composer#d95dc6c99952fc45d6677bba400424faf0be6170",
     "ember-mapbox-gl": "0.12.0",
     "ember-mapbox-gl-draw": "^1.1.0",
     "ember-maybe-import-regenerator": "^0.1.6",

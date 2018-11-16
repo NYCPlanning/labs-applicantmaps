@@ -4,7 +4,7 @@
 
   <h4 class="header-small">Project Maps</h4>
   {{link-to 'Area Map' 'projects.edit.map.edit' model.id (query-params mapType=(dasherize 'Area Map'))
-    class='button large expanded'
+    class='button large expanded map-type-area-map'
   }}
 
 </div>
@@ -65,12 +65,28 @@
           <button class="button tiny gray no-margin">
             Edit
             {{#ember-popover
+              data-test-development-site
               event='click'
               side='bottom'
               as |popover|
             }}
-              <button class="button tiny gray no-margin">Select Lots</button>
-              <button class="button tiny gray no-margin">Draw Manually</button>
+              {{link-to 
+                'Select Lots' 
+                'projects.edit.geometry-edit' 
+                model
+                (query-params type='development-site' mode='lots') 
+
+                data-test-lots
+                tagName='button'
+                classNames='button tiny gray no-margin'}}
+              {{link-to 
+                'Draw Manually' 
+                'projects.edit.geometry-edit' 
+                model
+                (query-params type='development-site' mode='draw') 
+                data-test-draw
+                tagName='button'
+                classNames='button tiny gray no-margin'}}
             {{/ember-popover}}
           </button>
         </div>

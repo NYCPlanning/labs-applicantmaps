@@ -10,17 +10,12 @@ module('Integration | Component | project-geometry-edit/development-site', funct
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{project-geometry-edit/development-site}}`);
-
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
     await render(hbs`
-      {{#project-geometry-edit/development-site}}
-        template block text
-      {{/project-geometry-edit/development-site}}
+      {{#mapbox-gl as |map|}} 
+        {{project-geometry-edit/development-site map=map}}
+      {{/mapbox-gl}}
     `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.equal(this.element.textContent.trim(), '');
   });
 });

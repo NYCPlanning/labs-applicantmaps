@@ -10,17 +10,12 @@ module('Integration | Component | project-geometry-edit/proposed-commercial-over
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{project-geometry-edit/proposed-commercial-overlays}}`);
-
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
     await render(hbs`
-      {{#project-geometry-edit/proposed-commercial-overlays}}
-        template block text
-      {{/project-geometry-edit/proposed-commercial-overlays}}
+      {{#mapbox-gl as |map|}} 
+        {{project-geometry-edit/proposed-commercial-overlays map=map}}
+      {{/mapbox-gl}}
     `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.equal(this.element.textContent.trim(), '');
   });
 });

@@ -15,8 +15,9 @@ module('Acceptance | user clicks edit project button and sees new url', function
     server.createList('project', 10);
 
     await visit('/projects/10');
-    await click('.edit-project-button');
+    await click('[data-test-development-site]');
+    await click('[data-test-lots]');
 
-    assert.equal(currentURL(), '/projects/10/edit');
+    assert.equal(currentURL(), '/projects/10/edit/geometry-edit?mode=lots&type=development-site');
   });
 });

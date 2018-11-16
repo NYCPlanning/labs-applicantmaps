@@ -10,17 +10,12 @@ module('Integration | Component | project-geometry-edit/proposed-special-distric
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{project-geometry-edit/proposed-special-districts}}`);
-
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
     await render(hbs`
-      {{#project-geometry-edit/proposed-special-districts}}
-        template block text
-      {{/project-geometry-edit/proposed-special-districts}}
+      {{#mapbox-gl as |map|}} 
+        {{project-geometry-edit/proposed-special-districts map=map}}
+      {{/mapbox-gl}}
     `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.equal(this.element.textContent.trim(), '');
   });
 });

@@ -10,17 +10,12 @@ module('Integration | Component | project-geometry-edit/zoning-district', functi
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{project-geometry-edit/zoning-district}}`);
-
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
     await render(hbs`
-      {{#project-geometry-edit/zoning-district}}
-        template block text
-      {{/project-geometry-edit/zoning-district}}
+      {{#mapbox-gl as |map|}} 
+        {{project-geometry-edit/zoning-district map=map}}
+      {{/mapbox-gl}}
     `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.equal(this.element.textContent.trim(), '');
   });
 });
