@@ -63,26 +63,24 @@
         </div>
         <div class="cell shrink">
           <button class="button tiny gray no-margin">
-            Edit
+            {{#if model.developmentSite}}
+              Edit
+            {{else}}
+              {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
+            {{/if}}
+
             {{#ember-popover
               data-test-development-site
               event='click'
               side='bottom'
               as |popover|
             }}
-              {{link-to 
-                'Select Lots' 
-                'projects.edit.geometry-edit' 
-                model
+              {{link-to 'Select Lots' 'projects.edit.geometry-edit' model 
                 (query-params type='development-site' mode='lots') 
-
                 data-test-lots
                 tagName='button'
                 classNames='button tiny gray no-margin'}}
-              {{link-to 
-                'Draw Manually' 
-                'projects.edit.geometry-edit' 
-                model
+              {{link-to 'Draw Manually' 'projects.edit.geometry-edit' model
                 (query-params type='development-site' mode='draw') 
                 data-test-draw
                 tagName='button'
@@ -91,23 +89,64 @@
           </button>
         </div>
         <div class="cell shrink">
-          <button class="button tiny gray no-margin">{{fa-icon 'trash' class='dark-gray' transform='grow-3'}}</button>
+          <button class="button tiny gray no-margin">
+            {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
+          </button>
         </div>
       </div>
       <div class="grid-x control">
         <div class="cell auto">
-          <strong>Project Area </strong>
+          <strong>Project Area</strong>
         </div>
         <div class="cell shrink">
-          <button class="button tiny gray no-margin">{{fa-icon 'plus' class='green-muted' transform='grow-6'}}</button>
+          <button class="button tiny gray no-margin">
+            {{#if model.projectArea}}
+              Edit
+            {{else}}
+              {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
+            {{/if}}
+
+            {{#ember-popover
+              data-test-project-area
+              event='click'
+              side='bottom'
+              as |popover|
+            }}
+              {{link-to 'Select Lots' 'projects.edit.geometry-edit' model 
+                (query-params type='project-area' mode='lots') 
+                data-test-lots
+                tagName='button'
+                classNames='button tiny gray no-margin'}}
+              {{link-to 'Draw Manually' 'projects.edit.geometry-edit' model
+                (query-params type='project-area' mode='draw') 
+                data-test-draw
+                tagName='button'
+                classNames='button tiny gray no-margin'}}
+            {{/ember-popover}}
+          </button>
+        </div>
+        <div class="cell shrink">
+          <button class="button tiny gray no-margin">
+            {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
+          </button>
         </div>
       </div>
       <div class="grid-x control">
         <div class="cell auto">
           <strong>Underlying Zoning</strong>
         </div>
-        <div class="cell shrink">
-          <button class="button tiny gray no-margin">{{fa-icon 'plus' class='green-muted' transform='grow-6'}}</button>
+        <div class="cell shrink">  
+          {{#link-to 'projects.edit.geometry-edit' model
+            (query-params type='zoning-district' mode='draw') 
+            data-test-draw
+            tagName='button'
+            classNames='button tiny gray no-margin'}}
+            {{#if model.proposedZoning}}
+              Edit
+            {{else}}
+              {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
+            {{/if}}
+          {{/link-to}}
         </div>
       </div>
       <div class="grid-x control">
@@ -115,7 +154,17 @@
           <strong>Commercial Overlays</strong>
         </div>
         <div class="cell shrink">
-          <button class="button tiny gray no-margin">{{fa-icon 'plus' class='green-muted' transform='grow-6'}}</button>
+          {{#link-to 'projects.edit.geometry-edit' model
+            (query-params type='proposed-commercial-overlays' mode='draw') 
+            data-test-draw
+            tagName='button'
+            classNames='button tiny gray no-margin'}}
+            {{#if model.proposedCommercialOverlays}}
+              Edit
+            {{else}}
+              {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
+            {{/if}}
+          {{/link-to}}
         </div>
       </div>
       <div class="grid-x control">
@@ -123,7 +172,17 @@
           <strong>Special Purpose Districts</strong>
         </div>
         <div class="cell shrink">
-          <button class="button tiny gray no-margin">{{fa-icon 'plus' class='green-muted' transform='grow-6'}}</button>
+          {{#link-to 'projects.edit.geometry-edit' model
+            (query-params type='proposed-special-districts' mode='draw') 
+            data-test-draw
+            tagName='button'
+            classNames='button tiny gray no-margin'}}
+            {{#if model.proposedSpecialDistricts}}
+              Edit
+            {{else}}
+              {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
+            {{/if}}
+          {{/link-to}}
         </div>
       </div>
       <div class="grid-x control">
@@ -131,13 +190,13 @@
           <strong>Rezoning Area </strong>
         </div>
         <div class="cell shrink">
-          <button class="button tiny gray no-margin">{{fa-icon 'plus' class='green-muted' transform='grow-6'}}</button>
+          <button class="button tiny gray no-margin">
+            {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
+          </button>
         </div>
       </div>
-
     </div>
   </div>
-
 </div>
 
 {{outlet}}

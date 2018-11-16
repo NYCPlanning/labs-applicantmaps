@@ -48,7 +48,7 @@ export default class DrawLotsToUnion extends Component {
     if (mode === 'draw') {
       mapInstance.addControl(draw, 'top-left');
 
-      // // set up initial drawing mode
+      // set up initial drawing mode
       draw.changeMode('draw_polygon');
 
       // if geometry exists for this mode, add it to the drawing canvas
@@ -58,14 +58,16 @@ export default class DrawLotsToUnion extends Component {
         draw.changeMode('simple_select');
       }
 
-      // setup events to update draw state
-      mapInstance.on('draw.create', () => {
+      const drawStateCallback = () => {
         this.set('currentDrawing', draw.getAll());
-      });
+      };
 
-      mapInstance.on('draw.update', () => {
-        this.set('currentDrawing', draw.getAll());
-      });
+      // setup events to update draw state
+      // bind events to the state callback
+      ['create', 'delete', 'combine', 'uncombine', 'update', 'selectionchange']
+        .forEach((event) => {
+          mapInstance.on(`draw.${event}`, drawStateCallback);
+        });
     }
   }
 
