@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | project-geometry-edit/underlying-zoning', function(hooks) {
+module('Integration | Component | project-geometries/commercial-overlays', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
@@ -12,7 +12,7 @@ module('Integration | Component | project-geometry-edit/underlying-zoning', func
 
     await render(hbs`
       {{#mapbox-gl as |map|}} 
-        {{project-geometry-edit/underlying-zoning map=map}}
+        {{project-geometries/commercial-overlays map=map}}
       {{/mapbox-gl}}
     `);
 

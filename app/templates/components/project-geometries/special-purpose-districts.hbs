@@ -1,5 +1,5 @@
 {{#if model.specialPurposeDistricts}}
-  {{#project-geometry-edit/draw-lots-to-union
+  {{#project-geometries/draw-lots-to-union
     mode=mode
     map=map
     geometricProperty=model.specialPurposeDistricts as |selection|
@@ -8,7 +8,7 @@
       handleClick=(action 'save')}}
       Save Special Districts
     {{/selection.button}}
-  {{/project-geometry-edit/draw-lots-to-union}}
+  {{/project-geometries/draw-lots-to-union}}
 
   {{#map.source 
     options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
