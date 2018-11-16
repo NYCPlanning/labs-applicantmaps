@@ -246,7 +246,7 @@ export default class extends Model {
     }
 
     if (trueOrNull(needRezoning)
-      && ((needUnderlyingZoning && !underlyingZoning)
+      || ((needUnderlyingZoning && !underlyingZoning)
         || (needCommercialOverlay && !commercialOverlays)
         || (needSpecialDistrict && !specialPurposeDistricts))) {
       return { label: 'rezoning', route: 'projects.edit.steps.rezoning' };
