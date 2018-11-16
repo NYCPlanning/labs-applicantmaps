@@ -23,7 +23,7 @@ const fieldsForCurrentStep = [
   'projectName',
   'projectArea',
   'rezoningArea',
-  'proposedZoning',
+  'underlyingZoning',
   'proposedCommercialOverlays',
   'proposedSpecialDistricts',
   ...questionFields,
@@ -193,7 +193,7 @@ export default class extends Model {
       developmentSite,
       projectArea,
       rezoningArea,
-      proposedZoning,
+      underlyingZoning,
       proposedCommercialOverlays,
       proposedSpecialDistricts,
       needProjectArea,
@@ -222,7 +222,7 @@ export default class extends Model {
       return { label: 'rezoning', route: 'projects.edit.steps.rezoning' };
     }
 
-    if (trueOrNull(needUnderlyingZoning) && needRezoning && !proposedZoning) {
+    if (trueOrNull(needUnderlyingZoning) && needRezoning && !underlyingZoning) {
       return { label: 'rezoning-underlying', route: 'projects.edit.steps.rezoning' };
     }
 
