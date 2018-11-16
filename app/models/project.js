@@ -143,13 +143,13 @@ export default class extends Model {
 
   @attr() projectArea
 
-  @attr() proposedZoning
+  @attr() underlyingZoning
 
-  async setDefaultProposedZoning() {
+  async setDefaultUnderlyingZoning() {
     const developmentSite = this.get('developmentSite');
     const result = await INTERSECTING_ZONING_QUERY(developmentSite);
 
-    this.set('proposedZoning', result);
+    this.set('underlyingZoning', result);
   }
 
   @attr() proposedCommercialOverlays

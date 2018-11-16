@@ -1,8 +1,8 @@
-{{#if model.proposedZoning}}
+{{#if model.underlyingZoning}}
   {{#project-geometry-edit/draw-lots-to-union
     mode=mode
     map=map
-    geometricProperty=model.proposedZoning as |selection|
+    geometricProperty=model.underlyingZoning as |selection|
   }}
     {{#selection.button
       handleClick=(action 'save')}}
@@ -10,13 +10,13 @@
     {{/selection.button}}
   {{/project-geometry-edit/draw-lots-to-union}}
 
-  {{#map.source options=(mapbox-geojson-source model.proposedZoning) as |source|}}
+  {{#map.source options=(mapbox-geojson-source model.underlyingZoning) as |source|}}
     {{source.layer
-      layer=proposedZoningLayer
+      layer=underlyingZoningLayer
       before='boundary_country'
     }}
     {{source.layer
-      layer=proposedZoningLabelsLayer
+      layer=underlyingZoningLabelsLayer
       before='boundary_country'
     }}
   {{/map.source}}
