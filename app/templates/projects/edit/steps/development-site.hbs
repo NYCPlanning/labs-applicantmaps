@@ -1,6 +1,6 @@
 <h1>First, let’s define your Development&nbsp;Site.</h1>
 
-<p>The Development site refers to the zoning lot(s) that you want to change using land use actions.</p>
+<p>The Development site refers to the zoning lot(s) you plan to develop, facilitated by land use actions.</p>
 
 <h2 class="header-medium">To create a Development Site, you can either:</h2>
 
@@ -13,7 +13,7 @@
       {{fa-icon 'hand-pointer' fixedWidth=true transform='left-3 grow-3'}}
       Select Lots
     {{/link-to}}
-    <p class="text-small text-center">Create a Development Site that is contiguous with chosen zoning lots</p>
+    <p class="text-small text-center">Create a Development Site that is contiguous with chosen lots</p>
   </div>
   <div class="cell medium-6 large-5 xlarge-4">
     {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='draw' type='development-site')
@@ -23,6 +23,6 @@
       {{fa-icon 'draw-polygon' fixedWidth=true transform='left-3 grow-3'}}
       Draw Manually
     {{/link-to}}
-    <p class="text-small text-center">Use draw tools to create a Development Site that includes partial zoning lots</p>
+    <p class="text-small text-center">Use draw tools to create a Development Site that includes partial lots</p>
   </div>
 </div>
