@@ -1,17 +1,4 @@
 <div class="cell sidebar map-sidebar">
-  {{#if mapInstance}}
-    {{#project-geometries-menu
-      model=model
-      mapInstance=mapInstance
-      selectedLots=selectedLots
-      lotSelectionMode=lotSelectionMode
-      geometryMode=geometryMode
-      as |menu|
-    }}
-
-    {{/project-geometries-menu}}
-  {{/if}}
-
   {{!-- EMBER WORMHOLE CONTAINER --}}
   {{!-- The geometry type component will fill this div with markup once invoked --}}
   <div id="geometry-type-draw-explainer">
