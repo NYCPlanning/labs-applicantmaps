@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | project-geometry-edit/development-site', function(hooks) {
+module('Integration | Component | project-geometries/development-site', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
@@ -12,7 +12,7 @@ module('Integration | Component | project-geometry-edit/development-site', funct
 
     await render(hbs`
       {{#mapbox-gl as |map|}} 
-        {{project-geometry-edit/development-site map=map}}
+        {{project-geometries/development-site map=map}}
       {{/mapbox-gl}}
     `);
 

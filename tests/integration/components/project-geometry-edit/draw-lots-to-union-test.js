@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | project-geometry-edit/draw-lots-to-union', function(hooks) {
+module('Integration | Component | project-geometries/draw-lots-to-union', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
@@ -12,7 +12,7 @@ module('Integration | Component | project-geometry-edit/draw-lots-to-union', fun
 
     await render(hbs`
       {{#mapbox-gl as |map|}} 
-        {{project-geometry-edit/draw-lots-to-union map=map}}
+        {{project-geometries/draw-lots-to-union map=map}}
       {{/mapbox-gl}}
     `);
 

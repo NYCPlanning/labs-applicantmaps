@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember-decorators/object';
-import { developmentSiteLayer } from '../../components/project-geometry-edit/development-site';
-import { projectAreaLayer } from '../../components/project-geometry-edit/project-area';
+import { developmentSiteLayer } from '../../components/project-geometries/development-site';
+import { projectAreaLayer } from '../../components/project-geometries/project-area';
 
 export default class NewProjectController extends Controller {
   projectAreaLayer = projectAreaLayer;
