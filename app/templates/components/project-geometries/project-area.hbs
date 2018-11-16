@@ -10,7 +10,21 @@
 {{/project-geometries/draw-lots-to-union}}
 
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
-  Explainer Text here
+  <h3 class="no-margin">Project Area</h3>
+  <p class="text-small">The Project Area includes all properties subject to proposed actions. You need to define a Project Area if you are requesting actions on properties that will not be developed.</p>
+  <ul class="text-small">
+    {{#if (eq mode 'draw')}}
+      <li> Select the polygon tool to begin drawing a new shape (you can draw multiple shapes)</li>
+      <li> Complete a shape by clicking the final vertex a second time</li>
+      <li> Edit a completed shape by selecting then dragging vertices</li>
+      <li> Use the trash button (or delete key) to delete a selected shape or vertex</li>
+      <li> Once you're finished drawing, save the geometry</li>
+    {{else}}
+      <li>Select tax lots to highlight them</li>
+      <li>Selected lots will be yellow</li>
+      <li>Once you're finished selecting lots, save the geometry</li>
+    {{/if}}
+  </ul>
 {{/ember-wormhole}}
 
 {{!-- Ad-hoc source and layer for projectArea --}}
