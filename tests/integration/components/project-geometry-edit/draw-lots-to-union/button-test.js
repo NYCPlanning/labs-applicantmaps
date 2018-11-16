@@ -3,23 +3,22 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | new-project', (hooks) => {
+module('Integration | Component | project-geometry-edit/draw-lots-to-union/button', function(hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function (assert) {
+  test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
-    this.set('projectModel', {});
 
-    await render(hbs`{{new-project}}`);
+    await render(hbs`{{project-geometry-edit/draw-lots-to-union/button}}`);
 
     assert.equal(this.element.textContent.trim(), '');
 
     // Template block usage:
     await render(hbs`
-      {{#new-project}}
+      {{#project-geometry-edit/draw-lots-to-union/button}}
         template block text
-      {{/new-project}}
+      {{/project-geometry-edit/draw-lots-to-union/button}}
     `);
 
     assert.equal(this.element.textContent.trim(), 'template block text');

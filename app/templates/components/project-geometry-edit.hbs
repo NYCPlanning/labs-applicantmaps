@@ -1,0 +1,57 @@
+<div class="cell sidebar map-sidebar">
+  {{#if mapInstance}}
+    {{#project-geometries-menu
+      model=model
+      mapInstance=mapInstance
+      selectedLots=selectedLots
+      lotSelectionMode=lotSelectionMode
+      geometryMode=geometryMode
+      as |menu|
+    }}
+
+    {{/project-geometries-menu}}
+  {{/if}}
+
+  {{!-- EMBER WORMHOLE CONTAINER --}}
+  {{!-- The geometry type component will fill this div with markup once invoked --}}
+  <div id="geometry-type-draw-explainer">
+  </div>
+
+  {{!-- EMBER WORMHOLE CONTAINER --}}
+  <div id="geometry-type-save-box">
+  </div>
+
+</div>
+<div class="cell large-auto map-container">
+  {{#project-map-form tagName='' as |projectMapForm|}}
+    {{#labs-map
+      id='main-map'
+      initOptions=(hash
+        style=projectMapForm.model.meta.mapboxStyle
+        zoom=12
+        center=(array -73.983307 40.704977)
+      )
+      mapLoaded=(action handleMapLoad) as |map|}}
+
+      {{search-handler map=map}}
+
+      {{!-- labs-layers (includes tax-lots layer) --}}
+      {{#map.labs-layers
+        layerGroups=projectMapForm.model.layerGroups
+        as |layers|}}
+        {{#layers.tooltip as |tooltip|}}
+          {{tooltip-renderer
+            feature=tooltip.feature
+            template=tooltip.layer.tooltipTemplate}}
+        {{/layers.tooltip}}
+      {{/map.labs-layers}}
+
+      {{!-- invoke the component for the specified draw mode --}}
+      {{component (concat 'project-geometry-edit/' type)
+        model=model
+        mode=mode
+        map=map}}
+
+    {{/labs-map}}
+  {{/project-map-form}}
+</div>

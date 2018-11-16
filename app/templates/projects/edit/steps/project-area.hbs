@@ -1,0 +1,113 @@
+<nav class="step-nav">
+  {{#link-to 'projects.edit.steps.development-site'
+    tagName='span'
+    class='button tiny gray no-margin'
+  }}
+    {{fa-icon 'long-arrow-alt-left'}} Back
+  {{/link-to}}
+</nav>
+
+{{!-- <h1>Are you requesting actions on properties that will not be&nbsp;developed?</h1>
+
+<p>Define a Project Area to indicate all properties that would be subject to the proposed actions, regardless of whether or not they will be developed.</p> --}}
+
+<h1>Project Area</h1>
+
+<p>The Project Area includes all properties subject to proposed actions, regardless of whether or not they will be&nbsp;developed.</p>
+
+<h2 class="header-medium">Are you requesting actions on properties that will not be&nbsp;developed?</h2>
+
+<p class="text-small">Select "No" if you are unsure. You can add a Project Area later if needed.</p>
+
+<p class="small-bottom-margin">
+  <button
+    type="button"
+    class="button gray large no-margin"
+    onclick={{action (mut model.needProjectArea) false}}
+  >
+    <span class="dark-gray">
+      {{#if (eq model.needProjectArea false)}}
+        {{fa-icon 'check-circle'
+          fixedWidth=true
+          transform='left-3 grow-3'
+        }}
+      {{else}}
+        {{fa-icon 'circle'
+          prefix='far'
+          fixedWidth=true
+          transform='left-3 grow-3'
+        }}
+      {{/if}}
+    </span>
+    <strong>No</strong>
+    <small>(Only the Development Site is subject to actions)</small>
+  </button>
+</p>
+
+<p class="small-bottom-margin">
+  <button
+    type="button"
+    class="button gray large no-margin"
+    onclick={{action (mut model.needProjectArea) true}}
+  >
+    <span class="dark-gray">
+      {{#if (eq model.needProjectArea true)}}
+        {{fa-icon 'check-circle'
+          fixedWidth=true
+          transform='left-3 grow-3'
+        }}
+      {{else}}
+        {{fa-icon 'circle'
+          prefix='far'
+          fixedWidth=true
+          transform='left-3 grow-3'
+        }}
+      {{/if}}
+    </span>
+    <strong>Yes</strong>
+    <small>(I need to define the Project Area)</small>
+  </button>
+</p>
+
+{{#if (eq model.needProjectArea true)}}
+
+  <h2 class="header-medium">To create a Project Area, you can either:</h2>
+
+  <div class="grid-x grid-margin-x">
+    <div class="cell medium-6 large-5 xlarge-4">
+      {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='lots' type='project-area')
+        tagName='span'
+        class='button large expanded'
+      }}
+        {{fa-icon 'hand-pointer' fixedWidth=true transform='left-3 grow-3'}}
+        Select Lots
+      {{/link-to}}
+      <p class="text-small text-center">Create a Project Area that is contiguous with chosen zoning lots</p>
+    </div>
+    <div class="cell medium-6 large-5 xlarge-4">
+      {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='draw' type='project-area')
+        tagName='span'
+        class='button large expanded'
+      }}
+        {{fa-icon 'draw-polygon' fixedWidth=true transform='left-3 grow-3'}}
+        Draw Manually
+      {{/link-to}}
+      <p class="text-small text-center">Use draw tools to create a Project Area that includes partial zoning lots</p>
+    </div>
+  </div>
+
+{{else if (eq model.needProjectArea false)}}
+
+  <p class="text-right">
+    {{#link-to 'projects.edit.steps.rezoning'
+      tagName='span'
+      class='button large'
+    }}
+      Next
+      {{fa-icon 'long-arrow-alt-right' fixedWidth=true transform='right-3 grow-3'}}
+    {{/link-to}}
+  </p>
+
+{{/if}}
+
+{{outlet}}

@@ -1,0 +1,39 @@
+<h1 class="header-large">
+  {{ember-inline-edit
+    value=(readonly project.projectName)
+    onSave=(action (mut project.projectName))
+    saveButtonClass='button tiny'
+    cancelButtonClass='button tiny'
+    showEditButton=true
+    editButtonClass='button tiny no-margin clear'
+  }}
+</h1>
+
+<h6>Applicant:</h6>
+<p class="header-small">
+  {{ember-inline-edit
+    value=(readonly project.applicantName)
+    onSave=(action (mut project.applicantName))
+    saveButtonClass='button tiny'
+    cancelButtonClass='button tiny'
+    showEditButton=true
+    editButtonClass='button tiny no-margin clear'
+  }}
+</p>
+
+<h6>Project Number:</h6>
+<p class="header-small">
+  {{ember-inline-edit
+    value=(readonly project.zapProjectId)
+    onSave=(action (mut project.zapProjectId))
+    field='number'
+    saveButtonClass='button tiny'
+    cancelButtonClass='button tiny'
+    showEditButton=true
+    editButtonClass='button tiny no-margin clear'
+  }}
+</p>
+
+<hr />
+
+{{yield}}

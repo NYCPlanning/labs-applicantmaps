@@ -117,7 +117,7 @@ export default class ProjectFormComponent extends Component {
     const { mapInstance: map } = this;
 
     this.set('geocodedFeature', { type: 'geojson', data: geometry });
-    map.flyTo({ center: coordinates, zoom: 16 });
+    map.flyTo({ center: coordinates, zoom: 18 });
   }
 
   @action
@@ -271,7 +271,6 @@ export default class ProjectFormComponent extends Component {
   showInstructions() {
     this.set('showDrawInstructions', true);
   }
-
 
   @action
   async getClippedSpecialPurposeDistricts() {
