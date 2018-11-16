@@ -10,24 +10,25 @@
 {{/project-geometry-edit/draw-lots-to-union}}
 
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
-  <h3>Development Site</h3>
-  {{#if (eq mode 'draw')}}
+  <h2>Development Site</h2>
     <p>The Development Site refers to the zoning lot(s) to be improved by the specific development(s) that the land use actions would facilitate.</p>
-    <ul>
-      <li> Select the polygon tool to begin drawing a new shape (you can draw multiple shapes)</li>
-      <li> Complete a shape by clicking the final vertex a second time</li>
-      <li> Edit a completed shape by selecting then dragging vertices</li>
-      <li> Use the trash button (or delete key) to delete a selected shape or vertex</li>
-      <li> Once you're finished drawing, save the geometry</li>
-    </ul>
-  {{else}}
-  <p> The Development Site refers to the zoning lot(s) to be improved by the specific development(s) that the land use actions would facilitate.</p>
-    <ul>
-      <li>Select zoning lots to highlight them</li>
-      <li>Selected lots will be yellow</li>
-      <li>Once you're finished selecting lots, save the geometry</li>
-    </ul>
-  {{/if}}
+    <div class="text-small">
+      {{#if (eq mode 'draw')}}
+        <ul>
+          <li> Select the polygon tool to begin drawing a new shape (you can draw multiple shapes)</li>
+          <li> Complete a shape by clicking the final vertex a second time</li>
+          <li> Edit a completed shape by selecting then dragging vertices</li>
+          <li> Use the trash button (or delete key) to delete a selected shape or vertex</li>
+          <li> Once you're finished drawing, save the geometry</li>
+        </ul>
+      {{else}}
+        <ul>
+          <li>Select zoning lots to highlight them</li>
+          <li>Selected lots will be yellow</li>
+          <li>Once you're finished selecting lots, save the geometry</li>
+        </ul>
+      {{/if}}
+    </div>
 {{/ember-wormhole}}
 
 {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
