@@ -138,7 +138,7 @@
         <div class="cell shrink">  
           {{#link-to 'projects.edit.geometry-edit' model
             (query-params type='zoning-district' mode='draw') 
-            data-test-draw
+            data-test-underlying-zoning
             tagName='button'
             classNames='button tiny gray no-margin'}}
             {{#if model.proposedZoning}}
@@ -156,7 +156,7 @@
         <div class="cell shrink">
           {{#link-to 'projects.edit.geometry-edit' model
             (query-params type='proposed-commercial-overlays' mode='draw') 
-            data-test-draw
+            data-test-commercial-overlays
             tagName='button'
             classNames='button tiny gray no-margin'}}
             {{#if model.proposedCommercialOverlays}}
@@ -174,7 +174,7 @@
         <div class="cell shrink">
           {{#link-to 'projects.edit.geometry-edit' model
             (query-params type='proposed-special-districts' mode='draw') 
-            data-test-draw
+            data-test-special-purpose-districts
             tagName='button'
             classNames='button tiny gray no-margin'}}
             {{#if model.proposedSpecialDistricts}}
