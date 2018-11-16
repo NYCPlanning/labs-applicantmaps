@@ -1,4 +1,4 @@
-{{#project-geometry-edit/draw-lots-to-union
+{{#project-geometries/draw-lots-to-union
   mode=mode
   map=map
   geometricProperty=model.developmentSite as |selection|
@@ -7,11 +7,11 @@
     handleClick=(action 'save')}}
     Save Development Site
   {{/selection.button}}
-{{/project-geometry-edit/draw-lots-to-union}}
+{{/project-geometries/draw-lots-to-union}}
 
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <h3>Development Site</h3>
-  <p>The Development Site refers to the zoning lot(s) to be improved by the specific development(s) that the land use actions would facilitate.</p>
+  <p>The Development site refers to the zoning lot(s) that you want to change using land use actions.</p>
   <div class="text-small">
     {{#if (eq mode 'draw')}}
       <ul>

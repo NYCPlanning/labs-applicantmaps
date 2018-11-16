@@ -26,11 +26,11 @@
   {{#if hasBlock}}
     {{yield (hash
       finalGeometry=finalGeometry 
-      button=(component 'project-geometry-edit/draw-lots-to-union/button'
+      button=(component 'project-geometries/draw-lots-to-union/button'
         enabled=isReady
         finalGeometry=finalGeometry))}}
   {{else}}
-    {{project-geometry-edit/draw-lots-to-union/button
+    {{project-geometries/draw-lots-to-union/button
       enabled=isReady
       finalGeometry=finalGeometry
     }}

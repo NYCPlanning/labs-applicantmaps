@@ -118,8 +118,8 @@ export default class ZoningDistrictComponent extends Component {
   init(...args) {
     super.init(...args);
 
-    if (!this.get('model.proposedCommercialOverlays')) {
-      this.get('model').setDefaultProposedCommercialOverlays();
+    if (!this.get('model.commercialOverlays')) {
+      this.get('model').setDefaultCommercialOverlays();
     }
   }
 
@@ -165,7 +165,7 @@ export default class ZoningDistrictComponent extends Component {
     const model = this.get('model');
     const featureCollection = await finalGeometry;
 
-    model.set('proposedCommercialOverlays', featureCollection);
+    model.set('commercialOverlays', featureCollection);
 
     try {
       const savedProject = await model.save();

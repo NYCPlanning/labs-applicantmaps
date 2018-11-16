@@ -1,18 +1,18 @@
-{{#if model.proposedCommercialOverlays}}
-  {{#project-geometry-edit/draw-lots-to-union
+{{#if model.commercialOverlays}}
+  {{#project-geometries/draw-lots-to-union
     mode=mode
     map=map
-    geometricProperty=model.proposedCommercialOverlays as |selection|
+    geometricProperty=model.commercialOverlays as |selection|
   }}
     {{#selection.button
       handleClick=(action 'save')}}
       Save Commercial Overlays
     {{/selection.button}}
-  {{/project-geometry-edit/draw-lots-to-union}}
+  {{/project-geometries/draw-lots-to-union}}
 
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
     <h3>Proposed Rezoning: Commercial Overlays</h3>
-      <p>Proposed Rezoning refers to any changes to existing zoning district boundaries that are necessary to continue with proposed developments. Zoning boundaries are NOT dependent on lot lines and can sometimes intersect tax lots.</p>
+      <p>Proposed Rezoning refers to any changes to existing zoning district boundaries that are necessary to continue with proposed developments. Zoning boundaries are not dependent on lot lines and can sometimes intersect tax lots.</p>
       <div class="text-small">
           <ul>
             <li> <strong>You can either edit an existing zoning boundary or draw a new zoning boundary using the draw tool</strong></li>
@@ -26,7 +26,7 @@
       </div>
   {{/ember-wormhole}}
 
-  {{#map.source options=(mapbox-geojson-source model.proposedCommercialOverlays) as |source|}}
+  {{#map.source options=(mapbox-geojson-source model.CommercialOverlays) as |source|}}
     {{source.layer layer=coLayer before='boundary_country'}}
     {{source.layer layer=c11Layer before='boundary_country'}}
     {{source.layer layer=c12Layer before='boundary_country'}}

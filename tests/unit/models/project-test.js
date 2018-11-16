@@ -1,4 +1,4 @@
-import { module, test } from 'qunit';
+import { module, test, skip } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { run } from '@ember/runloop';
 
@@ -34,7 +34,7 @@ module('Unit | Model | project', (hooks) => {
   });
 
   // Test for project incomplete project that hasn't answered rezoning question
-  test('it produces rezoning step', function (assert) {
+  skip('it produces rezoning step', function (assert) {
     const store = this.owner.lookup('service:store');
     const model = run(() => store.createRecord('project', {
       projectName: 'some project',

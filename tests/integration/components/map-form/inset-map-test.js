@@ -10,15 +10,15 @@ module('Integration | Component | inset-map', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{inset-map}}`);
+    await render(hbs`{{map-form/inset-map}}`);
 
     assert.equal(this.element.textContent.trim(), 'Missing Mapbox GL JS CSS');
 
     // Template block usage:
     await render(hbs`
-      {{#inset-map}}
+      {{#map-form/inset-map}}
         Missing Mapbox GL JS CSS
-      {{/inset-map}}
+      {{/map-form/inset-map}}
     `);
 
     assert.equal(this.element.textContent.trim(), 'Missing Mapbox GL JS CSS');

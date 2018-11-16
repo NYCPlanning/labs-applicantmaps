@@ -1,18 +1,18 @@
-{{#if model.proposedSpecialDistricts}}
-  {{#project-geometry-edit/draw-lots-to-union
+{{#if model.underlyingZoning}}
+  {{#project-geometries/draw-lots-to-union
     mode=mode
     map=map
-    geometricProperty=model.proposedSpecialDistricts as |selection|
+    geometricProperty=model.underlyingZoning as |selection|
   }}
     {{#selection.button
       handleClick=(action 'save')}}
-      Save Special Districts
+      Save Zoning District
     {{/selection.button}}
-  {{/project-geometry-edit/draw-lots-to-union}}
+  {{/project-geometries/draw-lots-to-union}}
 
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
-    <h3>Proposed Rezoning: Special Purpose Districts</h3>
-      <p>Proposed Rezoning refers to any changes to existing zoning district boundaries that are necessary to continue with proposed developments. Proposed zoning district boundaries should be drawn to or extend to the centerline of streets. Zoning boundaries are NOT dependent on lot lines and can sometimes intersect tax lots.</p>
+    <h3>Proposed Rezoning: Underlying Zoning Districts</h3>
+      <p>Proposed Rezoning refers to any changes to existing zoning district boundaries that are necessary to continue with proposed developments. Proposed zoning district boundaries should be drawn to or extend to the centerline of streets. Zoning boundaries are not dependent on lot lines and can sometimes intersect tax lots.</p>
       <div class="text-small">
           <ul>
             <li> <strong>You can either edit an existing zoning boundary or draw a new zoning boundary using the draw tool</strong></li>
@@ -26,21 +26,19 @@
       </div>
   {{/ember-wormhole}}
 
-  {{#map.source
-    options=(mapbox-geojson-source model.proposedSpecialDistricts) as |source|}}
+  {{#map.source options=(mapbox-geojson-source model.underlyingZoning) as |source|}}
     {{source.layer
-      layer=proposedSpecialPurposeDistrictsLayer
+      layer=underlyingZoningLayer
       before='boundary_country'
     }}
     {{source.layer
-      layer=proposedSpecialPurposeDistrictsLabelsLayer
+      layer=underlyingZoningLabelsLayer
       before='boundary_country'
     }}
   {{/map.source}}
 {{/if}}
 
-{{#map.source
-  options=(mapbox-geojson-source model.developmentSite) as |source|}}
+{{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
   {{source.layer
     layer=developmentSiteLayer
     before='boundary_country'

@@ -1,4 +1,4 @@
-{{#project-geometry-edit/draw-lots-to-union
+{{#project-geometries/draw-lots-to-union
   mode=mode
   map=map
   geometricProperty=model.projectArea as |selection|
@@ -7,11 +7,11 @@
     handleClick=(action 'save')}}
     Save Project Area
   {{/selection.button}}
-{{/project-geometry-edit/draw-lots-to-union}}
+{{/project-geometries/draw-lots-to-union}}
 
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <h3>Project Area</h3>
-    <p>The Project Area refers to all properties that would be subject to the proposed actions. The Project Area should only be used if it is larger than the Development Site.</p>
+    <p>The Project Area includes all properties subject to proposed actions, regardless of whether or not they will be developed. The Project Area should only be used if it is larger than the Development Site.</p>
     <div class="text-small">
       {{#if (eq mode 'draw')}}
         <ul>

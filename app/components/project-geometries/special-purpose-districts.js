@@ -43,12 +43,12 @@ const proposedSpecialPurposeDistrictsLabelsLayer = {
   },
 };
 
-export default class ProposedSpecialDistrictsComponent extends Component {
+export default class specialPurposeDistrictsComponent extends Component {
   init(...args) {
     super.init(...args);
 
-    if (!this.get('model.proposedSpecialDistricts')) {
-      this.get('model').setDefaultProposedSpecialDistricts();
+    if (!this.get('model.specialPurposeDistricts')) {
+      this.get('model').setDefaultSpecialPurposeDistricts();
     }
   }
 
@@ -76,7 +76,7 @@ export default class ProposedSpecialDistrictsComponent extends Component {
     const model = this.get('model');
     const featureCollection = await finalGeometry;
 
-    model.set('proposedSpecialDistricts', featureCollection);
+    model.set('specialPurposeDistricts', featureCollection);
 
     try {
       const savedProject = await model.save();

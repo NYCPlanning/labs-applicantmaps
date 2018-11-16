@@ -1,17 +1,17 @@
-{{#if model.proposedZoning}}
-  {{#project-geometry-edit/draw-lots-to-union
+{{#if model.specialPurposeDistricts}}
+  {{#project-geometries/draw-lots-to-union
     mode=mode
     map=map
-    geometricProperty=model.proposedZoning as |selection|
+    geometricProperty=model.specialPurposeDistricts as |selection|
   }}
     {{#selection.button
       handleClick=(action 'save')}}
-      Save Zoning District
+      Save Special Districts
     {{/selection.button}}
-  {{/project-geometry-edit/draw-lots-to-union}}
+  {{/project-geometries/draw-lots-to-union}}
 
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
-    <h3>Proposed Rezoning: Underlying Zoning Districts</h3>
+    <h3>Proposed Rezoning: Special Purpose Districts</h3>
       <p>Proposed Rezoning refers to any changes to existing zoning district boundaries that are necessary to continue with proposed developments. Proposed zoning district boundaries should be drawn to or extend to the centerline of streets. Zoning boundaries are NOT dependent on lot lines and can sometimes intersect tax lots.</p>
       <div class="text-small">
           <ul>
@@ -26,19 +26,21 @@
       </div>
   {{/ember-wormhole}}
 
-  {{#map.source options=(mapbox-geojson-source model.proposedZoning) as |source|}}
+  {{#map.source
+    options=(mapbox-geojson-source model.SpecialDistricts) as |source|}}
     {{source.layer
-      layer=proposedZoningLayer
+      layer=proposedSpecialPurposeDistrictsLayer
       before='boundary_country'
     }}
     {{source.layer
-      layer=proposedZoningLabelsLayer
+      layer=proposedSpecialPurposeDistrictsLabelsLayer
       before='boundary_country'
     }}
   {{/map.source}}
 {{/if}}
 
-{{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
+{{#map.source
+  options=(mapbox-geojson-source model.developmentSite) as |source|}}
   {{source.layer
     layer=developmentSiteLayer
     before='boundary_country'

@@ -1,17 +1,4 @@
 <div class="cell sidebar map-sidebar">
-  {{#if mapInstance}}
-    {{#project-geometries-menu
-      model=model
-      mapInstance=mapInstance
-      selectedLots=selectedLots
-      lotSelectionMode=lotSelectionMode
-      geometryMode=geometryMode
-      as |menu|
-    }}
-
-    {{/project-geometries-menu}}
-  {{/if}}
-
   {{!-- EMBER WORMHOLE CONTAINER --}}
   {{!-- The geometry type component will fill this div with markup once invoked --}}
   <div id="geometry-type-draw-explainer">
@@ -23,7 +10,7 @@
 
 </div>
 <div class="cell large-auto map-container">
-  {{#project-map-form tagName='' as |projectMapForm|}}
+  {{#project-geometries/layer-groups tagName='' as |projectMapForm|}}
     {{#labs-map
       id='main-map'
       initOptions=(hash
@@ -47,11 +34,11 @@
       {{/map.labs-layers}}
 
       {{!-- invoke the component for the specified draw mode --}}
-      {{component (concat 'project-geometry-edit/' type)
+      {{component (concat 'project-geometries/' type)
         model=model
         mode=mode
         map=map}}
 
     {{/labs-map}}
-  {{/project-map-form}}
+  {{/project-geometries/layer-groups}}
 </div>
