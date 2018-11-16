@@ -230,7 +230,7 @@
 
   <div class="grid-x grid-margin-x">
     <div class="cell medium-10 xlarge-8 xxlarge-6">
-      {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='draw' type=firstGeomType)
+      {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='draw' type=model.firstGeomType)
         tagName='span'
         disabled=(not model.rezoningAnsweredLogically)
         class='button large expanded'

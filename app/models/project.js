@@ -218,21 +218,36 @@ export default class extends Model {
       return { label: 'project-area', route: 'projects.edit.steps.project-area' };
     }
 
-    if (trueOrNull(needRezoning) && !rezoningArea) {
-      return { label: 'rezoning', route: 'projects.edit.steps.rezoning' };
-    }
-
     if (trueOrNull(needUnderlyingZoning) && needRezoning && !underlyingZoning) {
-      return { label: 'rezoning-underlying', route: 'projects.edit.steps.rezoning' };
+      return {
+        label: 'rezoning-underlying',
+        route: 'projects.edit.geometry-edit',
+        mode: 'draw',
+        type: 'underlying-zoning',
+      };
     }
 
     if (trueOrNull(needCommercialOverlay) && needRezoning && !commercialOverlays) {
-      return { label: 'rezoning-commercial', route: 'projects.edit.steps.rezoning' };
+      return {
+        label: 'rezoning-commercial',
+        route: 'projects.edit.geometry-edit',
+        mode: 'draw',
+        type: 'commercial-overlays',
+      };
     }
 
     if (trueOrNull(needSpecialDistrict) && needRezoning && !specialPurposeDistricts) {
-      return { label: 'rezoning-special', route: 'projects.steps.edit.rezoning' };
+      return {
+        label: 'rezoning-special',
+        route: 'projects.edit.geometry-edit',
+        mode: 'draw',
+        type: 'special-purpose-districts',
+      };
     }
+
+    // if (trueOrNull(needRezoning) && !rezoningArea) {
+    //   return { label: 'rezoning', route: 'projects.edit.steps.rezoning' };
+    // }
 
     return { label: 'complete', route: 'projects.show' };
   }
@@ -269,9 +284,9 @@ export default class extends Model {
 
   @computed('needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
   get firstGeomType() {
-    if ((this.get('needRezoning') === true) && (this.get('needUnderlyingZoning') === true)) return 'rezoning-underlying';
-    if ((this.get('needRezoning') === true) && (this.get('needCommercialOverlay') === true)) return 'rezoning-commercial';
-    if ((this.get('needRezoning') === true) && (this.get('needSpecialDistrict') === true)) return 'rezoning-special';
+    if ((this.get('needRezoning') === true) && (this.get('needUnderlyingZoning') === true)) return 'underlying-zoning';
+    if ((this.get('needRezoning') === true) && (this.get('needCommercialOverlay') === true)) return 'commercial-overlays';
+    if ((this.get('needRezoning') === true) && (this.get('needSpecialDistrict') === true)) return 'special-purpose-districts';
     return false;
   }
 
