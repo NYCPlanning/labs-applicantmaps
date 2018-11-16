@@ -11,19 +11,17 @@
   {{/project-geometries/draw-lots-to-union}}
 
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
-    <h3>Proposed Rezoning: Underlying Zoning Districts</h3>
-      <p>Proposed Rezoning refers to any changes to existing zoning district boundaries that are necessary to continue with proposed developments. Proposed zoning district boundaries should be drawn to or extend to the centerline of streets. Zoning boundaries are not dependent on lot lines and can sometimes intersect tax lots.</p>
-      <div class="text-small">
-          <ul>
-            <li> <strong>You can either edit an existing zoning boundary or draw a new zoning boundary using the draw tool</strong></li>
-            <li> Select the polygon tool to begin drawing a new shape (you can draw multiple shapes)</li>
-            <li> Complete a shape by clicking the final vertex a second time</li>
-            <li> Edit an existing zoning boundary or a drawn shape by selecting and then dragging vertices</li>
-            <li> Use the trash button (or delete key) to delete a selected shape or vertex</li>
-            <li> Type in the zoning designation code for a new zoning boundary in the box</li>
-            <li> Once you're finished, save the geometry</li>
-          </ul>
-      </div>
+    <h3 class="no-margin">Proposed Rezoning: Underlying Zoning Districts</h3>
+    <p class="text-small">Proposed Rezoning refers to any changes to existing zoning district boundaries that are necessary to continue with proposed developments. Proposed zoning district boundaries should be drawn to or extend to the centerline of streets. Zoning boundaries are not dependent on lot lines and can sometimes intersect tax lots.</p>
+    <ul class="text-small">
+      <li> <strong>You can either edit an existing zoning boundary or draw a new zoning boundary using the draw tool</strong></li>
+      <li> Select the polygon tool to begin drawing a new shape (you can draw multiple shapes)</li>
+      <li> Complete a shape by clicking the final vertex a second time</li>
+      <li> Edit an existing zoning boundary or a drawn shape by selecting and then dragging vertices</li>
+      <li> Use the trash button (or delete key) to delete a selected shape or vertex</li>
+      <li> Type in the zoning designation code for a new zoning boundary in the box</li>
+      <li> Once you're finished, save the geometry</li>
+    </ul>
   {{/ember-wormhole}}
 
   {{#map.source options=(mapbox-geojson-source model.underlyingZoning) as |source|}}
