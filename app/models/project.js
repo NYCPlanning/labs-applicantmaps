@@ -3,10 +3,103 @@ import { attr, hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
 import turfBbox from '@turf/bbox';
 import { camelize } from '@ember/string';
+import carto from 'cartobox-promises-utility/utils/carto';
 import config from '../config/environment';
 
+const bufferMeters = 500;
 const { mapTypes } = config;
 const { Model } = DS;
+
+const questionFields = [
+  'needProjectArea',
+  'needRezoning',
+  'needUnderlyingZoning',
+  'needCommercialOverlay',
+  'needSpecialDistrict',
+];
+
+const fieldsForCurrentStep = [
+  'developmentSite',
+  'projectName',
+  'projectArea',
+  'rezoningArea',
+  'proposedZoning',
+  'proposedCommercialOverlays',
+  'proposedSpecialDistricts',
+  ...questionFields,
+];
+
+export const INTERSECTING_ZONING_QUERY = (developmentSite) => {
+  if (developmentSite) {
+    // Get zoning districts
+    const zoningQuery = `
+      WITH buffer as (
+        SELECT ST_SetSRID(
+          ST_Buffer(
+            ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
+            ${bufferMeters}
+          ),
+        4326)::geometry AS the_geom
+      )
+      SELECT ST_Intersection(zoning.the_geom, buffer.the_geom) AS the_geom, zonedist AS label
+      FROM planninglabs.zoning_districts_v201809 zoning, buffer
+      WHERE ST_Intersects(zoning.the_geom,buffer.the_geom)
+    `;
+
+    return new carto.SQL(zoningQuery, 'geojson');
+  }
+
+  return null;
+};
+
+export const PROPOSED_COMMERCIAL_OVERLAYS_QUERY = (developmentSite) => {
+  if (developmentSite) {
+    // Get commercial overlays
+    const commercialOverlaysQuery = `
+      WITH buffer as (
+        SELECT ST_SetSRID(
+          ST_Buffer(
+            ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
+            ${bufferMeters}
+          ),
+        4326)::geometry AS the_geom
+      )
+      SELECT ST_Intersection(co.the_geom, buffer.the_geom) AS the_geom, overlay AS label
+      FROM planninglabs.commercial_overlays_v201809 co, buffer
+      WHERE ST_Intersects(co.the_geom,buffer.the_geom)
+    `;
+
+    return new carto.SQL(commercialOverlaysQuery, 'geojson');
+  }
+
+  return null;
+};
+
+export const PROPOSE_SPECIAL_DISTRICTS_QUERY = (developmentSite) => {
+  if (developmentSite) {
+    // Get special purpose districts
+    const specialPurposeDistrictsQuery = `
+      WITH buffer as (
+        SELECT ST_SetSRID(
+          ST_Buffer(
+            ST_GeomFromGeoJSON('${JSON.stringify(developmentSite)}')::geography,
+            ${bufferMeters}
+          ),
+        4326)::geometry AS the_geom
+      )
+      SELECT ST_Intersection(spd.the_geom, buffer.the_geom) AS the_geom, sdname AS label
+      FROM planninglabs.special_purpose_districts_v201809 spd, buffer
+      WHERE ST_Intersects(spd.the_geom,buffer.the_geom)
+    `;
+
+    return new carto.SQL(specialPurposeDistrictsQuery, 'geojson');
+  }
+
+  return null;
+};
+
+// const hasAnswered = property => property !== null;
+const trueOrNull = property => property === true || property === null;
 
 export default class extends Model {
   @hasMany('area-map', { async: false }) areaMaps;
@@ -35,60 +128,113 @@ export default class extends Model {
   @attr('number', { defaultValue: 0 }) datePrepared;
 
   // ******** REQUIRED ANSWERS ********
-  @attr('boolean', { defaultValue: null }) needProjectArea;
+  @attr('boolean', { allowNull: true, defaultValue: null }) needProjectArea;
 
-  @attr('boolean', { defaultValue: null }) needRezoning;
+  @attr('boolean', { allowNull: true, defaultValue: null }) needRezoning;
 
-  @attr('boolean', { defaultValue: null }) needUnderlyingZoning;
+  @attr('boolean', { allowNull: true, defaultValue: null }) needUnderlyingZoning;
 
-  @attr('boolean', { defaultValue: null }) needCommercialOverlay;
+  @attr('boolean', { allowNull: true, defaultValue: null }) needCommercialOverlay;
 
-  @attr('boolean', { defaultValue: null }) needSpecialDistrict;
+  @attr('boolean', { allowNull: true, defaultValue: null }) needSpecialDistrict;
 
   // ******** GEOMETRIES ********
   @attr({ defaultValue: null }) developmentSite
 
   @attr() projectArea
 
-  @attr() rezoningArea
-
   @attr() proposedZoning
+
+  async setDefaultProposedZoning() {
+    const developmentSite = this.get('developmentSite');
+    const result = await INTERSECTING_ZONING_QUERY(developmentSite);
+
+    this.set('proposedZoning', result);
+  }
 
   @attr() proposedCommercialOverlays
 
+  async setDefaultProposedCommercialOverlays() {
+    const developmentSite = this.get('developmentSite');
+    const result = await PROPOSED_COMMERCIAL_OVERLAYS_QUERY(developmentSite);
+
+    this.set('proposedCommercialOverlays', result);
+  }
+
   @attr() proposedSpecialDistricts
 
-  // ******** COMPUTING THE CURRENT STEP FOR ROUTING ********
-  @computed('developmentSite', 'projectName', 'projectArea', 'rezoningArea', 'proposedZoning', 'proposedCommercialOverlays', 'proposedSpecialDistricts', 'needProjectArea', 'needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
-  get currentStep() {
-    const projectName = this.get('projectName');
+  async setDefaultProposedSpecialDistricts() {
     const developmentSite = this.get('developmentSite');
-    const projectArea = this.get('projectArea');
-    const rezoningArea = this.get('rezoningArea');
-    const proposedZoning = this.get('proposedZoning');
-    const proposedCommercialOverlays = this.get('proposedCommercialOverlays');
-    const proposedSpecialDistricts = this.get('proposedSpecialDistricts');
-    const needProjectArea = this.get('needProjectArea');
-    const needRezoning = this.get('needRezoning');
-    const needUnderlyingZoning = this.get('needUnderlyingZoning');
-    const needCommercialOverlay = this.get('needCommercialOverlay');
-    const needSpecialDistrict = this.get('needSpecialDistrict');
+    const result = await PROPOSE_SPECIAL_DISTRICTS_QUERY(developmentSite);
 
-    if (projectName == null || projectName === '') {
+    this.set('proposedSpecialDistricts', result);
+  }
+
+  @attr() rezoningArea
+
+  // ******** VALIDATION CHECKS / STEPS ********
+
+  // @computed(...requiredFields)
+  // get isValid() {
+  //   return requiredFields.every(field => this.get(field));
+  // }
+
+  // @computed(...requiredFields)
+  // get requiredFieldsCompleted() {
+  //   return requiredFields.filter(field => this.get(field));
+  // }
+
+  // ******** COMPUTING THE CURRENT STEP FOR ROUTING ********
+
+  @computed(...fieldsForCurrentStep)
+  get currentStep() {
+    const {
+      projectName,
+      developmentSite,
+      projectArea,
+      rezoningArea,
+      proposedZoning,
+      proposedCommercialOverlays,
+      proposedSpecialDistricts,
+      needProjectArea,
+      needRezoning,
+      needUnderlyingZoning,
+      needCommercialOverlay,
+      needSpecialDistrict,
+    } = this.getProperties(...fieldsForCurrentStep);
+
+    // const currentQuestion = questionFields.find(q => hasAnswered(q));
+
+    if (!projectName) {
       return { label: 'project-creation', route: 'projects.new' };
-    } if (developmentSite == null) {
+    }
+
+    if (!developmentSite) {
       return { label: 'development-site', route: 'projects.edit.steps.development-site' };
-    } if ((needProjectArea === true || needProjectArea == null) && projectArea == null) {
+    }
+
+    // questions
+    if (trueOrNull(needProjectArea) && !projectArea) {
       return { label: 'project-area', route: 'projects.edit.steps.project-area' };
-    } if ((needRezoning === true || needRezoning == null) && rezoningArea == null) {
+    }
+
+    if (trueOrNull(needRezoning) && !rezoningArea) {
       return { label: 'rezoning', route: 'projects.edit.steps.rezoning' };
-    } if ((needRezoning === true && (needUnderlyingZoning === true || needUnderlyingZoning == null)) && proposedZoning == null) {
+    }
+
+    if (trueOrNull(needUnderlyingZoning) && needRezoning && !proposedZoning) {
       return { label: 'rezoning-underlying', route: 'projects.edit.steps.rezoning' };
-    } if ((needRezoning === true && (needCommercialOverlay === true || needCommercialOverlay == null)) && proposedCommercialOverlays == null) {
+    }
+
+    if (trueOrNull(needCommercialOverlay) && needRezoning && !proposedCommercialOverlays) {
       return { label: 'rezoning-commercial', route: 'projects.edit.steps.rezoning' };
-    } if ((needRezoning === true && (needSpecialDistrict === true || needSpecialDistrict == null)) && proposedSpecialDistricts == null) {
-      return { label: 'rezoning-special', route: 'projects.edit.steps.rezoning' };
-    } return { label: 'complete', route: 'projects.show' };
+    }
+
+    if (trueOrNull(needSpecialDistrict) && needRezoning && !proposedSpecialDistricts) {
+      return { label: 'rezoning-special', route: 'projects.steps.edit.rezoning' };
+    }
+
+    return { label: 'complete', route: 'projects.show' };
   }
 
   @computed('currentStep')

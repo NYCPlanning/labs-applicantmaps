@@ -1,1 +1,23 @@
+{{#project-geometry-edit/draw-lots-to-union
+  mode=mode
+  map=map
+  geometricProperty=model.developmentSite as |selection|
+}}
+  {{#selection.button
+    handleClick=(action 'save')}}
+    Save Development Site
+  {{/selection.button}}
+{{/project-geometry-edit/draw-lots-to-union}}
+
+{{#ember-wormhole to='geometry-type-draw-explainer'}}
+  Explainer Text here
+{{/ember-wormhole}}
+
+{{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
+  {{source.layer
+    layer=developmentSiteLayer
+    before='boundary_country'
+  }}
+{{/map.source}}
+
 {{yield}}

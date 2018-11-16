@@ -21,32 +21,6 @@ const developmentSiteIcon = {
 };
 
 
-// Project Area
-const projectAreaLayer = {
-  id: 'project-area-line',
-  type: 'line',
-  layout: {
-    visibility: 'visible',
-  },
-  paint: {
-    'line-color': 'rgba(0, 122, 122, 1)',
-    'line-width': 2.5,
-    'line-dasharray': [3, 1],
-  },
-};
-
-const projectAreaIcon = {
-  type: 'line',
-  layers: [
-    {
-      stroke: 'rgba(0, 122, 122, 1)',
-      'stroke-width': 1.25,
-      'stroke-dasharray': '3.25,1.75',
-    },
-  ],
-};
-
-
 // Rezoning Area
 const rezoningAreaLayer = {
   type: 'line',
@@ -284,8 +258,6 @@ export default {
   c25Layer,
   developmentSiteLayer,
   developmentSiteIcon,
-  projectAreaLayer,
-  projectAreaIcon,
   rezoningAreaLayer,
   rezoningAreaIcon,
   projectBufferLayer,

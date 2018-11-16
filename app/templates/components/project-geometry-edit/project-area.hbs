@@ -1,0 +1,26 @@
+{{#project-geometry-edit/draw-lots-to-union
+  mode=mode
+  map=map
+  geometricProperty=model.projectArea as |selection|
+}}
+  {{#selection.button
+    handleClick=(action 'save')}}
+    Save Project Area
+  {{/selection.button}}
+{{/project-geometry-edit/draw-lots-to-union}}
+
+{{#ember-wormhole to='geometry-type-draw-explainer'}}
+  Explainer Text here
+{{/ember-wormhole}}
+
+{{!-- Ad-hoc source and layer for projectArea --}}
+{{#if (and model.projectArea (not-eq geometryMode 'projectArea'))}}
+  {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
+    {{source.layer
+      layer=projectAreaLayer
+      before='boundary_country'
+    }}
+  {{/map.source}}
+{{/if}}
+
+{{yield}}

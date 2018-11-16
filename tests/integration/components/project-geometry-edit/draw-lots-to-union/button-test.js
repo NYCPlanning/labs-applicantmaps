@@ -1,24 +1,24 @@
-import { module, skip } from 'qunit';
+import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | labs-map', function(hooks) {
+module('Integration | Component | project-geometry-edit/draw-lots-to-union/button', function(hooks) {
   setupRenderingTest(hooks);
 
-  skip('it renders', async function(assert) {
+  test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{labs-map}}`);
+    await render(hbs`{{project-geometry-edit/draw-lots-to-union/button}}`);
 
     assert.equal(this.element.textContent.trim(), '');
 
     // Template block usage:
     await render(hbs`
-      {{#labs-map}}
+      {{#project-geometry-edit/draw-lots-to-union/button}}
         template block text
-      {{/labs-map}}
+      {{/project-geometry-edit/draw-lots-to-union/button}}
     `);
 
     assert.equal(this.element.textContent.trim(), 'template block text');

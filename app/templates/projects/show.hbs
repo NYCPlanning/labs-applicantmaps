@@ -19,7 +19,7 @@
           {{model.zapProjectId}}
         </p>
 
-        {{#link-to 'projects.edit' model.id tagName='div'}}
+        {{#link-to 'projects.edit.geometry-edit' model.id tagName='div'}}
           <button class="button expanded gray edit-project-button">Edit Project</button>
         {{/link-to}}
 
@@ -37,7 +37,7 @@
             {{#if model.developmentSite}}
               {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
                 {{source.layer
-                  layer=projectGeomLayers.developmentSiteLayer
+                  layer=developmentSiteLayer
                   before='boundary_country'
                 }}
               {{/map.source}}
@@ -47,7 +47,7 @@
             {{#if model.projectArea}}
               {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
                 {{source.layer
-                  layer=projectGeomLayers.projectAreaLayer
+                  layer=projectAreaLayer
                   before='boundary_country'
                 }}
               {{/map.source}}
