@@ -192,7 +192,7 @@ export default class extends Model {
       projectName,
       developmentSite,
       projectArea,
-      rezoningArea,
+      // rezoningArea,
       underlyingZoning,
       commercialOverlays,
       specialPurposeDistricts,
