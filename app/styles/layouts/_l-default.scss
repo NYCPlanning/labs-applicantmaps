@@ -150,6 +150,48 @@ body {
   }
 }
 
+.dashboard {
+  padding: $global-margin;
+
+  @include breakpoint(large) {
+    padding-right: $global-margin*2;
+  }
+}
+
+#dashboard-map {
+  height: 30vh;
+  margin-bottom: $global-margin;
+
+  @include breakpoint(xlarge) {
+    height: calc(100vh - 8rem);
+    margin-bottom: 0;
+  }
+}
+
+.dashboard-controls {
+  @include breakpoint(large) {
+    padding-top: $global-margin;
+  }
+  @include breakpoint(xlarge) {
+    padding-left: $global-margin;
+  }
+
+  .control > .cell:not(:first-child) {
+    padding-left: rem-calc(10);
+  }
+
+  .control > .cell {
+    padding-bottom: rem-calc(10);
+  }
+
+  .control + .control {
+    .cell {
+      border-top: $hr-border;
+      padding-top: rem-calc(10);
+    }
+  }
+}
+
 .content-close-button-container {
   position: relative;
   z-index: 4;
@@ -325,3 +367,15 @@ textarea[readonly] {
   background-color: $white-smoke;
   box-shadow: none;
 }
+
+// Ember Tooltip Overrides
+.ember-popover {
+  background-color: $dark-gray;
+  color: $white;
+  padding: $global-margin/2;
+  border: 0;
+}
+.ember-popover[x-placement^="top"] .ember-tooltip-arrow { border-top-color: $dark-gray; }
+.ember-popover[x-placement^="right"] .ember-tooltip-arrow { border-right-color: $dark-gray; }
+.ember-popover[x-placement^="bottom"] .ember-tooltip-arrow { border-bottom-color: $dark-gray; }
+.ember-popover[x-placement^="left"] .ember-tooltip-arrow { border-left-color: $dark-gray; }

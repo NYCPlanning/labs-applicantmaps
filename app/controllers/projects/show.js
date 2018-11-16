@@ -9,7 +9,7 @@ export default class NewProjectController extends Controller {
   developmentSiteLayer = developmentSiteLayer;
 
   @action
-  handleMapLoad(map) { // eslint-disable-line
+  handleMapLoad(map) {
     window.map = map;
 
     const projectGeometryBoundingBox = this.get('model.projectGeometryBoundingBox');

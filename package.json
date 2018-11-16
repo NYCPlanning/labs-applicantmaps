@@ -69,7 +69,7 @@
     "eslint-plugin-ember-best-practices": "^1.1.1",
     "eslint-plugin-import": "^2.12.0",
     "labs-ember-search": "2.4.5",
-    "labs-ui": "^0.0.7",
+    "labs-ui": "^0.0.11",
     "loader.js": "^4.7.0",
     "mapbox-gl": "^0.50.0",
     "qunit-dom": "^0.7.1"
