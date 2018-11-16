@@ -10,7 +10,7 @@
 
 </div>
 <div class="cell large-auto map-container">
-  {{#project-map-form tagName='' as |projectMapForm|}}
+  {{#project-geometries/layer-groups tagName='' as |projectMapForm|}}
     {{#labs-map
       id='main-map'
       initOptions=(hash
@@ -40,5 +40,5 @@
         map=map}}
 
     {{/labs-map}}
-  {{/project-map-form}}
+  {{/project-geometries/layer-groups}}
 </div>
