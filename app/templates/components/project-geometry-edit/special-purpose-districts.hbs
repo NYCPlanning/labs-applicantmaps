@@ -1,30 +1,34 @@
-{{#if model.proposedZoning}}
+{{#if model.specialPurposeDistricts}}
   {{#project-geometry-edit/draw-lots-to-union
     mode=mode
     map=map
-    geometricProperty=model.proposedZoning as |selection|
+    geometricProperty=model.specialPurposeDistricts as |selection|
   }}
     {{#selection.button
       handleClick=(action 'save')}}
-      Save Zoning District
+      Save Special Districts
     {{/selection.button}}
   {{/project-geometry-edit/draw-lots-to-union}}
 
-  {{#map.source options=(mapbox-geojson-source model.proposedZoning) as |source|}}
+  {{#map.source 
+    options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
     {{source.layer
-      layer=proposedZoningLayer
+      layer=proposedSpecialPurposeDistrictsLayer
       before='boundary_country'
     }}
     {{source.layer
-      layer=proposedZoningLabelsLayer
+      layer=proposedSpecialPurposeDistrictsLabelsLayer
       before='boundary_country'
     }}
   {{/map.source}}
 {{/if}}
 
-{{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
+{{#map.source
+  options=(mapbox-geojson-source model.developmentSite) as |source|}}
   {{source.layer
     layer=developmentSiteLayer
     before='boundary_country'
   }}
 {{/map.source}}
+
+

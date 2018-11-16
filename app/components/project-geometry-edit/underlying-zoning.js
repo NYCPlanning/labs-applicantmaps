@@ -3,8 +3,8 @@ import { argument } from '@ember-decorators/argument';
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 
-// Proposed Zoning
-export const proposedZoningLayer = {
+// Underlying Zoning
+export const underlyingZoningLayer = {
   id: 'proposed-zoningdistrict-lines',
   type: 'line',
   paint: {
@@ -13,7 +13,7 @@ export const proposedZoningLayer = {
   },
 };
 
-export const proposedZoningLabelsLayer = {
+export const underlyingZoningLabelsLayer = {
   id: 'proposed-zoningdistrict-labels',
   type: 'symbol',
   layout: {
@@ -43,12 +43,12 @@ export const proposedZoningLabelsLayer = {
   },
 };
 
-export default class ZoningDistrictComponent extends Component {
+export default class UnderlyingZoningComponent extends Component {
   init(...args) {
     super.init(...args);
 
-    if (!this.get('model.proposedZoning')) {
-      this.get('model').setDefaultProposedZoning();
+    if (!this.get('model.underlyingZoning')) {
+      this.get('model').setDefaultUnderlyingZoning();
     }
   }
 
@@ -67,16 +67,16 @@ export default class ZoningDistrictComponent extends Component {
   @service
   notificationMessages;
 
-  proposedZoningLayer = proposedZoningLayer;
+  underlyingZoningLayer = underlyingZoningLayer;
 
-  proposedZoningLabelsLayer = proposedZoningLabelsLayer;
+  underlyingZoningLabelsLayer = underlyingZoningLabelsLayer;
 
   @action
   async save(finalGeometry) {
     const model = this.get('model');
     const featureCollection = await finalGeometry;
 
-    model.set('proposedZoning', featureCollection);
+    model.set('underlyingZoning', featureCollection);
 
     try {
       const savedProject = await model.save();

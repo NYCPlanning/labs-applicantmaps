@@ -112,8 +112,8 @@
             {{map.labs-layers layerGroups=mapConfiguration.layerGroups}}
 
             {{!-- Ad-hoc source and layer for showing commercial overlays --}}
-            {{#if model.project.proposedCommercialOverlays}}
-              {{#map.source options=(mapbox-geojson-source model.project.proposedCommercialOverlays) as |source|}}
+            {{#if model.project.commercialOverlays}}
+              {{#map.source options=(mapbox-geojson-source model.project.commercialOverlays) as |source|}}
                 {{source.layer layer=projectGeomLayers.coLayer before='boundary_country'}}
                 {{source.layer layer=projectGeomLayers.c11Layer before='boundary_country'}}
                 {{source.layer layer=projectGeomLayers.c12Layer before='boundary_country'}}
@@ -165,14 +165,14 @@
               {{/map.source}}
             {{/if}}
 
-            {{#if model.project.proposedZoning}}
-              {{#map.source options=(mapbox-geojson-source model.project.proposedZoning) as |source|}}
+            {{#if model.project.underlyingZoning}}
+              {{#map.source options=(mapbox-geojson-source model.project.underlyingZoning) as |source|}}
                 {{source.layer
-                  layer=projectGeomLayers.proposedZoningLayer
+                  layer=projectGeomLayers.underlyingZoningLayer
                   before='boundary_country'
                 }}
                 {{source.layer
-                  layer=projectGeomLayers.proposedZoningLabelsLayer
+                  layer=projectGeomLayers.underlyingZoningLabelsLayer
                   before='boundary_country'
                 }}
               {{/map.source}}

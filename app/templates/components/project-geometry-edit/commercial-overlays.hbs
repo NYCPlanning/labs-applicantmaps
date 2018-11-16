@@ -1,8 +1,8 @@
-{{#if model.proposedCommercialOverlays}}
+{{#if model.commercialOverlays}}
   {{#project-geometry-edit/draw-lots-to-union
     mode=mode
     map=map
-    geometricProperty=model.proposedCommercialOverlays as |selection|
+    geometricProperty=model.commercialOverlays as |selection|
   }}
     {{#selection.button
       handleClick=(action 'save')}}
@@ -10,7 +10,7 @@
     {{/selection.button}}
   {{/project-geometry-edit/draw-lots-to-union}}
 
-  {{#map.source options=(mapbox-geojson-source model.proposedCommercialOverlays) as |source|}}
+  {{#map.source options=(mapbox-geojson-source model.commercialOverlays) as |source|}}
     {{source.layer layer=coLayer before='boundary_country'}}
     {{source.layer layer=c11Layer before='boundary_country'}}
     {{source.layer layer=c12Layer before='boundary_country'}}

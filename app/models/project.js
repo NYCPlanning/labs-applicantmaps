@@ -23,9 +23,9 @@ const fieldsForCurrentStep = [
   'projectName',
   'projectArea',
   'rezoningArea',
-  'proposedZoning',
-  'proposedCommercialOverlays',
-  'proposedSpecialDistricts',
+  'underlyingZoning',
+  'commercialOverlays',
+  'specialPurposeDistricts',
   ...questionFields,
 ];
 
@@ -143,31 +143,31 @@ export default class extends Model {
 
   @attr() projectArea
 
-  @attr() proposedZoning
+  @attr() underlyingZoning
 
-  async setDefaultProposedZoning() {
+  async setDefaultUnderlyingZoning() {
     const developmentSite = this.get('developmentSite');
     const result = await INTERSECTING_ZONING_QUERY(developmentSite);
 
-    this.set('proposedZoning', result);
+    this.set('underlyingZoning', result);
   }
 
-  @attr() proposedCommercialOverlays
+  @attr() commercialOverlays
 
-  async setDefaultProposedCommercialOverlays() {
+  async setDefaultCommercialOverlays() {
     const developmentSite = this.get('developmentSite');
     const result = await PROPOSED_COMMERCIAL_OVERLAYS_QUERY(developmentSite);
 
-    this.set('proposedCommercialOverlays', result);
+    this.set('commercialOverlays', result);
   }
 
-  @attr() proposedSpecialDistricts
+  @attr() specialPurposeDistricts
 
-  async setDefaultProposedSpecialDistricts() {
+  async setDefaultSpecialPurposeDistricts() {
     const developmentSite = this.get('developmentSite');
     const result = await PROPOSE_SPECIAL_DISTRICTS_QUERY(developmentSite);
 
-    this.set('proposedSpecialDistricts', result);
+    this.set('specialPurposeDistricts', result);
   }
 
   @attr() rezoningArea
@@ -193,9 +193,9 @@ export default class extends Model {
       developmentSite,
       projectArea,
       rezoningArea,
-      proposedZoning,
-      proposedCommercialOverlays,
-      proposedSpecialDistricts,
+      underlyingZoning,
+      commercialOverlays,
+      specialPurposeDistricts,
       needProjectArea,
       needRezoning,
       needUnderlyingZoning,
@@ -222,15 +222,15 @@ export default class extends Model {
       return { label: 'rezoning', route: 'projects.edit.steps.rezoning' };
     }
 
-    if (trueOrNull(needUnderlyingZoning) && needRezoning && !proposedZoning) {
+    if (trueOrNull(needUnderlyingZoning) && needRezoning && !underlyingZoning) {
       return { label: 'rezoning-underlying', route: 'projects.edit.steps.rezoning' };
     }
 
-    if (trueOrNull(needCommercialOverlay) && needRezoning && !proposedCommercialOverlays) {
+    if (trueOrNull(needCommercialOverlay) && needRezoning && !commercialOverlays) {
       return { label: 'rezoning-commercial', route: 'projects.edit.steps.rezoning' };
     }
 
-    if (trueOrNull(needSpecialDistrict) && needRezoning && !proposedSpecialDistricts) {
+    if (trueOrNull(needSpecialDistrict) && needRezoning && !specialPurposeDistricts) {
       return { label: 'rezoning-special', route: 'projects.steps.edit.rezoning' };
     }
 
