@@ -4,7 +4,7 @@ import { computed } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
 
 @tagName('button')
-@classNames('button large green expanded project-save-button')
+@classNames('button large expanded project-save-button')
 export default class DrawLotsButtonComponent extends Component {
   @attribute
   @computed('enabled')

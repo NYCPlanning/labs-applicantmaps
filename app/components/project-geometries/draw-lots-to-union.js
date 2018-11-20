@@ -60,11 +60,12 @@ export default class DrawLotsToUnion extends Component {
 
       const drawStateCallback = () => {
         this.set('currentDrawing', draw.getAll());
+        this.set('drawMode', draw.getMode());
       };
 
       // setup events to update draw state
       // bind events to the state callback
-      ['create', 'delete', 'combine', 'uncombine', 'update', 'selectionchange']
+      ['create', 'delete', 'combine', 'uncombine', 'update', 'selectionchange', 'modechange']
         .forEach((event) => {
           mapInstance.on(`draw.${event}`, drawStateCallback);
         });
@@ -88,6 +89,8 @@ export default class DrawLotsToUnion extends Component {
   selectedLotsLayer = selectedLotsLayer;
 
   currentDrawing = null;
+
+  drawMode = null;
 
   @computed()
   get taxLots() {
@@ -142,6 +145,19 @@ export default class DrawLotsToUnion extends Component {
     const { features: [{ geometry }] } = yield carto.SQL(bblSelectionQuery, 'geojson');
 
     set(targetFeature, 'geometry', geometry);
+  }
+
+  // Custom Draw button
+  @action
+  handleDrawButtonClick() {
+    draw.changeMode('draw_polygon');
+    this.set('drawMode', draw.getMode());
+  }
+
+  // Custom Trash button
+  @action
+  handleTrashButtonClick() {
+    draw.trash();
   }
 
   @action
