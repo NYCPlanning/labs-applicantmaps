@@ -2,6 +2,7 @@
   {{#project-geometries/draw-lots-to-union
     mode=mode
     map=map
+    editableLabel=true
     geometricProperty=model.specialPurposeDistricts as |selection|
   }}
     {{#selection.button
@@ -38,6 +39,14 @@
           {{fa-icon 'trash-alt' prefix='far' transform='shrink-2'}}
         </span>
         trash button (or delete key) to delete a selected shape or vertex
+      </p></li>
+      <li><p class="small-margin-bottom">
+        When a shape is complete/selected, you can edit its
+        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+          {{fa-icon 'tag' transform='shrink-2'}}
+        </span>
+        label
       </p></li>
       <li><p class="small-margin-bottom">Make sure all shapes are complete and labeled before saving</p></li>
     </ul>

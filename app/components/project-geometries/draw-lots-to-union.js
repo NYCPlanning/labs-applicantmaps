@@ -61,6 +61,13 @@ export default class DrawLotsToUnion extends Component {
       const drawStateCallback = () => {
         this.set('currentDrawing', draw.getAll());
         this.set('drawMode', draw.getMode());
+
+        const selectedFeatures = draw.getSelected().features;
+        if (selectedFeatures.length === 1) {
+          this.set('selectedZoningFeature', selectedFeatures[0]);
+        } else {
+          this.set('selectedZoningFeature', undefined);
+        }
       };
 
       // setup events to update draw state
@@ -81,6 +88,9 @@ export default class DrawLotsToUnion extends Component {
   @argument
   mode;
 
+  @argument
+  editableLabel = false;
+
   @service
   store;
 
@@ -91,6 +101,8 @@ export default class DrawLotsToUnion extends Component {
   currentDrawing = null;
 
   drawMode = null;
+
+  selectedZoningFeature = undefined;
 
   @computed()
   get taxLots() {
@@ -187,6 +199,12 @@ export default class DrawLotsToUnion extends Component {
         this.set('selectedLots.features', newLots);
       }
     }
+  }
+
+  @action
+  updateSelectedZoningFeature(label) {
+    const id = this.get('selectedZoningFeature.id');
+    draw.setFeatureProperty(id, 'label', label);
   }
 
   // validate the existence of properties
