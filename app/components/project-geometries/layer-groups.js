@@ -12,7 +12,7 @@ export default class ProjectMapFormComponent extends Component {
           id: 'tax-lots',
           visible: true,
           layers: [
-            { tooltipable: false, tooltipTemplate: '{{address}} (BBL: {{bbl}})' },
+            { tooltipable: false, highlightable: false, tooltipTemplate: '{{address}} (BBL: {{bbl}})' },
             {},
             { style: { layout: { 'text-field': '{lot}' } } },
             {
