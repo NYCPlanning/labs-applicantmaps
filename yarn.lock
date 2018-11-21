@@ -877,6 +877,13 @@
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.7.0.tgz#9a06f4f137ee84d7df0460c1fdb1135ffa6c50fd"
 
+"@turf/area@6.x":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@turf/area/-/area-6.0.1.tgz#50ed63c70ef2bdb72952384f1594319d94f3b051"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/meta" "6.x"
+
 "@turf/bbox@^5.1.5":
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/@turf/bbox/-/bbox-5.1.5.tgz#3051df514ad4c50f4a4f9b8a2d15fd8b6840eda3"
@@ -929,6 +936,16 @@
   resolved "https://registry.yarnpkg.com/@turf/clone/-/clone-5.1.5.tgz#253e8d35477181976e33adfab50a0f02a7f0e367"
   dependencies:
     "@turf/helpers" "^5.1.5"
+
+"@turf/difference@6.0.2":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@turf/difference/-/difference-6.0.2.tgz#dd20c0e2301ba6c22019e38a36eea3975205a77f"
+  dependencies:
+    "@turf/area" "6.x"
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+    "@turf/meta" "6.x"
+    martinez-polygon-clipping "^0.4.3"
 
 "@turf/helpers@6.x":
   version "6.1.4"
@@ -3070,7 +3087,7 @@ cartobox-promises-utility@nycplanning/cartobox-promises-utility#v1.0.2:
   resolved "https://codeload.github.com/nycplanning/cartobox-promises-utility/tar.gz/57f1c96a0bf03c47e048c30d202643cc49db3c69"
   dependencies:
     ember-cli-babel "^6.6.0"
-    ember-fetch "5.0.0"
+    ember-fetch "4.0.1"
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -4723,10 +4740,9 @@ ember-mapbox-composer@NYCPlanning/ember-mapbox-composer#d95dc6c99952fc45d6677bba
   version "0.0.19"
   resolved "https://codeload.github.com/NYCPlanning/ember-mapbox-composer/tar.gz/d95dc6c99952fc45d6677bba400424faf0be6170"
   dependencies:
+    "@ember-decorators/argument" "0.8.21"
     "@ember-decorators/babel-transforms" "^2.0.0"
-    "@turf/union" "^6.0.0"
     cartobox-promises-utility "1.0.2"
-    ember-auto-import "1.2.5"
     ember-cli-babel "^6.6.0"
     ember-cli-htmlbars "^2.0.1"
     ember-cli-htmlbars-inline-precompile "^1.0.0"

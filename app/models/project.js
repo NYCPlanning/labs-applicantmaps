@@ -2,6 +2,9 @@ import DS from 'ember-data';
 import { attr, hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
 import turfBbox from '@turf/bbox';
+import turfUnion from '@turf/union';
+import turfBuffer from '@turf/buffer';
+import turfDifference from '@turf/difference';
 import { camelize } from '@ember/string';
 import carto from 'cartobox-promises-utility/utils/carto';
 import config from '../config/environment';
@@ -29,7 +32,7 @@ const fieldsForCurrentStep = [
   ...questionFields,
 ];
 
-export const INTERSECTING_ZONING_QUERY = (developmentSite) => {
+export const INTERSECTING_ZONING_QUERY = async (developmentSite) => {
   if (developmentSite) {
     // Get zoning districts
     const zoningQuery = `
@@ -41,12 +44,21 @@ export const INTERSECTING_ZONING_QUERY = (developmentSite) => {
           ),
         4326)::geometry AS the_geom
       )
-      SELECT ST_Intersection(zoning.the_geom, buffer.the_geom) AS the_geom, zonedist AS label
+      SELECT ST_Intersection(zoning.the_geom, buffer.the_geom) AS the_geom, zonedist AS label, cartodb_id AS id
       FROM planninglabs.zoning_districts_v201809 zoning, buffer
       WHERE ST_Intersects(zoning.the_geom,buffer.the_geom)
     `;
 
-    return new carto.SQL(zoningQuery, 'geojson');
+    const clippedZoningDistricts = await new carto.SQL(zoningQuery, 'geojson');
+
+    // add an id to the top level of each feature object, for use by mapbox-gl-draw
+    const { features } = clippedZoningDistricts;
+    clippedZoningDistricts.features = features.map((feature) => {
+      feature.id = feature.properties.id;
+      return feature;
+    });
+
+    return clippedZoningDistricts;
   }
 
   return null;
@@ -93,6 +105,52 @@ export const PROPOSE_SPECIAL_DISTRICTS_QUERY = (developmentSite) => {
     `;
 
     return new carto.SQL(specialPurposeDistrictsQuery, 'geojson');
+  }
+
+  return null;
+};
+
+export const REZONING_AREA_QUERY = (currentZoning, proposedZoning) => {
+  // create an empty FeatureCollection to hold the difference sections
+  const differenceFC = {
+    type: 'FeatureCollection',
+    features: [],
+  };
+
+  // flag differences
+  proposedZoning.features.forEach((feature) => {
+    const { id } = feature;
+    const correspondingCurrentZoningFeature = currentZoning.features.filter(d => d.id === id)[0];
+
+    // if feature exists in currentZoning, compare the geometries
+    if (correspondingCurrentZoningFeature) {
+      // get the difference
+      const difference = turfDifference(correspondingCurrentZoningFeature, feature);
+      if (difference) differenceFC.features.push(difference);
+
+      // get the inverse difference (reverse the order of the polygons)
+      const inverseDifference = turfDifference(feature, correspondingCurrentZoningFeature);
+      if (inverseDifference) differenceFC.features.push(inverseDifference);
+    } else {
+      differenceFC.features.push(feature);
+    }
+  });
+
+  // union together all difference features
+  if (differenceFC.features.length > 0) {
+    const differenceUnion = differenceFC.features
+      .reduce((union, { geometry }) => {
+        if (union === null) {
+          union = geometry;
+        } else {
+          union = turfUnion(union, geometry);
+        }
+
+        const buffered = turfBuffer(union, -0.0005);
+        return buffered;
+      }, null);
+
+    return differenceUnion;
   }
 
   return null;
@@ -171,6 +229,15 @@ export default class extends Model {
   }
 
   @attr() rezoningArea
+
+  async setRezoningArea() {
+    const proposedZoning = this.get('underlyingZoning');
+    const developmentSite = this.get('developmentSite');
+    const currentZoning = await PROPOSE_SPECIAL_DISTRICTS_QUERY(developmentSite);
+    const result = await REZONING_AREA_QUERY(currentZoning, proposedZoning);
+    console.log(result);
+    this.set('rezoningArea', result);
+  }
 
   // ******** VALIDATION CHECKS / STEPS ********
 
