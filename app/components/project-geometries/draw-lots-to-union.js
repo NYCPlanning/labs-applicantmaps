@@ -62,7 +62,7 @@ export default class DrawLotsToUnion extends Component {
         this.set('currentDrawing', draw.getAll());
         this.set('drawMode', draw.getMode());
 
-        const selectedFeatures = draw.getSelected().features;
+        const { features: selectedFeatures } = draw.getSelected();
         if (selectedFeatures.length === 1) {
           this.set('selectedZoningFeature', selectedFeatures[0]);
         } else {
