@@ -32,6 +32,11 @@ const fieldsForCurrentStep = [
   ...questionFields,
 ];
 
+const EmptyFeatureCollection = {
+  type: 'FeatureCollection',
+  features: [],
+};
+
 export const INTERSECTING_ZONING_QUERY = async (developmentSite) => {
   if (developmentSite) {
     // Get zoning districts
@@ -114,7 +119,10 @@ export const REZONING_AREA_QUERY = (currentZoning, proposedZoning) => {
   // create an empty FeatureCollection to hold the difference sections
   const differenceFC = {
     type: 'FeatureCollection',
-    features: [],
+    features: [{
+      type: 'Feature',
+      geometry: null,
+    }],
   };
 
   // flag differences
@@ -197,11 +205,15 @@ export default class extends Model {
   @attr('boolean', { allowNull: true, defaultValue: null }) needSpecialDistrict;
 
   // ******** GEOMETRIES ********
-  @attr({ defaultValue: null }) developmentSite
+  // FeatureCollection of polygons or multipolygons
+  @attr({ defaultValue: () => EmptyFeatureCollection }) developmentSite
 
-  @attr() projectArea
+  // FeatureCollection of polygons or multipolygons
+  @attr({ defaultValue: () => EmptyFeatureCollection }) projectArea
 
-  @attr() underlyingZoning
+  // FeatureCollection
+  // includes label information that must be stored as properties
+  @attr({ defaultValue: () => EmptyFeatureCollection }) underlyingZoning
 
   async setDefaultUnderlyingZoning() {
     const developmentSite = this.get('developmentSite');
@@ -210,7 +222,9 @@ export default class extends Model {
     this.set('underlyingZoning', result);
   }
 
-  @attr() commercialOverlays
+  // FeatureCollection
+  // includes label information that must be stored as properties
+  @attr({ defaultValue: () => EmptyFeatureCollection }) commercialOverlays
 
   async setDefaultCommercialOverlays() {
     const developmentSite = this.get('developmentSite');
@@ -219,7 +233,9 @@ export default class extends Model {
     this.set('commercialOverlays', result);
   }
 
-  @attr() specialPurposeDistricts
+  // FeatureCollection
+  // includes label information that must be stored as properties
+  @attr({ defaultValue: () => EmptyFeatureCollection }) specialPurposeDistricts
 
   async setDefaultSpecialPurposeDistricts() {
     const developmentSite = this.get('developmentSite');
@@ -228,14 +244,15 @@ export default class extends Model {
     this.set('specialPurposeDistricts', result);
   }
 
-  @attr() rezoningArea
+  // FeatureCollection of polygons or multipolygons
+  @attr({ defaultValue: () => EmptyFeatureCollection }) rezoningArea
 
   async setRezoningArea() {
     const proposedZoning = this.get('underlyingZoning');
     const developmentSite = this.get('developmentSite');
     const currentZoning = await PROPOSE_SPECIAL_DISTRICTS_QUERY(developmentSite);
     const result = await REZONING_AREA_QUERY(currentZoning, proposedZoning);
-    console.log(result);
+
     this.set('rezoningArea', result);
   }
 
@@ -374,21 +391,13 @@ export default class extends Model {
   @computed('developmentSite', 'projectArea', 'rezoningArea')
   get projectGeometryBoundingBox() {
     // build a geojson FeatureCollection from all three project geoms
-    const geometries = this.getProperties('developmentSite', 'projectArea', 'rezoningArea');
+    const featureCollections = this
+      .getProperties('developmentSite', 'projectArea', 'rezoningArea');
 
-    // if all three are undefined, return undefined
-    const allUndefined = Object.values(geometries)
-      .reduce((acc, geometry) => acc && !geometry, true);
-    if (allUndefined) return undefined;
-
-    const featureCollection = Object.values(geometries)
-      .reduce((acc, geometry) => {
-        if (geometry) {
-          acc.features.push({
-            type: 'Feature',
-            geometry,
-          });
-        }
+    // flatten feature collections
+    const featureCollection = Object.values(featureCollections)
+      .reduce((acc, { features }) => {
+        acc.features.push(...features);
 
         return acc;
       }, {
