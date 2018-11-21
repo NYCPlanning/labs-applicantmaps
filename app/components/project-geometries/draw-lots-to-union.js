@@ -59,7 +59,7 @@ export default class DrawLotsToUnion extends Component {
       }
 
       const drawStateCallback = () => {
-        this.set('currentDrawing', draw.getAll());
+        if (!this.get('isDestroyed')) this.set('currentDrawing', draw.getAll());
       };
 
       // setup events to update draw state
