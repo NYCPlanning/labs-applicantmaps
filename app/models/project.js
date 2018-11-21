@@ -256,18 +256,6 @@ export default class extends Model {
     this.set('rezoningArea', result);
   }
 
-  // ******** VALIDATION CHECKS / STEPS ********
-
-  // @computed(...requiredFields)
-  // get isValid() {
-  //   return requiredFields.every(field => this.get(field));
-  // }
-
-  // @computed(...requiredFields)
-  // get requiredFieldsCompleted() {
-  //   return requiredFields.filter(field => this.get(field));
-  // }
-
   // ******** COMPUTING THE CURRENT STEP FOR ROUTING ********
 
   @computed(...fieldsForCurrentStep)
