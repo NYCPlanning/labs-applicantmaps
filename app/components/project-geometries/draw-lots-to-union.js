@@ -6,7 +6,6 @@ import turfBuffer from '@turf/buffer';
 import turfUnion from '@turf/union';
 import turfSimplify from '@turf/simplify';
 import { set } from '@ember/object';
-import MapboxDraw from 'mapbox-gl-draw';
 import carto from 'cartobox-promises-utility/utils/carto';
 import { task } from 'ember-concurrency-decorators';
 import { waitForProperty } from 'ember-concurrency';
@@ -14,14 +13,6 @@ import { waitForProperty } from 'ember-concurrency';
 const tolerance = 0.000001;
 const bufferkm = 0.00008;
 const plutoTable = 'mappluto_v18_1';
-
-const draw = new MapboxDraw({
-  displayControlsDefault: false,
-  controls: {
-    polygon: true,
-    trash: true,
-  },
-});
 
 export const selectedLotsLayer = {
   type: 'fill',
@@ -40,35 +31,6 @@ export default class DrawLotsToUnion extends Component {
       type: 'FeatureCollection',
       features: [],
     });
-
-    const { mapInstance } = this.get('map');
-    const mode = this.get('mode');
-    const geometricProperty = this.get('geometricProperty');
-
-    if (mode === 'draw') {
-      mapInstance.addControl(draw, 'top-left');
-
-      // set up initial drawing mode
-      draw.changeMode('draw_polygon');
-
-      // if geometry exists for this mode, add it to the drawing canvas
-      if (geometricProperty) {
-        this.set('currentDrawing', geometricProperty);
-        draw.add(geometricProperty);
-        draw.changeMode('simple_select');
-      }
-
-      const drawStateCallback = () => {
-        if (!this.get('isDestroyed')) this.set('currentDrawing', draw.getAll());
-      };
-
-      // setup events to update draw state
-      // bind events to the state callback
-      ['create', 'delete', 'combine', 'uncombine', 'update', 'selectionchange']
-        .forEach((event) => {
-          mapInstance.on(`draw.${event}`, drawStateCallback);
-        });
-    }
   }
 
   @argument
@@ -86,8 +48,6 @@ export default class DrawLotsToUnion extends Component {
   lotSelectionMode = true;
 
   selectedLotsLayer = selectedLotsLayer;
-
-  currentDrawing = null;
 
   @computed()
   get taxLots() {
@@ -174,11 +134,11 @@ export default class DrawLotsToUnion extends Component {
   }
 
   // validate the existence of properties
-  @computed('mode', 'currentDrawing', 'selectedLots.features.length')
+  @computed('mode', 'geometricProperty', 'selectedLots.features.length')
   get isValid() {
-    const { mode, currentDrawing, selectedLots } = this.getProperties('mode', 'currentDrawing', 'selectedLots');
+    const { mode, geometricProperty, selectedLots } = this.getProperties('mode', 'geometricProperty', 'selectedLots');
     // button is disabled if mode is not draw and there are no selected features
-    return (mode === 'draw') ? (!!currentDrawing) : (selectedLots.features.length);
+    return (mode === 'draw') ? (!!geometricProperty) : (selectedLots.features.length);
   }
 
   // make sure no rehydration tasks are still running
@@ -187,10 +147,10 @@ export default class DrawLotsToUnion extends Component {
     return this.get('isValid') && this.get('hydrateFeatures.isIdle');
   }
 
-  @computed('mode', 'selectedLotsBuffer', 'currentDrawing')
+  @computed('mode', 'selectedLotsBuffer', 'geometricProperty')
   get finalGeometry() {
     const bufferedLots = this.get('selectedLotsBuffer');
-    const drawnGeometry = this.get('currentDrawing');
+    const drawnGeometry = this.get('geometricProperty');
     const finalGeometry = (this.get('mode') === 'lots') ? bufferedLots : drawnGeometry;
 
     return finalGeometry;
@@ -198,18 +158,4 @@ export default class DrawLotsToUnion extends Component {
 
   @action
   noop() {}
-
-  willDestroyElement(...args) {
-    super.willDestroyElement(...args);
-
-    const { mapInstance } = this.get('map');
-
-    if (this.get('mode') === 'draw') {
-      // drawing cleanup
-      draw.trash();
-      draw.deleteAll();
-      mapInstance.off('draw.selectionchange');
-      mapInstance.removeControl(draw);
-    }
-  }
 }
