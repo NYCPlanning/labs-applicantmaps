@@ -167,6 +167,10 @@ export default class ZoningDistrictComponent extends Component {
 
     model.set('commercialOverlays', featureCollection);
 
+    // because we've just changed the proposed zoning,
+    // we should also calculate the rezoning area
+    model.setRezoningArea();
+
     try {
       const savedProject = await model.save();
 

@@ -28,14 +28,6 @@ export const rezoningAreaIcon = {
 };
 
 export default class RezoningArea extends Component {
-  init(...args) {
-    super.init(...args);
-
-    if (!this.get('model.rezoningArea')) {
-      this.get('model').setRezoningArea();
-    }
-  }
-
   rezoningAreaLayer = rezoningAreaLayer;
 
   @service

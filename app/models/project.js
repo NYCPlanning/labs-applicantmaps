@@ -32,6 +32,19 @@ const fieldsForCurrentStep = [
   ...questionFields,
 ];
 
+// takes `id` from properties, and copies it to `id` at the top level of each feature
+// used by mapbox-gl-draw to identify features for when editing
+const elevateGeojsonIds = (FeatureCollection) => {
+  // add an id to the top level of each feature object, for use by mapbox-gl-draw
+  const { features } = FeatureCollection;
+  FeatureCollection.features = features.map((feature) => {
+    feature.id = feature.properties.id;
+    return feature;
+  });
+
+  return FeatureCollection;
+};
+
 export const INTERSECTING_ZONING_QUERY = async (developmentSite) => {
   if (developmentSite) {
     // Get zoning districts
@@ -51,20 +64,13 @@ export const INTERSECTING_ZONING_QUERY = async (developmentSite) => {
 
     const clippedZoningDistricts = await new carto.SQL(zoningQuery, 'geojson');
 
-    // add an id to the top level of each feature object, for use by mapbox-gl-draw
-    const { features } = clippedZoningDistricts;
-    clippedZoningDistricts.features = features.map((feature) => {
-      feature.id = feature.properties.id;
-      return feature;
-    });
-
-    return clippedZoningDistricts;
+    return elevateGeojsonIds(clippedZoningDistricts);
   }
 
   return null;
 };
 
-export const PROPOSED_COMMERCIAL_OVERLAYS_QUERY = (developmentSite) => {
+export const PROPOSED_COMMERCIAL_OVERLAYS_QUERY = async (developmentSite) => {
   if (developmentSite) {
     // Get commercial overlays
     const commercialOverlaysQuery = `
@@ -76,18 +82,20 @@ export const PROPOSED_COMMERCIAL_OVERLAYS_QUERY = (developmentSite) => {
           ),
         4326)::geometry AS the_geom
       )
-      SELECT ST_Intersection(co.the_geom, buffer.the_geom) AS the_geom, overlay AS label
+      SELECT ST_Intersection(co.the_geom, buffer.the_geom) AS the_geom, overlay AS label, cartodb_id AS id
       FROM planninglabs.commercial_overlays_v201809 co, buffer
       WHERE ST_Intersects(co.the_geom,buffer.the_geom)
     `;
 
-    return new carto.SQL(commercialOverlaysQuery, 'geojson');
+    const clippedCommercialOverlays = await new carto.SQL(commercialOverlaysQuery, 'geojson');
+
+    return elevateGeojsonIds(clippedCommercialOverlays);
   }
 
   return null;
 };
 
-export const PROPOSE_SPECIAL_DISTRICTS_QUERY = (developmentSite) => {
+export const PROPOSE_SPECIAL_DISTRICTS_QUERY = async (developmentSite) => {
   if (developmentSite) {
     // Get special purpose districts
     const specialPurposeDistrictsQuery = `
@@ -99,15 +107,52 @@ export const PROPOSE_SPECIAL_DISTRICTS_QUERY = (developmentSite) => {
           ),
         4326)::geometry AS the_geom
       )
-      SELECT ST_Intersection(spd.the_geom, buffer.the_geom) AS the_geom, sdname AS label
+      SELECT ST_Intersection(spd.the_geom, buffer.the_geom) AS the_geom, sdname AS label, cartodb_id AS id
       FROM planninglabs.special_purpose_districts_v201809 spd, buffer
       WHERE ST_Intersects(spd.the_geom,buffer.the_geom)
     `;
 
-    return new carto.SQL(specialPurposeDistrictsQuery, 'geojson');
+    const clippedSpecialPurposeDistricts = await new carto.SQL(specialPurposeDistrictsQuery, 'geojson');
+
+    return elevateGeojsonIds(clippedSpecialPurposeDistricts);
   }
 
   return null;
+};
+
+const getDifference = (current, proposed) => {
+  if (!proposed) {
+    return {
+      type: 'FeatureCollection',
+      features: [],
+    };
+  }
+  // create an empty FeatureCollection to hold the difference sections
+  const differenceFC = {
+    type: 'FeatureCollection',
+    features: [],
+  };
+
+  // flag differences
+  proposed.features.forEach((feature) => {
+    const { id } = feature;
+    const correspondingCurrentFeature = current.features.filter(d => d.id === id)[0];
+
+    // if feature exists in currentZoning, compare the geometries
+    if (correspondingCurrentFeature) {
+      // get the difference
+      const difference = turfDifference(correspondingCurrentFeature, feature);
+      if (difference) differenceFC.features.push(difference);
+
+      // get the inverse difference (reverse the order of the polygons)
+      const inverseDifference = turfDifference(feature, correspondingCurrentFeature);
+      if (inverseDifference) differenceFC.features.push(inverseDifference);
+    } else {
+      differenceFC.features.push(feature);
+    }
+  });
+
+  return differenceFC;
 };
 
 export const REZONING_AREA_QUERY = (currentZoning, proposedZoning) => {
@@ -150,7 +195,7 @@ export const REZONING_AREA_QUERY = (currentZoning, proposedZoning) => {
         return buffered;
       }, null);
 
-    return differenceUnion;
+    return differenceUnion.geometry;
   }
 
   return null;
@@ -231,12 +276,41 @@ export default class extends Model {
   @attr() rezoningArea
 
   async setRezoningArea() {
+
+    // underlyingZoning
+    const currentZoning = await INTERSECTING_ZONING_QUERY(this.get('developmentSite'));
     const proposedZoning = this.get('underlyingZoning');
-    const developmentSite = this.get('developmentSite');
-    const currentZoning = await PROPOSE_SPECIAL_DISTRICTS_QUERY(developmentSite);
-    const result = await REZONING_AREA_QUERY(currentZoning, proposedZoning);
-    console.log(result);
-    this.set('rezoningArea', result);
+    const underlyingZoningDiff = getDifference(currentZoning, proposedZoning);
+
+    // commercial Overlays
+
+
+    // special purpose districts
+    const currentSpecialPurposeDistricts = await PROPOSE_SPECIAL_DISTRICTS_QUERY(this.get('developmentSite'));
+    const proposedSpecialPurposeDistricts = this.get('specialPurposeDistricts');
+    const specialPurposeDistrictsDiff = getDifference(currentSpecialPurposeDistricts, proposedSpecialPurposeDistricts);
+
+    const combinedFC = {
+      type: 'FeatureCollection',
+      features: [...underlyingZoningDiff.features, ...specialPurposeDistrictsDiff.features],
+    };
+
+    // union together all difference features
+    if (combinedFC.features.length > 0) {
+      const differenceUnion = combinedFC.features
+        .reduce((union, { geometry }) => {
+          if (union === null) {
+            union = geometry;
+          } else {
+            union = turfUnion(union, geometry);
+          }
+
+          const buffered = turfBuffer(union, -0.0005);
+          return buffered;
+        }, null);
+
+      this.set('rezoningArea', differenceUnion.geometry);
+    }
   }
 
   // ******** VALIDATION CHECKS / STEPS ********

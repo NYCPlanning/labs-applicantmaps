@@ -78,6 +78,10 @@ export default class UnderlyingZoningComponent extends Component {
 
     model.set('underlyingZoning', featureCollection);
 
+    // because we've just changed the proposed zoning,
+    // we should also calculate the rezoning area
+    model.setRezoningArea();
+
     try {
       const savedProject = await model.save();
 
