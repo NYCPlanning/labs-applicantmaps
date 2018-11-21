@@ -52,6 +52,34 @@
               }}
             {{/map.source}}
           {{/if}}
+
+          {{!-- Ad-hoc source and layer for proposedZoning --}}
+          {{#if model.underlyingZoning}}
+            {{#map.source options=(mapbox-geojson-source model.underlyingZoning) as |source|}}
+              {{source.layer
+                layer=underlyingZoningLayer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=underlyingZoningLabelsLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
+          {{/if}}
+
+          {{!-- Ad-hoc source and layer for proposedSpecialPurposeDistricts --}}
+          {{#if model.specialPurposeDistricts}}
+            {{#map.source options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
+              {{source.layer
+                layer=specialPurposeDistrictsLayer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=specialPurposeDistrictsLabelsLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
+          {{/if}}
       {{/mapbox-gl}}
 
     </div>
