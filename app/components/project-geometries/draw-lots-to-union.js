@@ -64,9 +64,9 @@ export default class DrawLotsToUnion extends Component {
 
         const selectedFeatures = draw.getSelected().features;
         if (selectedFeatures.length === 1) {
-          this.set('selectedZoningFeature', selectedFeatures[0]);
+          this.set('selectedFeature', selectedFeatures[0]);
         } else {
-          this.set('selectedZoningFeature', undefined);
+          this.set('selectedFeature', undefined);
         }
       };
 
@@ -102,7 +102,7 @@ export default class DrawLotsToUnion extends Component {
 
   drawMode = null;
 
-  selectedZoningFeature = undefined;
+  selectedFeature = undefined;
 
   @computed()
   get taxLots() {
@@ -202,8 +202,8 @@ export default class DrawLotsToUnion extends Component {
   }
 
   @action
-  updateSelectedZoningFeature(label) {
-    const id = this.get('selectedZoningFeature.id');
+  updateSelectedFeature(label) {
+    const id = this.get('selectedFeature.id');
     draw.setFeatureProperty(id, 'label', label);
   }
 

@@ -26,15 +26,15 @@
   <button class="trash" {{action 'handleTrashButtonClick'}}>{{fa-icon 'trash-alt' prefix='far' size='2x' fixedWidth=true}}</button>
 </div>
 
-{{#if (and selectedZoningFeature editableLabel)}}
-  <div class="selected-zoning-feature-form">
+{{#if (and selectedFeature editableLabel)}}
+  <div class="selected-feature-form">
     <div class="input-group">
       <span class="input-group-label text-small">{{fa-icon 'tag' transform='grow-6'}}</span>
       {{input
         type="text"
         class="input-group-field"
-        value=selectedZoningFeature.properties.label
-        key-up=(action "updateSelectedZoningFeature")
+        value=selectedFeature.properties.label
+        key-up=(action "updateSelectedFeature")
       }}
     </div>
   </div>
