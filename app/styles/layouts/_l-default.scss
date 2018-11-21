@@ -374,3 +374,10 @@ textarea[readonly] {
 .ember-popover[x-placement^="right"] .ember-tooltip-arrow { border-right-color: $dark-gray; }
 .ember-popover[x-placement^="bottom"] .ember-tooltip-arrow { border-bottom-color: $dark-gray; }
 .ember-popover[x-placement^="left"] .ember-tooltip-arrow { border-left-color: $dark-gray; }
+
+// Foundation's `.dropdown.menu > li > a` selector has more
+// specificity than Labs UI's `.site-header .menu a`
+.site-header .dropdown.menu > li > a {
+  padding-top: 1.6875rem;
+  padding-bottom: 1.6875rem;
+}
