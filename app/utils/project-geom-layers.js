@@ -62,8 +62,8 @@ const projectBufferLayer = {
 };
 
 // Proposed Zoning
-const proposedZoningLayer = {
-  id: 'proposed-zoningdistrict-lines',
+const underlyingZoningLayer = {
+  id: 'underlying-zoningdistrict-lines',
   type: 'line',
   paint: {
     'line-opacity': 0.5,
@@ -71,8 +71,8 @@ const proposedZoningLayer = {
   },
 };
 
-const proposedZoningLabelsLayer = {
-  id: 'proposed-zoningdistrict-labels',
+const underlyingZoningLabelsLayer = {
+  id: 'underlying-zoningdistrict-labels',
   type: 'symbol',
   layout: {
     'symbol-placement': 'line',
@@ -261,8 +261,8 @@ export default {
   rezoningAreaLayer,
   rezoningAreaIcon,
   projectBufferLayer,
-  proposedZoningLayer,
-  proposedZoningLabelsLayer,
+  underlyingZoningLayer,
+  underlyingZoningLabelsLayer,
   proposedSpecialPurposeDistrictsLayer,
   proposedSpecialPurposeDistrictsLabelsLayer,
 };
