@@ -106,7 +106,7 @@ const defaultLayerGroups = {
         {},
         {
           style: {
-            layout: { 'text-field': '{numfloors}' },
+            layout: { 'text-field': '{lot}' },
             paint: { 'text-color': 'rgba(33, 35, 38, 1)' },
           },
         },
