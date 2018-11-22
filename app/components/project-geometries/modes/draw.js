@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import MapboxDraw from 'mapbox-gl-draw';
 import { computed } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
+import isEmpty from '../../../utils/is-empty';
 
 const draw = new MapboxDraw({
   displayControlsDefault: false,
@@ -25,7 +26,10 @@ export default class DrawComponent extends Component {
     draw.changeMode('draw_polygon');
 
     // if geometry exists for this mode, add it to the drawing canvas
-    draw.add(geometricProperty);
+    if (!isEmpty(geometricProperty)) {
+      draw.add(geometricProperty);
+    }
+
     draw.changeMode('simple_select');
 
     const drawStateCallback = () => {
@@ -34,7 +38,7 @@ export default class DrawComponent extends Component {
 
     // setup events to update draw state
     // bind events to the state callback
-    ['create', 'delete', 'combine', 'uncombine', 'update', 'selectionchange']
+    ['create', 'combine', 'uncombine', 'update', 'selectionchange']
       .forEach((event) => {
         mapInstance.on(`draw.${event}`, drawStateCallback);
       });

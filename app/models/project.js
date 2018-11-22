@@ -419,7 +419,6 @@ export default class extends Model {
         features: [],
       });
 
-    console.log(featureCollection, turfBbox(featureCollection));
     if (isEmpty(featureCollection)) return undefined;
 
     return turfBbox(featureCollection);
