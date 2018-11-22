@@ -45,7 +45,7 @@ const elevateGeojsonIds = (FeatureCollection) => {
   return FeatureCollection;
 };
 
-export const INTERSECTING_ZONING_QUERY = async (developmentSite) => {
+export const NEARBY_UNDERLYING_ZONING_QUERY = async (developmentSite) => {
   if (developmentSite) {
     // Get zoning districts
     const zoningQuery = `
@@ -70,7 +70,7 @@ export const INTERSECTING_ZONING_QUERY = async (developmentSite) => {
   return null;
 };
 
-export const PROPOSED_COMMERCIAL_OVERLAYS_QUERY = async (developmentSite) => {
+export const NEARBY_COMMERCIAL_OVERLAYS_QUERY = async (developmentSite) => {
   if (developmentSite) {
     // Get commercial overlays
     const commercialOverlaysQuery = `
@@ -95,7 +95,7 @@ export const PROPOSED_COMMERCIAL_OVERLAYS_QUERY = async (developmentSite) => {
   return null;
 };
 
-export const PROPOSE_SPECIAL_DISTRICTS_QUERY = async (developmentSite) => {
+export const NEARBY_SPECIAL_PURPOSE_DISTRICTS_QUERY = async (developmentSite) => {
   if (developmentSite) {
     // Get special purpose districts
     const specialPurposeDistrictsQuery = `
@@ -250,7 +250,7 @@ export default class extends Model {
 
   async setDefaultUnderlyingZoning() {
     const developmentSite = this.get('developmentSite');
-    const result = await INTERSECTING_ZONING_QUERY(developmentSite);
+    const result = await NEARBY_UNDERLYING_ZONING_QUERY(developmentSite);
 
     this.set('underlyingZoning', result);
   }
@@ -259,7 +259,7 @@ export default class extends Model {
 
   async setDefaultCommercialOverlays() {
     const developmentSite = this.get('developmentSite');
-    const result = await PROPOSED_COMMERCIAL_OVERLAYS_QUERY(developmentSite);
+    const result = await NEARBY_COMMERCIAL_OVERLAYS_QUERY(developmentSite);
 
     this.set('commercialOverlays', result);
   }
@@ -268,7 +268,7 @@ export default class extends Model {
 
   async setDefaultSpecialPurposeDistricts() {
     const developmentSite = this.get('developmentSite');
-    const result = await PROPOSE_SPECIAL_DISTRICTS_QUERY(developmentSite);
+    const result = await NEARBY_SPECIAL_PURPOSE_DISTRICTS_QUERY(developmentSite);
 
     this.set('specialPurposeDistricts', result);
   }
@@ -276,24 +276,41 @@ export default class extends Model {
   @attr() rezoningArea
 
   async setRezoningArea() {
-
-    // underlyingZoning
-    const currentZoning = await INTERSECTING_ZONING_QUERY(this.get('developmentSite'));
-    const proposedZoning = this.get('underlyingZoning');
-    const underlyingZoningDiff = getDifference(currentZoning, proposedZoning);
-
-    // commercial Overlays
-
-
-    // special purpose districts
-    const currentSpecialPurposeDistricts = await PROPOSE_SPECIAL_DISTRICTS_QUERY(this.get('developmentSite'));
-    const proposedSpecialPurposeDistricts = this.get('specialPurposeDistricts');
-    const specialPurposeDistrictsDiff = getDifference(currentSpecialPurposeDistricts, proposedSpecialPurposeDistricts);
+    const {
+      underlyingZoning,
+      commercialOverlays,
+      specialPurposeDistricts,
+    } = this.getProperties('underlyingZoning', 'commercialOverlays', 'specialPurposeDistricts');
 
     const combinedFC = {
       type: 'FeatureCollection',
-      features: [...underlyingZoningDiff.features, ...specialPurposeDistrictsDiff.features],
+      features: [],
     };
+
+    // underlyingZoning
+    if (underlyingZoning) {
+      const currentZoning = await NEARBY_UNDERLYING_ZONING_QUERY(this.get('developmentSite'));
+      const underlyingZoningDiff = getDifference(currentZoning, underlyingZoning);
+
+      combinedFC.features = [...combinedFC.features, ...underlyingZoningDiff.features];
+    }
+
+
+    // commercial Overlays
+    if (commercialOverlays) {
+      const currentCommercialOverlays = await NEARBY_COMMERCIAL_OVERLAYS_QUERY(this.get('developmentSite'));
+      const commercialOverlaysDiff = getDifference(currentCommercialOverlays, commercialOverlays);
+
+      combinedFC.features = [...combinedFC.features, ...commercialOverlaysDiff.features];
+    }
+
+    // special purpose districts
+    if (specialPurposeDistricts) {
+      const currentSpecialPurposeDistricts = await NEARBY_SPECIAL_PURPOSE_DISTRICTS_QUERY(this.get('developmentSite'));
+      const specialPurposeDistrictsDiff = getDifference(currentSpecialPurposeDistricts, specialPurposeDistricts);
+
+      combinedFC.features = [...combinedFC.features, ...specialPurposeDistrictsDiff.features];
+    }
 
     // union together all difference features
     if (combinedFC.features.length > 0) {
