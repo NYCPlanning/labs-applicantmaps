@@ -114,7 +114,7 @@ export const c25Layer = {
   filter: ['all', ['==', 'label', 'C2-5']],
 };
 
-export default class ZoningDistrictComponent extends Component {
+export default class CommercialOverlayComponent extends Component {
   init(...args) {
     super.init(...args);
 
