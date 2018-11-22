@@ -7,6 +7,15 @@ import turfBuffer from '@turf/buffer';
 import turfDifference from '@turf/difference';
 import { camelize } from '@ember/string';
 import carto from 'cartobox-promises-utility/utils/carto';
+import {
+  type,
+  arrayOf,
+  shapeOf,
+  unionOf,
+  optional,
+  oneOf,
+} from '@ember-decorators/argument/type';
+import isEmpty from '../utils/is-empty';
 import config from '../config/environment';
 
 const bufferMeters = 500;
@@ -34,8 +43,25 @@ const fieldsForCurrentStep = [
 
 const EmptyFeatureCollection = {
   type: 'FeatureCollection',
-  features: [],
+  features: [{
+    type: 'Feature',
+    geometry: null,
+    properties: {},
+  }],
 };
+
+const Feature = shapeOf({
+  type: oneOf('Feature'),
+  geometry: unionOf(Object, null),
+  properties: optional(Object),
+});
+
+const FeatureCollection = shapeOf({
+  type: oneOf('FeatureCollection'),
+  features: arrayOf(
+    Feature,
+  ),
+});
 
 export const INTERSECTING_ZONING_QUERY = async (developmentSite) => {
   if (developmentSite) {
@@ -119,10 +145,7 @@ export const REZONING_AREA_QUERY = (currentZoning, proposedZoning) => {
   // create an empty FeatureCollection to hold the difference sections
   const differenceFC = {
     type: 'FeatureCollection',
-    features: [{
-      type: 'Feature',
-      geometry: null,
-    }],
+    features: [],
   };
 
   // flag differences
@@ -164,7 +187,6 @@ export const REZONING_AREA_QUERY = (currentZoning, proposedZoning) => {
   return null;
 };
 
-// const hasAnswered = property => property !== null;
 const trueOrNull = property => property === true || property === null;
 
 export default class extends Model {
@@ -176,7 +198,7 @@ export default class extends Model {
 
   @hasMany('zoning-section-map', { async: false }) zoningSectionMaps;
 
-  @computed(...mapTypes.map(type => `${camelize(type)}.@each.length`))
+  @computed(...mapTypes.map(mapType => `${camelize(mapType)}.@each.length`))
   get applicantMaps() {
     const maps = this.getProperties('areaMaps', 'taxMaps', 'zoningChangeMaps', 'zoningSectionMaps');
     return Object.values(maps).reduce((acc, curr) => acc.concat(...curr.toArray()), []);
@@ -206,13 +228,16 @@ export default class extends Model {
 
   // ******** GEOMETRIES ********
   // FeatureCollection of polygons or multipolygons
+  @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection }) developmentSite
 
   // FeatureCollection of polygons or multipolygons
+  @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection }) projectArea
 
   // FeatureCollection
   // includes label information that must be stored as properties
+  @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection }) underlyingZoning
 
   async setDefaultUnderlyingZoning() {
@@ -224,6 +249,7 @@ export default class extends Model {
 
   // FeatureCollection
   // includes label information that must be stored as properties
+  @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection }) commercialOverlays
 
   async setDefaultCommercialOverlays() {
@@ -235,6 +261,7 @@ export default class extends Model {
 
   // FeatureCollection
   // includes label information that must be stored as properties
+  @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection }) specialPurposeDistricts
 
   async setDefaultSpecialPurposeDistricts() {
@@ -245,6 +272,7 @@ export default class extends Model {
   }
 
   // FeatureCollection of polygons or multipolygons
+  @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection }) rezoningArea
 
   async setRezoningArea() {
@@ -275,22 +303,20 @@ export default class extends Model {
       needSpecialDistrict,
     } = this.getProperties(...fieldsForCurrentStep);
 
-    // const currentQuestion = questionFields.find(q => hasAnswered(q));
-
-    if (!projectName) {
+    if (isEmpty(projectName)) {
       return { label: 'project-creation', route: 'projects.new' };
     }
 
-    if (!developmentSite) {
+    if (isEmpty(developmentSite)) {
       return { label: 'development-site', route: 'projects.edit.steps.development-site' };
     }
 
     // questions
-    if (trueOrNull(needProjectArea) && !projectArea) {
+    if (trueOrNull(needProjectArea) && isEmpty(projectArea)) {
       return { label: 'project-area', route: 'projects.edit.steps.project-area' };
     }
 
-    if (trueOrNull(needUnderlyingZoning) && needRezoning && !underlyingZoning) {
+    if (trueOrNull(needUnderlyingZoning) && needRezoning && isEmpty(underlyingZoning)) {
       return {
         label: 'rezoning-underlying',
         route: 'projects.edit.geometry-edit',
@@ -299,7 +325,7 @@ export default class extends Model {
       };
     }
 
-    if (trueOrNull(needCommercialOverlay) && needRezoning && !commercialOverlays) {
+    if (trueOrNull(needCommercialOverlay) && needRezoning && isEmpty(commercialOverlays)) {
       return {
         label: 'rezoning-commercial',
         route: 'projects.edit.geometry-edit',
@@ -308,7 +334,7 @@ export default class extends Model {
       };
     }
 
-    if (trueOrNull(needSpecialDistrict) && needRezoning && !specialPurposeDistricts) {
+    if (trueOrNull(needSpecialDistrict) && needRezoning && isEmpty(specialPurposeDistricts)) {
       return {
         label: 'rezoning-special',
         route: 'projects.edit.geometry-edit',
@@ -318,9 +344,9 @@ export default class extends Model {
     }
 
     if (trueOrNull(needRezoning)
-      || ((needUnderlyingZoning && !underlyingZoning)
-        || (needCommercialOverlay && !commercialOverlays)
-        || (needSpecialDistrict && !specialPurposeDistricts))) {
+      || ((needUnderlyingZoning && isEmpty(underlyingZoning))
+        || (needCommercialOverlay && isEmpty(commercialOverlays))
+        || (needSpecialDistrict && isEmpty(specialPurposeDistricts)))) {
       return { label: 'rezoning', route: 'projects.edit.steps.rezoning' };
     }
 
@@ -392,6 +418,9 @@ export default class extends Model {
         type: 'FeatureCollection',
         features: [],
       });
+
+    console.log(featureCollection, turfBbox(featureCollection));
+    if (isEmpty(featureCollection)) return undefined;
 
     return turfBbox(featureCollection);
   }
