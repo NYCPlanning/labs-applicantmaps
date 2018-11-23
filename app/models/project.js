@@ -56,7 +56,7 @@ const Feature = shapeOf({
   properties: optional(Object),
 });
 
-const FeatureCollection = shapeOf({
+export const FeatureCollection = shapeOf({
   type: oneOf('FeatureCollection'),
   features: arrayOf(
     Feature,
