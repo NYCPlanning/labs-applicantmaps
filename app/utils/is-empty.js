@@ -8,10 +8,10 @@ export default function isEmpty(property) {
       && Object.keys(property).includes('features');
 
     if (isFeatureCollection) {
-      // check that every geometry is truthy
-      return !property.features
+      // check that every geometry is falsey
+      return property.features
         .map(({ geometry }) => geometry)
-        .any(Boolean);
+        .every(geom => !!geom === false);
     }
   }
 
