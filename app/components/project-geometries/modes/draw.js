@@ -2,6 +2,8 @@ import Component from '@ember/component';
 import MapboxDraw from 'mapbox-gl-draw';
 import { computed } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
+import { type } from '@ember-decorators/argument/type';
+import { FeatureCollection } from '../../../models/project';
 import isEmpty from '../../../utils/is-empty';
 
 const draw = new MapboxDraw({
@@ -47,6 +49,7 @@ export default class DrawComponent extends Component {
   @argument
   map;
 
+  @type(FeatureCollection)
   @argument
   geometricProperty;
 

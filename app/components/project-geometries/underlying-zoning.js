@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
+import isEmpty from '../../utils/is-empty';
 
 // Underlying Zoning
 export const underlyingZoningLayer = {
@@ -47,7 +48,7 @@ export default class UnderlyingZoningComponent extends Component {
   init(...args) {
     super.init(...args);
 
-    if (!this.get('model.underlyingZoning')) {
+    if (isEmpty(this.get('model.underlyingZoning'))) {
       this.get('model').setDefaultUnderlyingZoning();
     }
   }
@@ -72,11 +73,8 @@ export default class UnderlyingZoningComponent extends Component {
   underlyingZoningLabelsLayer = underlyingZoningLabelsLayer;
 
   @action
-  async save(finalGeometry) {
+  async save() {
     const model = this.get('model');
-    const featureCollection = await finalGeometry;
-
-    model.set('underlyingZoning', featureCollection);
 
     try {
       const savedProject = await model.save();
