@@ -12,6 +12,6 @@ module('Integration | Helper | is-empty', function(hooks) {
 
     await render(hbs`{{is-empty inputValue}}`);
 
-    assert.equal(this.element.textContent.trim(), '1234');
+    assert.equal(this.element.textContent.trim(), 'false');
   });
 });

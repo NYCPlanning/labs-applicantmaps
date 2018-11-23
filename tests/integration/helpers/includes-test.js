@@ -1,19 +1,18 @@
-// Don't know why this isn't working
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
+import hbs from 'htmlbars-inline-precompile';
 
-// import { module, test } from 'qunit';
-// import { setupRenderingTest } from 'ember-qunit';
-// import { render } from '@ember/test-helpers';
-// import hbs from 'htmlbars-inline-precompile';
+module('Integration | Helper | includes', function(hooks) {
+  setupRenderingTest(hooks);
 
-// module('Integration | Helper | includes', function(hooks) {
-//   setupRenderingTest(hooks);
+  // Replace this with your real tests.
+  test('it renders', async function(assert) {
+    this.set('haystack', ['grapes', 'peaches', 'bananas']);
+    this.set('needle', 'peaches');
 
-//   // Replace this with your real tests.
-//   test('it renders', async function(assert) {
-//     this.set('inputValue', '1234');
+    await render(hbs`{{includes haystack needle}}`);
 
-//     await render(hbs`{{includes inputValue}}`);
-
-//     assert.equal(this.element.textContent.trim(), '1234');
-//   });
-// });
+    assert.equal(this.element.textContent.trim(), 'true');
+  });
+});

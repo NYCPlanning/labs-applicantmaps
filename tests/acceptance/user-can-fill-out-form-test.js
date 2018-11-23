@@ -1,9 +1,6 @@
-// Don't know why this is failing
-
 import { module, skip } from 'qunit';
 import {
   visit,
-  // currentURL,
   fillIn,
   click,
 } from '@ember/test-helpers';
@@ -23,8 +20,6 @@ module('Acceptance | user can fill out form', (hooks) => {
     await fillIn('.zap-project-id-field', 'ASDF');
     await click('.project-save-button');
 
-    // Need to update the test to assert a URL that's based on currentStep
-    // assert.equal(currentURL(), '/projects/11');
     assert.equal('placeholder', 'placeholder');
   });
 });

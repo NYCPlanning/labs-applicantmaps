@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { EmptyFeatureCollection } from 'labs-applicant-maps/models/project';
 
 module('Integration | Component | project-geometries/modes/draw', function(hooks) {
   setupRenderingTest(hooks);
@@ -10,17 +11,16 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{project-geometries/modes/draw}}`);
+    this.set('geometricProperty', EmptyFeatureCollection);
 
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
     await render(hbs`
-      {{#project-geometries/modes/draw}}
-        template block text
-      {{/project-geometries/modes/draw}}
+      {{#mapbox-gl as |map|}}
+        {{project-geometries/modes/draw
+          map=map
+          geometricProperty=geometricProperty}}
+      {{/mapbox-gl}}
     `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.equal(this.element.textContent.trim(), '');
   });
 });
