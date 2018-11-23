@@ -1,29 +1,6 @@
-{{!-- add the development-specific tax-lots layergroup --}}
-{{#map.labs-layers
-  layerGroups=(array taxLots)
-  onLayerClick=(if (eq mode 'lots') (action 'handleLayerClick') (action 'noop'))
-  as |layers|}}
-  {{#layers.tooltip as |tooltip|}}
-    {{tooltip-renderer
-      feature=tooltip.feature
-      template=tooltip.layer.tooltipTemplate}}
-  {{/layers.tooltip}}
-{{/map.labs-layers}}
-
 {{component (concat 'project-geometries/modes/' mode)
   map=map
   geometricProperty=geometricProperty}}
-
-{{!-- if in lot selection mode, display the selected lots --}}
-{{#if (eq mode 'lots')}}
-  {{!-- Ad-hoc source and layer for showing selected lots in lot selection mode --}}
-  {{#map.source options=selectedLotsSource as |source|}}
-    {{source.layer
-      layer=selectedLotsLayer
-      before='boundary_country'
-    }}
-  {{/map.source}}
-{{/if}}
 
 {{!-- render markup into parent container --}}
 {{#ember-wormhole to='geometry-type-save-box'}}

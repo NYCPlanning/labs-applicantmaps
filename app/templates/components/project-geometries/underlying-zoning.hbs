@@ -1,4 +1,4 @@
-{{#if model.underlyingZoning}}
+{{#if (not (is-empty model.underlyingZoning))}}
   {{#project-geometries/draw-lots-to-union
     mode=mode
     map=map

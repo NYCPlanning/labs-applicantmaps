@@ -1,0 +1,19 @@
+{{!-- add the development-specific tax-lots layergroup --}}
+{{#map.labs-layers
+  layerGroups=(array taxLots)
+  onLayerClick=(action 'handleLayerClick')
+  as |layers|}}
+  {{#layers.tooltip as |tooltip|}}
+    {{tooltip-renderer
+      feature=tooltip.feature
+      template=tooltip.layer.tooltipTemplate}}
+  {{/layers.tooltip}}
+{{/map.labs-layers}}
+
+{{!-- Ad-hoc source and layer for showing selected lots in lot selection mode --}}
+{{#map.source options=selectedLotsSource as |source|}}
+  {{source.layer
+    layer=selectedLotsLayer
+    before='boundary_country'
+  }}
+{{/map.source}}
