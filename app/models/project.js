@@ -62,10 +62,6 @@ export const FeatureCollection = shapeOf({
   ),
 });
 
-
-  };
-};
-
 const trueOrNull = property => property === true || property === null;
 
 export default class extends Model {
