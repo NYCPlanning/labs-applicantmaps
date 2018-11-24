@@ -13,14 +13,5 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
     await render(hbs`{{project-geometries/modes/lots}}`);
 
     assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
-    await render(hbs`
-      {{#project-geometries/modes/lots}}
-        template block text
-      {{/project-geometries/modes/lots}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

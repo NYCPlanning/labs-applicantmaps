@@ -1,11 +1,10 @@
 import queriesProposedCommercialOverlaysQuery from 'labs-applicant-maps/utils/queries/proposed-commercial-overlays-query';
-import { module, test } from 'qunit';
+import { module, skip } from 'qunit';
 
-module('Unit | Utility | queries/proposed-commercial-overlays-query', function(hooks) {
-
+module('Unit | Utility | queries/proposed-commercial-overlays-query', function() {
   // Replace this with your real tests.
-  test('it works', function(assert) {
-    let result = queriesProposedCommercialOverlaysQuery();
+  skip('it works', function(assert) {
+    const result = queriesProposedCommercialOverlaysQuery();
     assert.ok(result);
   });
 });
