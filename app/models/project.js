@@ -16,6 +16,7 @@ import proposedCommercialOverlaysQuery from 'labs-applicant-maps/utils/queries/p
 import proposedSpecialDistrictsQuery from 'labs-applicant-maps/utils/queries/proposed-special-districts-query';
 import rezoningAreaQuery from 'labs-applicant-maps/utils/queries/rezoning-area-query';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
+import wizard from 'labs-applicant-maps/utils/wizard';
 import config from 'labs-applicant-maps/config/environment';
 
 const { mapTypes } = config;
@@ -45,7 +46,9 @@ const EmptyFeatureCollection = {
   features: [{
     type: 'Feature',
     geometry: null,
-    properties: {},
+    properties: {
+      isEmptyDefault: true,
+    },
   }],
 };
 
@@ -62,7 +65,103 @@ export const FeatureCollection = shapeOf({
   ),
 });
 
-const trueOrNull = property => property === true || property === null;
+
+const hasAnswered = property => property === true || property === false;
+const hasFilledOut = property => !isEmpty(property);
+const requiredIf = function(question, conditionalTest = hasAnswered) {
+  return function(property) {
+    return this.get(question) ? conditionalTest(property) : true;
+  };
+};
+
+export const projectProcedure = [
+  {
+    step: 'project-creation',
+    routing: {
+      route: 'projects.new',
+    },
+    conditions: {
+      projectName: hasFilledOut,
+    },
+  },
+  {
+    step: 'development-site',
+    routing: {
+      route: 'projects.edit.steps.development-site',
+    },
+    conditions: {
+      developmentSite: hasFilledOut,
+    },
+  },
+  {
+    step: 'project-area',
+    routing: {
+      route: 'projects.edit.steps.project-area',
+    },
+    conditions: {
+      needProjectArea: hasAnswered,
+      projectArea: requiredIf('needProjectArea', hasFilledOut),
+    },
+  },
+  {
+    step: 'rezoning',
+    routing: {
+      route: 'projects.edit.steps.rezoning',
+    },
+    conditions: {
+      needRezoning: hasAnswered,
+      needUnderlyingZoning: requiredIf('needRezoning', hasFilledOut),
+      needCommercialOverlay: requiredIf('needRezoning', hasAnswered),
+      needSpecialDistrict: requiredIf('needRezoning', hasAnswered),
+    },
+  },
+  {
+    step: 'rezoning-underlying',
+    routing: {
+      route: 'projects.edit.geometry-edit',
+      mode: 'draw',
+      type: 'underlying-zoning',
+    },
+    conditions: {
+      needRezoning: hasAnswered,
+      needUnderlyingZoning: requiredIf('needRezoning', hasAnswered),
+      underlyingZoning: requiredIf('needUnderlyingZoning', hasFilledOut),
+    },
+  },
+  {
+    step: 'rezoning-commercial',
+    routing: {
+      route: 'projects.edit.geometry-edit',
+      mode: 'draw',
+      type: 'commercial-overlays',
+    },
+    conditions: {
+      needRezoning: hasAnswered,
+      needCommercialOverlay: requiredIf('needRezoning', hasAnswered),
+      commercialOverlays: requiredIf('needCommercialOverlay', hasFilledOut),
+    },
+  },
+  {
+    step: 'rezoning-special',
+    routing: {
+      route: 'projects.edit.geometry-edit',
+      mode: 'draw',
+      type: 'special-purpose-districts',
+    },
+    conditions: {
+      needRezoning: hasAnswered,
+      needSpecialDistrict: requiredIf('needRezoning', hasAnswered),
+      specialPurposeDistricts: requiredIf('needSpecialDistrict', hasFilledOut),
+    },
+  },
+  {
+    step: 'complete',
+    routing: {
+      label: 'complete',
+      route: 'projects.show',
+    },
+  },
+];
 
 export default class extends Model {
   @hasMany('area-map', { async: false }) areaMaps;
@@ -163,69 +262,8 @@ export default class extends Model {
 
   @computed(...fieldsForCurrentStep)
   get currentStep() {
-    const {
-      projectName,
-      developmentSite,
-      projectArea,
-      // rezoningArea,
-      underlyingZoning,
-      commercialOverlays,
-      specialPurposeDistricts,
-      needProjectArea,
-      needRezoning,
-      needUnderlyingZoning,
-      needCommercialOverlay,
-      needSpecialDistrict,
-    } = this.getProperties(...fieldsForCurrentStep);
-
-    if (isEmpty(projectName)) {
-      return { label: 'project-creation', route: 'projects.new' };
-    }
-
-    if (isEmpty(developmentSite)) {
-      return { label: 'development-site', route: 'projects.edit.steps.development-site' };
-    }
-
-    // questions
-    if (trueOrNull(needProjectArea) && isEmpty(projectArea)) {
-      return { label: 'project-area', route: 'projects.edit.steps.project-area' };
-    }
-
-    if (trueOrNull(needUnderlyingZoning) && needRezoning && isEmpty(underlyingZoning)) {
-      return {
-        label: 'rezoning-underlying',
-        route: 'projects.edit.geometry-edit',
-        mode: 'draw',
-        type: 'underlying-zoning',
-      };
-    }
-
-    if (trueOrNull(needCommercialOverlay) && needRezoning && isEmpty(commercialOverlays)) {
-      return {
-        label: 'rezoning-commercial',
-        route: 'projects.edit.geometry-edit',
-        mode: 'draw',
-        type: 'commercial-overlays',
-      };
-    }
-
-    if (trueOrNull(needSpecialDistrict) && needRezoning && isEmpty(specialPurposeDistricts)) {
-      return {
-        label: 'rezoning-special',
-        route: 'projects.edit.geometry-edit',
-        mode: 'draw',
-        type: 'special-purpose-districts',
-      };
-    }
-
-    if (trueOrNull(needRezoning)
-      || ((needUnderlyingZoning && isEmpty(underlyingZoning))
-        || (needCommercialOverlay && isEmpty(commercialOverlays))
-        || (needSpecialDistrict && isEmpty(specialPurposeDistricts)))) {
-      return { label: 'rezoning', route: 'projects.edit.steps.rezoning' };
-    }
-
-    return { label: 'complete', route: 'projects.show' };
+    const { routing } = wizard(projectProcedure, this);
+    return routing;
   }
 
   @computed('currentStep')
