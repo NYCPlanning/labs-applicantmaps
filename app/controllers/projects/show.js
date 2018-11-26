@@ -29,7 +29,9 @@ export default class ShowProjectController extends Controller {
 
   underlyingZoningLayer = underlyingZoningLayer;
 
-  underlyingZoningLayer = underlyingZoningLabelsLayer
+  underlyingZoningLabelsLayer = underlyingZoningLabelsLayer
+
+  commercialOverlaysLayer = underlyingZoningLayer;
 
   specialPurposeDistrictsLayer = specialPurposeDistrictsLayer
 

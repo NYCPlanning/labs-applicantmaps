@@ -263,7 +263,7 @@ export default class extends Model {
     };
 
     // underlyingZoning
-    if (underlyingZoning) {
+    if (!isEmpty(underlyingZoning)) {
       const currentZoning = await intersectingZoningQuery(this.get('developmentSite'));
       const underlyingZoningDiff = getDifference(currentZoning, underlyingZoning);
 
@@ -272,7 +272,8 @@ export default class extends Model {
 
 
     // commercial Overlays
-    if (commercialOverlays) {
+    if (!isEmpty(commercialOverlays)) {
+      console.log('commercial overlays')
       const currentCommercialOverlays = await proposedCommercialOverlaysQuery(this.get('developmentSite'));
       const commercialOverlaysDiff = getDifference(currentCommercialOverlays, commercialOverlays);
 
@@ -280,7 +281,7 @@ export default class extends Model {
     }
 
     // special purpose districts
-    if (specialPurposeDistricts) {
+    if (!isEmpty(specialPurposeDistricts)) {
       const currentSpecialPurposeDistricts = await proposedSpecialDistrictsQuery(this.get('developmentSite'));
       const specialPurposeDistrictsDiff = getDifference(currentSpecialPurposeDistricts, specialPurposeDistricts);
 
