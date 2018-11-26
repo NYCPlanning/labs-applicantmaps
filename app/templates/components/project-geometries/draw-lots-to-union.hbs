@@ -8,10 +8,12 @@
     {{yield (hash
       finalGeometry=finalGeometry 
       button=(component 'project-geometries/draw-lots-to-union/button'
+        data-test-project-geometry-save=true
         enabled=isReady
         finalGeometry=finalGeometry))}}
   {{else}}
     {{project-geometries/draw-lots-to-union/button
+      data-test-project-geometry-save=true
       enabled=isReady
       finalGeometry=finalGeometry
     }}
