@@ -1,9 +1,9 @@
 import carto from 'cartobox-promises-utility/utils/carto';
 import unifyPolygons from 'labs-applicant-maps/utils/unify-polygons';
 import elevateGeojsonIds from 'labs-applicant-maps/utils/elevate-geojson-ids';
+import config from '../../config/environment';
 
-const bufferMeters = 500;
-
+const { bufferMeters } = config;
 export default async (developmentSite) => {
   const unionedGeometryFragments = JSON
     .stringify(
