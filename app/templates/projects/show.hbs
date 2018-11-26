@@ -24,7 +24,7 @@
           as | map |
         }}
           {{!-- Ad-hoc source and layer for developmentSite --}}
-          {{#if model.developmentSite}}
+          {{#if (not (is-empty model.developmentSite))}}
             {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
               {{source.layer
                 layer=developmentSiteLayer
@@ -34,7 +34,7 @@
           {{/if}}
 
           {{!-- Ad-hoc source and layer for projectArea --}}
-          {{#if model.projectArea}}
+          {{#if (not (is-empty model.projectArea))}}
             {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
               {{source.layer
                 layer=projectAreaLayer
@@ -44,10 +44,92 @@
           {{/if}}
 
           {{!-- Ad-hoc source and layer for rezoningArea --}}
-          {{#if model.rezoningArea}}
+          {{#if (not (is-empty model.rezoningArea))}}
             {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
               {{source.layer
                 layer=rezoningAreaLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
+          {{/if}}
+
+          {{!-- Ad-hoc source and layer for proposedZoning --}}
+          {{#if (not (is-empty model.underlyingZoning))}}
+            {{#map.source options=(mapbox-geojson-source model.underlyingZoning) as |source|}}
+              {{source.layer
+                layer=underlyingZoningLayer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=underlyingZoningLabelsLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
+          {{/if}}
+
+          {{!-- Ad-hoc source and layer for proposedCommercialOverlays --}}
+          {{#if (not (is-empty model.commercialOverlays))}}
+            {{#map.source options=(mapbox-geojson-source model.commercialOverlays) as |source|}}
+              {{source.layer
+                layer=commercialOverlaysLayer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=coLayer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c11Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c12Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c13Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c14Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c15Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c21Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c22Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c23Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c24Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c25Layer
+                before='boundary_country'
+              }}
+            {{/map.source}}
+          {{/if}}
+
+          {{!-- Ad-hoc source and layer for proposedSpecialPurposeDistricts --}}
+          {{#if (not (is-empty model.specialPurposeDistricts))}}
+            {{#map.source options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
+              {{source.layer
+                layer=specialPurposeDistrictsLayer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=specialPurposeDistrictsLabelsLayer
                 before='boundary_country'
               }}
             {{/map.source}}
@@ -64,7 +146,7 @@
         </div>
         <div class="cell shrink">
           <button class="button tiny gray no-margin">
-            {{#if model.developmentSite}}
+            {{#if (not (is-empty model.developmentSite))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
@@ -102,7 +184,7 @@
         </div>
         <div class="cell shrink">
           <button class="button tiny gray no-margin">
-            {{#if model.projectArea}}
+            {{#if (not (is-empty model.projectArea))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
@@ -144,7 +226,7 @@
             data-test-underlying-zoning
             tagName='button'
             classNames='button tiny gray no-margin'}}
-            {{#if model.underlyingZoning}}
+            {{#if (not (is-empty model.underlyingZoning))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
@@ -163,7 +245,7 @@
             data-test-commercial-overlays
             tagName='button'
             classNames='button tiny gray no-margin'}}
-            {{#if model.commercialOverlays}}
+            {{#if (not (is-empty model.commercialOverlays))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
@@ -182,7 +264,7 @@
             data-test-special-purpose-districts
             tagName='button'
             classNames='button tiny gray no-margin'}}
-            {{#if model.specialPurposeDistricts}}
+            {{#if (not (is-empty model.specialPurposeDistricts))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
@@ -201,7 +283,7 @@
             data-test-rezoning-area
             tagName='button'
             classNames='button tiny gray no-margin'}}
-            {{#if model.rezoningArea}}
+            {{#if (not (is-empty model.rezoningArea))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}

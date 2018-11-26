@@ -17,6 +17,7 @@ import proposedSpecialDistrictsQuery from 'labs-applicant-maps/utils/queries/pro
 import rezoningAreaQuery from 'labs-applicant-maps/utils/queries/rezoning-area-query';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import wizard from 'labs-applicant-maps/utils/wizard';
+import getDifference from 'labs-applicant-maps/utils/compute-difference';
 import config from 'labs-applicant-maps/config/environment';
 
 const { mapTypes } = config;
@@ -250,12 +251,54 @@ export default class extends Model {
   @attr({ defaultValue: () => EmptyFeatureCollection }) rezoningArea
 
   async setRezoningArea() {
-    const proposedZoning = this.get('underlyingZoning');
-    const developmentSite = this.get('developmentSite');
-    const currentZoning = await proposedSpecialDistrictsQuery(developmentSite);
-    const result = await rezoningAreaQuery(currentZoning, proposedZoning);
+    const {
+      underlyingZoning,
+      commercialOverlays,
+      specialPurposeDistricts,
+    } = this.getProperties('underlyingZoning', 'commercialOverlays', 'specialPurposeDistricts');
 
-    this.set('rezoningArea', result);
+    const combinedFC = {
+      type: 'FeatureCollection',
+      features: [],
+    };
+
+    // underlyingZoning
+    if (!isEmpty(underlyingZoning)) {
+      const currentZoning = await intersectingZoningQuery(this.get('developmentSite'));
+      const underlyingZoningDiff = getDifference(currentZoning, underlyingZoning);
+
+      combinedFC.features = [...combinedFC.features, ...underlyingZoningDiff.features];
+    }
+
+
+    // commercial Overlays
+    if (!isEmpty(commercialOverlays)) {
+      const currentCommercialOverlays = await proposedCommercialOverlaysQuery(this.get('developmentSite'));
+      const commercialOverlaysDiff = getDifference(currentCommercialOverlays, commercialOverlays);
+
+      combinedFC.features = [...combinedFC.features, ...commercialOverlaysDiff.features];
+    }
+
+    // special purpose districts
+    if (!isEmpty(specialPurposeDistricts)) {
+      const currentSpecialPurposeDistricts = await proposedSpecialDistrictsQuery(this.get('developmentSite'));
+      const specialPurposeDistrictsDiff = getDifference(currentSpecialPurposeDistricts, specialPurposeDistricts);
+
+      combinedFC.features = [...combinedFC.features, ...specialPurposeDistrictsDiff.features];
+    }
+
+    // union together all difference features
+    if (combinedFC.features.length > 0) {
+      const rezoningArea = rezoningAreaQuery(combinedFC);
+
+      this.set('rezoningArea', rezoningArea);
+      // const proposedZoning = this.get('underlyingZoning');
+      // const developmentSite = this.get('developmentSite');
+      // const currentZoning = await proposedSpecialDistrictsQuery(developmentSite);
+      // const result = await rezoningAreaQuery(currentZoning, proposedZoning);
+
+      // this.set('rezoningArea', result);
+    }
   }
 
   // ******** COMPUTING THE CURRENT STEP FOR ROUTING ********
