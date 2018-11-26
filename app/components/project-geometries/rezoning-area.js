@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
+import isEmpty from '../../utils/is-empty';
 
 export const rezoningAreaLayer = {
   type: 'line',
@@ -28,6 +29,14 @@ export const rezoningAreaIcon = {
 };
 
 export default class RezoningArea extends Component {
+  init(...args) {
+    super.init(...args);
+
+    if (isEmpty(this.get('model.rezoningArea'))) {
+      this.get('model').setRezoningArea();
+    }
+  }
+
   rezoningAreaLayer = rezoningAreaLayer;
 
   @service

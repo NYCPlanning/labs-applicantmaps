@@ -1,4 +1,4 @@
-{{#if model.commercialOverlays}}
+{{#if (not (is-empty model.commercialOverlays))}}
   {{#project-geometries/draw-lots-to-union
     mode=mode
     map=map

@@ -1,4 +1,4 @@
-{{#if model.specialPurposeDistricts}}
+{{#if (not (is-empty model.specialPurposeDistricts))}}
   {{#project-geometries/draw-lots-to-union
     mode=mode
     map=map
@@ -25,7 +25,7 @@
   {{/ember-wormhole}}
 
   {{#map.source
-    options=(mapbox-geojson-source model.SpecialDistricts) as |source|}}
+    options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
     {{source.layer
       layer=proposedSpecialPurposeDistrictsLayer
       before='boundary_country'
