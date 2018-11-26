@@ -2,33 +2,43 @@ import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
+import isEmpty from '../../utils/is-empty';
 
-// Project Area
-export const projectAreaLayer = {
-  id: 'project-area-line',
+export const rezoningAreaLayer = {
   type: 'line',
-  layout: {
-    visibility: 'visible',
-  },
   paint: {
-    'line-color': 'rgba(0, 122, 122, 1)',
-    'line-width': 2.5,
-    'line-dasharray': [3, 1],
+    'line-color': 'rgba(0, 0, 0, 1)',
+    'line-width': 9,
+    'line-dasharray': [0, 2],
+  },
+  layout: {
+    'line-cap': 'round',
   },
 };
 
-export const projectAreaIcon = {
+export const rezoningAreaIcon = {
   type: 'line',
   layers: [
     {
-      stroke: 'rgba(0, 122, 122, 1)',
-      'stroke-width': 1.25,
-      'stroke-dasharray': '3.25,1.75',
+      stroke: 'rgba(0, 0, 0, 1)',
+      'stroke-width': 2,
+      'stroke-dasharray': '0.2,4',
+      'stroke-linecap': 'round',
     },
   ],
 };
 
-export default class ProjectAreaComponent extends Component {
+export default class RezoningArea extends Component {
+  init(...args) {
+    super.init(...args);
+
+    if (isEmpty(this.get('model.rezoningArea'))) {
+      this.get('model').setRezoningArea();
+    }
+  }
+
+  rezoningAreaLayer = rezoningAreaLayer;
+
   @service
   notificationMessages;
 
@@ -44,12 +54,13 @@ export default class ProjectAreaComponent extends Component {
   @argument
   mode;
 
-  projectAreaLayer = projectAreaLayer;
-
   @action
-  async save() {
+  async save(finalGeometry) {
     const model = this.get('model');
     const notifications = this.get('notificationMessages');
+    const { features: [{ geometry }] } = await finalGeometry;
+
+    model.set('rezoningArea', geometry);
 
     try {
       const savedProject = await model.save();

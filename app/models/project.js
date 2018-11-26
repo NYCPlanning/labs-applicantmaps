@@ -2,8 +2,20 @@ import DS from 'ember-data';
 import { attr, hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
 import turfBbox from '@turf/bbox';
+import turfUnion from '@turf/union';
+import turfBuffer from '@turf/buffer';
+import turfDifference from '@turf/difference';
 import { camelize } from '@ember/string';
 import carto from 'cartobox-promises-utility/utils/carto';
+import {
+  type,
+  arrayOf,
+  shapeOf,
+  unionOf,
+  optional,
+  oneOf,
+} from '@ember-decorators/argument/type';
+import isEmpty from '../utils/is-empty';
 import config from '../config/environment';
 
 const bufferMeters = 500;
@@ -29,7 +41,29 @@ const fieldsForCurrentStep = [
   ...questionFields,
 ];
 
-export const INTERSECTING_ZONING_QUERY = (developmentSite) => {
+const EmptyFeatureCollection = {
+  type: 'FeatureCollection',
+  features: [{
+    type: 'Feature',
+    geometry: null,
+    properties: {},
+  }],
+};
+
+const Feature = shapeOf({
+  type: oneOf('Feature'),
+  geometry: unionOf(Object, null),
+  properties: optional(Object),
+});
+
+export const FeatureCollection = shapeOf({
+  type: oneOf('FeatureCollection'),
+  features: arrayOf(
+    Feature,
+  ),
+});
+
+export const INTERSECTING_ZONING_QUERY = async (developmentSite) => {
   if (developmentSite) {
     // Get zoning districts
     const zoningQuery = `
@@ -41,12 +75,21 @@ export const INTERSECTING_ZONING_QUERY = (developmentSite) => {
           ),
         4326)::geometry AS the_geom
       )
-      SELECT ST_Intersection(zoning.the_geom, buffer.the_geom) AS the_geom, zonedist AS label
+      SELECT ST_Intersection(zoning.the_geom, buffer.the_geom) AS the_geom, zonedist AS label, cartodb_id AS id
       FROM planninglabs.zoning_districts_v201809 zoning, buffer
       WHERE ST_Intersects(zoning.the_geom,buffer.the_geom)
     `;
 
-    return new carto.SQL(zoningQuery, 'geojson');
+    const clippedZoningDistricts = await new carto.SQL(zoningQuery, 'geojson');
+
+    // add an id to the top level of each feature object, for use by mapbox-gl-draw
+    const { features } = clippedZoningDistricts;
+    clippedZoningDistricts.features = features.map((feature) => {
+      feature.id = feature.properties.id;
+      return feature;
+    });
+
+    return clippedZoningDistricts;
   }
 
   return null;
@@ -98,7 +141,52 @@ export const PROPOSE_SPECIAL_DISTRICTS_QUERY = (developmentSite) => {
   return null;
 };
 
-// const hasAnswered = property => property !== null;
+export const REZONING_AREA_QUERY = (currentZoning, proposedZoning) => {
+  // create an empty FeatureCollection to hold the difference sections
+  const differenceFC = {
+    type: 'FeatureCollection',
+    features: [],
+  };
+
+  // flag differences
+  proposedZoning.features.forEach((feature) => {
+    const { id } = feature;
+    const correspondingCurrentZoningFeature = currentZoning.features.filter(d => d.id === id)[0];
+
+    // if feature exists in currentZoning, compare the geometries
+    if (correspondingCurrentZoningFeature) {
+      // get the difference
+      const difference = turfDifference(correspondingCurrentZoningFeature, feature);
+      if (difference) differenceFC.features.push(difference);
+
+      // get the inverse difference (reverse the order of the polygons)
+      const inverseDifference = turfDifference(feature, correspondingCurrentZoningFeature);
+      if (inverseDifference) differenceFC.features.push(inverseDifference);
+    } else {
+      differenceFC.features.push(feature);
+    }
+  });
+
+  // union together all difference features
+  if (differenceFC.features.length > 0) {
+    const differenceUnion = differenceFC.features
+      .reduce((union, { geometry }) => {
+        if (union === null) {
+          union = geometry;
+        } else {
+          union = turfUnion(union, geometry);
+        }
+
+        const buffered = turfBuffer(union, -0.0005);
+        return buffered;
+      }, null);
+
+    return differenceUnion;
+  }
+
+  return null;
+};
+
 const trueOrNull = property => property === true || property === null;
 
 export default class extends Model {
@@ -110,7 +198,7 @@ export default class extends Model {
 
   @hasMany('zoning-section-map', { async: false }) zoningSectionMaps;
 
-  @computed(...mapTypes.map(type => `${camelize(type)}.@each.length`))
+  @computed(...mapTypes.map(mapType => `${camelize(mapType)}.@each.length`))
   get applicantMaps() {
     const maps = this.getProperties('areaMaps', 'taxMaps', 'zoningChangeMaps', 'zoningSectionMaps');
     return Object.values(maps).reduce((acc, curr) => acc.concat(...curr.toArray()), []);
@@ -139,11 +227,18 @@ export default class extends Model {
   @attr('boolean', { allowNull: true, defaultValue: null }) needSpecialDistrict;
 
   // ******** GEOMETRIES ********
-  @attr({ defaultValue: null }) developmentSite
+  // FeatureCollection of polygons or multipolygons
+  @type(FeatureCollection)
+  @attr({ defaultValue: () => EmptyFeatureCollection }) developmentSite
 
-  @attr() projectArea
+  // FeatureCollection of polygons or multipolygons
+  @type(FeatureCollection)
+  @attr({ defaultValue: () => EmptyFeatureCollection }) projectArea
 
-  @attr() underlyingZoning
+  // FeatureCollection
+  // includes label information that must be stored as properties
+  @type(FeatureCollection)
+  @attr({ defaultValue: () => EmptyFeatureCollection }) underlyingZoning
 
   async setDefaultUnderlyingZoning() {
     const developmentSite = this.get('developmentSite');
@@ -152,7 +247,10 @@ export default class extends Model {
     this.set('underlyingZoning', result);
   }
 
-  @attr() commercialOverlays
+  // FeatureCollection
+  // includes label information that must be stored as properties
+  @type(FeatureCollection)
+  @attr({ defaultValue: () => EmptyFeatureCollection }) commercialOverlays
 
   async setDefaultCommercialOverlays() {
     const developmentSite = this.get('developmentSite');
@@ -161,7 +259,10 @@ export default class extends Model {
     this.set('commercialOverlays', result);
   }
 
-  @attr() specialPurposeDistricts
+  // FeatureCollection
+  // includes label information that must be stored as properties
+  @type(FeatureCollection)
+  @attr({ defaultValue: () => EmptyFeatureCollection }) specialPurposeDistricts
 
   async setDefaultSpecialPurposeDistricts() {
     const developmentSite = this.get('developmentSite');
@@ -170,19 +271,18 @@ export default class extends Model {
     this.set('specialPurposeDistricts', result);
   }
 
-  @attr() rezoningArea
+  // FeatureCollection of polygons or multipolygons
+  @type(FeatureCollection)
+  @attr({ defaultValue: () => EmptyFeatureCollection }) rezoningArea
 
-  // ******** VALIDATION CHECKS / STEPS ********
+  async setRezoningArea() {
+    const proposedZoning = this.get('underlyingZoning');
+    const developmentSite = this.get('developmentSite');
+    const currentZoning = await PROPOSE_SPECIAL_DISTRICTS_QUERY(developmentSite);
+    const result = await REZONING_AREA_QUERY(currentZoning, proposedZoning);
 
-  // @computed(...requiredFields)
-  // get isValid() {
-  //   return requiredFields.every(field => this.get(field));
-  // }
-
-  // @computed(...requiredFields)
-  // get requiredFieldsCompleted() {
-  //   return requiredFields.filter(field => this.get(field));
-  // }
+    this.set('rezoningArea', result);
+  }
 
   // ******** COMPUTING THE CURRENT STEP FOR ROUTING ********
 
@@ -203,22 +303,20 @@ export default class extends Model {
       needSpecialDistrict,
     } = this.getProperties(...fieldsForCurrentStep);
 
-    // const currentQuestion = questionFields.find(q => hasAnswered(q));
-
-    if (!projectName) {
+    if (isEmpty(projectName)) {
       return { label: 'project-creation', route: 'projects.new' };
     }
 
-    if (!developmentSite) {
+    if (isEmpty(developmentSite)) {
       return { label: 'development-site', route: 'projects.edit.steps.development-site' };
     }
 
     // questions
-    if (trueOrNull(needProjectArea) && !projectArea) {
+    if (trueOrNull(needProjectArea) && isEmpty(projectArea)) {
       return { label: 'project-area', route: 'projects.edit.steps.project-area' };
     }
 
-    if (trueOrNull(needUnderlyingZoning) && needRezoning && !underlyingZoning) {
+    if (trueOrNull(needUnderlyingZoning) && needRezoning && isEmpty(underlyingZoning)) {
       return {
         label: 'rezoning-underlying',
         route: 'projects.edit.geometry-edit',
@@ -227,7 +325,7 @@ export default class extends Model {
       };
     }
 
-    if (trueOrNull(needCommercialOverlay) && needRezoning && !commercialOverlays) {
+    if (trueOrNull(needCommercialOverlay) && needRezoning && isEmpty(commercialOverlays)) {
       return {
         label: 'rezoning-commercial',
         route: 'projects.edit.geometry-edit',
@@ -236,7 +334,7 @@ export default class extends Model {
       };
     }
 
-    if (trueOrNull(needSpecialDistrict) && needRezoning && !specialPurposeDistricts) {
+    if (trueOrNull(needSpecialDistrict) && needRezoning && isEmpty(specialPurposeDistricts)) {
       return {
         label: 'rezoning-special',
         route: 'projects.edit.geometry-edit',
@@ -246,9 +344,9 @@ export default class extends Model {
     }
 
     if (trueOrNull(needRezoning)
-      || ((needUnderlyingZoning && !underlyingZoning)
-        || (needCommercialOverlay && !commercialOverlays)
-        || (needSpecialDistrict && !specialPurposeDistricts))) {
+      || ((needUnderlyingZoning && isEmpty(underlyingZoning))
+        || (needCommercialOverlay && isEmpty(commercialOverlays))
+        || (needSpecialDistrict && isEmpty(specialPurposeDistricts)))) {
       return { label: 'rezoning', route: 'projects.edit.steps.rezoning' };
     }
 
@@ -307,27 +405,21 @@ export default class extends Model {
   @computed('developmentSite', 'projectArea', 'rezoningArea')
   get projectGeometryBoundingBox() {
     // build a geojson FeatureCollection from all three project geoms
-    const geometries = this.getProperties('developmentSite', 'projectArea', 'rezoningArea');
+    const featureCollections = this
+      .getProperties('developmentSite', 'projectArea', 'rezoningArea');
 
-    // if all three are undefined, return undefined
-    const allUndefined = Object.values(geometries)
-      .reduce((acc, geometry) => acc && !geometry, true);
-    if (allUndefined) return undefined;
-
-    const featureCollection = Object.values(geometries)
-      .reduce((acc, geometry) => {
-        if (geometry) {
-          acc.features.push({
-            type: 'Feature',
-            geometry,
-          });
-        }
+    // flatten feature collections
+    const featureCollection = Object.values(featureCollections)
+      .reduce((acc, { features }) => {
+        acc.features.push(...features);
 
         return acc;
       }, {
         type: 'FeatureCollection',
         features: [],
       });
+
+    if (isEmpty(featureCollection)) return undefined;
 
     return turfBbox(featureCollection);
   }

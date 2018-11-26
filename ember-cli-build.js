@@ -17,6 +17,20 @@ module.exports = function (defaults) {
     'ember-cli-babel': {
       includePolyfill: true,
     },
+    autoImport: {
+      webpack: {
+        module: {
+          rules: [
+            /* see: https://github.com/graphql/graphql-js/issues/1272#issuecomment-393903706 */
+            {
+              test: /\.mjs$/,
+              include: /node_modules\/@turf\/difference/,
+              type: 'javascript/auto',
+            },
+          ],
+        },
+      },
+    },
   });
 
   // Use `app.import` to add additional libraries to the generated

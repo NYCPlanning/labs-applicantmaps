@@ -196,9 +196,17 @@
           {{labs-ui/legend-icon icon=areaMapLegendConfig.rezoningArea.icon}}
         </div>
         <div class="cell shrink">
-          <button class="button tiny gray no-margin">
-            {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
-          </button>
+          {{#link-to 'projects.edit.geometry-edit' model
+            (query-params type='rezoning-area' mode='draw')
+            data-test-rezoning-area
+            tagName='button'
+            classNames='button tiny gray no-margin'}}
+            {{#if model.rezoningArea}}
+              Edit
+            {{else}}
+              {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
+            {{/if}}
+          {{/link-to}}
         </div>
       </div>
     </div>

@@ -1,0 +1,8 @@
+{{#if (not (is-empty model.rezoningArea))}}
+  {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
+    {{source.layer
+      layer=rezoningAreaLayer
+      before='boundary_country'
+    }}
+  {{/map.source}}
+{{/if}}

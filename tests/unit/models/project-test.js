@@ -2,6 +2,15 @@ import { module, test, skip } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { run } from '@ember/runloop';
 
+const EmptyFeatureCollection = {
+  type: 'FeatureCollection',
+  features: [{
+    type: 'Feature',
+    geometry: null,
+    properties: {},
+  }],
+};
+
 module('Unit | Model | project', (hooks) => {
   setupTest(hooks);
 
@@ -23,10 +32,17 @@ module('Unit | Model | project', (hooks) => {
 
   // Test for project completion when only development site is required
   test('it produces complete status', function (assert) {
+    const dummyFeatureCollection = EmptyFeatureCollection;
+
+    dummyFeatureCollection.features[0].geometry = {
+      type: 'Point',
+      coordinates: [0, 0],
+    };
+
     const store = this.owner.lookup('service:store');
     const model = run(() => store.createRecord('project', {
       projectName: 'some project',
-      developmentSite: { anObject: 'exists in here' },
+      developmentSite: dummyFeatureCollection,
       needProjectArea: false,
       needRezoning: false,
     }));
@@ -35,10 +51,17 @@ module('Unit | Model | project', (hooks) => {
 
   // Test for project incomplete project that hasn't answered rezoning question
   skip('it produces rezoning step', function (assert) {
+    const dummyFeatureCollection = EmptyFeatureCollection;
+
+    dummyFeatureCollection.features[0].geometry = {
+      type: 'Point',
+      coordinates: [0, 0],
+    };
+
     const store = this.owner.lookup('service:store');
     const model = run(() => store.createRecord('project', {
       projectName: 'some project',
-      developmentSite: { anObject: 'exists in here' },
+      developmentSite: dummyFeatureCollection,
       needProjectArea: false,
       needRezoning: null,
     }));

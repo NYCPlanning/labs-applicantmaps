@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
+import isEmpty from '../../utils/is-empty';
 
 // Proposed Commercial Overlays
 
@@ -118,7 +119,7 @@ export default class ZoningDistrictComponent extends Component {
   init(...args) {
     super.init(...args);
 
-    if (!this.get('model.commercialOverlays')) {
+    if (isEmpty(this.get('model.commercialOverlays'))) {
       this.get('model').setDefaultCommercialOverlays();
     }
   }
