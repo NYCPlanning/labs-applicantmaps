@@ -273,7 +273,6 @@ export default class extends Model {
 
     // commercial Overlays
     if (!isEmpty(commercialOverlays)) {
-      console.log('commercial overlays')
       const currentCommercialOverlays = await proposedCommercialOverlaysQuery(this.get('developmentSite'));
       const commercialOverlaysDiff = getDifference(currentCommercialOverlays, commercialOverlays);
 
