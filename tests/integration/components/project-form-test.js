@@ -1,17 +1,22 @@
-import { module, skip } from 'qunit';
+import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, fillIn } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { run } from '@ember/runloop';
 
 module('Integration | Component | project-form', function(hooks) {
   setupRenderingTest(hooks);
 
-  skip('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+  test('it disables clicking if not filled out', async function(assert) {
+    const store = this.owner.lookup('service:store');
+    const model = run(() => store.createRecord('project', {}));
+    this.set('model', model);
+    await render(hbs`{{project-form model=model}}`);
 
-    await render(hbs`{{project-form}}`);
+    assert.equal(this.element.querySelector('[data-test-create-new-project]').disabled, true);
 
-    assert.equal(this.element.textContent.trim(), '');
+    await fillIn('[data-test-new-project-project-name]', 'Mulholland Drive');
+
+    assert.equal(this.element.querySelector('[data-test-create-new-project]').disabled, false);
   });
 });

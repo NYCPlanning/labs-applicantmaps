@@ -15,7 +15,7 @@ export default class ProjectsShowRoute extends Route {
 
   afterModel(model) {
     // here we check which step we're on so that we can route
-    const { route, mode, type } = model.get('currentStep');
+    const { routing: { route, mode, type } } = model.get('currentStep');
 
     // has the user completed the steps? if not, transition to that step.
     if (model.get('currentStep') !== 'complete') {
