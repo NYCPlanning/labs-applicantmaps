@@ -4,6 +4,7 @@ import elevateGeojsonIds from 'labs-applicant-maps/utils/elevate-geojson-ids';
 import config from '../../config/environment';
 
 const { bufferMeters } = config;
+
 export default async (developmentSite) => {
   const unionedGeometryFragments = JSON
     .stringify(

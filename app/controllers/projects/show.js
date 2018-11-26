@@ -5,6 +5,7 @@ import { projectAreaLayer } from '../../components/project-geometries/project-ar
 import { rezoningAreaLayer } from '../../components/project-geometries/rezoning-area';
 import { underlyingZoningLayer, underlyingZoningLabelsLayer } from '../../components/project-geometries/underlying-zoning';
 import {
+  commercialOverlaysLayer,
   coLayer,
   c11Layer,
   c12Layer,
@@ -31,7 +32,7 @@ export default class ShowProjectController extends Controller {
 
   underlyingZoningLabelsLayer = underlyingZoningLabelsLayer
 
-  commercialOverlaysLayer = underlyingZoningLayer;
+  commercialOverlaysLayer = commercialOverlaysLayer;
 
   specialPurposeDistrictsLayer = specialPurposeDistrictsLayer
 

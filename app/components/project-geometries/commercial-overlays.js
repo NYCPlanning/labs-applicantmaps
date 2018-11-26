@@ -5,6 +5,15 @@ import { service } from '@ember-decorators/service';
 import isEmpty from '../../utils/is-empty';
 
 // Proposed Commercial Overlays
+export const commercialOverlaysLayer = {
+  id: 'commemrcial-overlays-lines',
+  type: 'line',
+  paint: {
+    'line-opacity': 0.5,
+    'line-width': 3,
+  },
+};
+
 
 export const coLayer = {
   id: 'co_outline',

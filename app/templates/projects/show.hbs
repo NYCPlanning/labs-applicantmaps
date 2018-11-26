@@ -24,7 +24,7 @@
           as | map |
         }}
           {{!-- Ad-hoc source and layer for developmentSite --}}
-          {{#if (not (isEmpty model.developmentSite))}}
+          {{#if (not (is-empty model.developmentSite))}}
             {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
               {{source.layer
                 layer=developmentSiteLayer
@@ -34,7 +34,7 @@
           {{/if}}
 
           {{!-- Ad-hoc source and layer for projectArea --}}
-          {{#if (not (isEmpty model.projectArea))}}
+          {{#if (not (is-empty model.projectArea))}}
             {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
               {{source.layer
                 layer=projectAreaLayer
@@ -44,7 +44,7 @@
           {{/if}}
 
           {{!-- Ad-hoc source and layer for rezoningArea --}}
-          {{#if (not (isEmpty model.rezoningArea))}}
+          {{#if (not (is-empty model.rezoningArea))}}
             {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
               {{source.layer
                 layer=rezoningAreaLayer
@@ -54,7 +54,7 @@
           {{/if}}
 
           {{!-- Ad-hoc source and layer for proposedZoning --}}
-          {{#if (not (isEmpty model.underlyingZoning))}}
+          {{#if (not (is-empty model.underlyingZoning))}}
             {{#map.source options=(mapbox-geojson-source model.underlyingZoning) as |source|}}
               {{source.layer
                 layer=underlyingZoningLayer
@@ -68,7 +68,7 @@
           {{/if}}
 
           {{!-- Ad-hoc source and layer for proposedCommercialOverlays --}}
-          {{#if (not (isEmpty model.commercialOverlays))}}
+          {{#if (not (is-empty model.commercialOverlays))}}
             {{#map.source options=(mapbox-geojson-source model.commercialOverlays) as |source|}}
               {{source.layer
                 layer=commercialOverlaysLayer
@@ -122,7 +122,7 @@
           {{/if}}
 
           {{!-- Ad-hoc source and layer for proposedSpecialPurposeDistricts --}}
-          {{#if (not (isEmpty model.specialPurposeDistricts))}}
+          {{#if (not (is-empty model.specialPurposeDistricts))}}
             {{#map.source options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
               {{source.layer
                 layer=specialPurposeDistrictsLayer
@@ -146,7 +146,7 @@
         </div>
         <div class="cell shrink">
           <button class="button tiny gray no-margin">
-            {{#if (not (isEmpty model.developmentSite))}}
+            {{#if (not (is-empty model.developmentSite))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
@@ -184,7 +184,7 @@
         </div>
         <div class="cell shrink">
           <button class="button tiny gray no-margin">
-            {{#if (not (isEmpty model.projectArea))}}
+            {{#if (not (is-empty model.projectArea))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
@@ -226,7 +226,7 @@
             data-test-underlying-zoning
             tagName='button'
             classNames='button tiny gray no-margin'}}
-            {{#if (not (isEmpty model.underlyingZoning))}}
+            {{#if (not (is-empty model.underlyingZoning))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
@@ -245,7 +245,7 @@
             data-test-commercial-overlays
             tagName='button'
             classNames='button tiny gray no-margin'}}
-            {{#if (not (isEmpty model.commercialOverlays))}}
+            {{#if (not (is-empty model.commercialOverlays))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
@@ -264,7 +264,7 @@
             data-test-special-purpose-districts
             tagName='button'
             classNames='button tiny gray no-margin'}}
-            {{#if (not (isEmpty model.specialPurposeDistricts))}}
+            {{#if (not (is-empty model.specialPurposeDistricts))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
@@ -283,7 +283,7 @@
             data-test-rezoning-area
             tagName='button'
             classNames='button tiny gray no-margin'}}
-            {{#if (not (isEmpty model.rezoningArea))}}
+            {{#if (not (is-empty model.rezoningArea))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
