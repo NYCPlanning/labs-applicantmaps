@@ -5,6 +5,7 @@
     geometricProperty=model.commercialOverlays as |selection|
   }}
     {{#selection.button
+      enabled=model.hasDirtyAttributes
       handleClick=(action 'save')}}
       Save Commercial Overlays
     {{/selection.button}}

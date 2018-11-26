@@ -49,9 +49,9 @@ export default class LotsComponent extends Component {
     return this.get('store').peekRecord('layer-group', 'tax-lots');
   }
 
-  @computed('selectedLots.features.[]')
+  @computed('geometricProperty.features.@each.geometry')
   get selectedLotsSource() {
-    const selectedLots = this.get('selectedLots');
+    const selectedLots = this.get('geometricProperty');
     return {
       type: 'geojson',
       data: selectedLots,

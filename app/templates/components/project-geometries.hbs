@@ -38,6 +38,14 @@
         mode=mode
         map=map}}
 
+      {{#ember-wormhole to='geometry-type-save-box'}}
+        <button class="button smal gray expanded" 
+          disabled={{not model.hasDirtyAttributes}}
+          onclick={{action 'rollbackChanges'}}
+        >
+          Undo
+        </button>
+      {{/ember-wormhole}}
     {{/labs-map}}
   {{/project-geometries/layer-groups}}
 </div>

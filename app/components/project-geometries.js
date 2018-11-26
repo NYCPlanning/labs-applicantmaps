@@ -41,6 +41,11 @@ export default class ProjectGeometryEditComponent extends Component {
   }
 
   @action
+  rollbackChanges() {
+    this.get('model').rollbackAttributes();
+  }
+
+  @action
   handleMapLoad(map) {
     this.set('mapInstance', map);
     window.map = map;

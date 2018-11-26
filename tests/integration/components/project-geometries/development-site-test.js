@@ -21,7 +21,7 @@ module('Integration | Component | project-geometries/development-site', function
   setupRenderingTest(hooks);
   setupMirage(hooks);
 
-  test('it renders', async function(assert) {
+  test('it disables button if there is nothing drawn', async function(assert) {
     const store = this.owner.lookup('service:store');
     const model = run(() => store.createRecord('project', {
       projectName: 'Mulholland Drive',

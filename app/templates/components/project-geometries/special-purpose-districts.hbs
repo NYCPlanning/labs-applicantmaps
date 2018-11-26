@@ -5,6 +5,7 @@
     geometricProperty=model.specialPurposeDistricts as |selection|
   }}
     {{#selection.button
+      enabled=model.hasDirtyAttributes
       handleClick=(action 'save')}}
       Save Special Districts
     {{/selection.button}}
