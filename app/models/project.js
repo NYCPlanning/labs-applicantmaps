@@ -22,25 +22,6 @@ import config from 'labs-applicant-maps/config/environment';
 const { mapTypes } = config;
 const { Model } = DS;
 
-const questionFields = [
-  'needProjectArea',
-  'needRezoning',
-  'needUnderlyingZoning',
-  'needCommercialOverlay',
-  'needSpecialDistrict',
-];
-
-const fieldsForCurrentStep = [
-  'developmentSite',
-  'projectName',
-  'projectArea',
-  'rezoningArea',
-  'underlyingZoning',
-  'commercialOverlays',
-  'specialPurposeDistricts',
-  ...questionFields,
-];
-
 const EmptyFeatureCollection = {
   type: 'FeatureCollection',
   features: [{
@@ -110,7 +91,7 @@ export const projectProcedure = [
     },
     conditions: {
       needRezoning: hasAnswered,
-      needUnderlyingZoning: requiredIf('needRezoning', hasFilledOut),
+      needUnderlyingZoning: requiredIf('needRezoning', hasAnswered),
       needCommercialOverlay: requiredIf('needRezoning', hasAnswered),
       needSpecialDistrict: requiredIf('needRezoning', hasAnswered),
     },
@@ -162,6 +143,9 @@ export const projectProcedure = [
     },
   },
 ];
+
+const procedureKeys = projectProcedure
+  .reduce((acc, { conditions }) => acc.concat(conditions ? Object.keys(conditions) : []), []);
 
 export default class extends Model {
   @hasMany('area-map', { async: false }) areaMaps;
@@ -260,7 +244,7 @@ export default class extends Model {
 
   // ******** COMPUTING THE CURRENT STEP FOR ROUTING ********
 
-  @computed(...fieldsForCurrentStep)
+  @computed(...procedureKeys)
   get currentStep() {
     const { routing } = wizard(projectProcedure, this);
     return routing;
