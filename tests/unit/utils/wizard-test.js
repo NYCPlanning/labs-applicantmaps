@@ -396,7 +396,7 @@ module('Unit | Utility | wizard', function(hooks) {
     assert.equal(step, 'complete');
   });
 
-  test('answers no to all questions but yes to needRezoning, needUnderlyingZoning', function(assert) {
+  test('answers no to all questions but yes to needRezoning, needSpecialDistrict', function(assert) {
     const store = this.owner.lookup('service:store');
     const model = run(() => store.createRecord('area-map', {}));
     let step;
@@ -425,6 +425,50 @@ module('Unit | Utility | wizard', function(hooks) {
       needCommercialOverlay: false,
       needSpecialDistrict: true,
     });
+
+    ({ step } = wizard(projectProcedure, model));
+    assert.equal(step, 'rezoning-special');
+
+    model.set('specialPurposeDistricts', DUMMY_FEATURE_COLLECTION);
+
+    ({ step } = wizard(projectProcedure, model));
+    assert.equal(step, 'complete');
+  });
+
+  test('answers no to all questions but yes to needRezoning, needSpecialDistrict', function(assert) {
+    const store = this.owner.lookup('service:store');
+    const model = run(() => store.createRecord('area-map', {}));
+    let step;
+
+    ({ step } = wizard(projectProcedure, model));
+    assert.equal(step, 'project-creation');
+
+    model.set('projectName', 'Mulholland Drive');
+
+    ({ step } = wizard(projectProcedure, model));
+    assert.equal(step, 'development-site');
+
+    model.set('developmentSite', DUMMY_FEATURE_COLLECTION);
+
+    ({ step } = wizard(projectProcedure, model));
+    assert.equal(step, 'project-area');
+
+    model.set('needProjectArea', false);
+
+    ({ step } = wizard(projectProcedure, model));
+    assert.equal(step, 'rezoning');
+
+    model.setProperties({
+      needRezoning: true,
+      needUnderlyingZoning: false,
+      needCommercialOverlay: true,
+      needSpecialDistrict: true,
+    });
+
+    ({ step } = wizard(projectProcedure, model));
+    assert.equal(step, 'rezoning-commercial');
+
+    model.set('commercialOverlays', DUMMY_FEATURE_COLLECTION);
 
     ({ step } = wizard(projectProcedure, model));
     assert.equal(step, 'rezoning-special');
