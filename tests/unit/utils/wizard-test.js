@@ -435,7 +435,7 @@ module('Unit | Utility | wizard', function(hooks) {
     assert.equal(step, 'complete');
   });
 
-  test('answers no to all questions but yes to needRezoning, needSpecialDistrict', function(assert) {
+  test('answers no to all questions but yes to needRezoning, needCommercialOverlay, and needSpecialDistrict', function(assert) {
     const store = this.owner.lookup('service:store');
     const model = run(() => store.createRecord('area-map', {}));
     let step;
