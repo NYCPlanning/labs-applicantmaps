@@ -1,10 +1,11 @@
 import carto from 'cartobox-promises-utility/utils/carto';
 import unifyPolygons from 'labs-applicant-maps/utils/unify-polygons';
+import elevateGeojsonIds from 'labs-applicant-maps/utils/elevate-geojson-ids';
 import config from '../../config/environment';
 
 const { bufferMeters } = config;
 
-export default (developmentSite) => {
+export default async (developmentSite) => {
   const unionedGeometryFragments = JSON
     .stringify(
       unifyPolygons(developmentSite),
@@ -21,12 +22,14 @@ export default (developmentSite) => {
           ),
         4326)::geometry AS the_geom
       )
-      SELECT ST_Intersection(co.the_geom, buffer.the_geom) AS the_geom, overlay AS label
+      SELECT ST_Intersection(co.the_geom, buffer.the_geom) AS the_geom, overlay AS label, cartodb_id AS id
       FROM planninglabs.commercial_overlays_v201809 co, buffer
       WHERE ST_Intersects(co.the_geom,buffer.the_geom)
     `;
 
-    return new carto.SQL(commercialOverlaysQuery, 'geojson');
+    const clippedCommercialOverlays = await new carto.SQL(commercialOverlaysQuery, 'geojson');
+
+    return elevateGeojsonIds(clippedCommercialOverlays);
   }
 
   return null;

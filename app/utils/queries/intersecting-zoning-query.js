@@ -1,5 +1,6 @@
 import carto from 'cartobox-promises-utility/utils/carto';
 import unifyPolygons from 'labs-applicant-maps/utils/unify-polygons';
+import elevateGeojsonIds from 'labs-applicant-maps/utils/elevate-geojson-ids';
 
 const bufferMeters = 500;
 
@@ -27,14 +28,7 @@ export default async (developmentSite) => {
 
     const clippedZoningDistricts = await new carto.SQL(zoningQuery, 'geojson');
 
-    // add an id to the top level of each feature object, for use by mapbox-gl-draw
-    const { features } = clippedZoningDistricts;
-    clippedZoningDistricts.features = features.map((feature) => {
-      feature.id = feature.properties.id;
-      return feature;
-    });
-
-    return clippedZoningDistricts;
+    return elevateGeojsonIds(clippedZoningDistricts);
   }
 
   return null;
