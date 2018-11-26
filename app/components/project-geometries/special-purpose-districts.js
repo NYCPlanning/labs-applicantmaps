@@ -5,7 +5,7 @@ import { service } from '@ember-decorators/service';
 import isEmpty from '../../utils/is-empty';
 
 // Proposed Special Purpose Districts
-const proposedSpecialPurposeDistrictsLayer = {
+export const specialPurposeDistrictsLayer = {
   id: 'proposed-special-purpose-districts-fill',
   type: 'fill',
   paint: {
@@ -14,7 +14,7 @@ const proposedSpecialPurposeDistrictsLayer = {
   },
 };
 
-const proposedSpecialPurposeDistrictsLabelsLayer = {
+export const specialPurposeDistrictsLabelsLayer = {
   id: 'proposed-special-purpose-districts-labels',
   type: 'symbol',
   layout: {
@@ -68,9 +68,9 @@ export default class specialPurposeDistrictsComponent extends Component {
   @service
   notificationMessages;
 
-  proposedSpecialPurposeDistrictsLayer = proposedSpecialPurposeDistrictsLayer;
+  specialPurposeDistrictsLayer = specialPurposeDistrictsLayer;
 
-  proposedSpecialPurposeDistrictsLabelsLayer = proposedSpecialPurposeDistrictsLabelsLayer;
+  specialPurposeDistrictsLabelsLayer = specialPurposeDistrictsLabelsLayer;
 
   @action
   async save(finalGeometry) {
@@ -78,6 +78,10 @@ export default class specialPurposeDistrictsComponent extends Component {
     const featureCollection = await finalGeometry;
 
     model.set('specialPurposeDistricts', featureCollection);
+
+    // because we've just changed the proposed zoning,
+    // we should also calculate the rezoning area
+    model.setRezoningArea();
 
     try {
       const savedProject = await model.save();
