@@ -5,6 +5,15 @@ import { service } from '@ember-decorators/service';
 import isEmpty from '../../utils/is-empty';
 
 // Proposed Commercial Overlays
+export const commercialOverlaysLayer = {
+  id: 'commemrcial-overlays-lines',
+  type: 'line',
+  paint: {
+    'line-opacity': 0.5,
+    'line-width': 3,
+  },
+};
+
 
 export const coLayer = {
   id: 'co_outline',
@@ -115,7 +124,7 @@ export const c25Layer = {
   filter: ['all', ['==', 'label', 'C2-5']],
 };
 
-export default class ZoningDistrictComponent extends Component {
+export default class CommercialOverlayComponent extends Component {
   init(...args) {
     super.init(...args);
 
@@ -167,6 +176,10 @@ export default class ZoningDistrictComponent extends Component {
     const featureCollection = await finalGeometry;
 
     model.set('commercialOverlays', featureCollection);
+
+    // because we've just changed the proposed zoning,
+    // we should also calculate the rezoning area
+    model.setRezoningArea();
 
     try {
       const savedProject = await model.save();
