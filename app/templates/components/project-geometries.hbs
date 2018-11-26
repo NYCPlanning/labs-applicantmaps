@@ -39,12 +39,23 @@
         map=map}}
 
       {{#ember-wormhole to='geometry-type-save-box'}}
-        <button class="button smal gray expanded" 
-          disabled={{not model.hasDirtyAttributes}}
-          onclick={{action 'rollbackChanges'}}
-        >
-          Undo
-        </button>
+        <div class="stable">
+          {{#if (eq mode 'lots')}}
+            {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='draw')
+              tagName='button'
+              class='button gray expanded'
+              disabled=(not model.hasDirtyAttributes)
+            }}
+              Manual Edit
+            {{/link-to}}
+          {{/if}}
+          <button class="button smal gray expanded" 
+            disabled={{not model.hasDirtyAttributes}}
+            onclick={{action 'rollbackChanges'}}
+          >
+            Undo
+          </button>
+        </div>
       {{/ember-wormhole}}
     {{/labs-map}}
   {{/project-geometries/layer-groups}}
