@@ -1,40 +1,23 @@
-{{component (concat 'project-geometries/modes/' mode)
+{{!-- Contextual component so we can provide access to the mode context --}}
+{{#component (concat 'project-geometries/modes/' mode)
   map=map
-  geometricProperty=geometricProperty}}
-
-<div class="draw-controls">
-  <button class="polygon {{if (eq drawMode 'draw_polygon') 'active'}}" {{action 'handleDrawButtonClick'}}>{{fa-icon 'draw-polygon' size='2x' fixedWidth=true}}</button>
-  <button class="trash" {{action 'handleTrashButtonClick'}}>{{fa-icon 'trash-alt' prefix='far' size='2x' fixedWidth=true}}</button>
-</div>
-
-{{#if (and selectedFeature editableLabel)}}
-  <div class="selected-feature-form">
-    <div class="input-group">
-      <span class="input-group-label text-small">{{fa-icon 'tag' transform='grow-6'}}</span>
-      {{input
-        type="text"
-        class="input-group-field"
-        value=selectedFeature.properties.label
-        key-up=(action "updateSelectedFeature")
-      }}
-    </div>
-  </div>
-{{/if}}
-
-{{!-- render markup into parent container --}}
-{{#ember-wormhole to='geometry-type-save-box'}}
-  {{#if hasBlock}}
-    {{yield (hash
-      finalGeometry=finalGeometry
-      button=(component 'project-geometries/draw-lots-to-union/button'
+  geometricProperty=geometricProperty as |mode|
+}}
+  <div class="stable">
+    {{#if hasBlock}}
+      {{yield (hash
+        finalGeometry=finalGeometry
+        mode=mode
+        button=(component 'project-geometries/draw-lots-to-union/button'
+          data-test-project-geometry-save=true
+          enabled=isReady
+          finalGeometry=finalGeometry))}}
+    {{else}}
+      {{project-geometries/draw-lots-to-union/button
         data-test-project-geometry-save=true
         enabled=isReady
-        finalGeometry=finalGeometry))}}
-  {{else}}
-    {{project-geometries/draw-lots-to-union/button
-      data-test-project-geometry-save=true
-      enabled=isReady
-      finalGeometry=finalGeometry
-    }}
-  {{/if}}
-{{/ember-wormhole}}
+        finalGeometry=finalGeometry
+      }}
+    {{/if}}
+  </div>
+{{/component}}

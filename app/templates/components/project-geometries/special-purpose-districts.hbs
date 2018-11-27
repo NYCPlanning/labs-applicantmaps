@@ -1,17 +1,9 @@
-{{#if (not (is-empty model.specialPurposeDistricts))}}
-  {{#project-geometries/draw-lots-to-union
-    mode=mode
-    map=map
-    editableLabel=true
-    geometricProperty=model.specialPurposeDistricts as |selection|
-  }}
-    {{#selection.button
-      enabled=model.hasDirtyAttributes
-      handleClick=(action 'save')}}
-      Save
-      <small style="display:block;line-height:1.75;">Special Purpose Districts</small>
-    {{/selection.button}}
-  {{/project-geometries/draw-lots-to-union}}
+{{#project-geometries/draw-lots-to-union
+  mode=mode
+  map=map
+  geometricProperty=model.specialPurposeDistricts as |selection|
+}}
+  {{selection.mode.feature-label-form}}
 
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
     <h1 class="header-large small-margin-bottom">Rezoning: <span class="text-weight-normal">Special Purpose Districts</span></h1>
@@ -51,20 +43,26 @@
       </p></li>
       <li><p class="small-margin-bottom">Make sure all shapes are complete and labeled before saving</p></li>
     </ul>
+    {{#selection.button
+      enabled=model.hasDirtyAttributes
+      handleClick=(action 'save')}}
+      Save
+      <small style="display:block;line-height:1.75;">Special Purpose Districts</small>
+    {{/selection.button}}
   {{/ember-wormhole}}
+{{/project-geometries/draw-lots-to-union}}
 
-  {{#map.source
-    options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
-    {{source.layer
-      layer=proposedSpecialPurposeDistrictsLayer
-      before='boundary_country'
-    }}
-    {{source.layer
-      layer=proposedSpecialPurposeDistrictsLabelsLayer
-      before='boundary_country'
-    }}
-  {{/map.source}}
-{{/if}}
+{{#map.source
+  options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
+  {{source.layer
+    layer=proposedSpecialPurposeDistrictsLayer
+    before='boundary_country'
+  }}
+  {{source.layer
+    layer=proposedSpecialPurposeDistrictsLabelsLayer
+    before='boundary_country'
+  }}
+{{/map.source}}
 
 {{#map.source
   options=(mapbox-geojson-source model.developmentSite) as |source|}}
