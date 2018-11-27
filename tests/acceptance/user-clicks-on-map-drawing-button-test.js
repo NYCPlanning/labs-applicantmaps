@@ -1,5 +1,3 @@
-// Needs to be redesigned for the refactored geom creation work flow
-
 import { module, skip } from 'qunit';
 import {
   visit,

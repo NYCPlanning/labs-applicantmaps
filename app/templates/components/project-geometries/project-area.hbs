@@ -4,6 +4,7 @@
   geometricProperty=model.projectArea as |selection|
 }}
   {{#selection.button
+    enabled=model.hasDirtyAttributes
     handleClick=(action 'save')}}
     Save Project Area
   {{/selection.button}}

@@ -24,7 +24,7 @@
           as | map |
         }}
           {{!-- Ad-hoc source and layer for developmentSite --}}
-          {{#if model.developmentSite}}
+          {{#if (not (is-empty model.developmentSite))}}
             {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
               {{source.layer
                 layer=developmentSiteLayer
@@ -34,7 +34,7 @@
           {{/if}}
 
           {{!-- Ad-hoc source and layer for projectArea --}}
-          {{#if model.projectArea}}
+          {{#if (not (is-empty model.projectArea))}}
             {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
               {{source.layer
                 layer=projectAreaLayer
@@ -44,10 +44,92 @@
           {{/if}}
 
           {{!-- Ad-hoc source and layer for rezoningArea --}}
-          {{#if model.rezoningArea}}
+          {{#if (not (is-empty model.rezoningArea))}}
             {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
               {{source.layer
                 layer=rezoningAreaLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
+          {{/if}}
+
+          {{!-- Ad-hoc source and layer for proposedZoning --}}
+          {{#if (not (is-empty model.underlyingZoning))}}
+            {{#map.source options=(mapbox-geojson-source model.underlyingZoning) as |source|}}
+              {{source.layer
+                layer=underlyingZoningLayer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=underlyingZoningLabelsLayer
+                before='boundary_country'
+              }}
+            {{/map.source}}
+          {{/if}}
+
+          {{!-- Ad-hoc source and layer for proposedCommercialOverlays --}}
+          {{#if (not (is-empty model.commercialOverlays))}}
+            {{#map.source options=(mapbox-geojson-source model.commercialOverlays) as |source|}}
+              {{source.layer
+                layer=commercialOverlaysLayer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=coLayer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c11Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c12Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c13Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c14Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c15Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c21Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c22Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c23Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c24Layer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=c25Layer
+                before='boundary_country'
+              }}
+            {{/map.source}}
+          {{/if}}
+
+          {{!-- Ad-hoc source and layer for proposedSpecialPurposeDistricts --}}
+          {{#if (not (is-empty model.specialPurposeDistricts))}}
+            {{#map.source options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
+              {{source.layer
+                layer=specialPurposeDistrictsLayer
+                before='boundary_country'
+              }}
+              {{source.layer
+                layer=specialPurposeDistrictsLabelsLayer
                 before='boundary_country'
               }}
             {{/map.source}}
@@ -57,23 +139,25 @@
     </div>
     <div class="cell xlarge-shrink dashboard-controls">
 
+      {{!-- Development Site --}}
       <div class="grid-x control">
         <div class="cell auto">
           <strong>Development Site</strong>
-          {{labs-ui/legend-icon icon=areaMapLegendConfig.developmentSite.icon}}
+          {{#if (not (is-empty model.developmentSite))}}
+            {{labs-ui/legend-icon icon=developmentSiteIcon}}
+          {{/if}}
         </div>
         <div class="cell shrink">
           <button class="button tiny gray no-margin">
-            {{#if model.developmentSite}}
+            {{#if (not (is-empty model.developmentSite))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
             {{/if}}
-
             {{#ember-popover
               data-test-development-site
               event='click'
-              side='bottom'
+              side='left'
               as |popover|
             }}
               {{link-to 'Select Lots' 'projects.edit.geometry-edit' model
@@ -89,29 +173,37 @@
             {{/ember-popover}}
           </button>
         </div>
-        <div class="cell shrink">
-          <button class="button tiny gray no-margin">
-            {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
-          </button>
-        </div>
+        {{#if (not (is-empty model.developmentSite))}}
+          <div class="cell shrink">
+            <button
+              class="button tiny gray no-margin"
+              onclick={{action (mut model.developmentSite) EmptyFeatureCollection}}
+            >
+              {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
+            </button>
+          </div>
+        {{/if}}
       </div>
+
+      {{!-- Project Area --}}
       <div class="grid-x control">
         <div class="cell auto">
           <strong>Project Area</strong>
-          {{labs-ui/legend-icon icon=areaMapLegendConfig.projectArea.icon}}
+          {{#if (not (is-empty model.projectArea))}}
+            {{labs-ui/legend-icon icon=projectAreaIcon}}
+          {{/if}}
         </div>
         <div class="cell shrink">
           <button class="button tiny gray no-margin">
-            {{#if model.projectArea}}
+            {{#if (not (is-empty model.projectArea))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
             {{/if}}
-
             {{#ember-popover
               data-test-project-area
               event='click'
-              side='bottom'
+              side='left'
               as |popover|
             }}
               {{link-to 'Select Lots' 'projects.edit.geometry-edit' model
@@ -127,16 +219,25 @@
             {{/ember-popover}}
           </button>
         </div>
-        <div class="cell shrink">
-          <button class="button tiny gray no-margin">
-            {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
-          </button>
-        </div>
+        {{#if (not (is-empty model.projectArea))}}
+          <div class="cell shrink">
+            <button
+              class="button tiny gray no-margin"
+              onclick={{action (mut model.projectArea) EmptyFeatureCollection}}
+            >
+              {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
+            </button>
+          </div>
+        {{/if}}
       </div>
+
+      {{!-- Underlying Zoning --}}
       <div class="grid-x control">
         <div class="cell auto">
           <strong>Underlying Zoning</strong>
-          {{!-- {{labs-ui/legend-icon icon=areaMapLegendConfig.underlyingZoning.icon}} --}}
+          {{#if (not (is-empty model.underlyingZoning))}}
+            {{labs-ui/legend-icon icon=underlyingZoningIcon}}
+          {{/if}}
         </div>
         <div class="cell shrink">
           {{#link-to 'projects.edit.geometry-edit' model
@@ -144,18 +245,35 @@
             data-test-underlying-zoning
             tagName='button'
             classNames='button tiny gray no-margin'}}
-            {{#if model.underlyingZoning}}
+            {{#if (not (is-empty model.underlyingZoning))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
             {{/if}}
           {{/link-to}}
         </div>
+        {{#if (not (is-empty model.underlyingZoning))}}
+          <div class="cell shrink">
+            <button
+              class="button tiny gray no-margin"
+              onclick={{action (mut model.underlyingZoning) EmptyFeatureCollection}}
+            >
+              {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
+            </button>
+          </div>
+        {{/if}}
       </div>
+
+      {{!-- Commercial Overlays --}}
       <div class="grid-x control">
         <div class="cell auto">
           <strong>Commercial Overlays</strong>
-          {{!-- {{labs-ui/legend-icon icon=areaMapLegendConfig.commercialOverlays.icon}} --}}
+          {{#if (not (is-empty model.commercialOverlays))}}
+            <div class="legend-icon">
+              <div class="sprite c1-1"></div>
+              <div class="sprite c2-3"></div>
+            </div>
+          {{/if}}
         </div>
         <div class="cell shrink">
           {{#link-to 'projects.edit.geometry-edit' model
@@ -163,18 +281,32 @@
             data-test-commercial-overlays
             tagName='button'
             classNames='button tiny gray no-margin'}}
-            {{#if model.commercialOverlays}}
+            {{#if (not (is-empty model.commercialOverlays))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
             {{/if}}
           {{/link-to}}
         </div>
+        {{#if (not (is-empty model.commercialOverlays))}}
+          <div class="cell shrink">
+            <button
+              class="button tiny gray no-margin"
+              onclick={{action (mut model.commercialOverlays) EmptyFeatureCollection}}
+            >
+              {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
+            </button>
+          </div>
+        {{/if}}
       </div>
+
+      {{!-- Special Purpose Districts --}}
       <div class="grid-x control">
         <div class="cell auto">
           <strong>Special Purpose Districts</strong>
-          {{!-- {{labs-ui/legend-icon icon=areaMapLegendConfig.specialPurposeDistricts.icon}} --}}
+          {{#if (not (is-empty model.specialPurposeDistricts))}}
+            {{labs-ui/legend-icon icon=specialPurposeDistrictsIcon}}
+          {{/if}}
         </div>
         <div class="cell shrink">
           {{#link-to 'projects.edit.geometry-edit' model
@@ -182,25 +314,58 @@
             data-test-special-purpose-districts
             tagName='button'
             classNames='button tiny gray no-margin'}}
-            {{#if model.specialPurposeDistricts}}
+            {{#if (not (is-empty model.specialPurposeDistricts))}}
               Edit
             {{else}}
               {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
             {{/if}}
           {{/link-to}}
         </div>
+        {{#if (not (is-empty model.specialPurposeDistricts))}}
+          <div class="cell shrink">
+            <button
+              class="button tiny gray no-margin"
+              onclick={{action (mut model.specialPurposeDistricts) EmptyFeatureCollection}}
+            >
+              {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
+            </button>
+          </div>
+        {{/if}}
       </div>
+
+      {{!-- Rezoning Area --}}
       <div class="grid-x control">
         <div class="cell auto">
           <strong>Rezoning Area</strong>
-          {{labs-ui/legend-icon icon=areaMapLegendConfig.rezoningArea.icon}}
+          {{#if (not (is-empty model.rezoningArea))}}
+            {{labs-ui/legend-icon icon=rezoningAreaIcon}}
+          {{/if}}
         </div>
         <div class="cell shrink">
-          <button class="button tiny gray no-margin">
-            {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
-          </button>
+          {{#link-to 'projects.edit.geometry-edit' model
+            (query-params type='rezoning-area' mode='draw')
+            data-test-rezoning-area
+            tagName='button'
+            classNames='button tiny gray no-margin'}}
+            {{#if (not (is-empty model.rezoningArea))}}
+              Edit
+            {{else}}
+              {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
+            {{/if}}
+          {{/link-to}}
         </div>
+        {{#if (not (is-empty model.rezoningArea))}}
+          <div class="cell shrink">
+            <button
+              class="button tiny gray no-margin"
+              onclick={{action (mut model.rezoningArea) EmptyFeatureCollection}}
+            >
+              {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
+            </button>
+          </div>
+        {{/if}}
       </div>
+
     </div>
   </div>
 </div>

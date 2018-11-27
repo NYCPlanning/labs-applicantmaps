@@ -21,7 +21,6 @@
       mapLoaded=(action handleMapLoad) as |map|}}
 
       {{search-handler map=map}}
-
       {{!-- labs-layers (includes tax-lots layer) --}}
       {{#map.labs-layers
         layerGroups=projectMapForm.model.layerGroups
@@ -33,12 +32,31 @@
         {{/layers.tooltip}}
       {{/map.labs-layers}}
 
-      {{!-- invoke the component for the specified draw mode --}}
+      {{!-- invoke the component for the specified type --}}
       {{component (concat 'project-geometries/' type)
         model=model
         mode=mode
         map=map}}
 
+      {{#ember-wormhole to='geometry-type-save-box'}}
+        <div class="stable">
+          {{#if (eq mode 'lots')}}
+            {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='draw')
+              tagName='button'
+              class='button gray expanded'
+              disabled=(not model.hasDirtyAttributes)
+            }}
+              Manual Edit
+            {{/link-to}}
+          {{/if}}
+          <button class="button smal gray expanded" 
+            disabled={{not model.hasDirtyAttributes}}
+            onclick={{action 'rollbackChanges'}}
+          >
+            Undo
+          </button>
+        </div>
+      {{/ember-wormhole}}
     {{/labs-map}}
   {{/project-geometries/layer-groups}}
 </div>

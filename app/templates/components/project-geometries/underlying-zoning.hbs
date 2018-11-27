@@ -1,4 +1,4 @@
-{{#if model.underlyingZoning}}
+{{#if (not (is-empty model.underlyingZoning))}}
   {{#project-geometries/draw-lots-to-union
     mode=mode
     map=map
@@ -6,6 +6,7 @@
     geometricProperty=model.underlyingZoning as |selection|
   }}
     {{#selection.button
+      enabled=model.hasDirtyAttributes
       handleClick=(action 'save')}}
       Save
       <small style="display:block;line-height:1.75;">Zoning Districts</small>
