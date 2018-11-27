@@ -23,7 +23,7 @@ import config from 'labs-applicant-maps/config/environment';
 const { mapTypes } = config;
 const { Model } = DS;
 
-const EmptyFeatureCollection = {
+export const EmptyFeatureCollection = {
   type: 'FeatureCollection',
   features: [{
     type: 'Feature',
