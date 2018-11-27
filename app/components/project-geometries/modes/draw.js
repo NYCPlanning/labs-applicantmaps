@@ -39,7 +39,11 @@ export default class DrawComponent extends Component {
     };
 
     this.addObserver('geometricProperty', () => {
-      draw.add(this.get('geometricProperty'));
+      if (!isEmpty(geometricProperty)) {
+        draw.add(this.get('geometricProperty'));
+      } else {
+        draw.deleteAll();
+      }
     });
 
     // setup events to update draw state
