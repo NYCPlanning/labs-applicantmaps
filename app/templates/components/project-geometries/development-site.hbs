@@ -4,6 +4,7 @@
   geometricProperty=model.developmentSite as |selection|
 }}
   {{#selection.button
+    enabled=model.hasDirtyAttributes
     handleClick=(action 'save')}}
     Save Development Site
   {{/selection.button}}

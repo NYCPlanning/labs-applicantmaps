@@ -27,7 +27,7 @@ module('Unit | Utility | wizard', function(hooks) {
   // Replace this with your real tests.
   test('answers yes to all questions', function(assert) {
     const store = this.owner.lookup('service:store');
-    const model = run(() => store.createRecord('area-map', {}));
+    const model = run(() => store.createRecord('project', {}));
     let step;
 
     ({ step } = wizard(projectProcedure, model));

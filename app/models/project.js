@@ -289,8 +289,7 @@ export default class extends Model {
 
   @computed(...procedureKeys)
   get currentStep() {
-    const { routing } = wizard(projectProcedure, this);
-    return routing;
+    return wizard(projectProcedure, this);
   }
 
   @computed('currentStep')
