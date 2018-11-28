@@ -34,7 +34,10 @@ module('Integration | Component | project-geometries/rezoning-area', function(ho
 
     this.set('model', model);
 
-    await render(hbs`{{project-geometries/rezoning-area model=model}}`);
+    await render(hbs`
+      {{project-geometries/rezoning-area
+        model=model
+        mode='lots'}}`);
 
     assert.equal(this.element.textContent.trim(), '');
   });
