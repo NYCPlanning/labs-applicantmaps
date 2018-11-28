@@ -68,6 +68,7 @@ export default class DrawComponent extends Component {
       'update',
       'selectionchange',
       'modechange',
+      'delete',
     ]
       .forEach((event) => {
         mapInstance.on(`draw.${event}`, drawStateCallback);
@@ -99,6 +100,7 @@ export default class DrawComponent extends Component {
 
   @action
   handleDrawButtonClick() {
+    draw.changeMode('simple_select');
     draw.changeMode('draw_polygon');
     this.set('drawMode', draw.getMode());
   }

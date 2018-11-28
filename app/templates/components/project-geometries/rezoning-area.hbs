@@ -1,8 +1,58 @@
-{{#if (not (is-empty model.rezoningArea))}}
-  {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
-    {{source.layer
-      layer=rezoningAreaLayer
-      before='boundary_country'
-    }}
-  {{/map.source}}
-{{/if}}
+{{#project-geometries/draw-lots-to-union
+  mode=mode
+  map=map
+  geometricProperty=model.rezoningArea as |selection|
+}}
+  {{#ember-wormhole to='geometry-type-draw-explainer'}}
+    <h1 class="header-large small-margin-bottom">Rezoning Area</h1>
+
+    <p class="text-small">The Rezoning Area refers to all property subject to the proposed amendment to existing Zoning Districts and Boundaries. It should be graphically offset from the proposed Zoning District boundaries.</p>
+
+    <h2 class="header-small small-margin-bottom">How to use the draw tools:</h2>
+
+    <ul class="text-small">
+      <li><p class="small-margin-bottom">Edit an existing shape by selecting it then selecting and dragging its vertices</p></li>
+      <li><p class="small-margin-bottom">
+        Use the
+        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+          {{fa-icon 'square' transform='grow-8' class='white'}}
+          {{fa-icon 'draw-polygon' transform='shrink-2'}}
+        </span>
+        polygon tool to add a new shapes
+      </p></li>
+      <li><p class="small-margin-bottom">Complete a new shape by clicking the final vertex a second time</p></li>
+      <li><p class="small-margin-bottom">
+        Use the
+        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+          {{fa-icon 'square' transform='grow-8' class='white'}}
+          {{fa-icon 'trash-alt' prefix='far' transform='shrink-2'}}
+        </span>
+        trash button (or delete key) to delete a selected shape or vertex
+      </p></li>
+      <li><p class="small-margin-bottom">Make sure all shapes are complete before saving</p></li>
+    </ul>
+    {{#selection.button
+      enabled=model.hasDirtyAttributes
+      handleClick=(action 'save')}}
+      Save
+      <small style="display:block;line-height:1.75;">Rezoning Area</small>
+    {{/selection.button}}
+  {{/ember-wormhole}}
+{{/project-geometries/draw-lots-to-union}}
+
+{{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
+  {{source.layer
+    layer=rezoningAreaLayer
+    before='boundary_country'
+  }}
+{{/map.source}}
+
+{{#map.source
+  options=(mapbox-geojson-source model.developmentSite) as |source|}}
+  {{source.layer
+    layer=developmentSiteLayer
+    before='boundary_country'
+  }}
+{{/map.source}}
