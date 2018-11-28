@@ -13,14 +13,5 @@ module('Integration | Component | project-geometries/modes/draw/feature-label-fo
     await render(hbs`{{project-geometries/modes/draw/feature-label-form}}`);
 
     assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
-    await render(hbs`
-      {{#project-geometries/modes/draw/feature-label-form}}
-        template block text
-      {{/project-geometries/modes/draw/feature-label-form}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });
