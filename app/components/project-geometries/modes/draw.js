@@ -15,16 +15,16 @@ const draw = new MapboxDraw({
 });
 
 // modify existing draw modes simple_select and draw_select to disable dragging shape
-const SimpleMode = MapboxDraw.modes.simple_select;
+// const SimpleMode = MapboxDraw.modes.simple_select;
 
-const DirectMode = MapboxDraw.modes.direct_select;
+// const DirectMode = MapboxDraw.modes.direct_select;
 
-SimpleMode.startOnActiveFeature = function() {
+MapboxDraw.modes.simple_select.startOnActiveFeature = function() {
   // Enable map.dragPan immediately, overrides ability to drag shape
   this.map.dragPan.enable();
 };
 
-DirectMode.onFeature = function() {
+MapboxDraw.modes.direct_select.onFeature = function() {
   // Enable map.dragPan when user clicks on feature, overrides ability to drag shape
   this.map.dragPan.enable();
 };
@@ -47,9 +47,9 @@ export default class DrawComponent extends Component {
       draw.add(geometricProperty);
     }
 
-    draw.changeMode('SimpleMode');
+    draw.changeMode('simple_select');
 
-    draw.changeMode('DirectMode');
+    draw.changeMode('direct_select', { featureId: 'development-site-layer' });
 
     const drawStateCallback = () => {
       if (!this.get('isDestroyed')) this.set('geometricProperty', draw.getAll());
