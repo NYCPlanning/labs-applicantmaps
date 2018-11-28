@@ -49,7 +49,7 @@ export default class DrawComponent extends Component {
 
     draw.changeMode('simple_select');
 
-    draw.changeMode('direct_select', { featureId: 'development-site-layer' });
+    // draw.changeMode('direct_select', { featureId: 'development-site-layer' });
 
     const drawStateCallback = () => {
       if (!this.get('isDestroyed')) this.set('geometricProperty', draw.getAll());
