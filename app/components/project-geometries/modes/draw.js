@@ -14,12 +14,7 @@ const draw = new MapboxDraw({
   },
 });
 
-// modify existing draw modes simple_select and draw_select to disable drag on features
-MapboxDraw.modes.simple_select.startOnActiveFeature = function() {
-  // Enable map.dragPan immediately, overrides ability to drag shape
-  this.map.dragPan.enable();
-};
-
+// modify existing draw modes direct_select to disable drag on features
 MapboxDraw.modes.direct_select.onFeature = function() {
   // Enable map.dragPan when user clicks on feature, overrides ability to drag shape
   this.map.dragPan.enable();
@@ -63,6 +58,16 @@ export default class DrawComponent extends Component {
       .forEach((event) => {
         mapInstance.on(`draw.${event}`, drawStateCallback);
       });
+
+    // skip simple_select mode, jump straight to direct_select mode so users can immediately select vertices
+    mapInstance.on('draw.selectionchange', () => {
+      const mode = draw.getMode();
+      const selected = draw.getSelectedIds()[0];
+
+      if (selected && mode === 'simple_select') {
+        draw.changeMode('direct_select', { featureId: selected });
+      }
+    });
   }
 
   @argument
