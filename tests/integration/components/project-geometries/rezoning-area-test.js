@@ -1,8 +1,9 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, click } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { run } from '@ember/runloop';
+import mapboxGlLoaded from '../../../helpers/mapbox-gl-loaded';
 
 const EmptyFeatureCollection = {
   type: 'FeatureCollection',
@@ -34,8 +35,32 @@ module('Integration | Component | project-geometries/rezoning-area', function(ho
 
     this.set('model', model);
 
-    await render(hbs`{{project-geometries/rezoning-area model=model}}`);
+    await render(hbs`
+      <div id='geometry-type-draw-explainer'></div>
+      {{#mapbox-gl}}
+        <div class="labs-map-loaded"></div>
+        {{project-geometries/rezoning-area
+          map=map
+          model=model
+          mode='lots'}}
+      {{/mapbox-gl}}
+    `);
 
-    assert.equal(this.element.textContent.trim(), '');
+    await mapboxGlLoaded();
+    const newData = Object.assign(EmptyFeatureCollection, {
+      features: [{
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [0, 0],
+        },
+      }],
+    });
+
+    model.set('rezoningArea', Object.assign(newData));
+
+    await click('[data-test-project-geometry-save]');
+
+    assert.ok(model);
   });
 });

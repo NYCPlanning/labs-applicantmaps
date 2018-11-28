@@ -1,0 +1,13 @@
+{{#if (not (is-empty selectedFeature))}}
+  <div class="selected-feature-form">
+    <div class="input-group">
+      <span class="input-group-label text-small">{{fa-icon 'tag' transform='grow-6'}}</span>
+      {{input
+        type="text"
+        class="input-group-field"
+        value=label
+        key-up=(action updateSelectedFeature)
+      }}
+    </div>
+  </div>
+{{/if}}

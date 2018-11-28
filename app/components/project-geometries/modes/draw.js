@@ -1,9 +1,9 @@
 import Component from '@ember/component';
 import MapboxDraw from 'mapbox-gl-draw';
-import { computed } from '@ember-decorators/object';
+import { action, computed } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
 import { type } from '@ember-decorators/argument/type';
-import { FeatureCollection } from '../../../models/project';
+import { FeatureCollection, EmptyFeatureCollection } from '../../../models/project';
 import isEmpty from '../../../utils/is-empty';
 
 const draw = new MapboxDraw({
@@ -41,12 +41,25 @@ export default class DrawComponent extends Component {
     draw.changeMode('simple_select');
 
     const drawStateCallback = () => {
-      if (!this.get('isDestroyed')) this.set('geometricProperty', draw.getAll());
+      if (!this.get('isDestroyed')) {
+        this.setProperties({
+          geometricProperty: draw.getAll(),
+          drawMode: draw.getMode(),
+        });
+
+        const { features: [firstSelectedFeature] } = draw.getSelected();
+        if (firstSelectedFeature) {
+          this.set('selectedFeature', { type: 'FeatureCollection', features: [firstSelectedFeature] });
+        } else {
+          this.set('selectedFeature', EmptyFeatureCollection);
+        }
+      }
     };
 
     this.addObserver('geometricProperty', () => {
-      if (!isEmpty(geometricProperty)) {
-        draw.add(this.get('geometricProperty'));
+      const latestProperty = this.get('geometricProperty');
+      if (!isEmpty(latestProperty)) {
+        draw.add(latestProperty);
       } else {
         draw.deleteAll();
       }
@@ -54,7 +67,15 @@ export default class DrawComponent extends Component {
 
     // setup events to update draw state
     // bind events to the state callback
-    ['create', 'combine', 'uncombine', 'update', 'selectionchange']
+    [
+      'create',
+      'combine',
+      'uncombine',
+      'update',
+      'selectionchange',
+      'modechange',
+      'delete',
+    ]
       .forEach((event) => {
         mapInstance.on(`draw.${event}`, drawStateCallback);
       });
@@ -77,10 +98,34 @@ export default class DrawComponent extends Component {
   @argument
   geometricProperty;
 
+  @type(FeatureCollection)
+  selectedFeature = EmptyFeatureCollection;
+
+  drawMode = null;
+
   // validate the existence of properties
   @computed('geometricProperty')
   get isValid() {
     return !!this.get('geometricProperty');
+  }
+
+  @action
+  handleTrashButtonClick() {
+    draw.trash();
+  }
+
+  @action
+  handleDrawButtonClick() {
+    draw.changeMode('simple_select');
+    draw.changeMode('draw_polygon');
+    this.set('drawMode', draw.getMode());
+  }
+
+  @action
+  updateSelectedFeature(label) {
+    const { features: [firstFeature] } = this.get('selectedFeature');
+
+    draw.setFeatureProperty(firstFeature.id, 'label', label);
   }
 
   willDestroyElement(...args) {

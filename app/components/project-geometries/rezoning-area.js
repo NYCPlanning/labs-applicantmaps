@@ -55,18 +55,15 @@ export default class RezoningArea extends Component {
   mode;
 
   @action
-  async save(finalGeometry) {
+  async save() {
     const model = this.get('model');
     const notifications = this.get('notificationMessages');
-    const { features: [{ geometry }] } = await finalGeometry;
-
-    model.set('rezoningArea', geometry);
 
     try {
-      const savedProject = await model.save();
+      await model.save();
 
       notifications.success('Project saved!');
-      this.get('router').transitionTo('projects.show', savedProject);
+      this.get('router').transitionTo('projects.show', model);
     } catch (e) {
       notifications.success(`Something went wrong: ${e}`);
     }
