@@ -1,44 +1,72 @@
-{{#if (not (is-empty model.commercialOverlays))}}
-  {{#project-geometries/draw-lots-to-union
-    mode=mode
-    map=map
-    geometricProperty=model.commercialOverlays as |selection|
-  }}
+{{#project-geometries/draw-lots-to-union
+  mode=mode
+  map=map
+  geometricProperty=model.commercialOverlays as |selection|
+}}
+  {{selection.mode.feature-label-form}}
+
+  {{!-- Render into sidebar --}}
+  {{#ember-wormhole to='geometry-type-draw-explainer'}}
+    <h1 class="header-large small-margin-bottom">
+      Rezoning: <span class="text-weight-normal">Commercial Overlays</span>
+    </h1>
+    <p class="text-small">
+      <a href='https://www1.nyc.gov/site/planning/zoning/districts-tools/commercial-districts-c1-c8.page' target="_blank">Commercial Overlays</a> are C1 or C2 district mapped within residential districts to serve local retail needs. These boundaries are not dependent on lot lines and can sometimes intersect tax lots.
+    </p>
+    <h2 class="header-small small-margin-bottom">How to use the draw tools:</h2>
+    <ul class="text-small">
+      <li><p class="small-margin-bottom">Edit an existing shape by selecting it then selecting and dragging its vertices</p></li>
+      <li><p class="small-margin-bottom">
+        Use the
+        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+          {{fa-icon 'square' transform='grow-8' class='white'}}
+          {{fa-icon 'draw-polygon' transform='shrink-2'}}
+        </span>
+        polygon tool to add a new shapes
+      </p></li>
+      <li><p class="small-margin-bottom">Complete a new shape by clicking the final vertex a second time</p></li>
+      <li><p class="small-margin-bottom">
+        Use the
+        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+          {{fa-icon 'square' transform='grow-8' class='white'}}
+          {{fa-icon 'trash-alt' prefix='far' transform='shrink-2'}}
+        </span>
+        trash button (or delete key) to delete a selected shape or vertex
+      </p></li>
+      <li><p class="small-margin-bottom">
+        When a shape is complete/selected, you can edit its
+        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+          {{fa-icon 'tag' transform='shrink-2'}}
+        </span>
+        label
+      </p></li>
+      <li><p class="small-margin-bottom">Make sure all shapes are complete and labeled before saving</p></li>
+    </ul>
     {{#selection.button
       enabled=model.hasDirtyAttributes
       handleClick=(action 'save')}}
-      Save Commercial Overlays
+      Save
+      <small style="display:block;line-height:1.75;">Commercial Overlays</small>
     {{/selection.button}}
-  {{/project-geometries/draw-lots-to-union}}
-
-  {{#ember-wormhole to='geometry-type-draw-explainer'}}
-    <h3 class="no-margin">Rezoning: Commercial Overlays</h3>
-    <p class="text-small">A <a href='https://www1.nyc.gov/site/planning/zoning/districts-tools/commercial-districts-c1-c8.page' target="_blank">Commercial Overlay</a> is a C1 or C2 district mapped within residential districts to serve local retail needs. These boundaries are not dependent on lot lines and can sometimes intersect tax lots.</p>
-    <ul class="text-small">
-      <li><strong>You can either edit an existing zoning boundary or draw a new zoning boundary using the draw tool</strong></li>
-      <li> Select the polygon tool to begin drawing a new shape (you can draw multiple shapes)</li>
-      <li> Complete a shape by clicking the final vertex a second time</li>
-      <li> Edit an existing zoning boundary or a drawn shape by selecting and then dragging vertices</li>
-      <li> Use the trash button (or delete key) to delete a selected shape or vertex</li>
-      <li> Type in the zoning designation code for a new zoning boundary in the box</li>
-      <li> Once you're finished, save the geometry</li>
-    </ul>
   {{/ember-wormhole}}
+{{/project-geometries/draw-lots-to-union}}
 
-  {{#map.source options=(mapbox-geojson-source model.commercialOverlays) as |source|}}
-    {{source.layer layer=coLayer before='boundary_country'}}
-    {{source.layer layer=c11Layer before='boundary_country'}}
-    {{source.layer layer=c12Layer before='boundary_country'}}
-    {{source.layer layer=c13Layer before='boundary_country'}}
-    {{source.layer layer=c14Layer before='boundary_country'}}
-    {{source.layer layer=c15Layer before='boundary_country'}}
-    {{source.layer layer=c21Layer before='boundary_country'}}
-    {{source.layer layer=c22Layer before='boundary_country'}}
-    {{source.layer layer=c23Layer before='boundary_country'}}
-    {{source.layer layer=c24Layer before='boundary_country'}}
-    {{source.layer layer=c25Layer before='boundary_country'}}
-  {{/map.source}}
-{{/if}}
+{{#map.source options=(mapbox-geojson-source model.commercialOverlays) as |source|}}
+  {{source.layer layer=coLayer before='boundary_country'}}
+  {{source.layer layer=c11Layer before='boundary_country'}}
+  {{source.layer layer=c12Layer before='boundary_country'}}
+  {{source.layer layer=c13Layer before='boundary_country'}}
+  {{source.layer layer=c14Layer before='boundary_country'}}
+  {{source.layer layer=c15Layer before='boundary_country'}}
+  {{source.layer layer=c21Layer before='boundary_country'}}
+  {{source.layer layer=c22Layer before='boundary_country'}}
+  {{source.layer layer=c23Layer before='boundary_country'}}
+  {{source.layer layer=c24Layer before='boundary_country'}}
+  {{source.layer layer=c25Layer before='boundary_country'}}
+{{/map.source}}
 
 {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
   {{source.layer
