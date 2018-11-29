@@ -4,7 +4,7 @@ import { render, settled } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { run } from '@ember/runloop';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import mapboxGlLoaded from '../../../helpers/mapbox-gl-loaded';
+import mapboxGlLoaded from '../../../../helpers/mapbox-gl-loaded';
 
 const DUMMY_FEATURE_COLLECTION = {
   type: 'FeatureCollection',
@@ -17,11 +17,11 @@ const DUMMY_FEATURE_COLLECTION = {
   }],
 };
 
-module('Integration | Component | project-geometries/development-site', function(hooks) {
+module('Integration | Component | project-geometries/project-area', function(hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
 
-  test('it disables button if there is nothing drawn', async function(assert) {
+  test('make sure button appears when model is dirty', async function(assert) {
     const store = this.owner.lookup('service:store');
     const model = run(() => store.createRecord('project', {
       projectName: 'Mulholland Drive',
@@ -43,7 +43,8 @@ module('Integration | Component | project-geometries/development-site', function
 
       {{#mapbox-gl as |map|}} 
         <div class="labs-map-loaded"></div>
-        {{project-geometries/development-site
+        {{project-geometries/types/project-area
+          map=map
           mode='lots'
           map=map
           model=model}}

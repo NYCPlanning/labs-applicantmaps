@@ -15,7 +15,7 @@ module('Integration | Component | project-geometries/underlying-zoning', functio
 
     await render(hbs`
       {{#mapbox-gl as |map|}} 
-        {{project-geometries/underlying-zoning model=model map=map}}
+        {{project-geometries/types/underlying-zoning model=model map=map}}
       {{/mapbox-gl}}
     `);
 

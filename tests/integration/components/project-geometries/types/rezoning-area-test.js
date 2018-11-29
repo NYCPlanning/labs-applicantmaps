@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { run } from '@ember/runloop';
-import mapboxGlLoaded from '../../../helpers/mapbox-gl-loaded';
+import mapboxGlLoaded from '../../../../helpers/mapbox-gl-loaded';
 
 const EmptyFeatureCollection = {
   type: 'FeatureCollection',
@@ -39,7 +39,7 @@ module('Integration | Component | project-geometries/rezoning-area', function(ho
       <div id='geometry-type-draw-explainer'></div>
       {{#mapbox-gl}}
         <div class="labs-map-loaded"></div>
-        {{project-geometries/rezoning-area
+        {{project-geometries/types/rezoning-area
           map=map
           model=model
           mode='lots'}}
