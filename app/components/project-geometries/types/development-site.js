@@ -14,8 +14,18 @@ export const developmentSiteLayer = {
 };
 
 export default class DevelopmentSiteComponent extends Component {
+  constructor(...args) {
+    super(...args);
+    const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');
+
+    zoningDistricts.set('visible', false);
+  }
+
   @service
   router;
+
+  @service
+  store;
 
   @service
   notificationMessages;
@@ -41,5 +51,11 @@ export default class DevelopmentSiteComponent extends Component {
     } catch (e) {
       this.get('notificationMessages').success(`Something went wrong: ${e}`);
     }
+  }
+
+  willDestroyElement() {
+    const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');
+
+    zoningDistricts.set('visible', true);
   }
 }

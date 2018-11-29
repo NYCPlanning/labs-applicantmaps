@@ -29,6 +29,16 @@ export const projectAreaIcon = {
 };
 
 export default class ProjectAreaComponent extends Component {
+  constructor(...args) {
+    super(...args);
+    const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');
+
+    zoningDistricts.set('visible', false);
+  }
+
+  @service
+  store;
+
   @service
   notificationMessages;
 
@@ -57,5 +67,11 @@ export default class ProjectAreaComponent extends Component {
     } catch (e) {
       notifications.success(`Something went wrong: ${e}`);
     }
+  }
+
+  willDestroyElement() {
+    const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');
+
+    zoningDistricts.set('visible', true);
   }
 }
