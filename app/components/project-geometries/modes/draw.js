@@ -30,15 +30,10 @@ export default class DrawComponent extends Component {
 
     mapInstance.addControl(draw, 'top-left');
 
-    // set up initial drawing mode
-    draw.changeMode('draw_polygon');
-
     // if geometry exists for this mode, add it to the drawing canvas
     if (!isEmpty(geometricProperty)) {
       draw.add(geometricProperty);
     }
-
-    draw.changeMode('simple_select');
 
     const drawStateCallback = () => {
       if (!this.get('isDestroyed')) {
@@ -111,7 +106,14 @@ export default class DrawComponent extends Component {
 
   @action
   handleTrashButtonClick() {
-    draw.trash();
+    const selectedFeature = draw.getSelectedIds();
+    const selectedVertices = draw.getSelectedPoints();
+
+    if (selectedVertices.features[0]) {
+      draw.trash();
+    } else {
+      draw.delete(selectedFeature);
+    }
   }
 
   @action
