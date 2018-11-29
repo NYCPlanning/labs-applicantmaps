@@ -14,6 +14,12 @@ const draw = new MapboxDraw({
   },
 });
 
+// modify existing draw modes direct_select to disable drag on features
+MapboxDraw.modes.direct_select.onFeature = function() {
+  // Enable map.dragPan when user clicks on feature, overrides ability to drag shape
+  this.map.dragPan.enable();
+};
+
 export default class DrawComponent extends Component {
   constructor(...args) {
     super(...args);
@@ -24,15 +30,10 @@ export default class DrawComponent extends Component {
 
     mapInstance.addControl(draw, 'top-left');
 
-    // set up initial drawing mode
-    draw.changeMode('draw_polygon');
-
     // if geometry exists for this mode, add it to the drawing canvas
     if (!isEmpty(geometricProperty)) {
       draw.add(geometricProperty);
     }
-
-    draw.changeMode('simple_select');
 
     const drawStateCallback = () => {
       if (!this.get('isDestroyed')) {
@@ -73,6 +74,16 @@ export default class DrawComponent extends Component {
       .forEach((event) => {
         mapInstance.on(`draw.${event}`, drawStateCallback);
       });
+
+    // skip simple_select mode, jump straight to direct_select mode so users can immediately select vertices
+    mapInstance.on('draw.selectionchange', () => {
+      const mode = draw.getMode();
+      const selected = draw.getSelectedIds()[0];
+
+      if (selected && mode === 'simple_select') {
+        draw.changeMode('direct_select', { featureId: selected });
+      }
+    });
   }
 
   @argument
@@ -95,7 +106,14 @@ export default class DrawComponent extends Component {
 
   @action
   handleTrashButtonClick() {
-    draw.trash();
+    const selectedFeature = draw.getSelectedIds();
+    const selectedVertices = draw.getSelectedPoints();
+
+    if (selectedVertices.features[0]) {
+      draw.trash();
+    } else {
+      draw.delete(selectedFeature);
+    }
   }
 
   @action
