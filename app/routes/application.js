@@ -6,9 +6,9 @@ export default class RouteClass extends Route {
   @service
   notificationMessages;
 
-  @action
-  error({ message }) {
-    this.get('notificationMessages').error(message);
-    this.transitionTo('application');
-  }
+  // @action
+  // error({ message }) {
+  //   this.get('notificationMessages').error(message);
+  //   this.transitionTo('application');
+  // }
 }

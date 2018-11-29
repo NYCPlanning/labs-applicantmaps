@@ -13,9 +13,9 @@ export default class ProjectsEditRoute extends Route {
     return this.store.findRecord('project', project_id, { include: mapTypes.toString() });
   }
 
-  @action
-  error({ message }) {
-    this.get('notificationMessages').error(message);
-    this.transitionTo('application');
-  }
+  // @action
+  // error({ message }) {
+  //   this.get('notificationMessages').error(message);
+  //   this.transitionTo('application');
+  // }
 }

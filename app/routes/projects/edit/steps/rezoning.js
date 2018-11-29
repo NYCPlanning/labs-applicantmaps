@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import StepRoute from './-base';
 
-export default Route.extend({
-});
+export default class RezoningStep extends StepRoute {
+}

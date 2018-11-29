@@ -47,7 +47,6 @@ export const FeatureCollection = shapeOf({
   ),
 });
 
-
 const hasAnswered = property => property === true || property === false;
 const hasFilledOut = property => !isEmpty(property);
 const requiredIf = function(question, conditionalTest = hasAnswered) {
@@ -70,6 +69,23 @@ export const projectProcedure = [
     step: 'development-site',
     routing: {
       route: 'projects.edit.steps.development-site',
+      queryParams: {
+        type: 'development-site',
+      },
+    },
+    conditions: {
+      hasVisitedStep(hasVisitedStep) {
+        return hasVisitedStep['development-site'] || hasFilledOut(this.get('developmentSite'));
+      },
+    },
+  },
+  {
+    step: 'development-site-edit',
+    routing: {
+      route: 'projects.edit.geometry-edit',
+      queryParams: {
+        type: 'development-site',
+      },
     },
     conditions: {
       developmentSite: hasFilledOut,
@@ -79,6 +95,28 @@ export const projectProcedure = [
     step: 'project-area',
     routing: {
       route: 'projects.edit.steps.project-area',
+    },
+    conditions: {
+      hasVisitedStep(hasVisitedStep) {
+        const projectArea = this.get('projectArea');
+
+        return hasVisitedStep['development-site']
+          || (hasFilledOut(projectArea) && requiredIf('needProjectArea', hasFilledOut).bind(this));
+      },
+      needProjectArea: hasAnswered,
+      projectArea: requiredIf('needProjectArea', hasFilledOut),
+    },
+  },
+  {
+    step: 'project-area-edit',
+    routing: {
+      route: 'projects.edit.steps.project-area',
+      queryParams: {
+        type: 'project-area',
+        queryParams: {
+          type: 'project-area',
+        },
+      },
     },
     conditions: {
       needProjectArea: hasAnswered,
@@ -101,8 +139,10 @@ export const projectProcedure = [
     step: 'rezoning-underlying',
     routing: {
       route: 'projects.edit.geometry-edit',
-      mode: 'draw',
-      type: 'underlying-zoning',
+      queryParams: {
+        mode: 'draw',
+        type: 'underlying-zoning',
+      },
     },
     conditions: {
       needRezoning: hasAnswered,
@@ -114,8 +154,10 @@ export const projectProcedure = [
     step: 'rezoning-commercial',
     routing: {
       route: 'projects.edit.geometry-edit',
-      mode: 'draw',
-      type: 'commercial-overlays',
+      queryParams: {
+        mode: 'draw',
+        type: 'commercial-overlays',
+      },
     },
     conditions: {
       needRezoning: hasAnswered,
@@ -127,8 +169,10 @@ export const projectProcedure = [
     step: 'rezoning-special',
     routing: {
       route: 'projects.edit.geometry-edit',
-      mode: 'draw',
-      type: 'special-purpose-districts',
+      queryParams: {
+        mode: 'draw',
+        type: 'special-purpose-districts',
+      },
     },
     conditions: {
       needRezoning: hasAnswered,
@@ -139,7 +183,6 @@ export const projectProcedure = [
   {
     step: 'complete',
     routing: {
-      label: 'complete',
       route: 'projects.show',
     },
   },
@@ -184,6 +227,15 @@ export default class extends Model {
   @attr('boolean', { allowNull: true, defaultValue: null }) needCommercialOverlay;
 
   @attr('boolean', { allowNull: true, defaultValue: null }) needSpecialDistrict;
+
+  // ephemeral state object for tracking
+  // where user has visited in a session
+  hasVisitedStep = {
+    'development-site': false,
+    'project-area': false,
+    rezoning: false,
+    dashboard: false,
+  };
 
   // ******** GEOMETRIES ********
   // FeatureCollection of polygons or multipolygons
