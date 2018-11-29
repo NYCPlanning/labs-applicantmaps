@@ -6,7 +6,7 @@
 
 <div class="grid-x grid-margin-x">
   <div class="cell medium-6 large-5 xlarge-4">
-    {{#link-to 'projects.show' model.id (query-params mode='lots')
+    {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='lots' type='development-site')
       tagName='span'
       class='button large expanded'
     }}
@@ -20,7 +20,7 @@
       tagName='span'
       class='button large expanded'
     }}
-      {{fa-icon 'projects.show' fixedWidth=true transform='left-3 grow-3'}}
+      {{fa-icon 'draw-polygon' fixedWidth=true transform='left-3 grow-3'}}
       Draw Manually
     {{/link-to}}
     <p class="text-small text-center">Use draw tools to create a Development Site that includes partial lots</p>
