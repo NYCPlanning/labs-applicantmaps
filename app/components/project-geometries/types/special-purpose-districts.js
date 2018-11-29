@@ -73,11 +73,8 @@ export default class specialPurposeDistrictsComponent extends Component {
   specialPurposeDistrictsLabelsLayer = specialPurposeDistrictsLabelsLayer;
 
   @action
-  async save(finalGeometry) {
+  async save() {
     const model = this.get('model');
-    const featureCollection = await finalGeometry;
-
-    model.set('specialPurposeDistricts', featureCollection);
 
     // because we've just changed the proposed zoning,
     // we should also calculate the rezoning area
