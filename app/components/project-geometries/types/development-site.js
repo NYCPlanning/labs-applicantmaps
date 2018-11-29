@@ -29,8 +29,6 @@ export default class DevelopmentSiteComponent extends Component {
   @argument
   mode;
 
-  developmentSiteLayer = developmentSiteLayer;
-
   @action
   async save() {
     const model = this.get('model');

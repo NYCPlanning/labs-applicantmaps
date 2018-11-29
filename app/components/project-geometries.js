@@ -4,6 +4,8 @@ import mapboxgl from 'mapbox-gl';
 import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { tagName } from '@ember-decorators/component';
+import { developmentSiteLayer } from './project-geometries/types/development-site';
+import { projectAreaLayer } from './project-geometries/types/project-area';
 
 @tagName('')
 export default class ProjectGeometryEditComponent extends Component {
@@ -21,6 +23,10 @@ export default class ProjectGeometryEditComponent extends Component {
 
   @service
   router;
+
+  developmentSiteLayer = developmentSiteLayer;
+
+  projectAreaLayer = projectAreaLayer;
 
   /* ----------  General Map  ---------- */
   showDrawInstructions = true;

@@ -44,8 +44,6 @@ export default class ProjectAreaComponent extends Component {
   @argument
   mode;
 
-  projectAreaLayer = projectAreaLayer;
-
   @action
   async save() {
     const model = this.get('model');

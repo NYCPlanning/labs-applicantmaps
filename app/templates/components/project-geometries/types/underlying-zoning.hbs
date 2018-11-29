@@ -62,10 +62,3 @@
     before='boundary_country'
   }}
 {{/map.source}}
-
-{{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
-  {{source.layer
-    layer=developmentSiteLayer
-    before='boundary_country'
-  }}
-{{/map.source}}
