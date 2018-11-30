@@ -61,11 +61,4 @@
   {{/ember-wormhole}}
 {{/project-geometries/draw-lots-to-union}}
 
-{{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
-  {{source.layer
-    layer=developmentSiteLayer
-    before='boundary_country'
-  }}
-{{/map.source}}
-
 {{yield}}

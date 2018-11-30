@@ -6,17 +6,12 @@
   <div class="stable">
     {{#if hasBlock}}
       {{yield (hash
-        finalGeometry=finalGeometry
         mode=mode
         button=(component 'project-geometries/draw-lots-to-union/button'
-          data-test-project-geometry-save=true
-          enabled=isReady
-          finalGeometry=finalGeometry))}}
+          data-test-project-geometry-save=true))}}
     {{else}}
       {{project-geometries/draw-lots-to-union/button
         data-test-project-geometry-save=true
-        enabled=isReady
-        finalGeometry=finalGeometry
       }}
     {{/if}}
   </div>

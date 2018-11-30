@@ -61,14 +61,4 @@
   {{/ember-wormhole}}
 {{/project-geometries/draw-lots-to-union}}
 
-{{!-- Ad-hoc source and layer for projectArea --}}
-{{#if (and model.projectArea (not-eq geometryMode 'projectArea'))}}
-  {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
-    {{source.layer
-      layer=projectAreaLayer
-      before='boundary_country'
-    }}
-  {{/map.source}}
-{{/if}}
-
 {{yield}}

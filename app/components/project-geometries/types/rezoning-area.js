@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
-import isEmpty from '../../utils/is-empty';
+import isEmpty from '../../../utils/is-empty';
 
 export const rezoningAreaLayer = {
   type: 'line',
