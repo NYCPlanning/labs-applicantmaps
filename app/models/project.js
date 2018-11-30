@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 import { attr, hasMany } from '@ember-decorators/data';
-import { computed } from '@ember-decorators/object';
+import { computed, observes } from '@ember-decorators/object';
 import turfBbox from '@turf/bbox';
 import { camelize } from '@ember/string';
 import {
@@ -234,6 +234,7 @@ export default class extends Model {
   @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection }) rezoningArea
 
+  // returns a promise
   async defaultRezoningArea() {
     const {
       underlyingZoning,
@@ -277,9 +278,20 @@ export default class extends Model {
     return EmptyFeatureCollection;
   }
 
+  @observes('underlyingZoning', 'commercialOverlays', 'specialPurposeDistricts')
   async setRezoningArea() {
-    const defaultRezoningArea = await this.defaultRezoningArea();
-    this.set('rezoningArea', defaultRezoningArea);
+    // if any of the relevant attrs have changed, recompute
+    const hasUpdatedRezoning = Object.keys(this.changedAttributes())
+      .any(key => [
+        'underlyingZoning',
+        'commercialOverlays',
+        'specialPurposeDistricts',
+      ].includes(key));
+
+    if (hasUpdatedRezoning) {
+      const defaultRezoningArea = await this.defaultRezoningArea();
+      this.set('rezoningArea', defaultRezoningArea);
+    }
   }
 
   // ******** COMPUTING THE CURRENT STEP FOR ROUTING ********
