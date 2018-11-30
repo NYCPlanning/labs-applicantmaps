@@ -174,6 +174,8 @@ export default class extends Model {
 
   @attr('number', { defaultValue: 0 }) datePrepared;
 
+  @attr('number') stepLabel
+
   // ******** REQUIRED ANSWERS ********
   @attr('boolean', { allowNull: true, defaultValue: null }) needProjectArea;
 
@@ -304,9 +306,9 @@ export default class extends Model {
   @computed('currentStep')
   get currentStepNumber() {
     const currentStep = this.get('currentStep');
-    if (currentStep.label === 'rezoning') { return 3; }
-    if (currentStep.label === 'complete') { return 3; }
-    if (currentStep.label === 'project-area') { return 2; }
+    if (currentStep.step === 'rezoning') { return 3; }
+    if (currentStep.step === 'complete') { return 3; }
+    if (currentStep.step === 'project-area') { return 2; }
     return 1;
   }
 
