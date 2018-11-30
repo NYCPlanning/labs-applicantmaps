@@ -1,8 +1,8 @@
+import EmberObject from '@ember/object';
 import wizard from 'labs-applicant-maps/utils/wizard';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import { projectProcedure } from 'labs-applicant-maps/models/project';
 import { module, test } from 'qunit';
-import { run } from '@ember/runloop';
 import { setupTest } from 'ember-qunit';
 
 const DUMMY_FEATURE_COLLECTION = {
@@ -26,8 +26,7 @@ module('Unit | Utility | wizard', function(hooks) {
 
   // Replace this with your real tests.
   test('answers yes to all questions', function(assert) {
-    const store = this.owner.lookup('service:store');
-    const model = run(() => store.createRecord('project', {}));
+    const model = EmberObject.create();
     let step;
 
     ({ step } = wizard(projectProcedure, model));
@@ -76,8 +75,7 @@ module('Unit | Utility | wizard', function(hooks) {
   });
 
   test('answers yes to all questions but project area', function(assert) {
-    const store = this.owner.lookup('service:store');
-    const model = run(() => store.createRecord('area-map', {}));
+    const model = EmberObject.create();
     let step;
 
     ({ step } = wizard(projectProcedure, model));
@@ -125,8 +123,7 @@ module('Unit | Utility | wizard', function(hooks) {
   });
 
   test('answers yes to all questions, no to needCommercialOverlay', function(assert) {
-    const store = this.owner.lookup('service:store');
-    const model = run(() => store.createRecord('area-map', {}));
+    const model = EmberObject.create();
     let step;
 
     ({ step } = wizard(projectProcedure, model));
@@ -169,8 +166,7 @@ module('Unit | Utility | wizard', function(hooks) {
   });
 
   test('answers yes to all questions, no to needCommercialOverlay and needSpecialDistrict', function(assert) {
-    const store = this.owner.lookup('service:store');
-    const model = run(() => store.createRecord('area-map', {}));
+    const model = EmberObject.create();
     let step;
 
     ({ step } = wizard(projectProcedure, model));
@@ -208,8 +204,7 @@ module('Unit | Utility | wizard', function(hooks) {
   });
 
   test('answers yes to all questions, no to needRezoning', function(assert) {
-    const store = this.owner.lookup('service:store');
-    const model = run(() => store.createRecord('area-map', {}));
+    const model = EmberObject.create();
     let step;
 
     ({ step } = wizard(projectProcedure, model));
@@ -239,8 +234,7 @@ module('Unit | Utility | wizard', function(hooks) {
   });
 
   test('answers yes to all questions but no to projectArea', function(assert) {
-    const store = this.owner.lookup('service:store');
-    const model = run(() => store.createRecord('area-map', {}));
+    const model = EmberObject.create();
     let step;
 
     ({ step } = wizard(projectProcedure, model));
@@ -288,8 +282,7 @@ module('Unit | Utility | wizard', function(hooks) {
   });
 
   test('answers no to all questions', function(assert) {
-    const store = this.owner.lookup('service:store');
-    const model = run(() => store.createRecord('area-map', {}));
+    const model = EmberObject.create();
     let step;
 
     ({ step } = wizard(projectProcedure, model));
@@ -319,8 +312,7 @@ module('Unit | Utility | wizard', function(hooks) {
   });
 
   test('answers no to all questions but yes to needRezoning, needUnderlyingZoning', function(assert) {
-    const store = this.owner.lookup('service:store');
-    const model = run(() => store.createRecord('area-map', {}));
+    const model = EmberObject.create();
     let step;
 
     ({ step } = wizard(projectProcedure, model));
@@ -358,8 +350,7 @@ module('Unit | Utility | wizard', function(hooks) {
   });
 
   test('answers no to all questions but yes to needRezoning, needCommercialOverlay', function(assert) {
-    const store = this.owner.lookup('service:store');
-    const model = run(() => store.createRecord('area-map', {}));
+    const model = EmberObject.create();
     let step;
 
     ({ step } = wizard(projectProcedure, model));
@@ -397,8 +388,7 @@ module('Unit | Utility | wizard', function(hooks) {
   });
 
   test('answers no to all questions but yes to needRezoning, needSpecialDistrict', function(assert) {
-    const store = this.owner.lookup('service:store');
-    const model = run(() => store.createRecord('area-map', {}));
+    const model = EmberObject.create();
     let step;
 
     ({ step } = wizard(projectProcedure, model));
@@ -436,8 +426,7 @@ module('Unit | Utility | wizard', function(hooks) {
   });
 
   test('answers no to all questions but yes to needRezoning, needCommercialOverlay, and needSpecialDistrict', function(assert) {
-    const store = this.owner.lookup('service:store');
-    const model = run(() => store.createRecord('area-map', {}));
+    const model = EmberObject.create();
     let step;
 
     ({ step } = wizard(projectProcedure, model));
