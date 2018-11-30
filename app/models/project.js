@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 import { attr, hasMany } from '@ember-decorators/data';
-import { computed } from '@ember-decorators/object';
+import { computed, observes } from '@ember-decorators/object';
 import turfBbox from '@turf/bbox';
 import { camelize } from '@ember/string';
 import {
@@ -234,7 +234,8 @@ export default class extends Model {
   @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection }) rezoningArea
 
-  async setRezoningArea() {
+  // returns a promise
+  async defaultRezoningArea() {
     const {
       underlyingZoning,
       commercialOverlays,
@@ -254,7 +255,6 @@ export default class extends Model {
       combinedFC.features = [...combinedFC.features, ...underlyingZoningDiff.features];
     }
 
-
     // commercial Overlays
     if (!isEmpty(commercialOverlays)) {
       const currentCommercialOverlays = await proposedCommercialOverlaysQuery(this.get('developmentSite'));
@@ -271,17 +271,26 @@ export default class extends Model {
       combinedFC.features = [...combinedFC.features, ...specialPurposeDistrictsDiff.features];
     }
 
-    // union together all difference features
-    if (combinedFC.features.length > 0) {
-      const rezoningArea = rezoningAreaQuery(combinedFC);
+    if (!isEmpty(combinedFC)) {
+      return rezoningAreaQuery(combinedFC);
+    }
 
-      this.set('rezoningArea', rezoningArea);
-      // const proposedZoning = this.get('underlyingZoning');
-      // const developmentSite = this.get('developmentSite');
-      // const currentZoning = await proposedSpecialDistrictsQuery(developmentSite);
-      // const result = await rezoningAreaQuery(currentZoning, proposedZoning);
+    return EmptyFeatureCollection;
+  }
 
-      // this.set('rezoningArea', result);
+  @observes('underlyingZoning', 'commercialOverlays', 'specialPurposeDistricts')
+  async setRezoningArea() {
+    // if any of the relevant attrs have changed, recompute
+    const hasUpdatedRezoning = Object.keys(this.changedAttributes())
+      .any(key => [
+        'underlyingZoning',
+        'commercialOverlays',
+        'specialPurposeDistricts',
+      ].includes(key));
+
+    if (hasUpdatedRezoning) {
+      const defaultRezoningArea = await this.defaultRezoningArea();
+      this.set('rezoningArea', defaultRezoningArea);
     }
   }
 

@@ -21,6 +21,7 @@
       mapLoaded=(action handleMapLoad) as |map|}}
 
       {{search-handler map=map}}
+
       {{!-- labs-layers (includes tax-lots layer) --}}
       {{#map.labs-layers
         layerGroups=projectMapForm.model.layerGroups
@@ -32,8 +33,22 @@
         {{/layers.tooltip}}
       {{/map.labs-layers}}
 
+      {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
+        {{source.layer
+          layer=developmentSiteLayer
+          before='boundary_country'
+        }}
+      {{/map.source}}
+
+      {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
+        {{source.layer
+          layer=projectAreaLayer
+          before='boundary_country'
+        }}
+      {{/map.source}}
+
       {{!-- invoke the component for the specified type --}}
-      {{component (concat 'project-geometries/' type)
+      {{component (concat 'project-geometries/types/' type)
         model=model
         mode=mode
         map=map}}

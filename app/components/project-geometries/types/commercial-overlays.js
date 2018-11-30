@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
-import isEmpty from '../../utils/is-empty';
+import isEmpty from '../../../utils/is-empty';
 
 // Proposed Commercial Overlays
 export const commercialOverlaysLayer = {
@@ -171,11 +171,8 @@ export default class CommercialOverlayComponent extends Component {
   c25Layer = c25Layer;
 
   @action
-  async save(finalGeometry) {
+  async save() {
     const model = this.get('model');
-    const featureCollection = await finalGeometry;
-
-    model.set('commercialOverlays', featureCollection);
 
     // because we've just changed the proposed zoning,
     // we should also calculate the rezoning area
