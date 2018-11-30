@@ -27,6 +27,8 @@ module('Integration | Component | project-geometries/development-site', function
       projectName: 'Mulholland Drive',
     }));
 
+    this.owner.register('service:store', store);
+
     await model.save();
 
     this.set('model', model);

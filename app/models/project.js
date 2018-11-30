@@ -234,7 +234,7 @@ export default class extends Model {
   @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection }) rezoningArea
 
-  async setRezoningArea() {
+  async defaultRezoningArea() {
     const {
       underlyingZoning,
       commercialOverlays,
@@ -254,7 +254,6 @@ export default class extends Model {
       combinedFC.features = [...combinedFC.features, ...underlyingZoningDiff.features];
     }
 
-
     // commercial Overlays
     if (!isEmpty(commercialOverlays)) {
       const currentCommercialOverlays = await proposedCommercialOverlaysQuery(this.get('developmentSite'));
@@ -271,18 +270,16 @@ export default class extends Model {
       combinedFC.features = [...combinedFC.features, ...specialPurposeDistrictsDiff.features];
     }
 
-    // union together all difference features
-    if (combinedFC.features.length > 0) {
-      const rezoningArea = rezoningAreaQuery(combinedFC);
-
-      this.set('rezoningArea', rezoningArea);
-      // const proposedZoning = this.get('underlyingZoning');
-      // const developmentSite = this.get('developmentSite');
-      // const currentZoning = await proposedSpecialDistrictsQuery(developmentSite);
-      // const result = await rezoningAreaQuery(currentZoning, proposedZoning);
-
-      // this.set('rezoningArea', result);
+    if (!isEmpty(combinedFC)) {
+      return rezoningAreaQuery(combinedFC);
     }
+
+    return EmptyFeatureCollection;
+  }
+
+  async setRezoningArea() {
+    const defaultRezoningArea = await this.defaultRezoningArea();
+    this.set('rezoningArea', defaultRezoningArea);
   }
 
   // ******** COMPUTING THE CURRENT STEP FOR ROUTING ********
