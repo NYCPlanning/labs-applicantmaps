@@ -1,4 +1,4 @@
-import Route from '@ember/routing/route';
+import StepRoute from './-base';
 
-export default Route.extend({
-});
+export default class DevelopmentSiteRoute extends StepRoute {
+}
