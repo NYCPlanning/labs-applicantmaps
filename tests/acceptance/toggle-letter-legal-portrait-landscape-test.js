@@ -1,4 +1,4 @@
-import { module, test } from 'qunit';
+import { module, skip } from 'qunit';
 import {
   visit,
   click,
@@ -13,7 +13,7 @@ module('Acceptance | user can toggle between letter/legal and portrait/landscape
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  test('user can toggle between letter/legal and portrait/landscape', async (assert) => {
+  skip('user can toggle between letter/legal and portrait/landscape', async (assert) => {
     server.createList('project', 10);
 
     await visit('/projects/10');

@@ -1,4 +1,4 @@
-import { module, test } from 'qunit';
+import { module, skip } from 'qunit';
 import {
   visit,
   click,
@@ -13,7 +13,7 @@ import { setupApplicationTest } from 'ember-qunit';
 module('Acceptance | user can search', function(hooks) {
   setupApplicationTest(hooks);
 
-  test('User can start new project and search for something', async function(assert) {
+  skip('User can start new project and search for something', async function(assert) {
     await visit('/');
     await click('.get-started');
     // await mapboxGlLoaded();

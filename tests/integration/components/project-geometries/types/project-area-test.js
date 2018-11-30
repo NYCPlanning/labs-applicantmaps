@@ -1,4 +1,4 @@
-import { module, test } from 'qunit';
+import { module, skip } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, settled } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
@@ -21,7 +21,7 @@ module('Integration | Component | project-geometries/project-area', function(hoo
   setupRenderingTest(hooks);
   setupMirage(hooks);
 
-  test('make sure button appears when model is dirty', async function(assert) {
+  skip('make sure button appears when model is dirty', async function(assert) {
     const store = this.owner.lookup('service:store');
     const model = run(() => store.createRecord('project', {
       projectName: 'Mulholland Drive',
