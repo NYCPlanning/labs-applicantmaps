@@ -18,7 +18,7 @@ export default class DevelopmentSiteComponent extends Component {
     super(...args);
     const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');
 
-    if (zoningDistricts) zoningDistricts.set('visible', false);
+    if (zoningDistricts && !this.get('isDestroyed')) zoningDistricts.set('visible', false);
   }
 
   @service
@@ -56,6 +56,6 @@ export default class DevelopmentSiteComponent extends Component {
   willDestroyElement() {
     const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');
 
-    if (zoningDistricts) zoningDistricts.set('visible', true);
+    if (zoningDistricts && !this.get('isDestroyed')) zoningDistricts.set('visible', true);
   }
 }
