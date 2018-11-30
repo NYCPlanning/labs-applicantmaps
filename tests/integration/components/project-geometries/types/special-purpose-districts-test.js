@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | project-geometries/commercial-overlays', function(hooks) {
+module('Integration | Component | project-geometries/special-purpose-districts', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
@@ -12,7 +12,7 @@ module('Integration | Component | project-geometries/commercial-overlays', funct
 
     await render(hbs`
       {{#mapbox-gl as |map|}} 
-        {{project-geometries/commercial-overlays map=map}}
+        {{project-geometries/types/special-purpose-districts map=map}}
       {{/mapbox-gl}}
     `);
 

@@ -2,25 +2,25 @@ import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
-import isEmpty from '../../utils/is-empty';
+import isEmpty from '../../../utils/is-empty';
 
-// Proposed Special Purpose Districts
-export const specialPurposeDistrictsLayer = {
-  id: 'proposed-special-purpose-districts-fill',
-  type: 'fill',
+// Underlying Zoning
+export const underlyingZoningLayer = {
+  id: 'proposed-zoningdistrict-lines',
+  type: 'line',
   paint: {
-    'fill-color': 'rgba(94, 102, 51, 1)',
-    'fill-opacity': 0.2,
+    'line-opacity': 0.5,
+    'line-width': 3,
   },
 };
 
-export const specialPurposeDistrictsLabelsLayer = {
-  id: 'proposed-special-purpose-districts-labels',
+export const underlyingZoningLabelsLayer = {
+  id: 'proposed-zoningdistrict-labels',
   type: 'symbol',
   layout: {
-    'symbol-placement': 'point',
+    'symbol-placement': 'line',
     'text-field': '{label}',
-    'text-size': 12,
+    'text-size': 16,
     visibility: 'visible',
     'symbol-avoid-edges': false,
     'text-offset': [
@@ -36,7 +36,7 @@ export const specialPurposeDistrictsLabelsLayer = {
     'text-max-angle': 90,
   },
   paint: {
-    'text-color': 'rgba(70, 76, 38, 1)',
+    'text-color': '#444',
     'text-halo-color': '#FFFFFF',
     'text-halo-width': 2,
     'text-halo-blur': 2,
@@ -44,12 +44,12 @@ export const specialPurposeDistrictsLabelsLayer = {
   },
 };
 
-export default class specialPurposeDistrictsComponent extends Component {
+export default class UnderlyingZoningComponent extends Component {
   init(...args) {
     super.init(...args);
 
-    if (isEmpty(this.get('model.specialPurposeDistricts'))) {
-      this.get('model').setDefaultSpecialPurposeDistricts();
+    if (isEmpty(this.get('model.underlyingZoning'))) {
+      this.get('model').setDefaultUnderlyingZoning();
     }
   }
 
@@ -68,16 +68,13 @@ export default class specialPurposeDistrictsComponent extends Component {
   @service
   notificationMessages;
 
-  specialPurposeDistrictsLayer = specialPurposeDistrictsLayer;
+  underlyingZoningLayer = underlyingZoningLayer;
 
-  specialPurposeDistrictsLabelsLayer = specialPurposeDistrictsLabelsLayer;
+  underlyingZoningLabelsLayer = underlyingZoningLabelsLayer;
 
   @action
-  async save(finalGeometry) {
+  async save() {
     const model = this.get('model');
-    const featureCollection = await finalGeometry;
-
-    model.set('specialPurposeDistricts', featureCollection);
 
     // because we've just changed the proposed zoning,
     // we should also calculate the rezoning area

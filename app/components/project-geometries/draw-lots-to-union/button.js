@@ -19,9 +19,6 @@ export default class DrawLotsButtonComponent extends Component {
   type = 'button';
 
   @argument
-  finalGeometry;
-
-  @argument
   handleClick = () => {};
 
   click() {
