@@ -35,7 +35,7 @@ jobs:
       - run: yarn browserstack-connect
 
       # run tests!
-      - run: COVERAGE=true yarn test
+      - run: COVERAGE=TRUE yarn test
 
       # deploy
       - run:
