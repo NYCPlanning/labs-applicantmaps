@@ -5,35 +5,52 @@ import helpers from '@turf/helpers';
 import transformScale from '@turf/transform-scale';
 import truncate from '@turf/truncate';
 import { faker } from 'ember-cli-mirage';
+import Response from 'ember-cli-mirage/response';
 
 const { randomPoint, randomPolygon } = random;
-const { feature } = helpers;
+const { feature, featureCollection } = helpers;
 
 export default function (schema, request) {
-  const { queryParams: { q } = {} } = request;
+  const { queryParams: { q, format } = {} } = request;
   const JSONAble = q.match(/\{(.*)\}/)[0];
 
-  const computedFeatureCollection = (() => {
-    if (JSONAble) {
-      const jsonObject = JSON.parse(JSONAble);
-      const featureCollection = {
-        type: 'FeatureCollection',
-        features: [feature(jsonObject)],
-      };
+  // can't parse the geoJSON, but it's requesting geoJSON
+  if (!JSONAble && format === 'geojson') return featureCollection();
 
-      if (q.match('zoning_districts')) {
-        const bbox = calculateBbox(transformScale(featureCollection, 3));
-        const randomPoints = randomPoint(3, { bbox });
-        const fakeZoningDistricts = voronoi(randomPoints, { bbox });
+  // it's requesting something other than GeoJSON
+  if (format !== 'geojson') return { rows: [] };
 
-        if (schema.stableGeometries.zoning_districts) {
-          return schema.stableGeometries.zoning_districts;
-        }
+  // it's JSONAble so we can compute some stuff from it
+  if (JSONAble) {
+    const jsonObject = JSON.parse(JSONAble);
+    const queryFeatureCollection = {
+      type: 'FeatureCollection',
+      features: [feature(jsonObject)],
+    };
 
-        schema.stableGeometries.zoning_districts = fakeZoningDistricts;
-
+    if (q.match('zoning_districts')) {
+      if (schema.stableGeometries.zoning_districts) {
         return schema.stableGeometries.zoning_districts;
       }
+
+      const bbox = calculateBbox(transformScale(queryFeatureCollection, 3));
+      const randomPoints = randomPoint(3, { bbox });
+      const fakeZoningDistricts = voronoi(randomPoints, { bbox });
+
+      schema.stableGeometries.zoning_districts = truncate(fakeZoningDistricts, { precision: 6 });
+
+      schema.stableGeometries.zoning_districts.features.forEach((zdFeature) => {
+        zdFeature.properties = {
+          id: faker.random.uuid(),
+          label: faker.random.word(),
+        };
+      });
+
+      return schema.stableGeometries.zoning_districts;
+    }
+
+    if (schema.stableGeometries.others) {
+      return schema.stableGeometries.others;
     }
 
     const randomZoning = randomPolygon(4, {
@@ -43,20 +60,10 @@ export default function (schema, request) {
       num_vertices: 4,
     });
 
-    if (schema.stableGeometries.others) {
-      return schema.stableGeometries.others;
-    }
-
-    schema.stableGeometries.others = randomZoning;
+    schema.stableGeometries.others = truncate(randomZoning, { precision: 6 });
 
     return schema.stableGeometries.others;
-  })();
+  }
 
-  return {
-    type: 'FeatureCollection',
-    features: truncate(computedFeatureCollection, { precision: 6 }).features
-      .map((computedFeature) => {
-        computedFeature.properties.id = faker.random.uuid(); return computedFeature;
-      }),
-  };
+  return new Response(400);
 }
