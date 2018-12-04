@@ -3,7 +3,6 @@ import voronoi from '@turf/voronoi';
 import random from '@turf/random';
 import helpers from '@turf/helpers';
 import transformScale from '@turf/transform-scale';
-import truncate from '@turf/truncate';
 import { faker } from 'ember-cli-mirage';
 import Response from 'ember-cli-mirage/response';
 
@@ -34,10 +33,10 @@ export default function (schema, request) {
       }
 
       const bbox = calculateBbox(transformScale(queryFeatureCollection, 3));
-      const randomPoints = randomPoint(3, { bbox });
+      const randomPoints = randomPoint(50, { bbox });
       const fakeZoningDistricts = voronoi(randomPoints, { bbox });
 
-      schema.stableGeometries.zoning_districts = truncate(fakeZoningDistricts, { precision: 6 });
+      schema.stableGeometries.zoning_districts = fakeZoningDistricts;
 
       schema.stableGeometries.zoning_districts.features.forEach((zdFeature) => {
         zdFeature.properties = {
@@ -60,7 +59,7 @@ export default function (schema, request) {
       num_vertices: 4,
     });
 
-    schema.stableGeometries.others = truncate(randomZoning, { precision: 6 });
+    schema.stableGeometries.others = randomZoning;
 
     return schema.stableGeometries.others;
   }
