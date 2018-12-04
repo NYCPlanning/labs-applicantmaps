@@ -5,23 +5,26 @@ import bboxToPolygon from '@turf/bbox-polygon';
 
 const { randomPolygon } = random;
 
-function computeRandomPolygonsFor(featureCollection) {
-  const projectBbox = calculateBbox(featureCollection)
-    // .map((coord, index) => ((coord > 0) ? (coord + 0.01) : (coord - 0.01)));
-    .map((coord, index) => {
-      if (index < 2) {
-        return coord - 0.01;
-      }
+// attempt to compute random zoning, probably
+// best if we did a voronoi map instead
 
-      return coord + 0.01;
-    });
+// function computeRandomPolygonsFor(featureCollection) {
+//   const projectBbox = calculateBbox(featureCollection)
+//     // .map((coord, index) => ((coord > 0) ? (coord + 0.01) : (coord - 0.01)));
+//     .map((coord, index) => {
+//       if (index < 2) {
+//         return coord - 0.01;
+//       }
 
-  return randomPolygon(15, {
-    bbox: projectBbox,
-    num_vertices: 5,
-    max_radial_length: 0.005,
-  });
-}
+//       return coord + 0.01;
+//     });
+
+//   return randomPolygon(15, {
+//     bbox: projectBbox,
+//     num_vertices: 5,
+//     max_radial_length: 0.005,
+//   });
+// }
 
 export default Factory.extend({
   afterCreate(project, server) {
