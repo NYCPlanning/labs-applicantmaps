@@ -2,31 +2,9 @@ import { Factory, faker } from 'ember-cli-mirage';
 import random from '@turf/random';
 import calculateBbox from '@turf/bbox';
 import bboxToPolygon from '@turf/bbox-polygon';
-import truncate from '@turf/truncate';
 import transformScale from '@turf/transform-scale';
 
 const { randomPolygon } = random;
-
-// attempt to compute random zoning, probably
-// best if we did a voronoi map instead
-
-// function computeRandomPolygonsFor(featureCollection) {
-//   const projectBbox = calculateBbox(featureCollection)
-//     // .map((coord, index) => ((coord > 0) ? (coord + 0.01) : (coord - 0.01)));
-//     .map((coord, index) => {
-//       if (index < 2) {
-//         return coord - 0.01;
-//       }
-
-//       return coord + 0.01;
-//     });
-
-//   return randomPolygon(15, {
-//     bbox: projectBbox,
-//     num_vertices: 5,
-//     max_radial_length: 0.005,
-//   });
-// }
 
 export default Factory.extend({
   afterCreate(project, server) {
@@ -83,7 +61,7 @@ export default Factory.extend({
       // Manhattan bbox
       bbox: [-73.972866, 40.767488, -73.996735, 40.745782],
       num_vertices: faker.random.arrayElement([4, 6, 8, 10]),
-      max_radial_length: 0.005,
+      max_radial_length: 0.003,
     });
   },
 
