@@ -12,6 +12,6 @@ module('Integration | Component | map-form', function(hooks) {
 
     await render(hbs`{{map-form}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.ok(this);
   });
 });
