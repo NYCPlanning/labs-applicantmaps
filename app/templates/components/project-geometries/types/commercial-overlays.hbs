@@ -5,52 +5,63 @@
 }}
   {{selection.mode.feature-label-form}}
 
-  {{!-- Render into sidebar --}}
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
-    <h1 class="header-large small-margin-bottom">
-      Rezoning: <span class="text-weight-normal">Commercial Overlays</span>
-    </h1>
-    <p class="text-small">
-      <a href='https://www1.nyc.gov/site/planning/zoning/districts-tools/commercial-districts-c1-c8.page' target="_blank">Commercial Overlays</a> are C1 or C2 district mapped within residential districts to serve local retail needs. These boundaries are not dependent on lot lines and can sometimes intersect tax lots.
-    </p>
-    <h2 class="header-small small-margin-bottom">How to use the draw tools:</h2>
-    <ul class="text-small">
-      <li><p class="small-margin-bottom">Edit an existing shape by selecting it then selecting and dragging its vertices</p></li>
-      <li><p class="small-margin-bottom">
-        Use the
-        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
-          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
-          {{fa-icon 'square' transform='grow-8' class='white'}}
-          {{fa-icon 'draw-polygon' transform='shrink-2'}}
-        </span>
-        polygon tool to add a new shapes
-      </p></li>
-      <li><p class="small-margin-bottom">Complete a new shape by clicking the final vertex a second time</p></li>
-      <li><p class="small-margin-bottom">
-        Use the
-        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
-          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
-          {{fa-icon 'square' transform='grow-8' class='white'}}
-          {{fa-icon 'trash-alt' prefix='far' transform='shrink-2'}}
-        </span>
-        trash button to delete a selected shape or vertex
-      </p></li>
-      <li><p class="small-margin-bottom">
-        When a shape is complete/selected, you can edit its
-        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
-          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
-          {{fa-icon 'tag' transform='shrink-2'}}
-        </span>
-        label
-      </p></li>
-      <li><p class="small-margin-bottom">Make sure all shapes are complete and labeled before saving</p></li>
-    </ul>
-    {{#selection.button
-      enabled=model.hasDirtyAttributes
-      handleClick=(action 'save')}}
-      Save
-      <small style="display:block;line-height:1.75;">Commercial Overlays</small>
-    {{/selection.button}}
+    <div class="text-small">
+      <h1 class="header-large small-margin-bottom">Rezoning: <span class="text-weight-normal">Commercial Overlays</span></h1>
+      <p><a href='https://www1.nyc.gov/site/planning/zoning/districts-tools/commercial-districts-c1-c8.page' target="_blank">Commercial Overlays</a> are C1 or C2 district mapped within residential districts to serve local retail needs. These boundaries are not dependent on lot lines and can sometimes intersect tax lots.</p>
+
+      <hr />
+
+      <p class="text-weight-bold small-margin-bottom">Adding new shapes:</p>
+      <ul class="small-margin-bottom">
+        <li>
+          Use the
+          <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+            {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+            {{fa-icon 'square' transform='grow-8' class='white'}}
+            {{fa-icon 'draw-polygon' transform='shrink-2'}}
+          </span>
+          polygon tool to add a new shape
+        </li>
+        <li>Complete a new shape by clicking its final vertex a second time</li>
+      </ul>
+
+      <p class="text-weight-bold small-margin-bottom">Editing existing shapes:</p>
+      <ul class="small-margin-bottom">
+        <li>Edit an existing shape by selecting it and dragging its vertices</li>
+        <li>Add a vertex by clicking the midpoint of a line</li>
+        <li>
+          Use the
+          <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+            {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+            {{fa-icon 'square' transform='grow-8' class='white'}}
+            {{fa-icon 'trash-alt' prefix='far' transform='shrink-2'}}
+          </span>
+          trash button to delete a selected shape or vertex
+        </li>
+      </ul>
+
+      <p class="text-weight-bold small-margin-bottom">Labeling shapes:</p>
+      <ul>
+        <li>
+          Select a shape then edit the
+          <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+            {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+            {{fa-icon 'tag' transform='shrink-2'}}
+          </span>
+          label text
+        </li>
+      </ul>
+
+      <hr />
+
+      {{#selection.button
+        enabled=model.hasDirtyAttributes
+        handleClick=(action 'save')}}
+        Save
+        <small style="display:block;line-height:1.75;">Commercial Overlays</small>
+      {{/selection.button}}
+    </div>
   {{/ember-wormhole}}
 {{/project-geometries/draw-lots-to-union}}
 
