@@ -282,15 +282,10 @@ export default class extends Model {
 
   @observes('underlyingZoning', 'commercialOverlays', 'specialPurposeDistricts')
   async setRezoningArea() {
-    // if any of the relevant attrs have changed, recompute
-    const hasUpdatedRezoning = Object.keys(this.changedAttributes())
-      .any(key => [
-        'underlyingZoning',
-        'commercialOverlays',
-        'specialPurposeDistricts',
-      ].includes(key));
+    // WARNING: This is an observer, and will recompute unpredictably.
+    // We should enforce strict checks.
 
-    if (hasUpdatedRezoning) {
+    if (!this.hasDirtyAttributes) {
       const defaultRezoningArea = await this.defaultRezoningArea();
       this.set('rezoningArea', defaultRezoningArea);
     }
