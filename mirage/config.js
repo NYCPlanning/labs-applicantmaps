@@ -1,39 +1,16 @@
-import random from '@turf/random';
-import calculateBbox from '@turf/bbox';
-import voronoi from '@turf/voronoi';
-import helpers from '@turf/helpers';
-import transformScale from '@turf/transform-scale';
 import patchXMLHTTPRequest from './helpers/mirage-mapbox-gl-monkeypatch';
-
-const { randomPoint, randomPolygon } = random;
-const { feature } = helpers;
+import handleCartoGeometries from './helpers/handle-fake-carto-geometries';
 
 export default function() {
   patchXMLHTTPRequest();
 
+  this.schema.stableGeometries = {
+    zoning_districts: null,
+    others: null,
+  };
+
   // generate geojson from memory for testing
-  this.get('https://planninglabs.carto.com/api/v2/sql', (schema, request) => {
-    const { queryParams: { q } = {} } = request;
-    const JSONAble = q.match(/\{(.*)\}/)[0];
-
-    if (JSONAble) {
-      const jsonObject = JSON.parse(JSONAble);
-      const featureCollection = { type: 'FeatureCollection', features: [feature(jsonObject)] };
-
-      if (q.match('zoning_districts')) {
-        const bbox = calculateBbox(transformScale(featureCollection, 3));
-        const randomPoints = randomPoint(50, { bbox });
-        return voronoi(randomPoints, { bbox });
-      }
-    }
-
-    return randomPolygon(4, {
-      // Manhattan bbox
-      bbox: [-73.97286695932547, 40.7674887779298, -73.99673516858115, 40.74578266557765],
-      max_radial_length: 0.005,
-      num_vertices: 4,
-    });
-  });
+  this.get('https://planninglabs.carto.com/api/v2/sql', handleCartoGeometries);
 
   // intercept and generate geojson from server
   this.passthrough('https://planninglabs.carto.com/**');

@@ -1068,6 +1068,13 @@
     "@turf/rhumb-destination" "^5.1.5"
     "@turf/rhumb-distance" "^5.1.5"
 
+"@turf/truncate@6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@turf/truncate/-/truncate-6.0.1.tgz#b052255ad17a114e50d2f77d9339454918e750b7"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/meta" "6.x"
+
 "@turf/union@^6.0.0", "@turf/union@^6.0.3":
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/@turf/union/-/union-6.0.3.tgz#463b62d71c406f40a6978f560bfb92e88fe7db56"
