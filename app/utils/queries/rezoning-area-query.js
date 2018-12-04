@@ -1,6 +1,5 @@
 import turfUnion from '@turf/union';
 import turfBuffer from '@turf/buffer';
-// import turfDifference from '@turf/difference';
 
 export default (combinedFC) => {
   const unionedGeoms = combinedFC.features
