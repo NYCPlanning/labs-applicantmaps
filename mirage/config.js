@@ -1,30 +1,63 @@
+import Response from 'ember-cli-mirage/response';
 import patchXMLHTTPRequest from './helpers/mirage-mapbox-gl-monkeypatch';
 import handleCartoGeometries from './helpers/handle-fake-carto-geometries';
+import config from '../config/environment';
+import {
+  layersAPIStyle,
+  v3JSON,
+  baseStyle,
+  spritesJson,
+} from './helpers/static-styles';
+
+const { interceptCarto } = config;
 
 export default function() {
   patchXMLHTTPRequest();
 
   this.schema.stableGeometries = {
     zoning_districts: null,
-    others: null,
+    commercial_overlays: null,
+    special_purpose_districts: null,
   };
 
-  // generate geojson from memory for testing
-  this.get('https://planninglabs.carto.com/api/v2/sql', handleCartoGeometries);
+  if (interceptCarto) {
+    // generate geojson from memory for testing
+    this.get('https://planninglabs.carto.com/api/v2/sql', handleCartoGeometries);
+    this.post('/layer-groups', function(schema) {
+      const response = schema.layerGroups.all();
+      const json = this.serialize(response);
 
-  // intercept and generate geojson from server
-  this.passthrough('https://planninglabs.carto.com/**');
-  this.passthrough('https://search-api.planninglabs.nyc/**');
-  this.passthrough('https://layers-api.planninglabs.nyc/**');
-  this.passthrough('https://raw.githubusercontent.com/**');
-  this.passthrough('http://raw.githubusercontent.com/**');
-  this.passthrough('https://raw.githubusercontent.com/**');
-  this.passthrough('https://tiles.planninglabs.nyc/**');
-  this.passthrough('https://layers-api-staging.planninglabs.nyc/**');
-  this.passthrough('http://localhost:3000/**');
+      json.meta = {
+        mapboxStyle: layersAPIStyle,
+      };
+
+      return json;
+    });
+
+    // note:
+    // this is a workaround to get arraybuffers sent to mapbox-gl
+    // see mirage-mapbox-gl-monkeypatch
+    this.get('https://tiles.planninglabs.nyc/fonts/**', () => {});
+    this.get('https://layers-api-staging.planninglabs.nyc/static/v3.json', () => new Response(200, {
+      'Content-Type': 'application/json',
+    }, v3JSON));
+    this.get('https://layers-api-staging.planninglabs.nyc/v1/base/style.json', () => baseStyle);
+    this.get('https://layers-api-staging.planninglabs.nyc/static/sprite@2x.json', () => spritesJson);
+    this.get('https://layers-api-staging.planninglabs.nyc/static/sprite@2x.png', () => {});
+  } else {
+    // intercept and generate geojson from server
+    this.passthrough('https://planninglabs.carto.com/**');
+    this.passthrough('https://search-api.planninglabs.nyc/**');
+    this.passthrough('https://layers-api.planninglabs.nyc/**');
+    this.passthrough('https://raw.githubusercontent.com/**');
+    this.passthrough('http://raw.githubusercontent.com/**');
+    this.passthrough('https://raw.githubusercontent.com/**');
+    this.passthrough('https://tiles.planninglabs.nyc/**');
+    this.passthrough('https://layers-api-staging.planninglabs.nyc/**');
+    this.passthrough('http://localhost:3000/**');
+  }
+
   this.passthrough('/write-coverage');
-  this.passthrough('/sources.json');
-  this.passthrough('/layer-groups.json');
 
   // REST Endpoints
   this.get('/projects');

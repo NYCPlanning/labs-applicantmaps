@@ -1,5 +1,9 @@
 'use strict';
 
+let { INTERCEPT_CARTO = 'false' } = process.env;
+
+INTERCEPT_CARTO = JSON.parse(INTERCEPT_CARTO);
+
 module.exports = function (environment) {
   const ENV = {
     modulePrefix: 'labs-applicant-maps',
@@ -38,6 +42,8 @@ module.exports = function (environment) {
       enabled: true,
     },
 
+    interceptCarto: INTERCEPT_CARTO,
+
     'labs-search': {
       host: 'https://search-api.planninglabs.nyc',
       route: 'search',
@@ -45,8 +51,8 @@ module.exports = function (environment) {
     },
 
     'ember-mapbox-composer': {
-      host: 'https://layers-api-staging.planninglabs.nyc',
-      namespace: 'v1',
+      host: INTERCEPT_CARTO ? '' : 'https://layers-api-staging.planninglabs.nyc',
+      namespace: INTERCEPT_CARTO ? '' : 'v1',
     },
 
     'ember-cli-notifications': {
@@ -87,6 +93,8 @@ module.exports = function (environment) {
   if (environment === 'test') {
     // Testem prefers this...
     ENV.locationType = 'none';
+    ENV['ember-mapbox-composer'].host = '';
+    ENV['ember-mapbox-composer'].namespace = '';
 
     // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;

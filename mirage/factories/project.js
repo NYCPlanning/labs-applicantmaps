@@ -35,7 +35,8 @@ export default Factory.extend({
   },
 
   needRezoning() {
-    return faker.random.boolean();
+    // return faker.random.boolean();
+    return false;
   },
 
   needUnderlyingZoning() { // eslint-disable-line

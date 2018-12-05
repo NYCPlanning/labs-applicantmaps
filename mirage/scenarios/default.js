@@ -5,4 +5,5 @@ export default function(server) {
   */
 
   server.createList('project', 10);
+  server.createList('layer-group', 3);
 }
