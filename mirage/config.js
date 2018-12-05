@@ -38,7 +38,7 @@ export default function() {
     // note:
     // this is a workaround to get arraybuffers sent to mapbox-gl
     // see mirage-mapbox-gl-monkeypatch
-    this.get('https://tiles.planninglabs.nyc/fonts/Metropolis%20Regular,Noto%20Sans%20Regular/0-255.pbf', () => {});
+    this.get('https://tiles.planninglabs.nyc/fonts/**', () => {});
     this.get('https://layers-api-staging.planninglabs.nyc/static/v3.json', () => new Response(200, {
       'Content-Type': 'application/json',
     }, v3JSON));
