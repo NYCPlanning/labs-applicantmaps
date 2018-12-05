@@ -21,6 +21,7 @@ export default function() {
   };
 
   if (interceptCarto) {
+    console.log('intercepting...');
     // generate geojson from memory for testing
     this.get('https://planninglabs.carto.com/api/v2/sql', handleCartoGeometries);
     this.post('/layer-groups', function(schema) {
@@ -37,13 +38,14 @@ export default function() {
     // note:
     // this is a workaround to get arraybuffers sent to mapbox-gl
     // see mirage-mapbox-gl-monkeypatch
-    this.get('https://tiles.planninglabs.nyc/fonts/**', () => {});
+    this.get('https://tiles.planninglabs.nyc/fonts/Metropolis%20Regular,Noto%20Sans%20Regular/0-255.pbf', () => {});
     this.get('https://layers-api-staging.planninglabs.nyc/static/v3.json', () => new Response(200, {
       'Content-Type': 'application/json',
     }, v3JSON));
     this.get('https://layers-api-staging.planninglabs.nyc/v1/base/style.json', () => baseStyle);
     this.get('https://layers-api-staging.planninglabs.nyc/static/sprite@2x.json', () => spritesJson);
     this.get('https://layers-api-staging.planninglabs.nyc/static/sprite@2x.png', () => {});
+    this.get('https://tiles.planninglabs.nyc/data/v3/**', () => {});
   } else {
     // intercept and generate geojson from server
     this.passthrough('https://planninglabs.carto.com/**');

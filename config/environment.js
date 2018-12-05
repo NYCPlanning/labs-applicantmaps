@@ -95,6 +95,9 @@ module.exports = function (environment) {
     ENV.locationType = 'none';
     ENV['ember-mapbox-composer'].host = '';
     ENV['ember-mapbox-composer'].namespace = '';
+    ENV['ember-cli-mirage'] = {
+      enabled: true,
+    };
 
     // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;
