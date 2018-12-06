@@ -4,7 +4,7 @@ import {
   render,
   click,
   waitUntil,
-  fillIn,
+  typeIn,
   // pauseTest,
 } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
@@ -97,7 +97,11 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
       {{/project-geometries/modes/draw}}
     `);
 
-    await fillIn('[data-test-feature-label-form]', 'test');
+    const { features: [{ id }] } = draw.getAll();
+
+    draw.changeMode('direct_select', { featureId: id });
+    await waitUntil(() => map.loaded(), { timeout: 15000 });
+    await typeIn('[data-test-feature-label-form]', 'test');
 
     assert.equal(model.developmentSite.features[0].properties.label, 'test');
   });
