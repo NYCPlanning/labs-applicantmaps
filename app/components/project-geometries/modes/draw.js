@@ -126,6 +126,9 @@ export default class DrawComponent extends Component {
   @action
   handleDrawButtonClick() {
     const { draw } = this.get('map');
+
+    // change both to correctly fire event
+    // see https://github.com/mapbox/mapbox-gl-draw/blob/master/docs/API.md#events
     draw.changeMode('simple_select');
     draw.changeMode('draw_polygon');
     this.set('drawMode', draw.getMode());
