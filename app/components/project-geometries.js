@@ -54,7 +54,6 @@ export default class ProjectGeometryEditComponent extends Component {
   @action
   handleMapLoad(map) {
     this.set('mapInstance', map);
-    window.map = map;
 
     // setup controls
     const navigationControl = new mapboxgl.NavigationControl();

@@ -1,10 +1,27 @@
 import computeDifference from 'labs-applicant-maps/utils/compute-difference';
+import queriesIntersectingZoningQuery from 'labs-applicant-maps/utils/queries/intersecting-zoning-query';
 import { module, test } from 'qunit';
+import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupTest } from 'ember-qunit';
+import random from '@turf/random';
 
-module('Unit | Utility | compute-difference', function() {
+const { randomPolygon } = random;
+
+module('Unit | Utility | compute-difference', function(hooks) {
+  setupTest(hooks);
+  setupMirage(hooks);
+
   // Replace this with your real tests.
-  test('it works', function(assert) {
-    const result = computeDifference();
+  test('it works', async function(assert) {
+    this.server.createList('project', 1);
+    const store = this.owner.lookup('service:store');
+    const model = await store.findRecord('project', 1);
+    const current = await queriesIntersectingZoningQuery(
+      model.get('developmentSite'),
+    );
+    const proposed = randomPolygon(4);
+
+    const result = computeDifference(current, proposed);
     assert.ok(result);
   });
 });

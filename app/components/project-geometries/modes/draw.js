@@ -6,7 +6,7 @@ import { type } from '@ember-decorators/argument/type';
 import { FeatureCollection, EmptyFeatureCollection } from '../../../models/project';
 import isEmpty from '../../../utils/is-empty';
 
-const draw = new MapboxDraw({
+export const DefaultDraw = MapboxDraw.bind(null, {
   displayControlsDefault: false,
   controls: {
     polygon: true,
@@ -24,7 +24,13 @@ export default class DrawComponent extends Component {
   constructor(...args) {
     super(...args);
 
-    const { mapInstance } = this.get('map');
+    const {
+      mapInstance,
+      draw = new DefaultDraw(),
+    } = this.get('map');
+
+    // set draw instance so it's available to the class
+    this.set('map.draw', draw);
 
     const geometricProperty = this.get('geometricProperty');
 
@@ -106,6 +112,7 @@ export default class DrawComponent extends Component {
 
   @action
   handleTrashButtonClick() {
+    const { draw } = this.get('map');
     const selectedFeature = draw.getSelectedIds();
     const selectedVertices = draw.getSelectedPoints();
 
@@ -118,6 +125,10 @@ export default class DrawComponent extends Component {
 
   @action
   handleDrawButtonClick() {
+    const { draw } = this.get('map');
+
+    // change both to correctly fire event
+    // see https://github.com/mapbox/mapbox-gl-draw/blob/master/docs/API.md#events
     draw.changeMode('simple_select');
     draw.changeMode('draw_polygon');
     this.set('drawMode', draw.getMode());
@@ -125,6 +136,7 @@ export default class DrawComponent extends Component {
 
   @action
   updateSelectedFeature(label) {
+    const { draw } = this.get('map');
     const { features: [firstFeature] } = this.get('selectedFeature');
 
     draw.setFeatureProperty(firstFeature.id, 'label', label);
@@ -133,11 +145,9 @@ export default class DrawComponent extends Component {
   willDestroyElement(...args) {
     super.willDestroyElement(...args);
 
+    const { draw } = this.get('map');
     const { mapInstance } = this.get('map');
 
-    // drawing cleanup
-    draw.trash();
-    draw.deleteAll();
     mapInstance.off('draw.selectionchange');
     mapInstance.removeControl(draw);
   }

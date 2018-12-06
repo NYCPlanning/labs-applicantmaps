@@ -137,8 +137,6 @@ export default class ShowProjectController extends Controller {
 
   @action
   handleMapLoad(map) {
-    window.map = map;
-
     const projectGeometryBoundingBox = this.get('model.projectGeometryBoundingBox');
 
     map.fitBounds(projectGeometryBoundingBox, {

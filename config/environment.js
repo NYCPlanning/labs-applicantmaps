@@ -1,5 +1,9 @@
 'use strict';
 
+let { INTERCEPT_MAPBOX_GL = 'false' } = process.env;
+
+INTERCEPT_MAPBOX_GL = JSON.parse(INTERCEPT_MAPBOX_GL);
+
 module.exports = function (environment) {
   const ENV = {
     modulePrefix: 'labs-applicant-maps',
@@ -37,6 +41,8 @@ module.exports = function (environment) {
     'ember-cli-mirage': {
       enabled: true,
     },
+
+    interceptMapboxGL: INTERCEPT_MAPBOX_GL,
 
     'labs-search': {
       host: 'https://search-api.planninglabs.nyc',
@@ -87,6 +93,14 @@ module.exports = function (environment) {
   if (environment === 'test') {
     // Testem prefers this...
     ENV.locationType = 'none';
+    if (INTERCEPT_MAPBOX_GL) {
+      ENV['ember-mapbox-composer'].host = '';
+      ENV['ember-mapbox-composer'].namespace = '';
+    }
+
+    ENV['ember-cli-mirage'] = {
+      enabled: true,
+    };
 
     // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;
