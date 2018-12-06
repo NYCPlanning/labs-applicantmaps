@@ -35,7 +35,7 @@ jobs:
       - run: yarn browserstack-connect
 
       # run tests!
-      - run: COVERAGE=TRUE INTERCEPT_CARTO=true yarn test
+      - run: COVERAGE=TRUE INTERCEPT_CARTO=false yarn test
 
       - run: curl -s https://codecov.io/bash | bash
 
