@@ -26,13 +26,7 @@ export default class DrawComponent extends Component {
 
     const {
       mapInstance,
-      draw = new DefaultDraw({
-        displayControlsDefault: false,
-        controls: {
-          polygon: true,
-          trash: true,
-        },
-      }),
+      draw = new DefaultDraw(),
     } = this.get('map');
 
     // set draw instance so it's available to the class
