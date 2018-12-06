@@ -1,26 +1,74 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, click, waitUntil } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import { EmptyFeatureCollection } from 'labs-applicant-maps/models/project';
+import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import createMap from 'labs-applicant-maps/tests/helpers/create-map';
+import { DefaultDraw } from 'labs-applicant-maps/components/project-geometries/modes/draw';
 
 module('Integration | Component | project-geometries/modes/draw', function(hooks) {
   setupRenderingTest(hooks);
+  setupMirage(hooks);
 
-  test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+  hooks.before(async function() {
+    this.map = await createMap();
+    this.draw = new DefaultDraw();
+  });
 
-    this.set('geometricProperty', EmptyFeatureCollection);
+  hooks.after(function() {
+    this.map.remove();
+  });
+
+  test('it switches to draw mode', async function(assert) {
+    this.server.create('project');
+    const store = this.owner.lookup('service:store');
+    const model = await store.findRecord('project', 1);
+    const { map, draw } = this;
+
+    this.set('geometricProperty', model.get('developmentSite'));
+    this.set('mapObject', {
+      mapInstance: map,
+      draw,
+    });
 
     await render(hbs`
-      {{#mapbox-gl as |map|}}
-        {{project-geometries/modes/draw
-          map=map
-          geometricProperty=geometricProperty}}
-      {{/mapbox-gl}}
+      {{#project-geometries/modes/draw
+        map=mapObject
+        geometricProperty=geometricProperty as |draw|}}
+      {{/project-geometries/modes/draw}}
     `);
 
-    assert.ok(this);
+    await click('.polygon');
+
+    assert.equal(draw.getMode(), 'draw_polygon');
+  });
+
+  test('it deletes selected polygon', async function(assert) {
+    this.server.create('project');
+    const store = this.owner.lookup('service:store');
+    const model = await store.findRecord('project', 1);
+    const { map, draw } = this;
+
+    this.set('model', model);
+    this.set('mapObject', {
+      mapInstance: map,
+      draw,
+    });
+
+    await render(hbs`
+      {{#project-geometries/modes/draw
+        map=mapObject
+        geometricProperty=model.developmentSite as |draw|}}
+      {{/project-geometries/modes/draw}}
+    `);
+
+    const { features: [{ id }] } = draw.getAll();
+
+    draw.changeMode('direct_select', { featureId: id });
+
+    await waitUntil(() => map.loaded());
+    await click('.trash');
+
+    assert.equal(model.get('developmentSite').features.length, 0);
   });
 });
