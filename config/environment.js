@@ -93,8 +93,11 @@ module.exports = function (environment) {
   if (environment === 'test') {
     // Testem prefers this...
     ENV.locationType = 'none';
-    ENV['ember-mapbox-composer'].host = '';
-    ENV['ember-mapbox-composer'].namespace = '';
+    if (INTERCEPT_CARTO) {
+      ENV['ember-mapbox-composer'].host = '';
+      ENV['ember-mapbox-composer'].namespace = '';
+    }
+
     ENV['ember-cli-mirage'] = {
       enabled: true,
     };
