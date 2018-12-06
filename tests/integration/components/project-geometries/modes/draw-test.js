@@ -1,6 +1,12 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, click, waitUntil } from '@ember/test-helpers';
+import {
+  render,
+  click,
+  waitUntil,
+  fillIn,
+  // pauseTest,
+} from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import createMap from 'labs-applicant-maps/tests/helpers/create-map';
@@ -32,10 +38,9 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     });
 
     await render(hbs`
-      {{#project-geometries/modes/draw
+      {{project-geometries/modes/draw
         map=mapObject
-        geometricProperty=geometricProperty as |draw|}}
-      {{/project-geometries/modes/draw}}
+        geometricProperty=geometricProperty}}
     `);
 
     await click('.polygon');
@@ -56,10 +61,9 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     });
 
     await render(hbs`
-      {{#project-geometries/modes/draw
+      {{project-geometries/modes/draw
         map=mapObject
-        geometricProperty=model.developmentSite as |draw|}}
-      {{/project-geometries/modes/draw}}
+        geometricProperty=model.developmentSite}}
     `);
 
     const { features: [{ id }] } = draw.getAll();
@@ -70,5 +74,31 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     await click('.trash');
 
     assert.equal(model.get('developmentSite').features.length, 0);
+  });
+
+  test('it updates the draw layer label', async function(assert) {
+    this.server.create('project');
+    const store = this.owner.lookup('service:store');
+    const model = await store.findRecord('project', 1);
+    const { map, draw } = this;
+
+    this.set('model', model);
+    this.set('mapObject', {
+      mapInstance: map,
+      draw,
+    });
+
+    await render(hbs`
+      {{#project-geometries/modes/draw
+        map=mapObject
+        geometricProperty=model.developmentSite as |draw|}}
+        {{draw.feature-label-form
+          selectedFeature=model.developmentSite}}
+      {{/project-geometries/modes/draw}}
+    `);
+
+    await fillIn('[data-test-feature-label-form]', 'test');
+
+    assert.equal(model.developmentSite.features[0].properties.label, 'test');
   });
 });
