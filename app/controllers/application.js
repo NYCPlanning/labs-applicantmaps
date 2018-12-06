@@ -20,7 +20,6 @@ export default class ApplicationController extends Controller {
   @action
   handleMapLoad(map) {
     this.set('mapInstance', map);
-    window.map = map;
 
     // setup controls
     const navigationControl = new mapboxgl.NavigationControl();
