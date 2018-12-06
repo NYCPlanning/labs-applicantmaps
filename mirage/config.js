@@ -9,7 +9,7 @@ import {
   spritesJson,
 } from './helpers/static-styles';
 
-const { interceptCarto } = config;
+const { interceptMapboxGL } = config;
 
 export default function() {
   patchXMLHTTPRequest();
@@ -20,7 +20,7 @@ export default function() {
     special_purpose_districts: null,
   };
 
-  if (interceptCarto) {
+  if (this.environment === 'test') {
     console.log('intercepting...');
     // generate geojson from memory for testing
     this.get('https://planninglabs.carto.com/api/v2/sql', handleCartoGeometries);
@@ -34,7 +34,13 @@ export default function() {
 
       return json;
     });
+  } else {
+    // intercept and generate geojson from server
+    this.passthrough('https://planninglabs.carto.com/**');
+  }
 
+  // map interceptions
+  if (interceptMapboxGL) {
     // note:
     // this is a workaround to get arraybuffers sent to mapbox-gl
     // see mirage-mapbox-gl-monkeypatch
@@ -49,19 +55,17 @@ export default function() {
     this.get('https://layers-api-staging.planninglabs.nyc/static/sprite.png', () => {});
     this.get('https://tiles.planninglabs.nyc/data/v3/**', () => {});
   } else {
-    // intercept and generate geojson from server
-    this.passthrough('https://planninglabs.carto.com/**');
-    this.passthrough('https://search-api.planninglabs.nyc/**');
     this.passthrough('https://layers-api.planninglabs.nyc/**');
-    this.passthrough('https://raw.githubusercontent.com/**');
-    this.passthrough('http://raw.githubusercontent.com/**');
-    this.passthrough('https://raw.githubusercontent.com/**');
     this.passthrough('https://tiles.planninglabs.nyc/**');
     this.passthrough('https://layers-api-staging.planninglabs.nyc/**');
-    this.passthrough('http://localhost:3000/**');
   }
 
+  this.passthrough('https://raw.githubusercontent.com/**');
+  this.passthrough('http://raw.githubusercontent.com/**');
+  this.passthrough('https://raw.githubusercontent.com/**');
   this.passthrough('/write-coverage');
+  this.passthrough('https://search-api.planninglabs.nyc/**');
+  this.passthrough('http://localhost:3000/**');
 
   // REST Endpoints
   this.get('/projects');
