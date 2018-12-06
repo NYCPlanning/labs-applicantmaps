@@ -66,7 +66,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
 
     draw.changeMode('direct_select', { featureId: id });
 
-    await waitUntil(() => map.loaded());
+    await waitUntil(() => map.loaded(), { timeout: 15000 });
     await click('.trash');
 
     assert.equal(model.get('developmentSite').features.length, 0);
