@@ -44,7 +44,9 @@ export default function() {
     }, v3JSON));
     this.get('https://layers-api-staging.planninglabs.nyc/v1/base/style.json', () => baseStyle);
     this.get('https://layers-api-staging.planninglabs.nyc/static/sprite@2x.json', () => spritesJson);
+    this.get('https://layers-api-staging.planninglabs.nyc/static/sprite.json', () => spritesJson);
     this.get('https://layers-api-staging.planninglabs.nyc/static/sprite@2x.png', () => {});
+    this.get('https://layers-api-staging.planninglabs.nyc/static/sprite.png', () => {});
     this.get('https://tiles.planninglabs.nyc/data/v3/**', () => {});
   } else {
     // intercept and generate geojson from server
