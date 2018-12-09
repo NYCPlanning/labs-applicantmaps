@@ -39,10 +39,14 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
 
     // make dependent components happy
     this.owner.register('component:labs-layers', Component.extend({}));
+    this.owner.register('component:mapbox-gl-source', Component.extend({}));
 
     await render(hbs`
       {{project-geometries/modes/lots
-        map=(hash labs-layers=(component 'labs-layers'))}}
+        map=(hash
+          labs-layers=(component 'labs-layers')
+          source=(component 'mapbox-gl-source')
+        )}}
     `);
 
     assert.ok(peekRecordSpy.calledOnce, 'peekRecord called once');
@@ -136,14 +140,12 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
 
     this.server.create('project');
     this.server.get('https://planninglabs.carto.com/api/v2/sql', () => randomFeatures);
+
+    let actionArgs = [];
     this.owner.register('component:labs-layers', Component.extend({
       'data-test-lot-selector': true,
-      click(options) {
-        if (options.clientX === 1) {
-          this.get('onLayerClick')(randomFeature1);
-        } else {
-          this.get('onLayerClick')(randomFeature2);
-        }
+      click() {
+        this.get('onLayerClick')(...actionArgs);
       },
     }));
 
@@ -157,9 +159,10 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
         map=(hash labs-layers=(component 'labs-layers'))
         geometricProperty=model.developmentSite}}
     `);
-    await click('[data-test-lot-selector]', { clientX: 1 });
-    await click('[data-test-lot-selector]', { clientX: 2 });
-
+    actionArgs = [randomFeature1];
+    await click('[data-test-lot-selector]');
+    actionArgs = [randomFeature2];
+    await click('[data-test-lot-selector]');
 
     // area is the same
     assert.equal(initialArea, computeArea(model.get('developmentSite')));
