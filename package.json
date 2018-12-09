@@ -74,7 +74,8 @@
     "labs-ui": "^0.0.11",
     "loader.js": "^4.7.0",
     "mapbox-gl": "^0.50.0",
-    "qunit-dom": "^0.7.1"
+    "qunit-dom": "^0.7.1",
+    "sinon": "7.1.1"
   },
   "engines": {
     "node": "6.* || 8.* || >= 10.*"
@@ -82,6 +83,7 @@
   "dependencies": {
     "@ember-decorators/argument": "0.8.15",
     "@ember-decorators/babel-transforms": "^2.0.0",
+    "@turf/area": "6.0.1",
     "@turf/bbox": "6.0.1",
     "@turf/bbox-polygon": "6.0.1",
     "@turf/buffer": "^5.1.5",

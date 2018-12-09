@@ -7,14 +7,15 @@ import { faker } from 'ember-cli-mirage';
 import Response from 'ember-cli-mirage/response';
 
 const { randomPoint, randomPolygon } = random;
-const { feature, featureCollection } = helpers;
+const { feature } = helpers;
 
 export default function (schema, request) {
   const { queryParams: { q, format } = {} } = request;
-  const JSONAble = q.match(/\{(.*)\}/)[0];
+
+  const JSONAble = (q.match(/\{(.*)\}/) || [])[0];
 
   // can't parse the geoJSON, but it's requesting geoJSON
-  if (!JSONAble && format === 'geojson') return featureCollection();
+  if (!JSONAble && format === 'geojson') return randomPolygon(5);
 
   // it's requesting something other than GeoJSON
   if (format !== 'geojson') return { rows: [] };

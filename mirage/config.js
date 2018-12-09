@@ -34,6 +34,7 @@ export default function() {
 
       return json;
     });
+    this.get('/layer-groups/:id');
   } else {
     // intercept and generate geojson from server
     this.passthrough('https://planninglabs.carto.com/**');
