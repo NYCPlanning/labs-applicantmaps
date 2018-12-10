@@ -29,7 +29,7 @@ export default function (schema, request) {
     };
 
     const bbox = calculateBbox(transformScale(queryFeatureCollection, 3));
-    const randomPoints = randomPoint(50, { bbox });
+    const randomPoints = randomPoint(3, { bbox });
     const randomZoning = randomPolygon(4, {
       // Manhattan bbox
       bbox: [-73.972866, 40.767488, -73.996735, 40.745782],

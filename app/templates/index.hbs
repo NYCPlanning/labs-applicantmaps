@@ -20,7 +20,11 @@
 
         <h2 class="header-small" style="padding-top:1rem;">STEP ONE</h2>
         <p class="lead">Create a new project for your application.</p>
-        {{#link-to 'projects.new' tagName='button' type='button' class='get-started button large expanded'}}
+        {{#link-to 'projects.new'
+          data-test-get-started=true
+          tagName='button'
+          type='button'
+          class='get-started button large expanded'}}
           <strong>Get Started</strong> &nbsp;{{fa-icon 'arrow-right'}}
         {{/link-to}}
 

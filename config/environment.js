@@ -100,6 +100,8 @@ module.exports = function (environment) {
       enabled: true,
     };
 
+    ENV['ember-cli-notifications'].clearDuration = 1;
+
     // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;

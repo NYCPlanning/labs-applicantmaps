@@ -20,7 +20,8 @@
       )
       mapLoaded=(action 'handleMapLoad') as |map|}}
 
-      {{search-handler map=map}}
+      {{search-handler
+        map=map}}
 
       {{!-- labs-layers (includes tax-lots layer) --}}
       {{#map.labs-layers

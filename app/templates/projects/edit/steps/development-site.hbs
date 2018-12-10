@@ -7,6 +7,7 @@
 <div class="grid-x grid-margin-x">
   <div class="cell medium-6 large-5 xlarge-4">
     {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='lots' type='development-site')
+      data-test-select-lots=true
       tagName='span'
       class='button large expanded'
     }}
@@ -17,6 +18,7 @@
   </div>
   <div class="cell medium-6 large-5 xlarge-4">
     {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='draw' type='development-site')
+      data-test-draw=true
       tagName='span'
       class='button large expanded'
     }}
