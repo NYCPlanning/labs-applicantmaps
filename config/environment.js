@@ -1,8 +1,9 @@
 'use strict';
 
-let { INTERCEPT_MAPBOX_GL = 'false' } = process.env;
+let { INTERCEPT_MAPBOX_GL = 'false', INTERCEPT_CARTO = 'false' } = process.env;
 
 INTERCEPT_MAPBOX_GL = JSON.parse(INTERCEPT_MAPBOX_GL);
+INTERCEPT_CARTO = JSON.parse(INTERCEPT_CARTO);
 
 module.exports = function (environment) {
   const ENV = {
@@ -43,6 +44,7 @@ module.exports = function (environment) {
     },
 
     interceptMapboxGL: INTERCEPT_MAPBOX_GL,
+    interceptCarto: INTERCEPT_CARTO,
 
     'labs-search': {
       host: 'https://search-api.planninglabs.nyc',
