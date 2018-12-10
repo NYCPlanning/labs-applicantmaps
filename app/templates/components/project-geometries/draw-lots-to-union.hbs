@@ -4,15 +4,9 @@
   geometricProperty=geometricProperty as |mode|
 }}
   <div class="stable">
-    {{#if hasBlock}}
-      {{yield (hash
-        mode=mode
-        button=(component 'project-geometries/draw-lots-to-union/button'
-          data-test-project-geometry-save=true))}}
-    {{else}}
-      {{project-geometries/draw-lots-to-union/button
-        data-test-project-geometry-save=true
-      }}
-    {{/if}}
+    {{yield (hash
+      mode=mode
+      button=(component 'project-geometries/draw-lots-to-union/button'
+        data-test-project-geometry-save=true))}}
   </div>
 {{/component}}

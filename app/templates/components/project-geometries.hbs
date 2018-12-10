@@ -20,7 +20,8 @@
       )
       mapLoaded=(action 'handleMapLoad') as |map|}}
 
-      {{search-handler map=map}}
+      {{search-handler
+        map=map}}
 
       {{!-- labs-layers (includes tax-lots layer) --}}
       {{#map.labs-layers
@@ -48,7 +49,7 @@
       {{/map.source}}
 
       {{!-- invoke the component for the specified type --}}
-      {{component (concat 'project-geometries/types/' type)
+      {{component projectGeometryType
         model=model
         mode=mode
         map=map}}

@@ -43,6 +43,7 @@
     type="button"
     class="button gray large no-margin"
     onclick={{action (mut model.needRezoning) true}}
+    data-test-rezoning-yes
   >
     <span class="dark-gray">
       {{#if (eq model.needRezoning true)}}
@@ -80,6 +81,7 @@
           type="button"
           class="button gray"
           onclick={{action (mut model.needUnderlyingZoning) true}}
+          data-test-rezoning-underlying-zoning-yes
         >
           <span class="dark-gray">
             {{#if (eq model.needUnderlyingZoning true)}}
@@ -133,6 +135,7 @@
           type="button"
           class="button gray"
           onclick={{action (mut model.needCommercialOverlay) true}}
+          data-test-rezoning-commercial-overlays-yes
         >
           <span class="dark-gray">
             {{#if (eq model.needCommercialOverlay true)}}
@@ -186,6 +189,7 @@
           type="button"
           class="button gray"
           onclick={{action (mut model.needSpecialDistrict) true}}
+          data-test-rezoning-special-purpose-districts-yes
         >
           <span class="dark-gray">
             {{#if (eq model.needSpecialDistrict true)}}
@@ -234,6 +238,7 @@
         tagName='span'
         disabled=(not model.rezoningAnsweredLogically)
         class='button large expanded'
+        data-test-alter-zoning=true
       }}
         {{fa-icon 'draw-polygon' fixedWidth=true transform='left-3 grow-3'}}
         Alter Zoning

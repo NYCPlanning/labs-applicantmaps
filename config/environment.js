@@ -1,8 +1,9 @@
 'use strict';
 
-let { INTERCEPT_MAPBOX_GL = 'false' } = process.env;
+let { INTERCEPT_MAPBOX_GL = 'false', INTERCEPT_CARTO = 'false' } = process.env;
 
 INTERCEPT_MAPBOX_GL = JSON.parse(INTERCEPT_MAPBOX_GL);
+INTERCEPT_CARTO = JSON.parse(INTERCEPT_CARTO);
 
 module.exports = function (environment) {
   const ENV = {
@@ -43,6 +44,7 @@ module.exports = function (environment) {
     },
 
     interceptMapboxGL: INTERCEPT_MAPBOX_GL,
+    interceptCarto: INTERCEPT_CARTO,
 
     'labs-search': {
       host: 'https://search-api.planninglabs.nyc',
@@ -99,6 +101,8 @@ module.exports = function (environment) {
     ENV['ember-cli-mirage'] = {
       enabled: true,
     };
+
+    ENV['ember-cli-notifications'].clearDuration = 1;
 
     // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;

@@ -29,8 +29,8 @@ export default function (schema, request) {
     };
 
     const bbox = calculateBbox(transformScale(queryFeatureCollection, 3));
-    const randomPoints = randomPoint(50, { bbox });
-    const randomZoning = randomPolygon(4, {
+    const randomPoints = randomPoint(3, { bbox });
+    const randomZoning = randomPolygon(1, {
       // Manhattan bbox
       bbox: [-73.972866, 40.767488, -73.996735, 40.745782],
       max_radial_length: 0.005,

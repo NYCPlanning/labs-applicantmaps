@@ -36,6 +36,11 @@ export default class ProjectGeometryEditComponent extends Component {
     return [this.get('lat'), this.get('lng')];
   }
 
+  @computed('type')
+  get projectGeometryType() {
+    return `project-geometries/types/${this.get('type')}`;
+  }
+
   @action
   hideInstructions() {
     this.set('showDrawInstructions', false);
