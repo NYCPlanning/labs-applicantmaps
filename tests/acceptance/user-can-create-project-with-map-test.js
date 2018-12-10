@@ -90,5 +90,20 @@ module('Acceptance | user can create project with map', function(hooks) {
     await click('[data-test-project-geometry-save]');
 
     assert.equal(currentURL(), '/projects/1');
+
+    await click('[data-test-add-area-map]');
+
+    await click('[data-test-paper-orientation-portrait]');
+    await click('[data-test-paper-orientation-landscape]');
+    await click('[data-test-paper-paper-size-tabloid]');
+    await click('[data-test-paper-paper-size-letter]');
+
+    await click('[data-test-project-area-buffer]');
+    await click('[data-test-project-area-buffer-400]');
+    await click('[data-test-save-map]');
+
+    await click('[data-test-go-back-to-project]');
+
+    assert.equal(currentURL(), '/projects/1');
   });
 });
