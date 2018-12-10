@@ -10,6 +10,9 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { faker } from 'ember-cli-mirage';
 import random from '@turf/random';
 import LabsLayers from 'labs-applicant-maps/components/labs-layers';
+import LabsMap from 'labs-applicant-maps/components/labs-map';
+import config from 'labs-applicant-maps/config/environment';
+import { registerWaiter } from '@ember/test';
 
 const { randomPolygon } = random;
 
@@ -33,6 +36,16 @@ module('Acceptance | user can create project with map', function(hooks) {
         const randomFeature = randomPolygon(1).features[0];
         randomFeature.properties.bbl = faker.random.uuid();
         onLayerClick(randomFeature);
+      },
+    }));
+
+    this.owner.register('component:labs-map', LabsMap.extend({
+      init(...args) {
+        this._super(...args);
+
+        if (config.environment === 'test') {
+          registerWaiter(() => this.map);
+        }
       },
     }));
   });
