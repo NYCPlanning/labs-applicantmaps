@@ -75,7 +75,8 @@
     "loader.js": "^4.7.0",
     "mapbox-gl": "^0.50.0",
     "qunit-dom": "^0.7.1",
-    "sinon": "7.1.1"
+    "sinon": "7.1.1",
+    "testem": "2.14.0"
   },
   "engines": {
     "node": "6.* || 8.* || >= 10.*"
