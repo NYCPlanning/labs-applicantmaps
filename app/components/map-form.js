@@ -309,38 +309,22 @@ export default class MapFormComponent extends Component {
       },
     });
 
-    // this.set('mapBearing', map.getBearing());
     this.set('model.mapBearing', map.getBearing());
     this.set('model.mapCenter', map.getCenter());
     this.set('model.mapZoom', map.getZoom());
   }
 
   @action
-  reorientPaper(orientation) {
-    this.set('model.paperOrientation', orientation);
-    next(() => {
-      // not supported in IE 11
-      window.addEventListener('resize', () => {
-        this.fitBoundsToBuffer();
-        this.updateBounds();
-      });
-      // not supported in IE 11
-      window.dispatchEvent(new Event('resize'));
-    });
-  }
+  fitBoundsToSelectedBuffer() {
+    const map = this.get('mapInstance');
+    const buffer = this.get('model.projectGeometryBuffer');
 
-  @action
-  scalePaper(size) {
-    this.set('model.paperSize', size);
-    next(() => {
-      // not supported in IE 11
-      window.addEventListener('resize', () => {
-        this.fitBoundsToBuffer();
-        this.updateBounds();
-      });
-      // not supported in IE 11
-      window.dispatchEvent(new Event('resize'));
+    map.fitBounds(turfBbox(buffer), {
+      padding: 50,
+      duration: 0,
     });
+
+    this.updateBounds();
   }
 
   @action
@@ -354,6 +338,7 @@ export default class MapFormComponent extends Component {
 
     map.setBearing(bearing);
 
+    // prefer explicit zoom and center over the 600 ft buffer
     if (mapZoom && mapCenter) {
       map.setZoom(mapZoom);
       map.setCenter(mapCenter);
@@ -365,12 +350,6 @@ export default class MapFormComponent extends Component {
     }
 
     this.updateBounds();
-
-    // this already happens in updateBounds...
-    // const mapZoom = map.getZoom();
-    // this.set('model.mapZoom', mapZoom);
-    // const mapCenter = map.getCenter();
-    // this.set('model.mapCenter', mapCenter);
   }
 
   @action
@@ -399,6 +378,47 @@ export default class MapFormComponent extends Component {
       map.doubleClickZoom.disable();
       map.touchZoomRotate.disable();
     }
+  }
+
+  @action
+  setBufferSize(bufferSize) {
+    this.set('model.bufferSize', bufferSize);
+
+    next(() => {
+      this.fitBoundsToSelectedBuffer();
+    });
+  }
+
+  @action
+  reorientPaper(orientation) {
+    this.set('model.paperOrientation', orientation);
+
+    next(() => {
+      // not supported in IE 11
+      window.addEventListener('resize', () => {
+        this.fitBoundsToSelectedBuffer();
+        this.fitBoundsToBuffer();
+        this.updateBounds();
+      });
+      // not supported in IE 11
+      window.dispatchEvent(new Event('resize'));
+    });
+  }
+
+  @action
+  scalePaper(paperSize) {
+    this.set('model.paperSize', paperSize);
+
+    next(() => {
+      // not supported in IE 11
+      window.addEventListener('resize', () => {
+        this.fitBoundsToSelectedBuffer();
+        this.fitBoundsToBuffer();
+        this.updateBounds();
+      });
+      // not supported in IE 11
+      window.dispatchEvent(new Event('resize'));
+    });
   }
 
   @action
