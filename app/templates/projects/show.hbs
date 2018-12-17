@@ -2,6 +2,10 @@
 
   {{project-setup-status project=model}}
 
+  <div class="button large expanded map-type-area-map">
+    {{fa-icon 'envelope' prefix='far' class='white'}} Email this project
+  </div>
+
   <h4 class="header-small">Project Maps</h4>
   {{link-to 'Area Map' 'projects.edit.map.edit' model.id (query-params mapType=(dasherize 'Area Map'))
     data-test-add-area-map
