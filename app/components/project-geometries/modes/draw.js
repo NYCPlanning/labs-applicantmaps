@@ -20,6 +20,18 @@ MapboxDraw.modes.direct_select.onFeature = function() {
   this.map.dragPan.enable();
 };
 
+// setup events to update draw state
+// bind events to the state callback
+const callBackStateEvents = [
+  'create',
+  'combine',
+  'uncombine',
+  'update',
+  'selectionchange',
+  'modechange',
+  'delete',
+];
+
 export default class DrawComponent extends Component {
   constructor(...args) {
     super(...args);
@@ -68,15 +80,7 @@ export default class DrawComponent extends Component {
 
     // setup events to update draw state
     // bind events to the state callback
-    [
-      'create',
-      'combine',
-      'uncombine',
-      'update',
-      'selectionchange',
-      'modechange',
-      'delete',
-    ]
+    callBackStateEvents
       .forEach((event) => {
         mapInstance.on(`draw.${event}`, drawStateCallback);
       });
@@ -148,7 +152,11 @@ export default class DrawComponent extends Component {
     const { draw } = this.get('map');
     const { mapInstance } = this.get('map');
 
-    mapInstance.off('draw.selectionchange');
+    // turn off all events for teardown
+    callBackStateEvents.forEach((event) => {
+      mapInstance.off(`draw.${event}`);
+    });
+
     mapInstance.removeControl(draw);
   }
 }
