@@ -14,7 +14,11 @@
         </label>
       </div>
       <div class="cell shrink">
-        <button class="button tiny gray" onclick={{action 'fitBoundsToBuffer'}}>Reset</button>
+        <button
+          class="button tiny gray"
+          onclick={{action 'fitBoundsToSelectedBuffer'}}
+          data-test-reset-map
+        >Reset</button>
       </div>
     </div>
 
@@ -77,7 +81,7 @@
       name="buffer-size" 
       checked={{eq model.bufferSize "600"}} 
       id="buffer-size--600" 
-      onclick={{action (mut model.bufferSize) '600'}}
+      onclick={{action 'setBufferSize' '600'}}
       data-test-project-area-buffer
     />
     <label for="buffer-size--600">600ft</label>
@@ -86,7 +90,7 @@
       name="buffer-size" 
       checked={{eq model.bufferSize "400"}} 
       id="buffer-size--400" 
-      onclick={{action (mut model.bufferSize) '400'}}
+      onclick={{action 'setBufferSize' '400'}}
       data-test-project-area-buffer-400
     />
     <label for="buffer-size--400">400ft</label>

@@ -309,37 +309,29 @@ export default class MapFormComponent extends Component {
       },
     });
 
-    // this.set('mapBearing', map.getBearing());
     this.set('model.mapBearing', map.getBearing());
     this.set('model.mapCenter', map.getCenter());
     this.set('model.mapZoom', map.getZoom());
   }
 
   @action
-  reorientPaper(orientation) {
-    this.set('model.paperOrientation', orientation);
-    next(() => {
-      // not supported in IE 11
-      window.addEventListener('resize', () => {
-        this.fitBoundsToBuffer();
-        this.updateBounds();
-      });
-      // not supported in IE 11
-      window.dispatchEvent(new Event('resize'));
-    });
-  }
+  fitBoundsToSelectedBuffer() {
+    const map = this.get('mapInstance');
+    const buffer = this.get('model.projectGeometryBuffer');
 
-  @action
-  scalePaper(size) {
-    this.set('model.paperSize', size);
     next(() => {
-      // not supported in IE 11
-      window.addEventListener('resize', () => {
-        this.fitBoundsToBuffer();
-        this.updateBounds();
+      map.resize();
+    });
+
+    next(() => {
+      map.fitBounds(turfBbox(buffer), {
+        padding: 50,
+        duration: 0,
       });
-      // not supported in IE 11
-      window.dispatchEvent(new Event('resize'));
+    });
+
+    next(() => {
+      this.updateBounds();
     });
   }
 
@@ -354,6 +346,7 @@ export default class MapFormComponent extends Component {
 
     map.setBearing(bearing);
 
+    // prefer explicit zoom and center over the 600 ft buffer
     if (mapZoom && mapCenter) {
       map.setZoom(mapZoom);
       map.setCenter(mapCenter);
@@ -365,40 +358,49 @@ export default class MapFormComponent extends Component {
     }
 
     this.updateBounds();
-
-    // this already happens in updateBounds...
-    // const mapZoom = map.getZoom();
-    // this.set('model.mapZoom', mapZoom);
-    // const mapCenter = map.getCenter();
-    // this.set('model.mapCenter', mapCenter);
   }
 
   @action
   toggleMapInteractions () {
     const map = this.get('mapInstance');
     const preventMapInteractions = this.get('preventMapInteractions');
+    const targetInteractions = [
+      'scrollZoom',
+      'boxZoom',
+      'dragRotate',
+      'dragPan',
+      'keyboard',
+      'doubleClickZoom',
+      'touchZoomRotate',
+    ];
 
     if (preventMapInteractions === true) {
       this.set('preventMapInteractions', false);
-      // enable all interactions
-      map.scrollZoom.enable();
-      map.boxZoom.enable();
-      map.dragRotate.enable();
-      map.dragPan.enable();
-      map.keyboard.enable();
-      map.doubleClickZoom.enable();
-      map.touchZoomRotate.enable();
+      targetInteractions
+        .forEach(interaction => map[interaction].enable());
     } else {
       this.set('preventMapInteractions', true);
-      // disable all interactions
-      map.scrollZoom.disable();
-      map.boxZoom.disable();
-      map.dragRotate.disable();
-      map.dragPan.disable();
-      map.keyboard.disable();
-      map.doubleClickZoom.disable();
-      map.touchZoomRotate.disable();
+      targetInteractions
+        .forEach(interaction => map[interaction].disable());
     }
+  }
+
+  @action
+  setBufferSize(bufferSize) {
+    this.set('model.bufferSize', bufferSize);
+    this.fitBoundsToSelectedBuffer();
+  }
+
+  @action
+  reorientPaper(orientation) {
+    this.set('model.paperOrientation', orientation);
+    this.fitBoundsToSelectedBuffer();
+  }
+
+  @action
+  scalePaper(paperSize) {
+    this.set('model.paperSize', paperSize);
+    this.fitBoundsToSelectedBuffer();
   }
 
   @action
