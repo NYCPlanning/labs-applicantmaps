@@ -39,7 +39,6 @@ export default function computeDifference(current, proposed) {
       const correspondingLabel = correspondingCurrentFeature.properties.label;
       const labelDifferent = label !== correspondingLabel;
 
-      console.log('LABELDIFFERENT', labelDifferent);
       if (labelDifferent) differenceFC.features.push(feature);
     } else {
       differenceFC.features.push(feature);
