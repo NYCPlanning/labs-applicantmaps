@@ -292,15 +292,6 @@ export default class extends Model {
     return wizard(projectProcedure, this);
   }
 
-  @computed('currentStep')
-  get currentStepNumber() {
-    const currentStep = this.get('currentStep');
-    if (currentStep.step === 'rezoning') { return 3; }
-    if (currentStep.step === 'complete') { return 3; }
-    if (currentStep.step === 'project-area') { return 2; }
-    return 1;
-  }
-
   // ******** CHECKS AND METHODS FOR REZONING QUESTIONS ********
   setRezoningFalse() {
     this.set('needRezoning', false);
