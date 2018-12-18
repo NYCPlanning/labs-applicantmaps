@@ -7,7 +7,7 @@ export default function(hooks) {
     this.owner.register('service:mock-map-service', Service.extend({
       init(...args) {
         this._super(...args);
-        this.set('maps', []);
+        this.set('maps', new Map());
       },
     }));
 
@@ -15,7 +15,8 @@ export default function(hooks) {
       mockMapService: service(),
       init(...args) {
         this._super(...args);
-        this.get('mockMapService.maps').pushObject(this);
+
+        this.get('mockMapService.maps').set(this.elementId, this);
         registerWaiter(() => this.map);
       },
     }));

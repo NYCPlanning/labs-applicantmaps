@@ -5,6 +5,7 @@ import { argument } from '@ember-decorators/argument';
 import { next } from '@ember/runloop';
 import turfBbox from '@turf/bbox';
 import mapboxgl from 'mapbox-gl';
+import { sanitizeStyle } from 'labs-applicant-maps/helpers/sanitize-style';
 import projectGeomLayers from '../utils/project-geom-layers';
 
 const defaultLayerGroups = {
@@ -228,11 +229,11 @@ export default class MapFormComponent extends Component {
     const bearing = this.get('model.mapBearing');
     const pitch = this.get('mapPitch');
 
-    return {
+    return sanitizeStyle([{
       arrow: `transform: rotateX(${pitch}deg) rotate(${360 - bearing}deg)`,
       n: `transform: rotate(${360 - bearing}deg)`,
       nSpan: `transform: rotate(${(360 - bearing) * -1}deg)`,
-    };
+    }]);
   }
 
   @action
