@@ -204,11 +204,10 @@ export default class MapFormComponent extends Component {
   @service
   store;
 
-  @argument
-  projectURL = window.location.href;
-
   @service
-  notificationMessages
+  notificationMessages;
+
+  projectURL = window.location.href;
 
   mapConfiguration = null
 
