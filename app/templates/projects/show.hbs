@@ -2,12 +2,6 @@
 
   {{project-setup-status project=model}}
 
-  <a href="mailto:?subject=Applicant Maps: {{model.projectName}}&body=Thanks for trying out NYC Planning's new Applicant Maps tool. You can access the project dashboard for the {{model.projectName}} project using the following URL: https://applicantmaps.planninglabs.nyc/projects/{{model.id}}">
-    <div class="button large expanded map-type-area-map">
-      {{fa-icon 'envelope' prefix='far' class='white'}} Email this project
-    </div>
-  </a>
-
   <h4 class="header-small">Project Maps</h4>
   {{link-to 'Area Map' 'projects.edit.map.edit' model.id (query-params mapType=(dasherize 'Area Map'))
     data-test-add-area-map
