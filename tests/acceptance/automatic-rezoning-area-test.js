@@ -6,12 +6,14 @@ import {
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import random from '@turf/random';
+import setupMapMocks from 'labs-applicant-maps/tests/helpers/setup-map-mocks';
 
 const { randomPolygon } = random;
 
 module('Acceptance | automated rezoning area geometry', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupMapMocks(hooks);
 
   test('after adding new feature to underlying zoning, rezoningArea has valid geometry', async function(assert) {
     // create a dummy project without rezoning geometries
@@ -39,7 +41,7 @@ module('Acceptance | automated rezoning area geometry', function(hooks) {
     assert.notEqual(model.get('rezoningArea').features[0].geometry, null);
   });
 
-  test('change to zoning label is included in rezoningArea calculation', async function(assert) {
+  test('change to zoning label triggers rezoningArea calculation and includes entire zoning polygon', async function(assert) {
     // create a dummy project without rezoning geometries
     this.server.create('project', { needsRezoning: true });
 
