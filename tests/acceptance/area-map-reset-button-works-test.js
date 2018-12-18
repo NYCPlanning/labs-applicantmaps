@@ -1,53 +1,37 @@
 import { module, test } from 'qunit';
-import { visit, click, getSettledState } from '@ember/test-helpers';
+import { visit, click, pauseTest } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import config from 'labs-applicant-maps/config/environment';
-import LabsMap from 'labs-applicant-maps/components/labs-map';
 import MapForm from 'labs-applicant-maps/components/map-form';
-import MapboxGL from 'labs-applicant-maps/components/mapbox-gl';
+import setupMapMocks from 'labs-applicant-maps/tests/helpers/setup-map-mocks';
 import { registerWaiter } from '@ember/test';
 import Sinon from 'sinon';
 
 module('Acceptance | area map reset button works', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupMapMocks(hooks);
 
   hooks.beforeEach(async function() {
     this.sandbox = Sinon.createSandbox();
     this.server.createList('layer-group', 10);
     this.server.create('layer-group', { id: 'tax-lots' });
 
-    const beforeHookScope = this;
-    this.owner.register('component:labs-map', LabsMap.extend({
-      init(...args) {
-        this._super(...args);
-
-        if (config.environment === 'test') {
-          registerWaiter(() => this.get('map'));
-        }
-      },
-    }));
-
-    this.owner.register('component:mapbox-gl', MapboxGL.extend({
-      init(...args) {
-        this._super(...args);
-
-        if (config.environment === 'test') {
-          registerWaiter(() => this.map);
-        }
-      },
-    }));
-
     this.owner.register('component:map-form', MapForm.extend({
+      init(...args) {
+        this._super(...args);
+
+        if (config.environment === 'test') {
+          registerWaiter(() => this.get('mapInstance'));
+        }
+      },
       actions: {
         handleMapLoaded(map) {
           this.set('mapInstance', map);
           this.fitBoundsToBuffer();
           this.updateBounds();
           this.toggleMapInteractions();
-
-          beforeHookScope.mapInstance = map;
         },
       },
     }));
@@ -61,13 +45,15 @@ module('Acceptance | area map reset button works', function(hooks) {
     this.server.create('project');
 
     await visit('/projects/1/edit/map/edit');
-    const fitBoundsSpy = this.sandbox.spy(this.mapInstance, 'fitBounds');
+
+    const currentMapService = this.owner.lookup('service:mock-map-service');
+    const fitBoundsSpy = this.sandbox.spy(currentMapService.get('maps.firstObject.map'), 'fitBounds');
+
     await click('[data-test-paper-orientation-portrait]');
     await click('[data-test-paper-paper-size-letter]');
     await click('[data-test-project-area-buffer-400]');
-
     await click('[data-test-reset-map]');
 
-    assert.ok(fitBoundsSpy.callCount, 4);
+    assert.equal(fitBoundsSpy.callCount, 4);
   });
 });

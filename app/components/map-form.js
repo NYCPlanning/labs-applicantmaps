@@ -319,12 +319,20 @@ export default class MapFormComponent extends Component {
     const map = this.get('mapInstance');
     const buffer = this.get('model.projectGeometryBuffer');
 
-    map.fitBounds(turfBbox(buffer), {
-      padding: 50,
-      duration: 0,
+    next(() => {
+      map.resize();
     });
 
-    this.updateBounds();
+    next(() => {
+      map.fitBounds(turfBbox(buffer), {
+        padding: 50,
+        duration: 0,
+      });
+    });
+
+    next(() => {
+      this.updateBounds();
+    });
   }
 
   @action
@@ -356,69 +364,43 @@ export default class MapFormComponent extends Component {
   toggleMapInteractions () {
     const map = this.get('mapInstance');
     const preventMapInteractions = this.get('preventMapInteractions');
+    const targetInteractions = [
+      'scrollZoom',
+      'boxZoom',
+      'dragRotate',
+      'dragPan',
+      'keyboard',
+      'doubleClickZoom',
+      'touchZoomRotate',
+    ];
 
     if (preventMapInteractions === true) {
       this.set('preventMapInteractions', false);
-      // enable all interactions
-      map.scrollZoom.enable();
-      map.boxZoom.enable();
-      map.dragRotate.enable();
-      map.dragPan.enable();
-      map.keyboard.enable();
-      map.doubleClickZoom.enable();
-      map.touchZoomRotate.enable();
+      targetInteractions
+        .forEach(interaction => map[interaction].enable());
     } else {
       this.set('preventMapInteractions', true);
-      // disable all interactions
-      map.scrollZoom.disable();
-      map.boxZoom.disable();
-      map.dragRotate.disable();
-      map.dragPan.disable();
-      map.keyboard.disable();
-      map.doubleClickZoom.disable();
-      map.touchZoomRotate.disable();
+      targetInteractions
+        .forEach(interaction => map[interaction].disable());
     }
   }
 
   @action
   setBufferSize(bufferSize) {
     this.set('model.bufferSize', bufferSize);
-
-    next(() => {
-      this.fitBoundsToSelectedBuffer();
-    });
+    this.fitBoundsToSelectedBuffer();
   }
 
   @action
   reorientPaper(orientation) {
     this.set('model.paperOrientation', orientation);
-
-    next(() => {
-      // not supported in IE 11
-      window.addEventListener('resize', () => {
-        this.fitBoundsToSelectedBuffer();
-        this.fitBoundsToBuffer();
-        this.updateBounds();
-      });
-      // not supported in IE 11
-      window.dispatchEvent(new Event('resize'));
-    });
+    this.fitBoundsToSelectedBuffer();
   }
 
   @action
   scalePaper(paperSize) {
     this.set('model.paperSize', paperSize);
-
-    next(() => {
-      // not supported in IE 11
-      window.addEventListener('resize', () => {
-        this.fitBoundsToSelectedBuffer();
-        this.fitBoundsToBuffer();
-        this.updateBounds();
-      });
-      // not supported in IE 11
-      window.dispatchEvent(new Event('resize'));
-    });
+    this.fitBoundsToSelectedBuffer();
   }
 
   @action
