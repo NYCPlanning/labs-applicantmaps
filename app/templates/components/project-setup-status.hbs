@@ -33,6 +33,52 @@
   }}
 </p>
 
+<div class="modal-controls">
+  <button class="modal-button button small gray text-orange">
+    {{fa-icon 'share-alt'}} Share Project 
+    {{#ember-popover class="tbd" side="left" as |popover|}}
+      <div class="modal-controls-content">
+        <h3 class="header header-small">Share Project:</h3>
+        <p>Please note that anyone who possesses the project URL will be able to edit the project.</p>
+        <div class="input-group">
+          <input id="share-url" class="input-group-field" type="text" value="https://applicantmaps.planninglabs.nyc/projects/{{project.id}}">
+          <div class="input-group-button">
+            {{#copy-button
+              clipboardTarget="#share-url"
+              success=(action 'handleShareSuccess')
+              error=(action 'handleModalClose')
+              class="button"
+            }}
+              {{fa-icon 'paste'}} Copy Link
+            {{/copy-button}}
+          </div>
+        </div>
+        {{#if copySuccess}}
+          <div class="share-controls-copy-success">
+            <div class="share-controls-copy-success-message">{{fa-icon 'check'}} Copied</div>
+          </div>
+        {{/if}}
+        <div>
+          <a href="mailto:?subject=Applicant Maps: {{project.projectName}}&body=Thanks for trying out NYC Planning's new Applicant Maps tool. You can access the project dashboard for the {{project.projectName}} project using the following URL: https://applicantmaps.planninglabs.nyc/projects/{{project.id}}. Please note that anyone who possesses the project URL will be able to edit the project.">
+              <div class="button medium expanded" data-test-email>
+                {{fa-icon 'envelope' prefix='far' class='white'}} Email
+              </div>
+          </a>    
+        </div>
+      <button {{action "hide" target=popover}}>Hide</button>
+      </div>
+    {{/ember-popover}}
+  </button>
+</div>
+
+{{!-- 
+  <a href="mailto:?subject=Applicant Maps: {{model.projectName}}&body=Thanks for trying out NYC Planning's new Applicant Maps tool. You can access the project dashboard for the {{model.projectName}} project using the following URL: https://applicantmaps.planninglabs.nyc/projects/{{model.id}}">
+    <div class="button large expanded map-type-area-map" data-test-email>
+      {{fa-icon 'envelope' prefix='far' class='white'}} Email this project
+    </div>
+  </a>
+  <hr> --}}
+
 <hr />
 
 {{yield}}
