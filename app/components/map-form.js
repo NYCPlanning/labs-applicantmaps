@@ -238,7 +238,7 @@ export default class MapFormComponent extends Component {
   @action
   handleMapLoaded(map) {
     this.set('mapInstance', map);
-    this.fitBoundsToBuffer();
+    this.fitBoundsToSelectedBuffer();
     this.updateBounds();
     this.toggleMapInteractions();
 
@@ -333,31 +333,6 @@ export default class MapFormComponent extends Component {
     next(() => {
       this.updateBounds();
     });
-  }
-
-  @action
-  fitBoundsToBuffer() {
-    const map = this.get('mapInstance');
-
-    const buffer = this.get('model.projectGeometryBuffer');
-    const bearing = this.get('model.mapBearing');
-    const mapZoom = this.get('model.mapZoom');
-    const mapCenter = this.get('model.mapCenter');
-
-    map.setBearing(bearing);
-
-    // prefer explicit zoom and center over the 600 ft buffer
-    if (mapZoom && mapCenter) {
-      map.setZoom(mapZoom);
-      map.setCenter(mapCenter);
-    } else {
-      map.fitBounds(turfBbox(buffer), {
-        padding: 50,
-        duration: 0,
-      });
-    }
-
-    this.updateBounds();
   }
 
   @action
