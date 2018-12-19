@@ -47,7 +47,7 @@ module('Acceptance | area map reset button works', function(hooks) {
     await visit('/projects/1/edit/map/edit');
 
     const currentMapService = this.owner.lookup('service:mock-map-service');
-    const fitBoundsSpy = this.sandbox.spy(currentMapService.get('maps.firstObject.map'), 'fitBounds');
+    const fitBoundsSpy = this.sandbox.spy(currentMapService.get('maps').get('main-map').map, 'fitBounds');
 
     await click('[data-test-paper-orientation-portrait]');
     await click('[data-test-paper-paper-size-letter]');
