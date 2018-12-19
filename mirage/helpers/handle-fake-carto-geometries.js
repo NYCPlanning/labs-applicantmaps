@@ -1,10 +1,10 @@
 import calculateBbox from '@turf/bbox';
 import voronoi from '@turf/voronoi';
-import random from 'labs-applicant-maps/tests/helpers/random-geometry';
 import helpers from '@turf/helpers';
 import transformScale from '@turf/transform-scale';
 import { faker } from 'ember-cli-mirage';
 import Response from 'ember-cli-mirage/response';
+import random from './helpers/random-geometry';
 
 const { randomPoint, randomPolygon } = random;
 const { feature } = helpers;
