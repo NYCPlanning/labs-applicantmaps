@@ -4,6 +4,6 @@ export default function(server) {
     This data will not be loaded in your tests.
   */
 
-  server.createList('project', 10);
+  server.loadFixtures('projects');
   server.createList('layer-group', 3);
 }
