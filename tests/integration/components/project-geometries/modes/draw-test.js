@@ -5,7 +5,6 @@ import {
   click,
   waitUntil,
   typeIn,
-  // pauseTest,
 } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -18,7 +17,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
 
   hooks.before(async function() {
     this.map = await createMap();
-    this.draw = new DefaultDraw();
+    this.draw = DefaultDraw;
   });
 
   hooks.after(function() {
