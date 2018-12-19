@@ -65,6 +65,7 @@ module('Unit | Model | project', (hooks) => {
       needProjectArea: false,
       needRezoning: null,
     }));
+
     assert.equal(model.get('currentStep.step'), 'rezoning');
   });
 });
