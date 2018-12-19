@@ -66,7 +66,7 @@ export default class SearchHandlerComponent extends Component {
   @action
   flyTo(center, zoom) {
     // Fly to the lot
-    this.get('mapInstance').flyTo({ center, zoom });
+    this.get('map.mapInstance').flyTo({ center, zoom });
     // Turn on the Tax Lots layer group
     this.set('tax-lots', true);
   }
