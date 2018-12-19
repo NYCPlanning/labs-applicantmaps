@@ -1,9 +1,56 @@
 <div class="draw-controls">
   <button class="polygon {{if (eq drawMode 'draw_polygon') 'active'}}" {{action 'handleDrawButtonClick'}}>
     {{fa-icon 'draw-polygon' size='2x' fixedWidth=true}}
+    {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip"}}
+      <h5 class="small-margin-bottom">Polygon</h5>
+      <p class="small-margin-bottom">Add a new shape. Complete it by clicking the final vertex a 2nd time.</p>
+      <p class="no-margin text-tiny">Edit an existing shape by selecting it and dragging its vertices. Add a vertex by clicking the midpoint of a line.</p>
+    {{/ember-tooltip}}
   </button>
   <button class="trash" {{action 'handleTrashButtonClick'}}>
     {{fa-icon 'trash-alt' prefix='far' size='2x' fixedWidth=true}}
+    {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip"}}
+      <h5 class="small-margin-bottom">Trash</h5>
+      <p class="no-margin">Delete a selected shape or vertex</p>
+    {{/ember-tooltip}}
+  </button>
+  <button class="annotation--parallel-offset">
+    <span class="fa-layers fa-2x">
+      {{fa-icon 'arrows-alt-h' transform='down-4'}}
+      {{fa-icon 'times' transform='shrink-9 up-3'}}
+    </span>
+    {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip"}}
+      <h5 class="small-margin-bottom">Straight Line</h5>
+      <p class="no-margin">Annotate a parallel offset measurement</p>
+    {{/ember-tooltip}}
+  </button>
+  <button class="annotation--point-to-point-offset">
+    <span class="fa-layers fa-2x">
+      {{fa-icon 'square-full' mask='circle-notch' transform='up-4'}}
+      {{fa-icon 'caret-left' transform='shrink-4 left-6 rotate-45 down-4'}}
+      {{fa-icon 'caret-right' transform='shrink-4 right-6 rotate-315 down-4'}}
+      {{fa-icon 'times' transform='shrink-9 up-3'}}
+    </span>
+    {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip"}}
+      <h5 class="small-margin-bottom">Curved Line</h5>
+      <p class="no-margin">Annotate a point-to-point offset measurement</p>
+    {{/ember-tooltip}}
+  </button>
+  <button class="annotation--custom-text">
+    {{fa-icon 'i-cursor' size='2x' fixedWidth=true transform='shrink-4'}}
+    {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip"}}
+      <h5 class="small-margin-bottom">Text Label</h5>
+      <p class="no-margin">Annotate a custom label</p>
+    {{/ember-tooltip}}
+  </button>
+  <button class="annotation--custom-text">
+    <span class="fa-layers fa-2x">
+      <span class="fa-layers-text">℄</span>
+    </span>
+    {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip"}}
+      <h5 class="small-margin-bottom">Centerline</h5>
+      <p class="no-margin">Annotate a centerline</p>
+    {{/ember-tooltip}}
   </button>
 </div>
 

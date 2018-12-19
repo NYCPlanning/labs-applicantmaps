@@ -7311,9 +7311,9 @@ labs-ember-search@2.4.5:
     ember-promise-helpers "1.0.6"
     ember-truth-helpers "2.0.0"
 
-labs-ui@^0.0.13:
-  version "0.0.13"
-  resolved "https://registry.yarnpkg.com/labs-ui/-/labs-ui-0.0.13.tgz#75946c367620249526279d87bb0479c7b525a008"
+labs-ui@^0.0.14:
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/labs-ui/-/labs-ui-0.0.14.tgz#7e63f644c4fab64d0c42d7a327347a474961ea4e"
   dependencies:
     "@ember-decorators/argument" "0.8.15"
     "@ember-decorators/babel-transforms" "^2.0.0"
@@ -7326,6 +7326,7 @@ labs-ui@^0.0.13:
     ember-cli-htmlbars "^2.0.1"
     ember-cli-htmlbars-inline-precompile "^1.0.0"
     ember-cli-sass "^6.2.0"
+    ember-cli-what-input "^1.0.0"
     ember-decorators "2.3.1"
     ember-tooltips "3.1.0"
     foundation-sites "^6.3.1"
