@@ -4,6 +4,19 @@ import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 import isEmpty from '../../../utils/is-empty';
 
+const labelOptions = [
+  'C1-1',
+  'C1-2',
+  'C1-3',
+  'C1-4',
+  'C1-5',
+  'C2-1',
+  'C2-2',
+  'C2-3',
+  'C2-4',
+  'C2-5',
+]
+
 // Proposed Commercial Overlays
 export const commercialOverlaysLayer = {
   id: 'commemrcial-overlays-lines',
@@ -132,6 +145,8 @@ export default class CommercialOverlayComponent extends Component {
       this.get('model').setDefaultCommercialOverlays();
     }
   }
+
+  labelOptions=labelOptions
 
   @argument
   map;
