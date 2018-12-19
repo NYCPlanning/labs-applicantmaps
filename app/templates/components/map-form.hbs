@@ -34,17 +34,17 @@
         onclick={{action 'reorientPaper' 'portrait'}}
         data-test-paper-orientation-portrait
       />
-        
+
       <label for="paper-orientation--portrait">
         Portrait
       </label>
-      <input 
-        type="radio" 
-        name="paper-orientation" 
-        class="landscape-radio-button" 
-        value="landscape" 
-        id="paper-orientation--landscape" 
-        checked={{eq model.paperOrientation "landscape"}}  
+      <input
+        type="radio"
+        name="paper-orientation"
+        class="landscape-radio-button"
+        value="landscape"
+        id="paper-orientation--landscape"
+        checked={{eq model.paperOrientation "landscape"}}
         onclick={{action 'reorientPaper' 'landscape'}}
         data-test-paper-orientation-landscape
       />
@@ -54,21 +54,21 @@
     </p>
     <p>
       <input
-        type="radio" 
-        name="paper-size" 
-        class="tabloid-radio-button" 
-        value="tabloid" 
-        id="paper-size--tabloid" 
-        checked={{eq model.paperSize "tabloid"}} 
+        type="radio"
+        name="paper-size"
+        class="tabloid-radio-button"
+        value="tabloid"
+        id="paper-size--tabloid"
+        checked={{eq model.paperSize "tabloid"}}
         onclick={{action 'scalePaper' 'tabloid'}}
         data-test-paper-paper-size-tabloid
       />
       <label for="paper-size--tabloid">Tabloid</label>
-      <input 
-        type="radio" 
-        name="paper-size" 
-        class="letter-radio-button" value="letter" id="paper-size--letter" 
-        checked={{eq model.paperSize "letter"}} 
+      <input
+        type="radio"
+        name="paper-size"
+        class="letter-radio-button" value="letter" id="paper-size--letter"
+        checked={{eq model.paperSize "letter"}}
         onclick={{action  'scalePaper' 'letter'}}
         data-test-paper-paper-size-letter
       />
@@ -76,20 +76,20 @@
     </p>
 
     <h5>Project Area Buffer</h5>
-    <input 
-      type="radio" 
-      name="buffer-size" 
-      checked={{eq model.bufferSize "600"}} 
-      id="buffer-size--600" 
+    <input
+      type="radio"
+      name="buffer-size"
+      checked={{eq model.bufferSize "600"}}
+      id="buffer-size--600"
       onclick={{action 'setBufferSize' '600'}}
       data-test-project-area-buffer
     />
     <label for="buffer-size--600">600ft</label>
-    <input 
-      type="radio" 
-      name="buffer-size" 
-      checked={{eq model.bufferSize "400"}} 
-      id="buffer-size--400" 
+    <input
+      type="radio"
+      name="buffer-size"
+      checked={{eq model.bufferSize "400"}}
+      id="buffer-size--400"
       onclick={{action 'setBufferSize' '400'}}
       data-test-project-area-buffer-400
     />
@@ -107,10 +107,10 @@
         {{fa-icon 'arrow-left'}}
         Go Back to Project
       {{/link-to}}
-      <button 
-        class="cell auto button project-save-button" 
-        type="button" 
-        onclick={{action 'saveProject'}} 
+      <button
+        class="cell auto button project-save-button"
+        type="button"
+        onclick={{action 'saveProject'}}
         disabled={{not model.hasDirtyAttributes}}
         data-test-save-map
       >Save Map</button>
@@ -175,7 +175,7 @@
             id='main-map'
             initOptions=(hash
               style=mapConfiguration.meta.mapboxStyle
-
+              pitchWithRotate=false
             )
             mapLoaded=(action 'handleMapLoaded') as |map|
           }}
