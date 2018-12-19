@@ -36,7 +36,7 @@
 <div class="modal-controls">
   <button class="modal-button button small gray text-orange">
     {{fa-icon 'share-alt'}} Share Project 
-    {{#ember-popover class="tbd" side="left" as |popover|}}
+    {{#ember-popover side="right" popperContainer="body" as |popover|}}
       <div class="modal-controls-content">
         <h3 class="header header-small">Share Project:</h3>
         <p>Please note that anyone who possesses the project URL will be able to edit the project.</p>
