@@ -3,7 +3,7 @@ import queriesIntersectingZoningQuery from 'labs-applicant-maps/utils/queries/in
 import { module, test } from 'qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupTest } from 'ember-qunit';
-import random from '@turf/random';
+import random from 'labs-applicant-maps/tests/helpers/random-geometry';
 
 const { randomPolygon } = random;
 
