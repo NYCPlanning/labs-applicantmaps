@@ -6,7 +6,7 @@ import { type } from '@ember-decorators/argument/type';
 import { FeatureCollection, EmptyFeatureCollection } from '../../../models/project';
 import isEmpty from '../../../utils/is-empty';
 
-export const DefaultDraw = MapboxDraw.bind(null, {
+export const DefaultDraw = new MapboxDraw({
   displayControlsDefault: false,
   controls: {
     polygon: true,
@@ -38,7 +38,7 @@ export default class DrawComponent extends Component {
 
     const {
       mapInstance,
-      draw = new DefaultDraw(),
+      draw = DefaultDraw,
     } = this.get('map');
 
     // set draw instance so it's available to the class
@@ -53,22 +53,6 @@ export default class DrawComponent extends Component {
       draw.add(geometricProperty);
     }
 
-    const drawStateCallback = () => {
-      if (!this.get('isDestroyed')) {
-        this.setProperties({
-          geometricProperty: draw.getAll(),
-          drawMode: draw.getMode(),
-        });
-
-        const { features: [firstSelectedFeature] } = draw.getSelected();
-        if (firstSelectedFeature) {
-          this.set('selectedFeature', { type: 'FeatureCollection', features: [firstSelectedFeature] });
-        } else {
-          this.set('selectedFeature', EmptyFeatureCollection);
-        }
-      }
-    };
-
     this.addObserver('geometricProperty', () => {
       const latestProperty = this.get('geometricProperty');
       if (!isEmpty(latestProperty)) {
@@ -82,7 +66,8 @@ export default class DrawComponent extends Component {
     // bind events to the state callback
     callBackStateEvents
       .forEach((event) => {
-        mapInstance.on(`draw.${event}`, drawStateCallback);
+        mapInstance.off(`draw.${event}`, this.drawStateCallback.bind(this));
+        mapInstance.on(`draw.${event}`, this.drawStateCallback.bind(this));
       });
 
     // skip simple_select mode, jump straight to direct_select mode so users can immediately select vertices
@@ -94,6 +79,24 @@ export default class DrawComponent extends Component {
         draw.changeMode('direct_select', { featureId: selected });
       }
     });
+  }
+
+  drawStateCallback() {
+    const { draw } = this.get('map');
+    console.log(this.get('elementId'));
+    if (!this.get('isDestroyed') && !this.get('isDestroying')) {
+      this.setProperties({
+        geometricProperty: draw.getAll(),
+        drawMode: draw.getMode(),
+      });
+
+      const { features: [firstSelectedFeature] } = draw.getSelected();
+      if (firstSelectedFeature) {
+        this.set('selectedFeature', { type: 'FeatureCollection', features: [firstSelectedFeature] });
+      } else {
+        this.set('selectedFeature', EmptyFeatureCollection);
+      }
+    }
   }
 
   @argument
@@ -147,16 +150,17 @@ export default class DrawComponent extends Component {
   }
 
   willDestroyElement(...args) {
-    super.willDestroyElement(...args);
-
     const { draw } = this.get('map');
     const { mapInstance } = this.get('map');
 
-    // turn off all events for teardown
-    callBackStateEvents.forEach((event) => {
-      mapInstance.off(`draw.${event}`);
-    });
+    callBackStateEvents
+      .forEach((event) => {
+        mapInstance.off(`draw.${event}`, this.drawStateCallback.bind(this));
+      });
 
+    draw.deleteAll();
     mapInstance.removeControl(draw);
+
+    super.willDestroyElement(...args);
   }
 }
