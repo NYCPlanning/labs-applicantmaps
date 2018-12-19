@@ -392,13 +392,13 @@ export default class MapFormComponent extends Component {
   }
 
   @action
-  reorientPaper(orientation) {
+  setPaperOrientation(orientation) {
     this.set('model.paperOrientation', orientation);
     this.fitBoundsToSelectedBuffer();
   }
 
   @action
-  scalePaper(paperSize) {
+  setPaperSize(paperSize) {
     this.set('model.paperSize', paperSize);
     this.fitBoundsToSelectedBuffer();
   }

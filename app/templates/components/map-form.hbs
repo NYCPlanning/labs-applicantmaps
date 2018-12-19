@@ -31,7 +31,7 @@
         value="portrait"
         id="paper-orientation--portrait"
         checked={{eq model.paperOrientation "portrait"}}
-        onclick={{action 'reorientPaper' 'portrait'}}
+        onclick={{action 'setPaperOrientation' 'portrait'}}
         data-test-paper-orientation-portrait
       />
         
@@ -45,7 +45,7 @@
         value="landscape" 
         id="paper-orientation--landscape" 
         checked={{eq model.paperOrientation "landscape"}}  
-        onclick={{action 'reorientPaper' 'landscape'}}
+        onclick={{action 'setPaperOrientation' 'landscape'}}
         data-test-paper-orientation-landscape
       />
         <label for="paper-orientation--landscape">
@@ -60,7 +60,7 @@
         value="tabloid" 
         id="paper-size--tabloid" 
         checked={{eq model.paperSize "tabloid"}} 
-        onclick={{action 'scalePaper' 'tabloid'}}
+        onclick={{action 'setPaperSize' 'tabloid'}}
         data-test-paper-paper-size-tabloid
       />
       <label for="paper-size--tabloid">Tabloid</label>
@@ -69,7 +69,7 @@
         name="paper-size" 
         class="letter-radio-button" value="letter" id="paper-size--letter" 
         checked={{eq model.paperSize "letter"}} 
-        onclick={{action  'scalePaper' 'letter'}}
+        onclick={{action  'setPaperSize' 'letter'}}
         data-test-paper-paper-size-letter
       />
       <label for="paper-size--letter">Letter</label>
