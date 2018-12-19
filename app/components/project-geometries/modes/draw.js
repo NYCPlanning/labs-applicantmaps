@@ -62,40 +62,45 @@ export default class DrawComponent extends Component {
       }
     });
 
-    // setup events to update draw state
-    // bind events to the state callback
-    callBackStateEvents
-      .forEach((event) => {
-        mapInstance.off(`draw.${event}`, this.drawStateCallback.bind(this));
-        mapInstance.on(`draw.${event}`, this.drawStateCallback.bind(this));
-      });
+    console.log('setting event callbacks');
+    // skip simple_select mode, jump straight to direct_select
+    // mode so users can immediately select vertices
+    // this helps avoid an additional click when something is selected
+    mapInstance.on('draw.selectionchange', this.drawStateCallback.bind(this));
+    mapInstance.on('draw.selectionchange', this.skipToDirectSelectCallback.bind(this));
+  }
 
-    // skip simple_select mode, jump straight to direct_select mode so users can immediately select vertices
-    mapInstance.on('draw.selectionchange', () => {
-      const mode = draw.getMode();
-      const selected = draw.getSelectedIds()[0];
+  didInsertElement(...params) {
+    super.didInsertElement(...params);
 
-      if (selected && mode === 'simple_select') {
-        draw.changeMode('direct_select', { featureId: selected });
-      }
-    });
+    this.drawStateCallback();
   }
 
   drawStateCallback() {
     const { draw } = this.get('map');
-    console.log(this.get('elementId'));
-    if (!this.get('isDestroyed') && !this.get('isDestroying')) {
-      this.setProperties({
-        geometricProperty: draw.getAll(),
-        drawMode: draw.getMode(),
-      });
 
-      const { features: [firstSelectedFeature] } = draw.getSelected();
-      if (firstSelectedFeature) {
-        this.set('selectedFeature', { type: 'FeatureCollection', features: [firstSelectedFeature] });
-      } else {
-        this.set('selectedFeature', EmptyFeatureCollection);
-      }
+    this.setProperties({
+      geometricProperty: draw.getAll(),
+      drawMode: draw.getMode(),
+    });
+
+    const { features: [firstSelectedFeature] } = draw.getSelected();
+
+    if (firstSelectedFeature) {
+      this.set('selectedFeature', { type: 'FeatureCollection', features: [firstSelectedFeature] });
+    } else {
+      this.set('selectedFeature', EmptyFeatureCollection);
+    }
+  }
+
+  skipToDirectSelectCallback() {
+    const { draw } = this.get('map');
+
+    const mode = draw.getMode();
+    const [selected] = draw.getSelectedIds();
+
+    if (selected && mode === 'simple_select') {
+      draw.changeMode('direct_select', { featureId: selected });
     }
   }
 
@@ -134,11 +139,7 @@ export default class DrawComponent extends Component {
   handleDrawButtonClick() {
     const { draw } = this.get('map');
 
-    // change both to correctly fire event
-    // see https://github.com/mapbox/mapbox-gl-draw/blob/master/docs/API.md#events
-    draw.changeMode('simple_select');
     draw.changeMode('draw_polygon');
-    this.set('drawMode', draw.getMode());
   }
 
   @action
@@ -157,6 +158,8 @@ export default class DrawComponent extends Component {
       .forEach((event) => {
         mapInstance.off(`draw.${event}`, this.drawStateCallback.bind(this));
       });
+    mapInstance.off('draw.selectionchange', this.skipToDirectSelectCallback);
+    this.removeObserver('geometricProperty');
 
     draw.deleteAll();
     mapInstance.removeControl(draw);
