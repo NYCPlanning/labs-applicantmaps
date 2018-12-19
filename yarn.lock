@@ -5032,15 +5032,15 @@ ember-text-measurer@^0.4.0:
   dependencies:
     ember-cli-babel "^6.8.2"
 
-ember-tooltips@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/ember-tooltips/-/ember-tooltips-3.0.0.tgz#bf864a81fc379dc3992fa6d4453cacfb14ffbacf"
+ember-tooltips@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/ember-tooltips/-/ember-tooltips-3.1.0.tgz#99c6b9d96eaf907a6f7a2285a7a43239ae62698d"
   dependencies:
     broccoli-funnel "^2.0.1"
     broccoli-merge-trees "^2.0.0"
-    ember-cli-babel "^6.6.0"
-    ember-cli-htmlbars "^2.0.1"
-    ember-cli-node-assets "^0.2.2"
+    ember-cli-babel "^6.16.0"
+    ember-cli-htmlbars "^3.0.0"
+    ember-get-config "^0.2.4"
     ember-wormhole "^0.5.5"
     popper.js "^1.12.5"
     tooltip.js "^1.1.5"
@@ -7311,9 +7311,9 @@ labs-ember-search@2.4.5:
     ember-promise-helpers "1.0.6"
     ember-truth-helpers "2.0.0"
 
-labs-ui@^0.0.12:
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/labs-ui/-/labs-ui-0.0.12.tgz#58a8aae3523a70c4cb745033066d40887cf2da1e"
+labs-ui@^0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/labs-ui/-/labs-ui-0.0.13.tgz#75946c367620249526279d87bb0479c7b525a008"
   dependencies:
     "@ember-decorators/argument" "0.8.15"
     "@ember-decorators/babel-transforms" "^2.0.0"
@@ -7326,10 +7326,10 @@ labs-ui@^0.0.12:
     ember-cli-htmlbars "^2.0.1"
     ember-cli-htmlbars-inline-precompile "^1.0.0"
     ember-cli-sass "^6.2.0"
-    ember-cli-what-input "^1.0.0"
     ember-decorators "2.3.1"
-    ember-tooltips "3.0.0"
+    ember-tooltips "3.1.0"
     foundation-sites "^6.3.1"
+    mapbox-gl "^0.48.0"
 
 lcid@^1.0.0:
   version "1.0.0"
@@ -7883,7 +7883,7 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-mapbox-gl@0.50.0, mapbox-gl@>=0.47.0, mapbox-gl@^0.50.0:
+mapbox-gl@0.50.0, mapbox-gl@>=0.47.0, mapbox-gl@^0.48.0, mapbox-gl@^0.50.0:
   version "0.50.0"
   resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-0.50.0.tgz#49f44149f02fdd25ab64a2ec4efc7a11a5c96f55"
   dependencies:
