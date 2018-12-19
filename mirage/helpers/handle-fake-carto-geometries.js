@@ -4,7 +4,7 @@ import helpers from '@turf/helpers';
 import transformScale from '@turf/transform-scale';
 import { faker } from 'ember-cli-mirage';
 import Response from 'ember-cli-mirage/response';
-import random from './helpers/random-geometry';
+import random from '../helpers/random-geometry';
 
 const { randomPoint, randomPolygon } = random;
 const { feature } = helpers;
