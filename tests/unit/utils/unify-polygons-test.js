@@ -1,6 +1,6 @@
 import unifyPolygons from 'labs-applicant-maps/utils/unify-polygons';
 import { module, test } from 'qunit';
-import random from '@turf/random';
+import random from 'labs-applicant-maps/helpers/random-geometry';
 
 const { randomPolygon } = random;
 
