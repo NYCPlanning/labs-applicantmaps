@@ -11,7 +11,7 @@ import { faker } from 'ember-cli-mirage';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import createMap from 'labs-applicant-maps/tests/helpers/create-map';
 import Sinon from 'sinon';
-import random from '@turf/random';
+import random from 'labs-applicant-maps/tests/helpers/random-geometry';
 import computeArea from '@turf/area';
 
 const { randomPolygon } = random;

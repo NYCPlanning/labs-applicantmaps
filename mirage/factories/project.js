@@ -1,8 +1,8 @@
 import { Factory, faker } from 'ember-cli-mirage';
-import random from '@turf/random';
 import calculateBbox from '@turf/bbox';
 import bboxToPolygon from '@turf/bbox-polygon';
 import transformScale from '@turf/transform-scale';
+import random from '../helpers/random-geometry';
 
 const { randomPolygon } = random;
 

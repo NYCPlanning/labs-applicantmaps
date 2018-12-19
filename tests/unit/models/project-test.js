@@ -1,6 +1,10 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { run } from '@ember/runloop';
+import random from 'labs-applicant-maps/tests/helpers/random-geometry';
+import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+
+const { randomPolygon } = random;
 
 const EmptyFeatureCollection = {
   type: 'FeatureCollection',
@@ -13,6 +17,7 @@ const EmptyFeatureCollection = {
 
 module('Unit | Model | project', (hooks) => {
   setupTest(hooks);
+  setupMirage(hooks);
 
   // Test for project not yet created
   test('it produces project-creation step', async function (assert) {
@@ -65,6 +70,33 @@ module('Unit | Model | project', (hooks) => {
       needProjectArea: false,
       needRezoning: null,
     }));
+
     assert.equal(model.get('currentStep.step'), 'rezoning');
+  });
+
+  test('it recalculates the rezoningArea', async function (assert) {
+    const dummyFeatureCollection = EmptyFeatureCollection;
+
+    dummyFeatureCollection.features[0].geometry = {
+      type: 'Point',
+      coordinates: [0, 0],
+    };
+
+    const store = this.owner.lookup('service:store');
+    const model = run(() => store.createRecord('project', {
+      projectName: 'some project',
+      developmentSite: randomPolygon(1),
+      needProjectArea: false,
+      needRezoning: true,
+      needUnderlyingZoning: true,
+      needCommercialOverlay: false,
+      needSpecialDistrict: false,
+    }));
+
+    model.set('underlyingZoning', randomPolygon(2));
+    await model.save();
+    await model.defaultRezoningArea();
+
+    assert.ok(true);
   });
 });
