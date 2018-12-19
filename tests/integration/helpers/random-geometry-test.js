@@ -1,6 +1,6 @@
 import { module, skip } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import random from 'labs-applicant-maps/helpers/random-geometry';
+import random from 'labs-applicant-maps/tests/helpers/random-geometry';
 
 const { randomPolygon } = random;
 

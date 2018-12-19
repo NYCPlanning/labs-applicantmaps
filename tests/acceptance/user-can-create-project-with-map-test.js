@@ -8,7 +8,7 @@ import {
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { faker } from 'ember-cli-mirage';
-import random from 'labs-applicant-maps/helpers/random-geometry';
+import random from 'labs-applicant-maps/tests/helpers/random-geometry';
 import LabsLayers from 'labs-applicant-maps/components/labs-layers';
 import setupMapMocks from 'labs-applicant-maps/tests/helpers/setup-map-mocks';
 
