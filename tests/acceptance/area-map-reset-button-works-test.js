@@ -29,7 +29,7 @@ module('Acceptance | area map reset button works', function(hooks) {
       actions: {
         handleMapLoaded(map) {
           this.set('mapInstance', map);
-          this.fitBoundsToBuffer();
+          this.fitBoundsToSelectedBuffer();
           this.updateBounds();
           this.toggleMapInteractions();
         },

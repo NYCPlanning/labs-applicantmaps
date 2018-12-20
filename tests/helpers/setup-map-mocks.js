@@ -30,6 +30,7 @@ export default function(hooks) {
       mockMapService: service(),
       init(...args) {
         this._super(...args);
+
         this.get('mockMapService.maps').set(this.elementId, this);
         registerWaiter(() => this.map);
       },
