@@ -346,39 +346,11 @@ label.inline {
   font-size: rem-calc(11);
 }
 
-
-//
-// HACKS!!! This stuff should be changed in Labs UI
-// --------------------------------------------------
-.input-group-label {
-  background-color: $white-smoke;
-  border-color: $silver;
-  // color: $dark-gray;
-}
-
-input:disabled,
-input[readonly],
-textarea:disabled,
-textarea[readonly] {
-  background-color: $white-smoke;
-  box-shadow: none;
-}
-
-// Ember Tooltip Overrides
-.ember-popover {
-  background-color: $dark-gray;
-  color: $white;
-  padding: $global-margin/2;
-  border: 0;
-}
-.ember-popover[x-placement^="top"] .ember-tooltip-arrow { border-top-color: $dark-gray; }
-.ember-popover[x-placement^="right"] .ember-tooltip-arrow { border-right-color: $dark-gray; }
-.ember-popover[x-placement^="bottom"] .ember-tooltip-arrow { border-bottom-color: $dark-gray; }
-.ember-popover[x-placement^="left"] .ember-tooltip-arrow { border-left-color: $dark-gray; }
-
-// Foundation's `.dropdown.menu > li > a` selector has more
-// specificity than Labs UI's `.site-header .menu a`
-.site-header .dropdown.menu > li > a {
-  padding-top: 1.6875rem;
-  padding-bottom: 1.6875rem;
+// HACK!
+// Foundation's button font size inside a input group is larger than a regular button
+.input-group-button .size-hack {
+  font-size:0.9em;
+  display:inline-block;
+  position:relative;
+  top:-0.05em;
 }
