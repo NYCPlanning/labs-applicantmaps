@@ -83,4 +83,26 @@ module('Integration | Component | project-geometries/modes/draw/feature-label-fo
     // make sure the first option's text matches the options that were passed in
     assert.equal(find('[data-test-feature-label-form]').value, 'someLabel');
   });
+
+  test('it passes the label to updateSelectedFeature on change', async function(assert) {
+    this.set('selectedFeature', dummyFeature);
+
+    this.set('updateSelectedFeature', (label) => {
+      assert.equal(label, 'Option 3');
+    });
+
+    await render(hbs`
+      {{project-geometries/modes/draw/feature-label-form
+        selectedFeature=selectedFeature
+        updateSelectedFeature=updateSelectedFeature
+        options=(array 'Option 1' 'Option 2' 'Option 3')
+      }}
+    `);
+
+    // click to open the powerselect list
+    await click('.ember-power-select-trigger');
+
+    // click the third option in the list
+    await click('.ember-power-select-option:nth-of-type(3)');
+  });
 });
