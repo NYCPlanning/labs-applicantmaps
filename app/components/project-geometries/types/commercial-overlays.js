@@ -15,7 +15,7 @@ const labelOptions = [
   'C2-3',
   'C2-4',
   'C2-5',
-]
+];
 
 // Proposed Commercial Overlays
 export const commercialOverlaysLayer = {
