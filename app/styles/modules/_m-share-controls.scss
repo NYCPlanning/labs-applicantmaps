@@ -1,0 +1,45 @@
+// --------------------------------------------------
+// Module: Share Controls
+// --------------------------------------------------
+
+.share-controls-message {
+  position: relative;
+  height: 0;
+  overflow: visible;
+  margin: -$global-margin $global-margin $global-margin;
+}
+
+.share-controls-message--success,
+.share-controls-message--error {
+  color: $white;
+  padding: rem-calc(6) rem-calc(10);
+  text-align: center;
+  font-style: italic;
+  border-radius: 6px;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+  opacity: 0;
+  animation: successfade 2s;
+  transform: translateY(-50%);
+  display: inline-block;
+}
+
+.share-controls-message--success {
+  background-color: $success-color;
+}
+
+.share-controls-message--error {
+  background-color: $alert-color;
+}
+
+@keyframes successfade {
+    0%   {opacity:0;}
+    10%  {opacity:1;}
+    75%  {opacity:1;}
+    100% {opacity:0;}
+}
+
+@keyframes flagfade {
+    0%   {opacity:0;}
+    10%  {opacity:1;}
+    100% {opacity:1;}
+}

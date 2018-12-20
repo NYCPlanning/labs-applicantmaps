@@ -7,6 +7,9 @@ export default class ProjectSetupStatus extends Component {
   @argument
   project;
 
+  @argument
+  shareURL = window.location.href;
+
   @action
   handleShareSuccess() {
     this.set('copySuccess', true);
@@ -16,7 +19,10 @@ export default class ProjectSetupStatus extends Component {
   }
 
   @action
-  handleModalClose() {
-    this.set('copySuccess', false);
+  handleShareError() {
+    this.set('copyError', true);
+    run.later(() => {
+      this.set('copyError', false);
+    }, 2000);
   }
 }

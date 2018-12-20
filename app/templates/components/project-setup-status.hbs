@@ -33,43 +33,46 @@
   }}
 </p>
 
-<div class="modal-controls">
-  <button class="modal-button button small gray text-orange">
-    {{fa-icon 'share-alt'}} Share Project 
-    {{#ember-popover side="right" popperContainer="body" as |popover|}}
-      <div class="modal-controls-content">
-        <h3 class="header header-small">Share Project:</h3>
-        <p>Please note that anyone who possesses the project URL will be able to edit the project.</p>
-        <div class="input-group">
-          <input id="share-url" class="input-group-field" type="text" value="https://applicantmaps.planninglabs.nyc/projects/{{project.id}}">
-          <div class="input-group-button">
-            {{#copy-button
-              clipboardTarget="#share-url"
-              success=(action 'handleShareSuccess')
-              error=(action 'handleModalClose')
-              class="button"
-            }}
-              {{fa-icon 'paste'}} Copy Link
-            {{/copy-button}}
-          </div>
+<p class="text-right no-margin">
+  <button class="button tiny gray text-orange no-margin">
+    {{fa-icon 'share-alt'}} Share Project
+    {{#ember-popover
+      event='click'
+      popperContainer='body'
+      tooltipClassName='ember-popover dark'
+      as |popover|
+    }}
+      <p><strong>Anyone with the link can edit the project.</strong></p>
+      <div class="input-group">
+        <input id="share-url" class="input-group-field" type="text" value="{{shareURL}}" />
+        <div class="input-group-button">
+          {{#copy-button
+            clipboardTarget="#share-url"
+            success=(action 'handleShareSuccess')
+            error=(action 'handleShareError')
+            class="button gray"
+          }}
+            {{fa-icon 'paste'}}
+            <span class="size-hack">Copy Link</span>
+          {{/copy-button}}
         </div>
-        {{#if copySuccess}}
-          <div class="share-controls-copy-success">
-            <div class="share-controls-copy-success-message">{{fa-icon 'check'}} Copied</div>
-          </div>
-        {{/if}}
-        <div>
-          <a href="mailto:?subject=Applicant Maps: {{project.projectName}}&body=Thanks for trying out NYC Planning's new Applicant Maps tool. You can access the project dashboard for the {{project.projectName}} project using the following URL: https://applicantmaps.planninglabs.nyc/projects/{{project.id}}. Please note that anyone who possesses the project URL will be able to edit the project.">
-              <div class="button medium expanded">
-                {{fa-icon 'envelope' prefix='far' class='white'}} Email
-              </div>
-          </a>    
-        </div>
-      <button {{action "hide" target=popover}}>Hide</button>
       </div>
+      {{#if copySuccess}}
+        <div class="share-controls-message">
+          <div class="share-controls-message--success">{{fa-icon 'check'}} Copied</div>
+        </div>
+      {{/if}}
+      {{#if copyError}}
+        <div class="share-controls-message">
+          <div class="share-controls-message--error">{{fa-icon 'times'}} Something went wrong</div>
+        </div>
+      {{/if}}
+      <a class="button gray expanded" href="mailto:?subject=Applicant Maps: {{project.projectName}}&body=Thanks for trying out NYC Planning's new Applicant Maps tool. You can access the project dashboard for the {{project.projectName}} project using the following URL: {{shareURL}}. Please note that anyone who possesses the project URL will be able to edit the project.">
+        {{fa-icon 'envelope'}} Email Project Link
+      </a>
     {{/ember-popover}}
   </button>
-</div>
+</p>
 
 <hr />
 

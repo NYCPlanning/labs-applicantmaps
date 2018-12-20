@@ -3215,7 +3215,6 @@ cartobox-promises-utility@nycplanning/cartobox-promises-utility#v1.0.2:
   resolved "https://codeload.github.com/nycplanning/cartobox-promises-utility/tar.gz/57f1c96a0bf03c47e048c30d202643cc49db3c69"
   dependencies:
     ember-cli-babel "^6.6.0"
-    ember-fetch "5.0.0"
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -5085,15 +5084,15 @@ ember-text-measurer@^0.4.0:
   dependencies:
     ember-cli-babel "^6.8.2"
 
-ember-tooltips@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/ember-tooltips/-/ember-tooltips-3.0.0.tgz#bf864a81fc379dc3992fa6d4453cacfb14ffbacf"
+ember-tooltips@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/ember-tooltips/-/ember-tooltips-3.1.0.tgz#99c6b9d96eaf907a6f7a2285a7a43239ae62698d"
   dependencies:
     broccoli-funnel "^2.0.1"
     broccoli-merge-trees "^2.0.0"
-    ember-cli-babel "^6.6.0"
-    ember-cli-htmlbars "^2.0.1"
-    ember-cli-node-assets "^0.2.2"
+    ember-cli-babel "^6.16.0"
+    ember-cli-htmlbars "^3.0.0"
+    ember-get-config "^0.2.4"
     ember-wormhole "^0.5.5"
     popper.js "^1.12.5"
     tooltip.js "^1.1.5"
@@ -7376,9 +7375,9 @@ labs-ember-search@2.4.5:
     ember-promise-helpers "1.0.6"
     ember-truth-helpers "2.0.0"
 
-labs-ui@^0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/labs-ui/-/labs-ui-0.0.11.tgz#702703e6fef86d31c531df3b5b6f7e4745959316"
+labs-ui@^0.0.14:
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/labs-ui/-/labs-ui-0.0.14.tgz#7e63f644c4fab64d0c42d7a327347a474961ea4e"
   dependencies:
     "@ember-decorators/argument" "0.8.15"
     "@ember-decorators/babel-transforms" "^2.0.0"
@@ -7391,8 +7390,9 @@ labs-ui@^0.0.11:
     ember-cli-htmlbars "^2.0.1"
     ember-cli-htmlbars-inline-precompile "^1.0.0"
     ember-cli-sass "^6.2.0"
+    ember-cli-what-input "^1.0.0"
     ember-decorators "2.3.1"
-    ember-tooltips "3.0.0"
+    ember-tooltips "3.1.0"
     foundation-sites "^6.3.1"
     mapbox-gl "^0.48.0"
 
