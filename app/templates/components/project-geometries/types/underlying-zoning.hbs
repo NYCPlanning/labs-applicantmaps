@@ -2,7 +2,8 @@
   map=map
   geometricProperty=model.underlyingZoning as |edit-mode|
 }}
-  {{edit-mode.feature-label-form}}
+  {{edit-mode.feature-label-form
+      options=labelOptions}}
 
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
     <div class="text-small">

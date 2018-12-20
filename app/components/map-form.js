@@ -5,6 +5,7 @@ import { argument } from '@ember-decorators/argument';
 import { next } from '@ember/runloop';
 import turfBbox from '@turf/bbox';
 import mapboxgl from 'mapbox-gl';
+import { sanitizeStyle } from 'labs-applicant-maps/helpers/sanitize-style';
 import projectGeomLayers from '../utils/project-geom-layers';
 
 const defaultLayerGroups = {
@@ -203,11 +204,10 @@ export default class MapFormComponent extends Component {
   @service
   store;
 
-  @argument
-  projectURL = window.location.href;
-
   @service
-  notificationMessages
+  notificationMessages;
+
+  projectURL = window.location.href;
 
   mapConfiguration = null
 
@@ -228,17 +228,17 @@ export default class MapFormComponent extends Component {
     const bearing = this.get('model.mapBearing');
     const pitch = this.get('mapPitch');
 
-    return {
+    return sanitizeStyle([{
       arrow: `transform: rotateX(${pitch}deg) rotate(${360 - bearing}deg)`,
       n: `transform: rotate(${360 - bearing}deg)`,
       nSpan: `transform: rotate(${(360 - bearing) * -1}deg)`,
-    };
+    }]);
   }
 
   @action
   handleMapLoaded(map) {
     this.set('mapInstance', map);
-    this.fitBoundsToBuffer();
+    this.fitBoundsToSelectedBuffer();
     this.updateBounds();
     this.toggleMapInteractions();
 
@@ -336,31 +336,6 @@ export default class MapFormComponent extends Component {
   }
 
   @action
-  fitBoundsToBuffer() {
-    const map = this.get('mapInstance');
-
-    const buffer = this.get('model.projectGeometryBuffer');
-    const bearing = this.get('model.mapBearing');
-    const mapZoom = this.get('model.mapZoom');
-    const mapCenter = this.get('model.mapCenter');
-
-    map.setBearing(bearing);
-
-    // prefer explicit zoom and center over the 600 ft buffer
-    if (mapZoom && mapCenter) {
-      map.setZoom(mapZoom);
-      map.setCenter(mapCenter);
-    } else {
-      map.fitBounds(turfBbox(buffer), {
-        padding: 50,
-        duration: 0,
-      });
-    }
-
-    this.updateBounds();
-  }
-
-  @action
   toggleMapInteractions () {
     const map = this.get('mapInstance');
     const preventMapInteractions = this.get('preventMapInteractions');
@@ -392,13 +367,13 @@ export default class MapFormComponent extends Component {
   }
 
   @action
-  reorientPaper(orientation) {
+  setPaperOrientation(orientation) {
     this.set('model.paperOrientation', orientation);
     this.fitBoundsToSelectedBuffer();
   }
 
   @action
-  scalePaper(paperSize) {
+  setPaperSize(paperSize) {
     this.set('model.paperSize', paperSize);
     this.fitBoundsToSelectedBuffer();
   }

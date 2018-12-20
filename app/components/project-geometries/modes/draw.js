@@ -173,6 +173,10 @@ export default class DrawComponent extends Component {
     const { features: [firstFeature] } = this.get('selectedFeature');
 
     draw.setFeatureProperty(firstFeature.id, 'label', label);
+
+    // this triggers an update that renders the new label as mutated above to show up in the selected feature
+    // see https://github.com/mapbox/mapbox-gl-draw/blob/master/docs/API.md#events
+    this.drawStateCallback();
   }
 
   willDestroyElement(...args) {
