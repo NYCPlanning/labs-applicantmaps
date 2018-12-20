@@ -34,7 +34,7 @@
 </p>
 
 <p class="text-right no-margin">
-  <button class="button tiny gray text-orange no-margin">
+  <button class="button tiny gray text-orange no-margin" data-test-share-button>
     {{fa-icon 'share-alt'}} Share Project
     {{#ember-popover
       event='click'
@@ -42,15 +42,16 @@
       tooltipClassName='ember-popover dark'
       as |popover|
     }}
+      <div class="data-test-share-popover"></div>
       <p><strong>Anyone with the link can edit the project.</strong></p>
       <div class="input-group">
         <input id="share-url" class="input-group-field" type="text" value="{{shareURL}}" />
-        <div class="input-group-button">
+        <div class="input-group-button" data-test-copy-button>
           {{#copy-button
             clipboardTarget="#share-url"
             success=(action 'handleShareSuccess')
             error=(action 'handleShareError')
-            class="button gray"
+            class="button gray copy-butto"
           }}
             {{fa-icon 'paste'}}
             <span class="size-hack">Copy Link</span>
