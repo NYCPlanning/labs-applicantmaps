@@ -1,4 +1,4 @@
-import { module, skip } from 'qunit';
+import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
@@ -17,10 +17,7 @@ const EmptyFeatureCollection = {
 module('Integration | Component | project-geometries/rezoning-area', function(hooks) {
   setupRenderingTest(hooks);
 
-  skip('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-
+  test('REZONING AREA', async function(assert) {
     const dummyFeatureCollection = EmptyFeatureCollection;
 
     dummyFeatureCollection.features[0].geometry = {
