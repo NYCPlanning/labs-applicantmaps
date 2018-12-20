@@ -15,7 +15,7 @@ export default function() {
   };
 
   if (this.environment === 'test' || interceptCarto) {
-    console.log('intercepting...');
+    // console.log('intercepting...');
     // generate geojson from memory for testing
     this.get('https://planninglabs.carto.com/api/v2/sql', handleCartoGeometries);
     this.post('/layer-groups', function(schema) {

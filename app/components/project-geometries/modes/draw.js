@@ -83,7 +83,7 @@ export default class DrawComponent extends Component {
 
   drawStateCallback() {
     const { draw } = this.get('map');
-    console.log(this.get('elementId'));
+    // console.log(this.get('elementId'));
     if (!this.get('isDestroyed') && !this.get('isDestroying')) {
       this.setProperties({
         geometricProperty: draw.getAll(),
