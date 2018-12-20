@@ -3,7 +3,9 @@
   map=map
   geometricProperty=model.commercialOverlays as |selection|
 }}
-  {{selection.mode.feature-label-form}}
+  {{selection.mode.feature-label-form
+    options=labelOptions
+  }}
 
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
     <div class="text-small">
