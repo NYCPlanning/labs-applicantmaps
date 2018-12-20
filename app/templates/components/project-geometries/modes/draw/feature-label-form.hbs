@@ -4,13 +4,15 @@
       <span class="input-group-label text-small">{{fa-icon 'tag' transform='grow-6'}}</span>
       {{!-- if an array of values was passed in as the 'options' property, use power select --}}
       {{#if options}}
-        {{#power-select
-          options=options
-          selected=label
-          onchange=(action "handleSelectChange")
-        as |selectedLabel|}}
-          {{selectedLabel}}
-        {{/power-select}}
+        <div class="input-group-field">
+          {{#power-select
+            options=options
+            selected=label
+            onchange=(action "handleSelectChange")
+          as |selectedLabel|}}
+            {{selectedLabel}}
+          {{/power-select}}
+        </div>
       {{else}}
         {{input
           data-test-feature-label-form
