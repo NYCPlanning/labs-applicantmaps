@@ -11,6 +11,7 @@
       <hr />
 
       {{#if (eq mode 'draw')}}
+        <p>Project Areas are usually drawn to the <strong>lot boundary</strong>.</p>
         <p class="text-weight-bold small-margin-bottom">Adding new shapes:</p>
         <ul class="small-margin-bottom">
           <li>
@@ -48,6 +49,10 @@
           <span class="cell shrink" style="padding-right:0.25rem;">{{fa-icon 'hand-pointer' prefix='far' fixedWidth=true}}</span>
           <span class="cell auto">Select lots to add them to your Project Area (selected lots will be yellow)</span>
         </p>
+        <p>If your Project Area includes your <strong>Development Site</strong>, (usually the case) you will need to reselect those lots.</p>
+        <div>
+          <img src="/img/gif-select-lot-project-area.gif" alt="Select Lot Project Area" class="shadowed" />
+        </div>
       {{/if}}
 
       <hr />
