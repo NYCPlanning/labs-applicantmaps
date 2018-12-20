@@ -27,7 +27,6 @@ const callBackStateEvents = [
   'create',
   'update',
   'delete',
-  'selectionchange', // this is necessary for selected vertices in delete
 ];
 
 export default class DrawComponent extends Component {
@@ -156,6 +155,8 @@ export default class DrawComponent extends Component {
     } else {
       draw.delete(selectedFeature);
     }
+
+    this.drawStateCallback();
   }
 
   @action
