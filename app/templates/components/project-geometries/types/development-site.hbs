@@ -1,7 +1,6 @@
-{{#project-geometries/draw-lots-to-union
-  mode=mode
+{{#component (concat 'project-geometries/modes/' mode)
   map=map
-  geometricProperty=model.developmentSite as |selection|
+  geometricProperty=model.developmentSite as |edit-mode|
 }}
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
     <div class="text-small">
@@ -52,13 +51,13 @@
 
       <hr />
 
-      {{#selection.button
+      {{#edit-mode.button
         enabled=model.hasDirtyAttributes
         handleClick=(action 'save')}}
         Save Development Site
-      {{/selection.button}}
+      {{/edit-mode.button}}
     </div>
   {{/ember-wormhole}}
-{{/project-geometries/draw-lots-to-union}}
+{{/component}}
 
 {{yield}}

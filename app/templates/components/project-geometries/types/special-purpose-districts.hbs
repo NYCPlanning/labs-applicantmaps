@@ -1,9 +1,8 @@
-{{#project-geometries/draw-lots-to-union
-  mode=mode
+{{#component (concat 'project-geometries/modes/' mode)
   map=map
-  geometricProperty=model.specialPurposeDistricts as |selection|
+  geometricProperty=model.specialPurposeDistricts as |edit-mode|
 }}
-  {{selection.mode.feature-label-form}}
+  {{edit-mode.feature-label-form}}
 
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
     <div class="text-small">
@@ -55,15 +54,15 @@
 
       <hr />
 
-      {{#selection.button
+      {{#edit-mode.button
         enabled=model.hasDirtyAttributes
         handleClick=(action 'save')}}
         Save
         <small style="display:block;line-height:1.75;">Special Purpose Districts</small>
-      {{/selection.button}}
+      {{/edit-mode.button}}
     </div>
   {{/ember-wormhole}}
-{{/project-geometries/draw-lots-to-union}}
+{{/component}}
 
 {{#map.source
   options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
