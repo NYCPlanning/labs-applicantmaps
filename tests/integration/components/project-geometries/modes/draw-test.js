@@ -17,7 +17,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
 
   hooks.before(async function() {
     this.map = await createMap();
-    this.draw = DefaultDraw;
+    this.draw = new DefaultDraw();
   });
 
   hooks.after(function() {
