@@ -140,7 +140,7 @@
 
     </div>
     <div class="cell xlarge-shrink dashboard-controls">
-
+      <h6>Your proposed changes</h6>
       {{!-- Development Site --}}
       <div class="grid-x control">
         <div class="cell auto">
@@ -160,6 +160,7 @@
               data-test-development-site
               event='click'
               side='left'
+              tooltipClassName='ember-popover dark'
               as |popover|
             }}
               {{link-to 'Select Lots' 'projects.edit.geometry-edit' model
@@ -206,6 +207,7 @@
               data-test-project-area
               event='click'
               side='left'
+              tooltipClassName='ember-popover dark'
               as |popover|
             }}
               {{link-to 'Select Lots' 'projects.edit.geometry-edit' model
