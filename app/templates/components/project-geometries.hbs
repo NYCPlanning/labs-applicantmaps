@@ -77,4 +77,32 @@
       {{/ember-wormhole}}
     {{/labs-map}}
   {{/project-geometries/layer-groups}}
+
+  {{#if
+    (or
+      (not (is-empty model.developmentSite))
+      (not (is-empty model.projectArea))
+      (not (is-empty model.underlyingZoning))
+      (not (is-empty model.specialPurposeDistricts))
+      (not (is-empty model.rezoningArea))
+    )
+  }}
+    <ul class="over-map-legend no-bullet">
+      {{#if (not (is-empty model.developmentSite))}}
+        <li><strong>Development Site</strong> {{labs-ui/legend-icon icon=developmentSiteIcon}}</li>
+      {{/if}}
+      {{#if (not (is-empty model.projectArea))}}
+        <li><strong>Project Area</strong> {{labs-ui/legend-icon icon=projectAreaIcon}}</li>
+      {{/if}}
+      {{#if (not (is-empty model.underlyingZoning))}}
+        <li><strong>Underlying Zoning</strong> {{labs-ui/legend-icon icon=underlyingZoningIcon}}</li>
+      {{/if}}
+      {{#if (not (is-empty model.specialPurposeDistricts))}}
+        <li><strong>Special Purpose Districts</strong> {{labs-ui/legend-icon icon=specialPurposeDistrictsIcon}}</li>
+      {{/if}}
+      {{#if (not (is-empty model.rezoningArea))}}
+        <li><strong>Rezoning Area</strong> {{labs-ui/legend-icon icon=rezoningAreaIcon}}</li>
+      {{/if}}
+    </ul>
+  {{/if}}
 </div>
