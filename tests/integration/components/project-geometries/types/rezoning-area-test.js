@@ -17,7 +17,7 @@ const EmptyFeatureCollection = {
 module('Integration | Component | project-geometries/rezoning-area', function(hooks) {
   setupRenderingTest(hooks);
 
-  test('REZONING AREA', async function(assert) {
+  test('test that user can edit and save new rezoning area', async function(assert) {
     const dummyFeatureCollection = EmptyFeatureCollection;
 
     dummyFeatureCollection.features[0].geometry = {
