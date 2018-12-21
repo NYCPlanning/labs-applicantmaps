@@ -1,7 +1,8 @@
 import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
-import { action } from '@ember-decorators/object';
+import { action, computed } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
+import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
 import isEmpty from '../../../utils/is-empty';
 
 // Underlying Zoning
@@ -238,6 +239,11 @@ export default class UnderlyingZoningComponent extends Component {
   underlyingZoningLayer = underlyingZoningLayer;
 
   underlyingZoningLabelsLayer = underlyingZoningLabelsLayer;
+
+  @computed('model.underlyingZoning')
+  get isReadyToProceed() {
+    return isFeatureCollectionChanged(this.get('model'), 'underlyingZoning');
+  }
 
   @action
   async save() {

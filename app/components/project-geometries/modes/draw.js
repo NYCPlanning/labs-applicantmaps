@@ -27,6 +27,8 @@ const callBackStateEvents = [
   'create',
   'update',
   'delete',
+  'modechange',
+  'selectionchange',
 ];
 
 export default class DrawComponent extends Component {
@@ -65,8 +67,6 @@ export default class DrawComponent extends Component {
     mapInstance.on('draw.modechange', this.callbacks.drawMode);
     mapInstance.on('draw.selectionchange', this.callbacks.selectedFeature);
     mapInstance.on('draw.selectionchange', this.callbacks.skipToDirectSelect);
-
-    this.drawStateCallback();
   }
 
   drawStateCallback() {

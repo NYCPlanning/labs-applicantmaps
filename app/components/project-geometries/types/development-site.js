@@ -1,7 +1,11 @@
 import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
-import { action } from '@ember-decorators/object';
+import { action, computed } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
+import { get } from '@ember/object';
+import isEmpty from 'labs-applicant-maps/utils/is-empty';
+import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
+import booleanEqual from '@turf/boolean-equal';
 
 export const developmentSiteLayer = {
   id: 'development-site-line',
@@ -38,6 +42,11 @@ export default class DevelopmentSiteComponent extends Component {
 
   @argument
   mode;
+
+  @computed('model.developmentSite')
+  get isReadyToProceed() {
+    return isFeatureCollectionChanged(this.get('model'), 'developmentSite');
+  }
 
   @action
   async save() {
