@@ -242,7 +242,8 @@ export default class UnderlyingZoningComponent extends Component {
 
   @computed('model.underlyingZoning')
   get isReadyToProceed() {
-    return isFeatureCollectionChanged(this.get('model'), 'underlyingZoning');
+    return !isEmpty(this.get('model.underlyingZoning'))
+      && isFeatureCollectionChanged(this.get('model'), 'underlyingZoning');
   }
 
   @action
