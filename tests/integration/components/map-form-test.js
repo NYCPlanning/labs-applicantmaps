@@ -16,7 +16,7 @@ module('Integration | Component | map-form', function(hooks) {
       actions: {
         handleMapLoaded(map) {
           this.set('mapInstance', map);
-          this.fitBoundsToBuffer();
+          this.fitBoundsToSelectedBuffer();
           this.updateBounds();
           this.toggleMapInteractions();
         },
