@@ -16,7 +16,7 @@ module('Unit | Controller | application', (hooks) => {
   });
 
   // Replace this with your real tests.
-  test('Application Controller !', function (assert) {
+  test('handlMapLoad works without error', function (assert) {
     this.server.create('project');
     const { map } = this;
 
