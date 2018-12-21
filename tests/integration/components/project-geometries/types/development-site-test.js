@@ -43,7 +43,7 @@ module('Integration | Component | project-geometries/development-site', function
       <div id="geometry-type-save-box">
       </div>
 
-      {{#mapbox-gl as |map|}} 
+      {{#mapbox-gl as |map|}}
         <div class="labs-map-loaded"></div>
         {{project-geometries/types/development-site
           mode='lots'
