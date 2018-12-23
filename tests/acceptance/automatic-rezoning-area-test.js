@@ -2,6 +2,8 @@ import { module, test } from 'qunit';
 import {
   visit,
   click,
+
+  isSettled,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -28,11 +30,12 @@ module('Acceptance | automated rezoning area geometry', function(hooks) {
     // rezoningArea should still be emptyDefault
     assert.equal(model.get('rezoningArea').features[0].properties.isEmptyDefault, true);
 
-    // add a random polygon to the underlying zoning
-    const underlyingZoning = model.get('underlyingZoning');
-    underlyingZoning.features.push(randomPolygon(1).features[0]);
-    model.set('underlyingZoning', underlyingZoning);
 
+    await isSettled();
+    // add a random polygon to the underlying zoning
+    const underlyingZoning = randomPolygon(5);
+    model.set('underlyingZoning', underlyingZoning);
+    await isSettled();
     // save underlying zoning features
     await click('[data-test-project-geometry-save]');
 
@@ -51,10 +54,9 @@ module('Acceptance | automated rezoning area geometry', function(hooks) {
     await visit('/projects/1/edit/geometry-edit?mode=draw&type=underlying-zoning');
     const model = store.peekRecord('project', 1);
 
-    const underlyingZoning = model.get('underlyingZoning');
-    underlyingZoning.features[0].properties.label = 'foo';
+    const underlyingZoning = randomPolygon(5);
+    model.set('underlyingZoning', underlyingZoning);
 
-    this.set('underlyingZoning', underlyingZoning);
     // save underlying zoning features
     await click('[data-test-project-geometry-save]');
 

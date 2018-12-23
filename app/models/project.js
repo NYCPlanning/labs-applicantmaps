@@ -201,11 +201,15 @@ export default class extends Model {
   @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection }) underlyingZoning
 
+  @type(FeatureCollection)
+  originalUnderlyingZoning = EmptyFeatureCollection;
+
   async setDefaultUnderlyingZoning() {
     const developmentSite = this.get('developmentSite');
     const result = await intersectingZoningQuery(developmentSite);
 
     this.set('underlyingZoning', result);
+    this.set('originalUnderlyingZoning', result);
   }
 
   // FeatureCollection
@@ -213,11 +217,15 @@ export default class extends Model {
   @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection }) commercialOverlays
 
+  @type(FeatureCollection)
+  originalCommercialOverlays = EmptyFeatureCollection;
+
   async setDefaultCommercialOverlays() {
     const developmentSite = this.get('developmentSite');
     const result = await proposedCommercialOverlaysQuery(developmentSite);
 
     this.set('commercialOverlays', result);
+    this.set('originalCommercialOverlays', result);
   }
 
   // FeatureCollection
@@ -225,11 +233,15 @@ export default class extends Model {
   @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection }) specialPurposeDistricts
 
+  @type(FeatureCollection)
+  originalSpecialPurposeDistricts = EmptyFeatureCollection;
+
   async setDefaultSpecialPurposeDistricts() {
     const developmentSite = this.get('developmentSite');
     const result = await proposedSpecialDistrictsQuery(developmentSite);
 
     this.set('specialPurposeDistricts', result);
+    this.set('originalSpecialPurposeDistricts', result);
   }
 
   // FeatureCollection of polygons or multipolygons

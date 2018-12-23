@@ -242,8 +242,24 @@ export default class UnderlyingZoningComponent extends Component {
 
   @computed('model.underlyingZoning')
   get isReadyToProceed() {
+    // here, it gets set once by the constructor
+    // const initial = model.get(attribute);
+    const [
+      initial,
+      proposed, // upstream proposed should always be FC
+    ] = this.get('model').changedAttributes().underlyingZoning || [];
+    console.log(initial, proposed, this.get('model.originalUnderlyingZoning'));
+    // console.log('if no initial and proposed');
+    // check that proposed is not the original
+    if ((!initial || isEmpty(initial)) && proposed) {
+      return isFeatureCollectionChanged(this.get('model.originalUnderlyingZoning'), proposed);
+    }
+
+    // console.log('if no proposed, there are no changes');
+    if (!proposed) return false; // no changes are proposed to canonical
+
     return !isEmpty(this.get('model.underlyingZoning'))
-      && isFeatureCollectionChanged(this.get('model'), 'underlyingZoning');
+      && isFeatureCollectionChanged(initial, proposed);
   }
 
   @action

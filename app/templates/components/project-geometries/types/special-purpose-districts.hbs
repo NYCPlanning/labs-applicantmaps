@@ -55,7 +55,7 @@
       <hr />
 
       {{#edit-mode.button
-        enabled=model.hasDirtyAttributes
+        enabled=isReadyToProceed
         handleClick=(action 'save')}}
         Save
         <small style="display:block;line-height:1.75;">Special Purpose Districts</small>

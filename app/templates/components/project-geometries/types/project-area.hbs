@@ -52,7 +52,7 @@
       <hr />
 
       {{#edit-mode.button
-        enabled=model.hasDirtyAttributes
+        enabled=isReadyToProceed
         handleClick=(action 'save')}}
         Save Project Area
       {{/edit-mode.button}}

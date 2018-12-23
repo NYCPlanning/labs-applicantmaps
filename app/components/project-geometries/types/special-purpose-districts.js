@@ -1,7 +1,8 @@
 import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
-import { action } from '@ember-decorators/object';
+import { action, computed } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
+import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
 import isEmpty from '../../../utils/is-empty';
 
 // Proposed Special Purpose Districts
@@ -71,6 +72,28 @@ export default class specialPurposeDistrictsComponent extends Component {
   specialPurposeDistrictsLayer = specialPurposeDistrictsLayer;
 
   specialPurposeDistrictsLabelsLayer = specialPurposeDistrictsLabelsLayer;
+
+  @computed('model.specialPurposeDistricts')
+  get isReadyToProceed() {
+    // here, it gets set once by the constructor
+    // const initial = model.get(attribute);
+    const [
+      initial,
+      proposed, // upstream proposed should always be FC
+    ] = this.get('model').changedAttributes().specialPurposeDistricts || [];
+
+    // console.log('if no initial and proposed');
+    // check that proposed is not the original
+    if ((!initial || isEmpty(initial)) && proposed) {
+      return isFeatureCollectionChanged(this.get('model.originalSpecialPurposeDistricts'), proposed);
+    }
+
+    // console.log('if no proposed, there are no changes');
+    if (!proposed) return false; // no changes are proposed to canonical
+
+    return !isEmpty(this.get('model.specialPurposeDistricts'))
+      && isFeatureCollectionChanged(initial, proposed);
+  }
 
   @action
   async save() {
