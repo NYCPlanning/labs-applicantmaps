@@ -65,7 +65,7 @@ export default class RezoningArea extends Component {
       notifications.success('Project saved!');
       this.get('router').transitionTo('projects.show', model);
     } catch (e) {
-      notifications.success(`Something went wrong: ${e}`);
+      notifications.error(`Something went wrong: ${e}`);
     }
   }
 }

@@ -16,9 +16,9 @@ module('Integration | Component | project-geometries/draw-lots-to-union/button',
 
     // Template block usage:
     await render(hbs`
-      {{#project-geometries/draw-lots-to-union/button}}
+      {{#project-geometries/utils/button}}
         template block text
-      {{/project-geometries/draw-lots-to-union/button}}
+      {{/project-geometries/utils/button}}
     `);
 
     assert.equal(this.element.textContent.trim(), 'template block text');
