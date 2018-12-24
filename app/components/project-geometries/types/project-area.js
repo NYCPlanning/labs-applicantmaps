@@ -65,7 +65,7 @@ export default class ProjectAreaComponent extends Component {
       notifications.success('Project saved!');
       this.get('router').transitionTo('projects.show', savedProject);
     } catch (e) {
-      notifications.success(`Something went wrong: ${e}`);
+      notifications.error(`Something went wrong: ${e}`);
     }
   }
 
