@@ -354,3 +354,15 @@ label.inline {
   position:relative;
   top:-0.05em;
 }
+
+
+//
+// Fade in the element when it's loaded
+// --------------------------------------------------
+.fade-in-on-load {
+  animation: fadein 2s;
+}
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
