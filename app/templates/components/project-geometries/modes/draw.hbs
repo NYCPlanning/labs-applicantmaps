@@ -14,7 +14,7 @@
       <p class="no-margin">Delete a selected shape or vertex</p>
     {{/ember-tooltip}}
   </button>
-  <button class="annotation--parallel-offset">
+  <button class="annotation--parallel-offset" {{action 'handleStraightLine'}}>
     <span class="fa-layers fa-2x">
       {{fa-icon 'arrows-alt-h' transform='down-4'}}
       {{fa-icon 'times' transform='shrink-9 up-3'}}

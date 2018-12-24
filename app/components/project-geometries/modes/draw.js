@@ -166,6 +166,14 @@ export default class DrawComponent extends Component {
   }
 
   @action
+  handleStraightLine() {
+    const { draw } = this.get('map');
+
+    draw.changeMode('draw_line_string');
+    this.drawModeCallback();
+  }
+
+  @action
   updateSelectedFeature(label) {
     const { draw } = this.get('map');
     const { features: [firstFeature] } = this.get('selectedFeature');
