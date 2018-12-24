@@ -1,20 +1,51 @@
 import patchXMLHTTPRequest from './helpers/mirage-mapbox-gl-monkeypatch';
+import handleCartoGeometries from './helpers/handle-fake-carto-geometries';
+import config from '../config/environment';
+import { layersAPIStyle } from './helpers/static-styles';
+
+const { interceptCarto } = config;
 
 export default function() {
   patchXMLHTTPRequest();
 
-  this.passthrough('https://search-api.planninglabs.nyc/**');
+  this.schema.stableGeometries = {
+    zoning_districts: null,
+    commercial_overlays: null,
+    special_purpose_districts: null,
+  };
+
+  if (this.environment === 'test' || interceptCarto) {
+    console.log('intercepting...');
+    // generate geojson from memory for testing
+    this.get('https://planninglabs.carto.com/api/v2/sql', handleCartoGeometries);
+    this.post('/layer-groups', function(schema) {
+      const response = schema.layerGroups.all();
+      const json = this.serialize(response);
+
+      json.meta = {
+        mapboxStyle: layersAPIStyle,
+      };
+
+      return json;
+    });
+    this.get('/layer-groups/:id');
+  } else {
+    // intercept and generate geojson from server
+    this.passthrough('https://planninglabs.carto.com/**');
+  }
+
+  // map interceptions
   this.passthrough('https://layers-api.planninglabs.nyc/**');
-  this.passthrough('https://planninglabs.carto.com/**');
+  this.passthrough('https://tiles.planninglabs.nyc/**');
+  this.passthrough('https://layers-api-staging.planninglabs.nyc/**');
   this.passthrough('https://raw.githubusercontent.com/**');
   this.passthrough('http://raw.githubusercontent.com/**');
   this.passthrough('https://raw.githubusercontent.com/**');
-  this.passthrough('https://tiles.planninglabs.nyc/**');
-  this.passthrough('https://layers-api-staging.planninglabs.nyc/**');
-  this.passthrough('/sources.json');
-  this.passthrough('/layer-groups.json');
-  // These comments are here to help you get started. Feel free to delete them.
+  this.passthrough('/write-coverage');
+  this.passthrough('https://search-api.planninglabs.nyc/**');
+  this.passthrough('http://localhost:3000/**');
 
+  // REST Endpoints
   this.get('/projects');
   this.get('/projects/:id');
   this.patch('/projects/:id');

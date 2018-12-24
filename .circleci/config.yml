@@ -35,7 +35,9 @@ jobs:
       - run: yarn browserstack-connect
 
       # run tests!
-      - run: yarn test
+      - run: COVERAGE=TRUE yarn test
+
+      - run: curl -s https://codecov.io/bash | bash
 
       # deploy
       - run:
@@ -45,7 +47,19 @@ jobs:
           name: Deployment
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              git remote add dokku dokku@planninglabs.nyc:applicantmaps && git push dokku master
+              yarn build -e production
+              cd dist
+              touch .static
+              git init
+              git add .
+              git -c user.name='Labs Deploy Script' -c user.email='labs_dl@planning.nyc.gov' commit -m "deploy"
+              git remote add dokku dokku@planninglabs.nyc:applicantmaps && git push -f dokku master
             elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
-              git remote add dokku dokku@planninglabs.nyc:applicantmaps-staging && git push dokku develop:master
+              yarn build -e staging
+              cd dist
+              touch .static
+              git init
+              git add .
+              git -c user.name='Labs Deploy Script' -c user.email='labs_dl@planning.nyc.gov' commit -m "deploy"
+              git remote add dokku dokku@planninglabs.nyc:applicantmaps-staging && git push -f dokku master
             fi

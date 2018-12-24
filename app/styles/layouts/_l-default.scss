@@ -120,11 +120,76 @@ body {
   position: relative;
   z-index: 2;
   padding: $global-margin;
-  box-shadow: 0 2px 0 rgba(0,0,0,0.1);
 
   @include breakpoint(large) {
-    box-shadow: 2px 0 0 rgba(0,0,0,0.1);
     width: 22rem;
+  }
+
+  &.map-sidebar {
+    box-shadow: 0 2px 0 rgba(0,0,0,0.1);
+
+    @include breakpoint(large) {
+      box-shadow: 2px 0 0 rgba(0,0,0,0.1);
+    }
+  }
+}
+
+.step {
+  padding: $global-margin;
+
+  @include breakpoint(large) {
+    padding: $global-margin*3;
+  }
+}
+
+.step-nav {
+  // margin-bottom: rem-calc(8);
+
+  @include breakpoint(large) {
+    margin-top: rem-calc(-28);
+  }
+}
+
+.dashboard {
+  padding: $global-margin;
+
+  @include breakpoint(large) {
+    padding-right: $global-margin*2;
+  }
+}
+
+#dashboard-map {
+  height: 30vh;
+  margin-bottom: $global-margin;
+
+  @include breakpoint(xlarge) {
+    height: calc(100vh - 8rem);
+    margin-bottom: 0;
+  }
+}
+
+.dashboard-controls {
+  @include breakpoint(large) {
+    padding-top: $global-margin;
+  }
+  @include breakpoint(xlarge) {
+    padding-left: $global-margin;
+    min-width: 22rem;
+  }
+
+  .control > .cell:not(:first-child) {
+    padding-left: rem-calc(10);
+  }
+
+  .control > .cell {
+    padding-bottom: rem-calc(10);
+  }
+
+  .control + .control {
+    .cell {
+      border-top: $hr-border;
+      padding-top: rem-calc(10);
+    }
   }
 }
 
@@ -276,25 +341,28 @@ label.inline {
   font-weight: normal;
 }
 
-.button.green {
-  @include button-style($background:$green-dark, $background-hover:auto, $color:$white);
+//project URL on final map page
+.project-url-text {
+  font-size: rem-calc(11);
 }
 
+// HACK!
+// Foundation's button font size inside a input group is larger than a regular button
+.input-group-button .size-hack {
+  font-size:0.9em;
+  display:inline-block;
+  position:relative;
+  top:-0.05em;
+}
 
 
 //
-// HACKS!!! This stuff should be changed in Labs UI
+// Fade in the element when it's loaded
 // --------------------------------------------------
-.input-group-label {
-  background-color: $white-smoke;
-  border-color: $silver;
-  color: $dark-gray;
+.fade-in-on-load {
+  animation: fadein 2s;
 }
-
-input:disabled,
-input[readonly],
-textarea:disabled,
-textarea[readonly] {
-  background-color: $white-smoke;
-  box-shadow: none;
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }

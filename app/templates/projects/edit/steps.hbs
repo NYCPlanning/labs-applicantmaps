@@ -1,0 +1,48 @@
+<div class="cell sidebar">
+
+  {{project-setup-status project=model}}
+
+  <h6>Steps to be completed:</h6>
+  <ul class="no-bullet light-gray">
+    <li class="
+      {{if (gte currentStepNumber 1) 'black'}}
+      {{if (eq currentStepNumber 1) 'text-weight-bold'}}
+    ">
+      {{fa-icon (if (eq currentStepNumber 1) 'arrow-alt-circle-right' 'check')
+        fixedWidth=true
+        class=(if (gt currentStepNumber 1) 'green-muted' '')
+      }}
+      Development Site
+    </li>
+    <li class="
+      {{if (gte currentStepNumber 2) 'black'}}
+      {{if (eq currentStepNumber 2) 'text-weight-bold'}}
+    ">
+      {{fa-icon (if (eq currentStepNumber 2) 'arrow-alt-circle-right' (if (gt currentStepNumber 2) 'check' 'circle'))
+        fixedWidth=true
+        class=(if (gt currentStepNumber 2) 'green-muted' '')
+        prefix=(unless (gte currentStepNumber 2) 'far' 'fas')
+      }}
+      Project Area
+    </li>
+    <li class="
+      {{if (gte currentStepNumber 3) 'black'}}
+      {{if (eq currentStepNumber 3) 'text-weight-bold'}}
+    ">
+      {{fa-icon (if (eq currentStepNumber 3) 'arrow-alt-circle-right' (if (gt currentStepNumber 3) 'check' 'circle'))
+        fixedWidth=true
+        class=(if (gt currentStepNumber 3) 'green-muted' '')
+        prefix=(unless (gte currentStepNumber 3) 'far' 'fas')
+      }}
+      Rezoning
+    </li>
+  </ul>
+
+  <hr class="hide-for-large no-margin" />
+
+</div>
+<div class="cell auto step">
+
+  {{outlet}}
+
+</div>

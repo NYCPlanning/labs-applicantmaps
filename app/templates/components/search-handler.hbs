@@ -1,0 +1,19 @@
+<div class="search-and-bbl-lookup-container">
+  {{#labs-search
+    data-test-search-address=true
+    searchPlaceholder='Search for Address...'
+    onSelect=(action 'selectSearchResult')
+    typeTitleLookup=(hash
+      lot='Addresses')
+    onClear=(action (mut geocodedFeature null)) as |search|}}
+    <small class="dark-gray">{{search.result.label}}</small>
+  {{/labs-search}}
+
+  {{labs-bbl-lookup flyTo=(action 'flyTo')}}
+</div>
+
+{{#if geocodedFeature}}
+  {{#map.source options=geocodedFeature as |source|}}
+    {{source.layer layer=geocodedLayer}}
+  {{/map.source}}
+{{/if}}

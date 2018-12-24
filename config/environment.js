@@ -1,5 +1,10 @@
 'use strict';
 
+let { INTERCEPT_MAPBOX_GL = 'false', INTERCEPT_CARTO = 'false' } = process.env;
+
+INTERCEPT_MAPBOX_GL = JSON.parse(INTERCEPT_MAPBOX_GL);
+INTERCEPT_CARTO = JSON.parse(INTERCEPT_CARTO);
+
 module.exports = function (environment) {
   const ENV = {
     modulePrefix: 'labs-applicant-maps',
@@ -17,8 +22,15 @@ module.exports = function (environment) {
       },
     },
 
+    '@ember-decorators/argument': {
+      ignoreComponentsWithoutValidations: true,
+    },
+
     // reusable list of named map types
     mapTypes: ['area-maps', 'tax-maps', 'zoning-change-maps', 'zoning-section-maps'],
+
+    // buffer in meters for queries
+    bufferMeters: 500,
 
     APP: {
       // Here you can pass flags/options to your application instance
@@ -30,6 +42,9 @@ module.exports = function (environment) {
     'ember-cli-mirage': {
       enabled: true,
     },
+
+    interceptMapboxGL: INTERCEPT_MAPBOX_GL,
+    interceptCarto: INTERCEPT_CARTO,
 
     'labs-search': {
       host: 'https://search-api.planninglabs.nyc',
@@ -80,6 +95,14 @@ module.exports = function (environment) {
   if (environment === 'test') {
     // Testem prefers this...
     ENV.locationType = 'none';
+    ENV['ember-mapbox-composer'].host = '';
+    ENV['ember-mapbox-composer'].namespace = '';
+
+    ENV['ember-cli-mirage'] = {
+      enabled: true,
+    };
+
+    ENV['ember-cli-notifications'].clearDuration = 100;
 
     // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;
