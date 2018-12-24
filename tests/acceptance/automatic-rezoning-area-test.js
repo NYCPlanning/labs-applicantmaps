@@ -27,7 +27,7 @@ module('Acceptance | automated rezoning area geometry', function(hooks) {
     const model = store.peekRecord('project', 1);
 
     // rezoningArea should still be emptyDefault
-    assert.equal(model.get('rezoningArea').features[0].properties.isEmptyDefault, true);
+    assert.equal(model.get('rezoningArea.features.firstObject.properties.isEmptyDefault'), true);
 
 
     await isSettled();
@@ -40,7 +40,7 @@ module('Acceptance | automated rezoning area geometry', function(hooks) {
     await isSettled();
     // rezoningArea should not have a null geom
     // this confirms that that setRezoningArea diffed the zoning features and created a new polygon
-    assert.ok(model.get('rezoningArea').features[0].geometry);
+    assert.ok(model.get('rezoningArea.features.firstObject.geometry'));
   });
 
   test('change to zoning label triggers rezoningArea calculation and includes entire zoning polygon', async function(assert) {
@@ -61,6 +61,6 @@ module('Acceptance | automated rezoning area geometry', function(hooks) {
     await isSettled();
     // rezoningArea should not have a null geom
     // this confirms that that setRezoningArea diffed the zoning features and created a new polygon
-    assert.ok(model.get('rezoningArea').features[0].geometry);
+    assert.ok(model.get('rezoningArea.features.firstObject.geometry'));
   });
 });
