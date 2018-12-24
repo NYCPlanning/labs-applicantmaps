@@ -277,7 +277,7 @@ export default class UnderlyingZoningComponent extends Component {
       this.get('notificationMessages').success('Project saved!');
       this.get('router').transitionTo('projects.show', savedProject);
     } catch (e) {
-      this.get('notificationMessages').success(`Something went wrong: ${e}`);
+      this.get('notificationMessages').error(`Something went wrong: ${e}`);
     }
   }
 }
