@@ -1,7 +1,6 @@
-{{#project-geometries/draw-lots-to-union
-  mode=mode
+{{#component (concat 'project-geometries/modes/' mode)
   map=map
-  geometricProperty=model.rezoningArea as |selection|
+  geometricProperty=model.rezoningArea as |edit-mode|
 }}
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
     <div class="fade-in-on-load text-small">
@@ -44,15 +43,15 @@
 
       <hr />
 
-      {{#selection.button
+      {{#edit-mode.button
         enabled=model.hasDirtyAttributes
         handleClick=(action 'save')}}
         Save
         <small style="display:block;line-height:1.75;">Rezoning Area</small>
-      {{/selection.button}}
+      {{/edit-mode.button}}
     </div>
   {{/ember-wormhole}}
-{{/project-geometries/draw-lots-to-union}}
+{{/component}}
 
 {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
   {{source.layer
