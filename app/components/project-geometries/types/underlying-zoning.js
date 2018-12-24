@@ -217,6 +217,7 @@ export default class UnderlyingZoningComponent extends Component {
     if (isEmpty(this.get('model.underlyingZoning'))) {
       this.get('model').setDefaultUnderlyingZoning();
     }
+    window.map = this.get('map.mapInstance');
   }
 
   labelOptions=labelOptions
@@ -248,7 +249,7 @@ export default class UnderlyingZoningComponent extends Component {
       initial,
       proposed, // upstream proposed should always be FC
     ] = this.get('model').changedAttributes().underlyingZoning || [];
-    console.log(initial, proposed, this.get('model.originalUnderlyingZoning'));
+
     // console.log('if no initial and proposed');
     // check that proposed is not the original
     if ((!initial || isEmpty(initial)) && proposed) {

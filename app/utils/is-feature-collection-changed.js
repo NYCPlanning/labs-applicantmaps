@@ -26,8 +26,8 @@ export default function isFeatureCollectionChanged(initial, proposed) {
 
     // console.log('check for null geoms');
     // null geoms are considered invalid and so a comparison can't be made
-    if (initialGeoms.any(({ geometry }) => geometry === null)
-      && proposedGeoms.any(({ geometry }) => geometry === null)) {
+    if (initialGeoms.every(({ geometry }) => geometry === null)
+      && proposedGeoms.every(({ geometry }) => geometry === null)) {
       return false;
     }
 

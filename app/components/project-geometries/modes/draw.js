@@ -48,10 +48,8 @@ export default class DrawComponent extends Component {
       selectedFeature: () => this.selectedFeatureCallback(),
       skipToDirectSelect: () => this.skipToDirectSelectCallback(),
     };
-  }
 
-  didInsertElement() {
-    const { draw, mapInstance } = this.get('map');
+    const { mapInstance } = this.get('map');
     const geometricProperty = this.get('geometricProperty');
 
     mapInstance.addControl(draw, 'top-left');
