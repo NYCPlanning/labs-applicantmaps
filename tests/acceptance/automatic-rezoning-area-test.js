@@ -41,7 +41,7 @@ module('Acceptance | automated rezoning area geometry', function(hooks) {
 
     // rezoningArea should not have a null geom
     // this confirms that that setRezoningArea diffed the zoning features and created a new polygon
-    assert.notEqual(model.get('rezoningArea').features[0].geometry, null);
+    assert.ok(model.get('rezoningArea').features[0].geometry);
   });
 
   test('change to zoning label triggers rezoningArea calculation and includes entire zoning polygon', async function(assert) {
@@ -62,6 +62,6 @@ module('Acceptance | automated rezoning area geometry', function(hooks) {
 
     // rezoningArea should not have a null geom
     // this confirms that that setRezoningArea diffed the zoning features and created a new polygon
-    assert.notEqual(model.get('rezoningArea').features[0].geometry, null);
+    assert.ok(model.get('rezoningArea').features[0].geometry);
   });
 });
