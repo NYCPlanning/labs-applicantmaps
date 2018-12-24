@@ -1,7 +1,9 @@
 import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
-import { action } from '@ember-decorators/object';
+import { action, computed } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
+import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
+import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
 // Project Area
 export const projectAreaLayer = {
@@ -53,6 +55,25 @@ export default class ProjectAreaComponent extends Component {
 
   @argument
   mode;
+
+  @computed('model.projectArea')
+  get isReadyToProceed() {
+    // here, it gets set once by the constructor
+    // const initial = model.get(attribute);
+    const [
+      initial,
+      proposed, // upstream proposed should always be FC
+    ] = this.get('model').changedAttributes().projectArea || [];
+
+    // console.log('if no initial and proposed');
+    if (!initial && proposed) return true;
+
+    // console.log('if no proposed, there are no changes');
+    if (!proposed) return false; // no changes are proposed to canonical
+
+    return !isEmpty(this.get('model.projectArea'))
+      && isFeatureCollectionChanged(initial, proposed);
+  }
 
   @action
   async save() {
