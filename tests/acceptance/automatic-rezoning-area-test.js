@@ -2,7 +2,6 @@ import { module, test } from 'qunit';
 import {
   visit,
   click,
-
   isSettled,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
@@ -33,12 +32,12 @@ module('Acceptance | automated rezoning area geometry', function(hooks) {
 
     await isSettled();
     // add a random polygon to the underlying zoning
-    const underlyingZoning = randomPolygon(5);
+    const underlyingZoning = randomPolygon(1);
     model.set('underlyingZoning', underlyingZoning);
     await isSettled();
     // save underlying zoning features
     await click('[data-test-project-geometry-save]');
-
+    await isSettled();
     // rezoningArea should not have a null geom
     // this confirms that that setRezoningArea diffed the zoning features and created a new polygon
     assert.ok(model.get('rezoningArea').features[0].geometry);
@@ -54,12 +53,12 @@ module('Acceptance | automated rezoning area geometry', function(hooks) {
     await visit('/projects/1/edit/geometry-edit?mode=draw&type=underlying-zoning');
     const model = store.peekRecord('project', 1);
 
-    const underlyingZoning = randomPolygon(5);
+    const underlyingZoning = randomPolygon(1);
     model.set('underlyingZoning', underlyingZoning);
 
     // save underlying zoning features
     await click('[data-test-project-geometry-save]');
-
+    await isSettled();
     // rezoningArea should not have a null geom
     // this confirms that that setRezoningArea diffed the zoning features and created a new polygon
     assert.ok(model.get('rezoningArea').features[0].geometry);
