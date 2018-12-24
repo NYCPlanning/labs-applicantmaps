@@ -194,7 +194,7 @@ export default class CommercialOverlayComponent extends Component {
       initial,
       proposed, // upstream proposed should always be FC
     ] = this.get('model').changedAttributes().commercialOverlays || [];
-    console.log(initial, proposed, this.get('model').changedAttributes());
+
     // console.log('if no initial and proposed');
     // check that proposed is not the original
     // new models default values are honored
