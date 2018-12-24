@@ -2,11 +2,8 @@ import { get } from '@ember/object';
 import booleanEqual from '@turf/boolean-equal';
 
 export default function isFeatureCollectionChanged(initial, proposed) {
-  const initialGeoms = get(initial, 'features')
-    .map((feature) => { delete feature.id; return feature; });
-
-  const proposedGeoms = get(proposed, 'features')
-    .map((feature) => { delete feature.id; return feature; });
+  const initialGeoms = get(initial, 'features');
+  const proposedGeoms = get(proposed, 'features');
 
   // sort according to property id. difference judgment is order-sensitive
   // because it is compare features by index

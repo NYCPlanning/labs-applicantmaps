@@ -35,6 +35,8 @@ export const EmptyFeatureCollection = {
 };
 
 const Feature = shapeOf({
+  // TODO
+  // id: oneOf('number', 'string'),
   type: oneOf('Feature'),
   geometry: unionOf(Object, null),
   properties: optional(Object),
