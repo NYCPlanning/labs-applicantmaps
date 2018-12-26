@@ -32,6 +32,10 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     this.map.remove();
   });
 
+  hooks.afterEach(function() {
+    this.sandbox.restore();
+  });
+
   test('it switches to draw mode', async function(assert) {
     this.server.create('project');
     const store = this.owner.lookup('service:store');
@@ -110,6 +114,60 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     await typeIn('[data-test-feature-label-form]', 'test');
 
     assert.equal(model.developmentSite.features[0].properties.label, 'test');
+  });
+
+  test('it selects and deletes', async function(assert) {
+    this.server.create('project', {
+      developmentSite: {
+        type: 'FeatureCollection',
+        features: [{
+          type: 'Feature',
+          id: 'd69a525591aac508d9a045e1883bb213',
+          geometry: {
+            type: 'Polygon',
+            coordinates: [[[-3, -3], [-3, 3], [3, 3], [3, -3], [-3, -3]]],
+          },
+          properties: {
+            id: 'd69a525591aac508d9a045e1883bb213',
+          },
+        }],
+      },
+    });
+
+    const store = this.owner.lookup('service:store');
+    const model = await store.findRecord('project', 1);
+    const { map, draw } = this;
+
+    this.set('model', model);
+    this.set('mapObject', {
+      mapInstance: map,
+      draw,
+    });
+
+    assert.equal(model.get('developmentSite.features.length'), 1);
+
+    await render(hbs`
+      {{#project-geometries/modes/draw
+        map=mapObject
+        geometricProperty=model.developmentSite as |draw|}}
+        {{draw.feature-label-form
+          selectedFeature=model.developmentSite}}
+      {{/project-geometries/modes/draw}}
+    `);
+
+    await waitUntil(() => map.queryRenderedFeatures().length, { timeout: 15000 });
+
+    const allRenderedFeatures = map.queryRenderedFeatures();
+
+    Sinon.stub(map, 'queryRenderedFeatures').callsFake((point, options) => { // eslint-disable-line
+      return allRenderedFeatures;
+    });
+
+    await click(map.getCanvas());
+
+    await click('.trash');
+
+    assert.equal(model.get('developmentSite.features.length'), 0);
   });
 
   // this test is too brittle at this point
