@@ -61,4 +61,4 @@ export default class ProjectGeometryRendererController extends Component {
   c24Layer = c24Layer;
 
   c25Layer = c25Layer;
-};
+}
