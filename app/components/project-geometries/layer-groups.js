@@ -8,6 +8,7 @@ export default class ProjectMapFormComponent extends Component {
     const store = this.get('store');
     store.query('layer-group', {
       'layer-groups': [
+        { id: 'subway' },
         {
           id: 'tax-lots',
           visible: true,
@@ -111,13 +112,13 @@ export default class ProjectMapFormComponent extends Component {
             },
           ],
         },
+        { id: 'bk-qn-mh-boundary', visible: true, layers: [{ tooltipable: false }] },
       ],
     }).then((allLayerGroups) => {
       const { meta } = allLayerGroups;
-      const layerGroups = allLayerGroups.filter(layerGroup => layerGroup.get('id') !== 'tax-lots');
 
       this.set('model', {
-        layerGroups,
+        layerGroups: allLayerGroups,
         meta,
       });
     });
