@@ -23,6 +23,7 @@ const developmentSiteIcon = {
 
 // Rezoning Area
 const rezoningAreaLayer = {
+  id: 'rezoning-area-line',
   type: 'line',
   paint: {
     'line-color': 'rgba(0, 0, 0, 1)',
@@ -63,7 +64,7 @@ const projectBufferLayer = {
 
 // Proposed Zoning
 const underlyingZoningLayer = {
-  id: 'underlying-zoningdistrict-lines',
+  id: 'underlying-zoning-line',
   type: 'line',
   paint: {
     'line-opacity': 0.5,
@@ -72,7 +73,7 @@ const underlyingZoningLayer = {
 };
 
 const underlyingZoningLabelsLayer = {
-  id: 'underlying-zoningdistrict-labels',
+  id: 'underlying-zoning-label',
   type: 'symbol',
   layout: {
     'symbol-placement': 'line',

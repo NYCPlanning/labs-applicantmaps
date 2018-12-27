@@ -67,24 +67,3 @@
     </div>
   {{/ember-wormhole}}
 {{/component}}
-
-{{#map.source options=(mapbox-geojson-source model.commercialOverlays) as |source|}}
-  {{source.layer layer=coLayer before='boundary_country'}}
-  {{source.layer layer=c11Layer before='boundary_country'}}
-  {{source.layer layer=c12Layer before='boundary_country'}}
-  {{source.layer layer=c13Layer before='boundary_country'}}
-  {{source.layer layer=c14Layer before='boundary_country'}}
-  {{source.layer layer=c15Layer before='boundary_country'}}
-  {{source.layer layer=c21Layer before='boundary_country'}}
-  {{source.layer layer=c22Layer before='boundary_country'}}
-  {{source.layer layer=c23Layer before='boundary_country'}}
-  {{source.layer layer=c24Layer before='boundary_country'}}
-  {{source.layer layer=c25Layer before='boundary_country'}}
-{{/map.source}}
-
-{{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
-  {{source.layer
-    layer=developmentSiteLayer
-    before='boundary_country'
-  }}
-{{/map.source}}
