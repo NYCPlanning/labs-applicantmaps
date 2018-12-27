@@ -38,8 +38,7 @@ export default class DrawComponent extends Component {
     const {
       draw = new MapboxDraw(),
     } = this.get('map');
-    window.draw = draw;
-    window.map = this.get('map');
+
     // set draw instance so it's available to the class
     this.set('map.draw', draw);
 

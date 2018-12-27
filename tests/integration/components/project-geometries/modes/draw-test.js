@@ -159,15 +159,59 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
 
     const allRenderedFeatures = map.queryRenderedFeatures();
 
-    Sinon.stub(map, 'queryRenderedFeatures').callsFake((point, options) => { // eslint-disable-line
+    // stub in an return all the rendered features
+    const stub = this.sandbox.stub(map, 'queryRenderedFeatures').callsFake((point, options) => { // eslint-disable-line
       return allRenderedFeatures;
     });
 
     await click(map.getCanvas());
 
+    assert.equal(draw.getSelectedIds()[0], 'd69a525591aac508d9a045e1883bb213');
+
     await click('.trash');
 
     assert.equal(model.get('developmentSite.features.length'), 0);
+
+    stub.resetBehavior();
+  });
+
+  // too flaky to ever rely upon
+  skip('it draws and saves', async function(assert) {
+    this.server.create('project', {
+      developmentSite: {
+        type: 'FeatureCollection',
+        features: [],
+      },
+    });
+
+    const store = this.owner.lookup('service:store');
+    const model = await store.findRecord('project', 1);
+    const map = await createMap();
+    const draw = new DefaultDraw();
+
+    this.set('model', model);
+    this.set('mapObject', {
+      mapInstance: map,
+      draw,
+    });
+
+    await render(hbs`
+      {{project-geometries/modes/draw
+        map=mapObject
+        geometricProperty=model.developmentSite}}
+    `);
+
+    draw.changeMode('draw_polygon');
+
+    await waitUntil(() => map.isSourceLoaded('mapbox-gl-draw-cold') && map.isSourceLoaded('mapbox-gl-draw-hot'));
+
+    const mapCanvas = map.getCanvas();
+    await click(mapCanvas, { clientX: 40, clientY: 40 });
+    await click(mapCanvas, { clientX: 50, clientY: 50 });
+    await click(mapCanvas, { clientX: 55, clientY: 55 });
+    await click(mapCanvas, { clientX: 55, clientY: 55 });
+
+    assert.ok(true);
   });
 
   // this test is too brittle at this point
