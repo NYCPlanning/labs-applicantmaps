@@ -10,7 +10,11 @@
 
 </div>
 <div class="cell large-auto map-container">
-  {{#project-geometries/layer-groups tagName='' as |projectMapForm|}}
+  {{#project-geometries/layer-groups
+    mode=mode
+    tagName=''
+    as |projectMapForm|
+  }}
     {{#labs-map
       id='main-map'
       initOptions=(hash
@@ -23,7 +27,6 @@
 
       {{search-handler
         map=map}}
-
       {{!-- labs-layers (includes tax-lots layer) --}}
       {{#map.labs-layers
         layerGroups=projectMapForm.model.layerGroups
