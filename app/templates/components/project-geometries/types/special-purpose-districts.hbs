@@ -2,6 +2,8 @@
   map=map
   geometricProperty=model.specialPurposeDistricts as |edit-mode|
 }}
+  {{project-geometry-renderer map=map model=model}}
+
   {{edit-mode.feature-label-form}}
 
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
@@ -66,23 +68,3 @@
     </div>
   {{/ember-wormhole}}
 {{/component}}
-
-{{#map.source
-  options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
-  {{source.layer
-    layer=proposedSpecialPurposeDistrictsLayer
-    before='boundary_country'
-  }}
-  {{source.layer
-    layer=proposedSpecialPurposeDistrictsLabelsLayer
-    before='boundary_country'
-  }}
-{{/map.source}}
-
-{{#map.source
-  options=(mapbox-geojson-source model.developmentSite) as |source|}}
-  {{source.layer
-    layer=developmentSiteLayer
-    before='boundary_country'
-  }}
-{{/map.source}}
