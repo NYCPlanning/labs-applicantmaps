@@ -49,8 +49,8 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
         )}}
     `);
 
-    assert.ok(peekRecordSpy.calledOnce, 'peekRecord called once');
-    assert.equal(peekRecordSpy.firstCall.args[1], 'tax-lots');
+    assert.ok(peekRecordSpy.calledTwice, 'peekRecord called once');
+    assert.equal(peekRecordSpy.firstCall.args[1], 'pluto-fill');
   });
 
   test('click handler action is functional', async function(assert) {
