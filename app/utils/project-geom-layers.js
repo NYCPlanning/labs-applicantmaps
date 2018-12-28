@@ -9,18 +9,6 @@ const developmentSiteLayer = {
   },
 };
 
-const developmentSiteIcon = {
-  type: 'line',
-  layers: [
-    {
-      stroke: 'rgba(237, 18, 18, 1)',
-      'stroke-width': 1.25,
-      'stroke-dasharray': '3,1.25,1.25,1.25',
-    },
-  ],
-};
-
-
 // Rezoning Area
 const rezoningAreaLayer = {
   id: 'rezoning-area-line',
@@ -34,19 +22,6 @@ const rezoningAreaLayer = {
     'line-cap': 'round',
   },
 };
-
-const rezoningAreaIcon = {
-  type: 'line',
-  layers: [
-    {
-      stroke: 'rgba(0, 0, 0, 1)',
-      'stroke-width': 2,
-      'stroke-dasharray': '0.2,4',
-      'stroke-linecap': 'round',
-    },
-  ],
-};
-
 
 // Project Buffer
 const projectBufferLayer = {
@@ -258,9 +233,7 @@ export default {
   c24Layer,
   c25Layer,
   developmentSiteLayer,
-  developmentSiteIcon,
   rezoningAreaLayer,
-  rezoningAreaIcon,
   projectBufferLayer,
   underlyingZoningLayer,
   underlyingZoningLabelsLayer,

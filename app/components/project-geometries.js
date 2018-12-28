@@ -6,6 +6,7 @@ import { argument } from '@ember-decorators/argument';
 import { tagName } from '@ember-decorators/component';
 import { developmentSiteLayer } from './project-geometries/types/development-site';
 import { projectAreaLayer } from './project-geometries/types/project-area';
+import projectGeometryIcons from '../utils/project-geom-icons';
 
 @tagName('')
 export default class ProjectGeometryEditComponent extends Component {
@@ -24,80 +25,11 @@ export default class ProjectGeometryEditComponent extends Component {
   @service
   router;
 
+  projectGeometryIcons = projectGeometryIcons;
+
   developmentSiteLayer = developmentSiteLayer;
 
   projectAreaLayer = projectAreaLayer;
-
-  developmentSiteIcon = {
-    type: 'rectangle',
-    layers: [
-      {
-        fill: 'rgba(0, 0, 0, 0)',
-        stroke: 'rgba(237, 18, 18, 1)',
-        'stroke-width': 1.25,
-        'stroke-dasharray': '3,1.25,1.25,1.25',
-      },
-    ],
-  };
-
-  projectAreaIcon = {
-    type: 'rectangle',
-    layers: [
-      {
-        fill: 'rgba(0, 0, 0, 0)',
-        stroke: 'rgba(0, 122, 122, 1)',
-        'stroke-width': 1,
-        'stroke-dasharray': '3.25,1.75',
-      },
-    ],
-  };
-
-  underlyingZoningIcon = {
-    type: 'rectangle',
-    layers: [
-      {
-        fill: 'rgba(0, 0, 0, 0)',
-        stroke: 'rgba(0, 0, 0, 0.7)',
-        'stroke-width': 1,
-      },
-    ],
-  };
-
-  commercialOverlaysIcon = {
-    type: 'rectangle',
-    layers: [
-      {
-        fill: 'rgba(0, 0, 0, 0)',
-        stroke: 'rgba(0, 0, 0, 0.7)',
-        'stroke-width': 1,
-      },
-    ],
-  };
-
-  specialPurposeDistrictsIcon = {
-    type: 'rectangle',
-    layers: [
-      {
-        fill: 'rgba(94, 102, 51, 0.2)',
-        stroke: 'rgba(0, 0, 0, 0)',
-        'stroke-width': 0,
-      },
-    ],
-  };
-
-  rezoningAreaIcon = {
-    type: 'rectangle',
-    layers: [
-      {
-        fill: 'rgba(0, 0, 0, 0)',
-        stroke: 'rgba(0, 0, 0, 1)',
-        'stroke-width': 2,
-        'stroke-dasharray': '0.2,4',
-        'stroke-linecap': 'round',
-      },
-    ],
-  };
-
 
   /* ----------  General Map  ---------- */
   showDrawInstructions = true;
