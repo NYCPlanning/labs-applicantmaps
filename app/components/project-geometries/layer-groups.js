@@ -1,4 +1,5 @@
 import Component from '@ember/component';
+import { argument } from '@ember-decorators/argument';
 import { service } from '@ember-decorators/service';
 
 export default class ProjectMapFormComponent extends Component {
@@ -8,11 +9,12 @@ export default class ProjectMapFormComponent extends Component {
     const store = this.get('store');
     store.query('layer-group', {
       'layer-groups': [
+        { id: 'subway' },
         {
           id: 'tax-lots',
           visible: true,
           layers: [
-            { tooltipable: false, highlightable: true, tooltipTemplate: '{{address}} (BBL: {{bbl}})' },
+            { tooltipable: false, highlightable: false, tooltipTemplate: '{{address}} (BBL: {{bbl}})' },
             {},
             { style: { layout: { 'text-field': '{lot}' } } },
             {
@@ -111,10 +113,17 @@ export default class ProjectMapFormComponent extends Component {
             },
           ],
         },
+        { id: 'bk-qn-mh-boundary', visible: true, layers: [{ tooltipable: false }] },
       ],
     }).then((allLayerGroups) => {
       const { meta } = allLayerGroups;
-      const layerGroups = allLayerGroups.filter(layerGroup => layerGroup.get('id') !== 'tax-lots');
+      let layerGroups = allLayerGroups;
+
+      // if in lots mode, exclude the tax-lots layerGroup from the initial map load
+      // it will be mutated, and added with a click handler by project-geometries/modes/lots.js
+      if (this.get('mode') === 'lots') {
+        layerGroups = allLayerGroups.filter(layerGroup => layerGroup.get('id') !== 'tax-lots');
+      }
 
       this.set('model', {
         layerGroups,
@@ -122,6 +131,9 @@ export default class ProjectMapFormComponent extends Component {
       });
     });
   }
+
+  @argument
+  mode = false
 
   @service store;
 
