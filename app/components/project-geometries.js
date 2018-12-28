@@ -6,6 +6,7 @@ import { argument } from '@ember-decorators/argument';
 import { tagName } from '@ember-decorators/component';
 import { developmentSiteLayer } from './project-geometries/types/development-site';
 import { projectAreaLayer } from './project-geometries/types/project-area';
+import projectGeometryIcons from '../utils/project-geom-icons';
 
 @tagName('')
 export default class ProjectGeometryEditComponent extends Component {
@@ -23,6 +24,8 @@ export default class ProjectGeometryEditComponent extends Component {
 
   @service
   router;
+
+  projectGeometryIcons = projectGeometryIcons;
 
   developmentSiteLayer = developmentSiteLayer;
 
