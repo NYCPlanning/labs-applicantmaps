@@ -10,11 +10,11 @@
 
 </div>
 <div class="cell large-auto map-container">
-  {{#project-geometries/layer-groups tagName='' as |projectMapForm|}}
+  {{#if layerGroups}}
     {{#labs-map
       id='main-map'
       initOptions=(hash
-        style=projectMapForm.model.meta.mapboxStyle
+        style=layerGroups.meta.mapboxStyle
         zoom=12
         center=(array -73.983307 40.704977)
         pitchWithRotate=false
@@ -26,7 +26,7 @@
 
       {{!-- labs-layers (includes tax-lots layer) --}}
       {{#map.labs-layers
-        layerGroups=projectMapForm.model.layerGroups
+        layerGroups=layerGroups.layerGroups
         as |layers|}}
         {{#layers.tooltip as |tooltip|}}
           {{tooltip-renderer
@@ -73,5 +73,5 @@
         </div>
       {{/ember-wormhole}}
     {{/labs-map}}
-  {{/project-geometries/layer-groups}}
+  {{/if}}
 </div>
