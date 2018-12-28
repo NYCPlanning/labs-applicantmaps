@@ -1,12 +1,16 @@
-{{#project-geometries/draw-lots-to-union
-  mode=mode
+{{#component (concat 'project-geometries/modes/' mode)
   map=map
-  geometricProperty=model.specialPurposeDistricts as |selection|
+  geometricProperty=model.specialPurposeDistricts as |edit-mode|
 }}
-  {{selection.mode.feature-label-form}}
+  {{project-geometry-renderer map=map model=model}}
+
+  {{edit-mode.feature-label-form}}
 
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
     <div class="fade-in-on-load text-small">
+
+      {{back-to-dashboard-button model=model}}
+
       <h1 class="header-large small-margin-bottom">Rezoning: <span class="text-weight-normal">Special Purpose Districts</span></h1>
       <p><a href="https://www1.nyc.gov/site/planning/zoning/districts-tools/special-purpose-districts.page" target="_blank">Special Purpose Districts</a> supplement and modify the underlying zoning in distinctive neighborhoods with particular issues and goals. These boundaries <strong>extend to the centerline of streets</strong>, are not dependent on lot lines, and can sometimes intersect tax lots.</p>
 
@@ -55,32 +59,12 @@
 
       <hr />
 
-      {{#selection.button
-        enabled=model.hasDirtyAttributes
+      {{#edit-mode.button
+        enabled=isReadyToProceed
         handleClick=(action 'save')}}
         Save
         <small style="display:block;line-height:1.75;">Special Purpose Districts</small>
-      {{/selection.button}}
+      {{/edit-mode.button}}
     </div>
   {{/ember-wormhole}}
-{{/project-geometries/draw-lots-to-union}}
-
-{{#map.source
-  options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
-  {{source.layer
-    layer=proposedSpecialPurposeDistrictsLayer
-    before='boundary_country'
-  }}
-  {{source.layer
-    layer=proposedSpecialPurposeDistrictsLabelsLayer
-    before='boundary_country'
-  }}
-{{/map.source}}
-
-{{#map.source
-  options=(mapbox-geojson-source model.developmentSite) as |source|}}
-  {{source.layer
-    layer=developmentSiteLayer
-    before='boundary_country'
-  }}
-{{/map.source}}
+{{/component}}

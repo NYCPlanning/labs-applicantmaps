@@ -19,6 +19,9 @@ module.exports = function (defaults) {
     },
     autoImport: {
       webpack: {
+        node: {
+          fs: 'empty',
+        },
         module: {
           rules: [
             /* see: https://github.com/graphql/graphql-js/issues/1272#issuecomment-393903706 */

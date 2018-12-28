@@ -44,6 +44,7 @@ export default function() {
   this.passthrough('/write-coverage');
   this.passthrough('https://search-api.planninglabs.nyc/**');
   this.passthrough('http://localhost:3000/**');
+  this.passthrough('https://maputnik-push.planninglabs.nyc/**');
 
   // REST Endpoints
   this.get('/projects');
