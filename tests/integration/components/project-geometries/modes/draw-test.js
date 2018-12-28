@@ -49,9 +49,11 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     });
 
     await render(hbs`
-      {{project-geometries/modes/draw
-        map=mapObject
-        geometricProperty=geometricProperty}}
+      {{#mapbox-gl-draw map=mapObject as |drawable|}}
+        {{project-geometries/modes/draw
+          map=drawable
+          geometricProperty=geometricProperty}}
+      {{/mapbox-gl-draw}}
     `);
 
     await click('.polygon');
@@ -72,9 +74,11 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     });
 
     await render(hbs`
-      {{project-geometries/modes/draw
-        map=mapObject
-        geometricProperty=model.developmentSite}}
+      {{#mapbox-gl-draw map=mapObject as |drawable|}}
+        {{project-geometries/modes/draw
+          map=drawable
+          geometricProperty=model.developmentSite}}
+      {{/mapbox-gl-draw}}
     `);
 
     const { features: [{ id }] } = draw.getAll();
@@ -99,12 +103,14 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     });
 
     await render(hbs`
-      {{#project-geometries/modes/draw
-        map=mapObject
-        geometricProperty=model.developmentSite as |draw|}}
-        {{draw.feature-label-form
-          selectedFeature=model.developmentSite}}
-      {{/project-geometries/modes/draw}}
+      {{#mapbox-gl-draw map=mapObject as |drawable|}}
+        {{#project-geometries/modes/draw
+          map=drawable
+          geometricProperty=model.developmentSite as |draw|}}
+          {{draw.feature-label-form
+            selectedFeature=model.developmentSite}}
+        {{/project-geometries/modes/draw}}
+      {{/mapbox-gl-draw}}
     `);
 
     const { features: [{ id }] } = draw.getAll();
@@ -147,12 +153,14 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     assert.equal(model.get('developmentSite.features.length'), 1);
 
     await render(hbs`
-      {{#project-geometries/modes/draw
-        map=mapObject
-        geometricProperty=model.developmentSite as |draw|}}
-        {{draw.feature-label-form
-          selectedFeature=model.developmentSite}}
-      {{/project-geometries/modes/draw}}
+      {{#mapbox-gl-draw map=mapObject as |drawable|}}
+        {{#project-geometries/modes/draw
+          map=drawable
+          geometricProperty=model.developmentSite as |draw|}}
+          {{draw.feature-label-form
+            selectedFeature=model.developmentSite}}
+        {{/project-geometries/modes/draw}}
+      {{/mapbox-gl-draw}}
     `);
 
     await waitUntil(() => map.queryRenderedFeatures().length, { timeout: 15000 });

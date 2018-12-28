@@ -21,57 +21,59 @@
       )
       mapLoaded=(action 'handleMapLoad') as |map|}}
 
-      {{search-handler
-        map=map}}
+      {{#mapbox-gl-draw map=map as |drawableMap|}}
+        {{search-handler
+          map=map}}
 
-      {{!-- labs-layers (includes tax-lots layer) --}}
-      {{#map.labs-layers
-        layerGroups=layerGroups.layerGroups
-        as |layers|}}
-        {{#layers.tooltip as |tooltip|}}
-          {{tooltip-renderer
-            feature=tooltip.feature
-            template=tooltip.layer.tooltipTemplate}}
-        {{/layers.tooltip}}
-      {{/map.labs-layers}}
+        {{!-- labs-layers (includes tax-lots layer) --}}
+        {{#map.labs-layers
+          layerGroups=layerGroups.layerGroups
+          as |layers|}}
+          {{#layers.tooltip as |tooltip|}}
+            {{tooltip-renderer
+              feature=tooltip.feature
+              template=tooltip.layer.tooltipTemplate}}
+          {{/layers.tooltip}}
+        {{/map.labs-layers}}
 
-      {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
-        {{source.layer
-          layer=developmentSiteLayer
-          before='boundary_country'
-        }}
-      {{/map.source}}
+        {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
+          {{source.layer
+            layer=developmentSiteLayer
+            before='boundary_country'
+          }}
+        {{/map.source}}
 
-      {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
-        {{source.layer
-          layer=projectAreaLayer
-          before='boundary_country'
-        }}
-      {{/map.source}}
+        {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
+          {{source.layer
+            layer=projectAreaLayer
+            before='boundary_country'
+          }}
+        {{/map.source}}
 
-      {{!-- invoke the component for the specified type --}}
-      {{component projectGeometryType
-        model=model
-        mode=mode
-        map=map}}
+        {{!-- invoke the component for the specified type --}}
+        {{component projectGeometryType
+          model=model
+          mode=mode
+          map=drawableMap}}
 
-      {{!-- transport this markup when map is done loading --}}
-      {{#ember-wormhole to='geometry-type-save-box'}}
-        <div class="stable">
-          {{#if (eq mode 'lots')}}
-            {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='draw')
-              tagName='button'
-              class='button gray expanded'
-              disabled=(not model.hasDirtyAttributes)
-            }}
-              Switch to Manual Drawing
-              <small style="display:block;line-height:1.75;">
-                (edit the shape with draw tools)
-              </small>
-            {{/link-to}}
-          {{/if}}
-        </div>
-      {{/ember-wormhole}}
+        {{!-- transport this markup when map is done loading --}}
+        {{#ember-wormhole to='geometry-type-save-box'}}
+          <div class="stable">
+            {{#if (eq mode 'lots')}}
+              {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='draw')
+                tagName='button'
+                class='button gray expanded'
+                disabled=(not model.hasDirtyAttributes)
+              }}
+                Switch to Manual Drawing
+                <small style="display:block;line-height:1.75;">
+                  (edit the shape with draw tools)
+                </small>
+              {{/link-to}}
+            {{/if}}
+          </div>
+        {{/ember-wormhole}}
+      {{/mapbox-gl-draw}}
     {{/labs-map}}
   {{/if}}
 </div>

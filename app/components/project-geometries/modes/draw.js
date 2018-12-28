@@ -35,12 +35,7 @@ export default class DrawComponent extends Component {
   constructor(...args) {
     super(...args);
 
-    const {
-      draw = new MapboxDraw(),
-    } = this.get('map');
-
-    // set draw instance so it's available to the class
-    this.set('map.draw', draw);
+    const { mapInstance } = this.get('map');
 
     this.callbacks = {
       drawState: () => this.drawStateCallback(),
@@ -48,16 +43,6 @@ export default class DrawComponent extends Component {
       selectedFeature: () => this.selectedFeatureCallback(),
       skipToDirectSelect: () => this.skipToDirectSelectCallback(),
     };
-
-    const { mapInstance } = this.get('map');
-    const geometricProperty = this.get('geometricProperty');
-
-    mapInstance.addControl(draw, 'top-left');
-
-    // if geometry exists for this mode, add it to the drawing canvas
-    if (!isEmpty(geometricProperty)) {
-      draw.add(geometricProperty);
-    }
 
     callBackStateEvents.forEach((event) => {
       mapInstance.on(`draw.${event}`, this.callbacks.drawState);
@@ -67,41 +52,17 @@ export default class DrawComponent extends Component {
     mapInstance.on('draw.selectionchange', this.callbacks.skipToDirectSelect);
   }
 
+  didInsertElement() {
+    const { draw } = this.get('map');
+    const geometricProperty = this.get('geometricProperty');
+
+    draw.add(geometricProperty);
+  }
+
   drawStateCallback() {
     const drawnFeatures = this.get('drawnFeatures');
 
     this.set('geometricProperty', drawnFeatures);
-  }
-
-  // update which is the selected feature
-  selectedFeatureCallback() {
-    const { draw } = this.get('map');
-    const { features: [firstSelectedFeature] } = draw.getSelected();
-
-    if (firstSelectedFeature) {
-      this.set('selectedFeature', { type: 'FeatureCollection', features: [firstSelectedFeature] });
-    } else {
-      this.set('selectedFeature', EmptyFeatureCollection);
-    }
-  }
-
-  // skip simple_select mode, jump straight to direct_select
-  // mode so users can immediately select vertices
-  // this helps avoid an additional click when something is selected
-  skipToDirectSelectCallback() {
-    const { draw } = this.get('map');
-    const mode = draw.getMode();
-    const [selected] = draw.getSelectedIds();
-
-    if (selected && mode === 'simple_select') {
-      draw.changeMode('direct_select', { featureId: selected });
-      this.drawModeCallback();
-    }
-  }
-
-  drawModeCallback() {
-    const { draw } = this.get('map');
-    this.set('drawMode', draw.getMode());
   }
 
   // adds geometric property from upstream model into mapbox-gl-draw
@@ -115,12 +76,43 @@ export default class DrawComponent extends Component {
     }
   }
 
+  // update which is the selected feature
+  selectedFeatureCallback() {
+    const { draw: { drawInstance: draw } } = this.get('map');
+    const { features: [firstSelectedFeature] } = draw.getSelected();
+
+    if (firstSelectedFeature) {
+      this.set('selectedFeature', { type: 'FeatureCollection', features: [firstSelectedFeature] });
+    } else {
+      this.set('selectedFeature', EmptyFeatureCollection);
+    }
+  }
+
+  // skip simple_select mode, jump straight to direct_select
+  // mode so users can immediately select vertices
+  // this helps avoid an additional click when something is selected
+  skipToDirectSelectCallback() {
+    const { draw: { drawInstance: draw } } = this.get('map');
+    const mode = draw.getMode();
+    const [selected] = draw.getSelectedIds();
+
+    if (selected && mode === 'simple_select') {
+      draw.changeMode('direct_select', { featureId: selected });
+      this.drawModeCallback();
+    }
+  }
+
+  drawModeCallback() {
+    const { draw: { drawInstance: draw } } = this.get('map');
+    this.set('drawMode', draw.getMode());
+  }
+
   // Get drawn features, if they're valid
   // We need to remove weird null coordinates.
   // See https://github.com/mapbox/mapbox-gl-draw/issues/774
   @computed('geometricProperty')
   get drawnFeatures() {
-    const { draw } = this.get('map');
+    const { draw: { drawInstance: draw } } = this.get('map');
     const features = draw.getAll().features
       .filter(({ geometry: { coordinates: [[firstCoord]] } }) => firstCoord !== null);
 
@@ -130,6 +122,8 @@ export default class DrawComponent extends Component {
     };
   }
 
+  // @required
+  // mapbox-gl map context with draw instance
   @argument
   map;
 
@@ -144,7 +138,7 @@ export default class DrawComponent extends Component {
 
   @action
   handleTrashButtonClick() {
-    const { draw } = this.get('map');
+    const { draw: { drawInstance: draw } } = this.get('map');
     const selectedFeature = draw.getSelectedIds();
     const { features: [feature] } = draw.getSelectedPoints();
 
@@ -159,7 +153,7 @@ export default class DrawComponent extends Component {
 
   @action
   handleDrawButtonClick() {
-    const { draw } = this.get('map');
+    const { draw: { drawInstance: draw } } = this.get('map');
 
     draw.changeMode('draw_polygon');
     this.drawModeCallback();
@@ -167,7 +161,7 @@ export default class DrawComponent extends Component {
 
   @action
   handleStraightLine() {
-    const { draw } = this.get('map');
+    const { draw: { drawInstance: draw } } = this.get('map');
 
     draw.changeMode('draw_line_string');
     this.drawModeCallback();
@@ -175,7 +169,7 @@ export default class DrawComponent extends Component {
 
   @action
   updateSelectedFeature(label) {
-    const { draw } = this.get('map');
+    const { draw: { drawInstance: draw } } = this.get('map');
     const { features: [firstFeature] } = this.get('selectedFeature');
 
     draw.setFeatureProperty(firstFeature.id, 'label', label);
@@ -186,8 +180,10 @@ export default class DrawComponent extends Component {
   }
 
   willDestroyElement(...args) {
-    const { draw } = this.get('map');
+    const { draw: { deleteAll } } = this.get('map');
     const { mapInstance } = this.get('map');
+
+    deleteAll();
 
     callBackStateEvents.forEach((event) => {
       mapInstance.off(`draw.${event}`, this.callbacks.drawState);
@@ -195,7 +191,6 @@ export default class DrawComponent extends Component {
     mapInstance.off('draw.modechange', this.callbacks.drawMode);
     mapInstance.off('draw.selectionchange', this.callbacks.selectedFeature);
     mapInstance.off('draw.selectionchange', this.callbacks.skipToDirectSelect);
-    mapInstance.removeControl(draw);
 
     super.willDestroyElement(...args);
   }
