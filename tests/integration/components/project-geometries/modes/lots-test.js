@@ -35,6 +35,16 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
 
   test('it peeks and returns tax-lots', async function(assert) {
     const store = this.owner.lookup('service:store');
+
+    // push a pluto-fill layer so that the conditionals in the constructor are true
+    store.push({
+      data: [
+        {
+          type: 'layer',
+          id: 'pluto-fill',
+        },
+      ],
+    });
     const peekRecordSpy = this.sandbox.spy(store, 'peekRecord');
 
     // make dependent components happy
@@ -49,8 +59,8 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
         )}}
     `);
 
-    assert.ok(peekRecordSpy.calledOnce, 'peekRecord called once');
-    assert.equal(peekRecordSpy.firstCall.args[1], 'tax-lots');
+    assert.ok(peekRecordSpy.calledTwice, 'peekRecord called once');
+    assert.equal(peekRecordSpy.firstCall.args[1], 'pluto-fill');
   });
 
   test('click handler action is functional', async function(assert) {

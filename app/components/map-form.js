@@ -6,6 +6,8 @@ import { next } from '@ember/runloop';
 import turfBbox from '@turf/bbox';
 import mapboxgl from 'mapbox-gl';
 import { sanitizeStyle } from 'labs-applicant-maps/helpers/sanitize-style';
+// TODO import geom layers from the various modes that export them,
+// this util should be deprecated
 import projectGeomLayers from '../utils/project-geom-layers';
 
 const defaultLayerGroups = {

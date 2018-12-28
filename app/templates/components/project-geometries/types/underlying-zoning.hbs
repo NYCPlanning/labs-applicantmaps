@@ -2,6 +2,8 @@
   map=map
   geometricProperty=model.underlyingZoning as |edit-mode|
 }}
+  {{project-geometry-renderer map=map model=model}}
+
   {{edit-mode.feature-label-form
       options=labelOptions}}
 
@@ -67,14 +69,3 @@
     </div>
   {{/ember-wormhole}}
 {{/component}}
-
-{{#map.source options=(mapbox-geojson-source model.underlyingZoning) as |source|}}
-  {{source.layer
-    layer=underlyingZoningLayer
-    before='boundary_country'
-  }}
-  {{source.layer
-    layer=underlyingZoningLabelsLayer
-    before='boundary_country'
-  }}
-{{/map.source}}
