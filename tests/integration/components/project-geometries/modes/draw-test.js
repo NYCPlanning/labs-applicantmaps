@@ -11,7 +11,7 @@ import hbs from 'htmlbars-inline-precompile';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import createMap from 'labs-applicant-maps/tests/helpers/create-map';
 import setupMapMocks from 'labs-applicant-maps/tests/helpers/setup-map-mocks';
-import { DefaultDraw } from 'labs-applicant-maps/components/project-geometries/modes/draw';
+import { DefaultDraw } from 'labs-applicant-maps/components/mapbox-gl-draw';
 import Sinon from 'sinon';
 
 module('Integration | Component | project-geometries/modes/draw', function(hooks) {

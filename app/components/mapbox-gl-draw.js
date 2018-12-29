@@ -40,6 +40,8 @@ export default class MapboxGlDraw extends Component {
     setProperties(this.get('map'), {
       draw: {
         drawInstance: draw,
+
+        // these methods are wrapped to help with runloop
         deleteAll: () => next(() => this.deleteAll()),
         add: featureCollection => next(() => this.add(featureCollection)),
       },

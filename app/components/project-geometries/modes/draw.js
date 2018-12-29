@@ -1,24 +1,9 @@
 import Component from '@ember/component';
-import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import { action, computed, observes } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
 import { type } from '@ember-decorators/argument/type';
 import { FeatureCollection, EmptyFeatureCollection } from '../../../models/project';
 import isEmpty from '../../../utils/is-empty';
-
-// modify existing draw modes direct_select to disable drag on features
-MapboxDraw.modes.direct_select.onFeature = function() {
-  // Enable map.dragPan when user clicks on feature, overrides ability to drag shape
-  this.map.dragPan.enable();
-};
-
-export const DefaultDraw = MapboxDraw.bind(null, {
-  displayControlsDefault: false,
-  controls: {
-    polygon: true,
-    trash: true,
-  },
-});
 
 // setup events to update draw state
 // bind events to the state callback
