@@ -190,9 +190,17 @@ export default class extends Model {
   @attr('boolean', { allowNull: true, defaultValue: null }) needSpecialDistrict;
 
   // ******** GEOMETRIES ********
-  // FeatureCollection of polygons or multipolygons
+  /**
+   *
+   * DevelopmentSite
+   * FeatureCollection of polygons or multipolygons
+   */
+
   @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection }) developmentSite
+
+  @type(FeatureCollection)
+  @attr({ defaultValue: () => EmptyFeatureCollection }) developmentSiteAnnotations
 
   // FeatureCollection of polygons or multipolygons
   @type(FeatureCollection)
