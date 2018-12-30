@@ -94,12 +94,14 @@ export default class DrawComponent extends Component {
 
   // Get drawn features, if they're valid
   // We need to remove weird null coordinates.
+  // This makes the component expect a certain type of FC
+  // which is bad.
   // See https://github.com/mapbox/mapbox-gl-draw/issues/774
   @computed('geometricProperty')
   get drawnFeatures() {
     const { draw: { drawInstance: draw } } = this.get('map');
     const features = draw.getAll().features
-      .filter(({ geometry: { coordinates: [[firstCoord]] } }) => firstCoord !== null);
+      .filter(({ geometry: { coordinates: [[firstCoord]] = [] } }) => firstCoord !== null);
 
     return {
       type: 'FeatureCollection',
