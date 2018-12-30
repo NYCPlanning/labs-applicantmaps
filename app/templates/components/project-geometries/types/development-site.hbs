@@ -1,65 +1,63 @@
-{{#let (if (eq mode 'annotation') 'annotations' 'developmentSite') as |prop|}}
-  {{#component (concat 'project-geometries/modes/' mode)
-    map=map
-    geometricProperty=(get model prop) as |edit-mode|
-  }}
-    {{#ember-wormhole to='geometry-type-draw-explainer'}}
-      <div class="fade-in-on-load text-small">
-        <h1 class="header-large small-margin-bottom">Development Site</h1>
-        <p>The Development Site refers to the zoning lot(s) you plan to develop, facilitated by land use actions.</p>
+{{#component (concat 'project-geometries/modes/' mode)
+  map=map
+  geometricProperty=model.developmentSite as |edit-mode|
+}}
+  {{#ember-wormhole to='geometry-type-draw-explainer'}}
+    <div class="fade-in-on-load text-small">
+      <h1 class="header-large small-margin-bottom">Development Site</h1>
+      <p>The Development Site refers to the zoning lot(s) you plan to develop, facilitated by land use actions.</p>
 
-        <hr />
+      <hr />
 
-        {{#if (eq mode 'draw')}}
-          <p class="text-weight-bold small-margin-bottom">Adding new shapes:</p>
-          <ul class="small-margin-bottom">
-            <li>
-              Use the
-              <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
-                {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
-                {{fa-icon 'square' transform='grow-8' class='white'}}
-                {{fa-icon 'draw-polygon' transform='shrink-2'}}
-              </span>
-              polygon tool to add a new shape
-            </li>
-            <li>Complete a new shape by clicking its final vertex a second time</li>
-          </ul>
+      {{#if (eq mode 'draw')}}
+        <p class="text-weight-bold small-margin-bottom">Adding new shapes:</p>
+        <ul class="small-margin-bottom">
+          <li>
+            Use the
+            <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+              {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+              {{fa-icon 'square' transform='grow-8' class='white'}}
+              {{fa-icon 'draw-polygon' transform='shrink-2'}}
+            </span>
+            polygon tool to add a new shape
+          </li>
+          <li>Complete a new shape by clicking its final vertex a second time</li>
+        </ul>
 
-          <p class="text-weight-bold small-margin-bottom">Editing existing shapes:</p>
-          <ul>
-            <li>Edit an existing shape by selecting it and dragging its vertices</li>
-            <li>Add a vertex by clicking the midpoint of a line</li>
-            <li>
-              Use the
-              <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
-                {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
-                {{fa-icon 'square' transform='grow-8' class='white'}}
-                {{fa-icon 'trash-alt' prefix='far' transform='shrink-2'}}
-              </span>
-              trash button to delete a selected shape or vertex
-            </li>
-          </ul>
-        {{else}}
-          <p class="small-margin-bottom grid-x">
-            <span class="cell shrink" style="padding-right:0.25rem;">{{fa-icon 'plus' fixedWidth=true}}</span>
-            <span class="cell auto">Zoom the map  so that lots are visible</span>
-          </p>
-          <p class="grid-x">
-            <span class="cell shrink" style="padding-right:0.25rem;">{{fa-icon 'hand-pointer' prefix='far' fixedWidth=true}}</span>
-            <span class="cell auto">Select lots to add them to your Development Site (selected lots will be yellow)</span>
-          </p>
-        {{/if}}
+        <p class="text-weight-bold small-margin-bottom">Editing existing shapes:</p>
+        <ul>
+          <li>Edit an existing shape by selecting it and dragging its vertices</li>
+          <li>Add a vertex by clicking the midpoint of a line</li>
+          <li>
+            Use the
+            <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+              {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+              {{fa-icon 'square' transform='grow-8' class='white'}}
+              {{fa-icon 'trash-alt' prefix='far' transform='shrink-2'}}
+            </span>
+            trash button to delete a selected shape or vertex
+          </li>
+        </ul>
+      {{else}}
+        <p class="small-margin-bottom grid-x">
+          <span class="cell shrink" style="padding-right:0.25rem;">{{fa-icon 'plus' fixedWidth=true}}</span>
+          <span class="cell auto">Zoom the map  so that lots are visible</span>
+        </p>
+        <p class="grid-x">
+          <span class="cell shrink" style="padding-right:0.25rem;">{{fa-icon 'hand-pointer' prefix='far' fixedWidth=true}}</span>
+          <span class="cell auto">Select lots to add them to your Development Site (selected lots will be yellow)</span>
+        </p>
+      {{/if}}
 
-        <hr />
+      <hr />
 
-        {{#edit-mode.button
-          enabled=isReadyToProceed
-          handleClick=(action 'save')}}
-          Save Development Site
-        {{/edit-mode.button}}
-      </div>
-    {{/ember-wormhole}}
-  {{/component}}
+      {{#edit-mode.button
+        enabled=isReadyToProceed
+        handleClick=(action 'save')}}
+        Save Development Site
+      {{/edit-mode.button}}
+    </div>
+  {{/ember-wormhole}}
+{{/component}}
 
-  {{yield}}
-{{/let}}
+{{yield}}
