@@ -2,46 +2,31 @@ import Component from '@ember/component';
 import { action, computed, observes } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
 import { type } from '@ember-decorators/argument/type';
-import { FeatureCollection, EmptyFeatureCollection } from '../../../models/project';
-import isEmpty from '../../../utils/is-empty';
-
-// setup events to update draw state
-// bind events to the state callback
-// I'm not sure which events we need or not
-const callBackStateEvents = [
-  'create',
-  'update',
-  'delete',
-  'modechange',
-  'selectionchange',
-];
+import { set } from '@ember/object';
+import { FeatureCollection, EmptyFeatureCollection } from 'labs-applicant-maps/models/project';
+import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
 export default class DrawComponent extends Component {
   constructor(...args) {
     super(...args);
 
-    const { mapInstance } = this.get('map');
-
     this.callbacks = {
       drawState: () => this.drawStateCallback(),
-      drawMode: () => this.drawModeCallback(),
       selectedFeature: () => this.selectedFeatureCallback(),
       skipToDirectSelect: () => this.skipToDirectSelectCallback(),
     };
 
-    callBackStateEvents.forEach((event) => {
-      mapInstance.on(`draw.${event}`, this.callbacks.drawState);
-    });
-    mapInstance.on('draw.modechange', this.callbacks.drawMode);
-    mapInstance.on('draw.selectionchange', this.callbacks.selectedFeature);
-    mapInstance.on('draw.selectionchange', this.callbacks.skipToDirectSelect);
+    this._bindCallbacks();
   }
 
-  didInsertElement() {
-    const { draw } = this.get('map');
-    const geometricProperty = this.get('geometricProperty');
+  _bindCallbacks() {
+    const { mapInstance } = this.get('map');
 
-    draw.add(geometricProperty);
+    mapInstance.on('draw.create', this.callbacks.drawState);
+    mapInstance.on('draw.update', this.callbacks.drawState);
+    mapInstance.on('draw.delete', this.callbacks.drawState);
+    mapInstance.on('draw.selectionchange', this.callbacks.selectedFeature);
+    mapInstance.on('draw.selectionchange', this.callbacks.skipToDirectSelect);
   }
 
   drawStateCallback() {
@@ -83,13 +68,7 @@ export default class DrawComponent extends Component {
 
     if (selected && mode === 'simple_select') {
       draw.changeMode('direct_select', { featureId: selected });
-      this.drawModeCallback();
     }
-  }
-
-  drawModeCallback() {
-    const { draw: { drawInstance: draw } } = this.get('map');
-    this.set('drawMode', draw.getMode());
   }
 
   // Get drawn features, if they're valid
@@ -121,8 +100,6 @@ export default class DrawComponent extends Component {
   @type(FeatureCollection)
   selectedFeature = EmptyFeatureCollection;
 
-  drawMode = null;
-
   @action
   handleTrashButtonClick() {
     const { draw: { drawInstance: draw } } = this.get('map');
@@ -143,15 +120,6 @@ export default class DrawComponent extends Component {
     const { draw: { drawInstance: draw } } = this.get('map');
 
     draw.changeMode('draw_polygon');
-    this.drawModeCallback();
-  }
-
-  @action
-  handleStraightLine() {
-    const { draw: { drawInstance: draw } } = this.get('map');
-
-    draw.changeMode('draw_line_string');
-    this.drawModeCallback();
   }
 
   @action
@@ -166,19 +134,26 @@ export default class DrawComponent extends Component {
     this.drawStateCallback();
   }
 
+  /* =================================================
+  =            COMPONENT LIFECYCLE HOOKS            =
+  ================================================= */
   willDestroyElement(...args) {
     const { draw: { deleteAll } } = this.get('map');
     const { mapInstance } = this.get('map');
 
     deleteAll();
 
-    callBackStateEvents.forEach((event) => {
-      mapInstance.off(`draw.${event}`, this.callbacks.drawState);
-    });
     mapInstance.off('draw.modechange', this.callbacks.drawMode);
     mapInstance.off('draw.selectionchange', this.callbacks.selectedFeature);
     mapInstance.off('draw.selectionchange', this.callbacks.skipToDirectSelect);
 
     super.willDestroyElement(...args);
+  }
+
+  didInsertElement() {
+    const { draw } = this.get('map');
+    const geometricProperty = this.get('geometricProperty');
+
+    draw.add(geometricProperty);
   }
 }
