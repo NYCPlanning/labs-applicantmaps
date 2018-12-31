@@ -1,7 +1,9 @@
 import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
-import { action } from '@ember-decorators/object';
+import { action, computed } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
+import isEmpty from 'labs-applicant-maps/utils/is-empty';
+import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
 
 export const developmentSiteLayer = {
   id: 'development-site-line',
@@ -39,6 +41,27 @@ export default class DevelopmentSiteComponent extends Component {
   @argument
   mode;
 
+  @computed('model.developmentSite')
+  get isReadyToProceed() {
+    // here, it gets set once by the constructor
+    // const initial = model.get(attribute);
+    const [
+      initial,
+      proposed, // upstream proposed should always be FC
+    ] = this.get('model').changedAttributes().developmentSite || [];
+
+    // console.log('if no initial and proposed');
+    if (!initial && proposed) return true;
+
+    // console.log('if no proposed, there are no changes');
+    if (!proposed) return false; // no changes are proposed to canonical
+
+    if (isEmpty(initial) && !isEmpty(proposed)) return true;
+
+    return !isEmpty(this.get('model.developmentSite'))
+      && isFeatureCollectionChanged(initial, proposed);
+  }
+
   @action
   async save() {
     const model = this.get('model');
@@ -49,7 +72,7 @@ export default class DevelopmentSiteComponent extends Component {
       this.get('notificationMessages').success('Project saved!');
       this.get('router').transitionTo('projects.show', savedProject);
     } catch (e) {
-      this.get('notificationMessages').success(`Something went wrong: ${e}`);
+      this.get('notificationMessages').error(`Something went wrong: ${e}`);
     }
   }
 

@@ -1,14 +1,17 @@
-{{#project-geometries/draw-lots-to-union
-  mode=mode
+{{#component (concat 'project-geometries/modes/' mode)
   map=map
-  geometricProperty=model.commercialOverlays as |selection|
+  geometricProperty=model.commercialOverlays as |edit-mode|
 }}
-  {{selection.mode.feature-label-form
-    options=labelOptions
-  }}
+  {{project-geometry-renderer map=map model=model}}
+
+  {{edit-mode.feature-label-form
+      options=labelOptions}}
 
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
     <div class="fade-in-on-load text-small">
+
+      {{back-to-dashboard-button model=model}}
+
       <h1 class="header-large small-margin-bottom">Rezoning: <span class="text-weight-normal">Commercial Overlays</span></h1>
       <p><a href='https://www1.nyc.gov/site/planning/zoning/districts-tools/commercial-districts-c1-c8.page' target="_blank">Commercial Overlays</a> are C1 or C2 district mapped within residential districts to serve local retail needs. These boundaries are not dependent on lot lines and can sometimes intersect tax lots.</p>
 
@@ -57,33 +60,12 @@
 
       <hr />
 
-      {{#selection.button
-        enabled=model.hasDirtyAttributes
+      {{#edit-mode.button
+        enabled=isReadyToProceed
         handleClick=(action 'save')}}
         Save
         <small style="display:block;line-height:1.75;">Commercial Overlays</small>
-      {{/selection.button}}
+      {{/edit-mode.button}}
     </div>
   {{/ember-wormhole}}
-{{/project-geometries/draw-lots-to-union}}
-
-{{#map.source options=(mapbox-geojson-source model.commercialOverlays) as |source|}}
-  {{source.layer layer=coLayer before='boundary_country'}}
-  {{source.layer layer=c11Layer before='boundary_country'}}
-  {{source.layer layer=c12Layer before='boundary_country'}}
-  {{source.layer layer=c13Layer before='boundary_country'}}
-  {{source.layer layer=c14Layer before='boundary_country'}}
-  {{source.layer layer=c15Layer before='boundary_country'}}
-  {{source.layer layer=c21Layer before='boundary_country'}}
-  {{source.layer layer=c22Layer before='boundary_country'}}
-  {{source.layer layer=c23Layer before='boundary_country'}}
-  {{source.layer layer=c24Layer before='boundary_country'}}
-  {{source.layer layer=c25Layer before='boundary_country'}}
-{{/map.source}}
-
-{{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
-  {{source.layer
-    layer=developmentSiteLayer
-    before='boundary_country'
-  }}
-{{/map.source}}
+{{/component}}

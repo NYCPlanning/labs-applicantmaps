@@ -10,7 +10,11 @@
 
 </div>
 <div class="cell large-auto map-container">
-  {{#project-geometries/layer-groups tagName='' as |projectMapForm|}}
+  {{#project-geometries/layer-groups
+    mode=mode
+    tagName=''
+    as |projectMapForm|
+  }}
     {{#labs-map
       id='main-map'
       initOptions=(hash
@@ -23,7 +27,6 @@
 
       {{search-handler
         map=map}}
-
       {{!-- labs-layers (includes tax-lots layer) --}}
       {{#map.labs-layers
         layerGroups=projectMapForm.model.layerGroups
@@ -35,26 +38,13 @@
         {{/layers.tooltip}}
       {{/map.labs-layers}}
 
-      {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
-        {{source.layer
-          layer=developmentSiteLayer
-          before='boundary_country'
-        }}
-      {{/map.source}}
-
-      {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
-        {{source.layer
-          layer=projectAreaLayer
-          before='boundary_country'
-        }}
-      {{/map.source}}
-
       {{!-- invoke the component for the specified type --}}
       {{component projectGeometryType
         model=model
         mode=mode
         map=map}}
 
+      {{!-- transport this markup when map is done loading --}}
       {{#ember-wormhole to='geometry-type-save-box'}}
         <div class="stable">
           {{#if (eq mode 'lots')}}
@@ -64,17 +54,41 @@
               disabled=(not model.hasDirtyAttributes)
             }}
               Switch to Manual Drawing
-              <small style="display:block;line-height:1.75;">(edit the shape with draw tools)</small>
+              <small style="display:block;line-height:1.75;">
+                (edit the shape with draw tools)
+              </small>
             {{/link-to}}
           {{/if}}
-          {{!-- <button class="button smal gray expanded"
-            disabled={{not model.hasDirtyAttributes}}
-            onclick={{action 'rollbackChanges'}}
-          >
-            Undo
-          </button> --}}
         </div>
       {{/ember-wormhole}}
     {{/labs-map}}
   {{/project-geometries/layer-groups}}
+
+  {{#if
+    (or
+      (not (is-empty model.developmentSite))
+      (not (is-empty model.projectArea))
+      (not (is-empty model.underlyingZoning))
+      (not (is-empty model.specialPurposeDistricts))
+      (not (is-empty model.rezoningArea))
+    )
+  }}
+    <ul class="over-map-legend no-bullet">
+      {{#if (not (is-empty model.developmentSite))}}
+        <li><strong>Development Site</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.developmentSiteIcon}}</li>
+      {{/if}}
+      {{#if (not (is-empty model.projectArea))}}
+        <li><strong>Project Area</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.projectAreaIcon}}</li>
+      {{/if}}
+      {{#if (not (is-empty model.underlyingZoning))}}
+        <li><strong>Underlying Zoning</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.underlyingZoningIcon}}</li>
+      {{/if}}
+      {{#if (not (is-empty model.specialPurposeDistricts))}}
+        <li><strong>Special Purpose Districts</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.specialPurposeDistrictsIcon}}</li>
+      {{/if}}
+      {{#if (not (is-empty model.rezoningArea))}}
+        <li><strong>Rezoning Area</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.rezoningAreaIcon}}</li>
+      {{/if}}
+    </ul>
+  {{/if}}
 </div>

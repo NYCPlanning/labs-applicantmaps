@@ -1,10 +1,13 @@
-{{#project-geometries/draw-lots-to-union
-  mode=mode
+{{#component (concat 'project-geometries/modes/' mode)
   map=map
-  geometricProperty=model.projectArea as |selection|
+  geometricProperty=model.projectArea as |edit-mode|
 }}
+  {{project-geometry-renderer map=map model=model}}
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
     <div class="fade-in-on-load text-small">
+
+      {{back-to-dashboard-button model=model}}
+
       <h1 class="header-large small-margin-bottom">Project Area</h1>
       <p>The Project Area includes all properties subject to proposed actions. You need to define a Project Area if you are requesting actions on properties that will not be developed.</p>
 
@@ -52,13 +55,13 @@
 
       <hr />
 
-      {{#selection.button
-        enabled=model.hasDirtyAttributes
+      {{#edit-mode.button
+        enabled=isReadyToProceed
         handleClick=(action 'save')}}
         Save Project Area
-      {{/selection.button}}
+      {{/edit-mode.button}}
     </div>
   {{/ember-wormhole}}
-{{/project-geometries/draw-lots-to-union}}
+{{/component}}
 
 {{yield}}
