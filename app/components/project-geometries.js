@@ -5,7 +5,6 @@ import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { tagName } from '@ember-decorators/component';
 import { camelize } from '@ember/string';
-import { next } from '@ember/runloop';
 import { developmentSiteLayer } from './project-geometries/types/development-site';
 import { projectAreaLayer } from './project-geometries/types/project-area';
 
