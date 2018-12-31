@@ -150,7 +150,7 @@ export const projectProcedure = [
 const procedureKeys = projectProcedure
   .reduce((acc, { conditions }) => acc.concat(conditions ? Object.keys(conditions) : []), []);
 
-export default class extends Model {
+export default class Project extends Model {
   @hasMany('area-map', { async: false }) areaMaps;
 
   @hasMany('tax-map', { async: false }) taxMaps;
@@ -158,6 +158,8 @@ export default class extends Model {
   @hasMany('zoning-change-map', { async: false }) zoningChangeMaps;
 
   @hasMany('zoning-section-map', { async: false }) zoningSectionMaps;
+
+  @hasMany('geometric-property', { async: false }) geometries;
 
   @computed(...mapTypes.map(mapType => `${camelize(mapType)}.@each.length`))
   get applicantMaps() {
@@ -255,6 +257,7 @@ export default class extends Model {
   }
 
   // FeatureCollection of polygons or multipolygons
+  // Depends on input from other geometries
   @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection }) rezoningArea
 
