@@ -830,7 +830,7 @@
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@mapbox/geojson-types/-/geojson-types-1.0.2.tgz#9aecf642cb00eab1080a57c4f949a65b4a5846d6"
 
-"@mapbox/geojsonhint@^2.0.0":
+"@mapbox/geojsonhint@^2.0.0", "@mapbox/geojsonhint@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@mapbox/geojsonhint/-/geojsonhint-2.1.0.tgz#bb94203ff09cf675898946362272e4738547c0d4"
   dependencies:

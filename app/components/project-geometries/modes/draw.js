@@ -3,6 +3,7 @@ import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import { action, computed, observes } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
 import { type } from '@ember-decorators/argument/type';
+import geojsonhint from '@mapbox/geojsonhint';
 import { FeatureCollection, EmptyFeatureCollection } from '../../../models/project';
 import isEmpty from '../../../utils/is-empty';
 
@@ -353,7 +354,10 @@ export default class DrawComponent extends Component {
   get drawnFeatures() {
     const { draw } = this.get('map');
     const features = draw.getAll().features
-      .filter(({ geometry: { coordinates: [[firstCoord]] } }) => firstCoord !== null);
+      .filter((feature) => {
+        const errors = geojsonhint.hint(feature).filter(d => d.level !== 'message');
+        return !errors.length;
+      });
 
     return {
       type: 'FeatureCollection',
