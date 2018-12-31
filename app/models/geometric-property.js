@@ -1,7 +1,7 @@
 import DS from 'ember-data';
-import { attr } from '@ember-decorators/data';
+import { attr, belongsTo } from '@ember-decorators/data';
 import { type, oneOf } from '@ember-decorators/argument/type';
-import { FeatureCollection } from './project';
+import { FeatureCollection, EmptyFeatureCollection } from './project';
 
 const { Model } = DS;
 
@@ -13,14 +13,17 @@ const GEOMETRY_TYPES = [
   'specialPurposeDistricts',
 ];
 
-export default class GeometricProperty extends Model {
+export default class extends Model {
+  @belongsTo('project')
+  project;
+
   @type(oneOf(...GEOMETRY_TYPES))
   @attr('string')
   geometryType;
 
   @type(FeatureCollection)
-  @attr()
-  data;
+  @attr({ defaultValue: () => EmptyFeatureCollection })
+  proposedGeometry;
 
   @attr('string')
   queryName;
@@ -29,10 +32,10 @@ export default class GeometricProperty extends Model {
   hasCanonical
 
   @type(FeatureCollection)
-  @attr()
+  @attr({ defaultValue: () => EmptyFeatureCollection })
   canonical;
 
   @type(FeatureCollection)
-  @attr()
+  @attr({ defaultValue: () => EmptyFeatureCollection })
   annotations;
 }

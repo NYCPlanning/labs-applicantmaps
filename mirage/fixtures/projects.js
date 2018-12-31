@@ -180,6 +180,7 @@ export default [
     needUnderlyingZoning: true,
     needCommercialOverlay: true,
     needSpecialDistrict: true,
+    geometricPropertyIds: [1, 2],
   },
   {
     id: 9,

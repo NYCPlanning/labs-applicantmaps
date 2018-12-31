@@ -159,7 +159,7 @@ export default class Project extends Model {
 
   @hasMany('zoning-section-map', { async: false }) zoningSectionMaps;
 
-  @hasMany('geometric-property', { async: false }) geometries;
+  @hasMany('geometric-property', { async: false }) geometricProperties;
 
   @computed(...mapTypes.map(mapType => `${camelize(mapType)}.@each.length`))
   get applicantMaps() {
