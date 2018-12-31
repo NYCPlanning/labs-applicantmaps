@@ -1,6 +1,6 @@
 {{#component (concat 'project-geometries/modes/' mode)
   map=map
-  geometricProperty=model.projectArea as |edit-mode|
+  geometricProperty=model.proposedGeometry as |edit-mode|
 }}
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
     <div class="fade-in-on-load text-small">

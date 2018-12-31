@@ -1,9 +1,5 @@
-import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
-import { action, computed } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
-import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
-import isEmpty from '../../../utils/is-empty';
+import { action } from '@ember-decorators/object';
+import TypesBaseComponent from '../-types';
 
 const labelOptions = [
   'C1-1',
@@ -138,31 +134,8 @@ export const c25Layer = {
   filter: ['all', ['==', 'label', 'C2-5']],
 };
 
-export default class CommercialOverlayComponent extends Component {
-  init(...args) {
-    super.init(...args);
-
-    if (isEmpty(this.get('model.commercialOverlays'))) {
-      this.get('model').setDefaultCommercialOverlays();
-    }
-  }
-
+export default class CommercialOverlayComponent extends TypesBaseComponent {
   labelOptions=labelOptions
-
-  @argument
-  map;
-
-  @argument
-  model;
-
-  @argument
-  mode;
-
-  @service
-  router;
-
-  @service
-  notificationMessages;
 
   coLayer = coLayer;
 
@@ -186,45 +159,13 @@ export default class CommercialOverlayComponent extends Component {
 
   c25Layer = c25Layer;
 
-  @computed('model.commercialOverlays')
-  get isReadyToProceed() {
-    // here, it gets set once by the constructor
-    // const initial = model.get(attribute);
-    const [
-      initial,
-      proposed, // upstream proposed should always be FC
-    ] = this.get('model').changedAttributes().commercialOverlays || [];
-
-    // console.log('if no initial and proposed');
-    // check that proposed is not the original
-    // new models default values are honored
-    // after they're saved
-    if ((!initial || isEmpty(initial)) && proposed) {
-      return isFeatureCollectionChanged(this.get('model.originalCommercialOverlays'), proposed);
-    }
-
-    // console.log('if no proposed, there are no changes');
-    if (!proposed) return false; // no changes are proposed to canonical
-
-    return !isEmpty(this.get('model.commercialOverlays'))
-      && isFeatureCollectionChanged(initial, proposed);
-  }
-
   @action
   async save() {
     const model = this.get('model');
+    const project = await model.get('project');
 
-    // because we've just changed the proposed zoning,
-    // we should also calculate the rezoning area
-    await model.setRezoningArea();
+    await project.setRezoningArea();
 
-    try {
-      const savedProject = await model.save();
-
-      this.get('notificationMessages').success('Project saved!');
-      this.get('router').transitionTo('projects.show', savedProject);
-    } catch (e) {
-      this.get('notificationMessages').error(`Something went wrong: ${e}`);
-    }
+    super.save();
   }
 }

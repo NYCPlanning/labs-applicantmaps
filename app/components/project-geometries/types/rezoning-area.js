@@ -32,8 +32,12 @@ export default class RezoningArea extends Component {
   init(...args) {
     super.init(...args);
 
-    if (isEmpty(this.get('model.rezoningArea'))) {
-      this.get('model').setRezoningArea();
+    const model = this.get('model');
+
+    if (isEmpty(this.get('model.proposedGeometry'))) {
+      model.get('project').then((project) => {
+        project.setRezoningArea();
+      });
     }
   }
 

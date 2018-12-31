@@ -1,6 +1,6 @@
 {{#component (concat 'project-geometries/modes/' mode)
   map=map
-  geometricProperty=model.underlyingZoning as |edit-mode|
+  geometricProperty=model.proposedGeometry as |edit-mode|
 }}
   {{edit-mode.feature-label-form
       options=labelOptions}}
@@ -65,7 +65,7 @@
   {{/ember-wormhole}}
 {{/component}}
 
-{{#map.source options=(mapbox-geojson-source model.underlyingZoning) as |source|}}
+{{#map.source options=(mapbox-geojson-source model.proposedGeometry) as |source|}}
   {{source.layer
     layer=underlyingZoningLayer
     before='boundary_country'

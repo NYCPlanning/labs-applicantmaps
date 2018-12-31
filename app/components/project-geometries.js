@@ -4,6 +4,8 @@ import mapboxgl from 'mapbox-gl';
 import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { tagName } from '@ember-decorators/component';
+import { camelize } from '@ember/string';
+import { next } from '@ember/runloop';
 import { developmentSiteLayer } from './project-geometries/types/development-site';
 import { projectAreaLayer } from './project-geometries/types/project-area';
 
@@ -157,6 +159,15 @@ export default class ProjectGeometryEditComponent extends Component {
   @computed('type')
   get projectGeometryType() {
     return `project-geometries/types/${this.get('type')}`;
+  }
+
+  @computed('type')
+  get geometricPropertyForType() {
+    const model = this.get('model');
+    const typeName = camelize(this.get('type'));
+
+    return model.get('geometricProperties')
+      .findBy('geometryType', typeName);
   }
 
   @action

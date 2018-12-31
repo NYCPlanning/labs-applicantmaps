@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { action, computed, observes } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
 import { type } from '@ember-decorators/argument/type';
-import { set } from '@ember/object';
 import { FeatureCollection, EmptyFeatureCollection } from 'labs-applicant-maps/models/project';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
@@ -143,6 +142,9 @@ export default class DrawComponent extends Component {
 
     deleteAll();
 
+    mapInstance.off('draw.create', this.callbacks.drawState);
+    mapInstance.off('draw.update', this.callbacks.drawState);
+    mapInstance.off('draw.delete', this.callbacks.drawState);
     mapInstance.off('draw.modechange', this.callbacks.drawMode);
     mapInstance.off('draw.selectionchange', this.callbacks.selectedFeature);
     mapInstance.off('draw.selectionchange', this.callbacks.skipToDirectSelect);
