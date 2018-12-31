@@ -242,60 +242,17 @@ export default class Project extends Model {
       .get('proposedGeometry');
   }
 
-  // FeatureCollection of polygons or multipolygons
-  // Depends on input from other geometries
-  @type(FeatureCollection)
-  @attr({ defaultValue: () => EmptyFeatureCollection }) rezoningArea
-
-  // returns a promise
-  async defaultRezoningArea() {
-    const {
-      underlyingZoning,
-      commercialOverlays,
-      specialPurposeDistricts,
-    } = this.getProperties('underlyingZoning', 'commercialOverlays', 'specialPurposeDistricts');
-
-    console.log(underlyingZoning, commercialOverlays, specialPurposeDistricts);
-
-    const combinedFC = {
-      type: 'FeatureCollection',
-      features: [],
-    };
-
-    // underlyingZoning
-    if (!isEmpty(underlyingZoning)) {
-      const currentZoning = await intersectingZoningQuery(this.get('developmentSite'));
-      const underlyingZoningDiff = computeDifference(currentZoning, underlyingZoning);
-
-      combinedFC.features = [...combinedFC.features, ...underlyingZoningDiff.features];
-    }
-
-    // commercial Overlays
-    if (!isEmpty(commercialOverlays)) {
-      const currentCommercialOverlays = await proposedCommercialOverlaysQuery(this.get('developmentSite'));
-      const commercialOverlaysDiff = computeDifference(currentCommercialOverlays, commercialOverlays);
-
-      combinedFC.features = [...combinedFC.features, ...commercialOverlaysDiff.features];
-    }
-
-    // special purpose districts
-    if (!isEmpty(specialPurposeDistricts)) {
-      const currentSpecialPurposeDistricts = await proposedSpecialDistrictsQuery(this.get('developmentSite'));
-      const specialPurposeDistrictsDiff = computeDifference(currentSpecialPurposeDistricts, specialPurposeDistricts);
-
-      combinedFC.features = [...combinedFC.features, ...specialPurposeDistrictsDiff.features];
-    }
-
-    if (!isEmpty(combinedFC)) {
-      return rezoningAreaQuery(combinedFC);
-    }
-
-    return EmptyFeatureCollection;
+  @computed('geometricProperties.@each.proposedGeometry')
+  get rezoningArea() {
+    return this.get('geometricProperties')
+      .findBy('geometryType', 'rezoningArea')
+      .get('proposedGeometry');
   }
 
   async setRezoningArea() {
-    const defaultRezoningArea = await this.defaultRezoningArea();
-    this.set('rezoningArea', defaultRezoningArea);
+    const rezoningArea = this.get('geometricProperties').findBy('geometryType', 'rezoningArea');
+
+    await rezoningArea.setCanonical();
   }
 
   // ******** COMPUTING THE CURRENT STEP FOR ROUTING ********
@@ -336,16 +293,7 @@ export default class Project extends Model {
 
   // ********************************
 
-  @computed('projectArea')
-  get projectAreaSource() {
-    const projectArea = this.get('projectArea');
-    return {
-      type: 'geojson',
-      data: projectArea,
-    };
-  }
-
-  @computed('geometricProperties')
+  @computed('geometricProperties.@each.proposedGeometry')
   get projectGeometryBoundingBox() {
     // build a geojson FeatureCollection from all three project geoms
     // const featureCollections = this

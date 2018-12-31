@@ -1,8 +1,4 @@
-import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
-import { action } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
-import isEmpty from '../../../utils/is-empty';
+import TypesBaseComponent from '../-types';
 
 export const rezoningAreaLayer = {
   type: 'line',
@@ -28,48 +24,6 @@ export const rezoningAreaIcon = {
   ],
 };
 
-export default class RezoningArea extends Component {
-  init(...args) {
-    super.init(...args);
-
-    const model = this.get('model');
-
-    if (isEmpty(this.get('model.proposedGeometry'))) {
-      model.get('project').then((project) => {
-        project.setRezoningArea();
-      });
-    }
-  }
-
+export default class RezoningArea extends TypesBaseComponent {
   rezoningAreaLayer = rezoningAreaLayer;
-
-  @service
-  notificationMessages;
-
-  @service
-  router;
-
-  @argument
-  map;
-
-  @argument
-  model;
-
-  @argument
-  mode;
-
-  @action
-  async save() {
-    const model = this.get('model');
-    const notifications = this.get('notificationMessages');
-
-    try {
-      await model.save();
-
-      notifications.success('Project saved!');
-      this.get('router').transitionTo('projects.show', model);
-    } catch (e) {
-      notifications.error(`Something went wrong: ${e}`);
-    }
-  }
 }

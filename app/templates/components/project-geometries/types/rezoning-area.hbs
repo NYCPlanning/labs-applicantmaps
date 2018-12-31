@@ -1,6 +1,6 @@
 {{#component (concat 'project-geometries/modes/' mode)
   map=map
-  geometricProperty=model.rezoningArea as |edit-mode|
+  geometricProperty=model.proposedGeometry as |edit-mode|
 }}
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
     <div class="fade-in-on-load text-small">
@@ -50,7 +50,7 @@
   {{/ember-wormhole}}
 {{/component}}
 
-{{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
+{{#map.source options=(mapbox-geojson-source model.proposedGeometry) as |source|}}
   {{source.layer
     layer=rezoningAreaLayer
     before='boundary_country'
@@ -58,7 +58,7 @@
 {{/map.source}}
 
 {{#map.source
-  options=(mapbox-geojson-source model.developmentSite) as |source|}}
+  options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
   {{source.layer
     layer=developmentSiteLayer
     before='boundary_country'

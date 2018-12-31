@@ -6,6 +6,7 @@ import { FeatureCollection, EmptyFeatureCollection } from './project';
 import underlyingZoning from '../utils/queries/intersecting-zoning-query';
 import commercialOverlays from '../utils/queries/proposed-commercial-overlays-query';
 import specialPurposeDistricts from '../utils/queries/proposed-special-districts-query';
+import rezoningArea from '../utils/queries/rezoning-area-query';
 
 const { Model } = DS;
 
@@ -13,6 +14,7 @@ const queries = {
   underlyingZoning,
   commercialOverlays,
   specialPurposeDistricts,
+  rezoningArea,
 };
 
 export const GEOMETRY_TYPES = [
@@ -21,6 +23,7 @@ export const GEOMETRY_TYPES = [
   'underlyingZoning',
   'commercialOverlays',
   'specialPurposeDistricts',
+  'rezoningArea',
 ];
 
 export default class extends Model {
@@ -55,7 +58,7 @@ export default class extends Model {
 
     if (!query) return new Error(`query not found for ${this.get('geometryType')}`);
 
-    const result = await query(developmentSite, ...args);
+    const result = await query(developmentSite, this.get('project.geometricProperties'), ...args);
 
     next(() => {
       this.set('proposedGeometry', result);
