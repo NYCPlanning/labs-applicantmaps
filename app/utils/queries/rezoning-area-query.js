@@ -2,9 +2,6 @@ import turfUnion from '@turf/union';
 import turfBuffer from '@turf/buffer';
 import computeDifference from 'labs-applicant-maps/utils/compute-difference';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
-import intersectingZoningQuery from 'labs-applicant-maps/utils/queries/intersecting-zoning-query';
-import proposedCommercialOverlaysQuery from 'labs-applicant-maps/utils/queries/proposed-commercial-overlays-query';
-import proposedSpecialDistrictsQuery from 'labs-applicant-maps/utils/queries/proposed-special-districts-query';
 
 export async function combineFeatureCollections(developmentSite, allGeometricProperties) {
   const underlyingZoning = allGeometricProperties.findBy('geometryType', 'underlyingZoning');
@@ -19,9 +16,8 @@ export async function combineFeatureCollections(developmentSite, allGeometricPro
   // underlyingZoning
   if (!isEmpty(underlyingZoning.get('proposedGeometry'))) {
     const currentZoning = underlyingZoning.get('canonical');
-    console.log(currentZoning);
-    const underlyingZoningDiff = computeDifference(currentZoning, underlyingZoning.get('proposedGeometry'));
 
+    const underlyingZoningDiff = computeDifference(currentZoning, underlyingZoning.get('proposedGeometry'));
     combinedFC.features = [...combinedFC.features, ...underlyingZoningDiff.features];
   }
 

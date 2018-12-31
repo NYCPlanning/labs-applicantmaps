@@ -1,8 +1,7 @@
 import Component from '@ember/component';
 import { action, computed, observes } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
-import { type } from '@ember-decorators/argument/type';
-import { FeatureCollection, EmptyFeatureCollection } from 'labs-applicant-maps/models/project';
+import { EmptyFeatureCollection } from 'labs-applicant-maps/models/geometric-property';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
 export default class DrawComponent extends Component {
@@ -92,11 +91,11 @@ export default class DrawComponent extends Component {
   @argument
   map;
 
-  @type(FeatureCollection)
+  // @type(FeatureCollection)
   @argument
   geometricProperty;
 
-  @type(FeatureCollection)
+  // @type(FeatureCollection)
   selectedFeature = EmptyFeatureCollection;
 
   @action

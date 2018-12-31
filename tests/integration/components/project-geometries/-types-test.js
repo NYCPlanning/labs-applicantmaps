@@ -2,25 +2,21 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 
 module('Integration | Component | project-geometries/-types', function(hooks) {
   setupRenderingTest(hooks);
+  setupMirage(hooks);
 
   test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+    this.server.create('project');
+    const store = this.owner.lookup('service:store');
+    const project = await store.findRecord('project', 1);
+    this.set('model', project.get('geometricProperties')
+      .findBy('geometryType', 'developmentSite'));
 
-    await render(hbs`{{project-geometries/-types}}`);
+    await render(hbs`{{project-geometries/-types model=model}}`);
 
     assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
-    await render(hbs`
-      {{#project-geometries/-types}}
-        template block text
-      {{/project-geometries/-types}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

@@ -3,21 +3,8 @@ import { attr, hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 import turfBbox from '@turf/bbox';
-import {
-  type,
-  arrayOf,
-  shapeOf,
-  unionOf,
-  optional,
-  oneOf,
-} from '@ember-decorators/argument/type';
-import intersectingZoningQuery from 'labs-applicant-maps/utils/queries/intersecting-zoning-query';
-import proposedCommercialOverlaysQuery from 'labs-applicant-maps/utils/queries/proposed-commercial-overlays-query';
-import proposedSpecialDistrictsQuery from 'labs-applicant-maps/utils/queries/proposed-special-districts-query';
-import rezoningAreaQuery from 'labs-applicant-maps/utils/queries/rezoning-area-query';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import wizard from 'labs-applicant-maps/utils/wizard';
-import computeDifference from 'labs-applicant-maps/utils/compute-difference';
 import { GEOMETRY_TYPES } from './geometric-property';
 
 const { Model } = DS;
@@ -32,21 +19,6 @@ export const EmptyFeatureCollection = {
     },
   }],
 };
-
-const Feature = shapeOf({
-  // TODO
-  // id: oneOf('number', 'string'),
-  type: oneOf('Feature'),
-  geometry: unionOf(Object, null),
-  properties: optional(Object),
-});
-
-export const FeatureCollection = shapeOf({
-  type: oneOf('FeatureCollection'),
-  features: arrayOf(
-    Feature,
-  ),
-});
 
 const hasAnswered = property => property === true || property === false;
 const hasFilledOut = property => !isEmpty(property);

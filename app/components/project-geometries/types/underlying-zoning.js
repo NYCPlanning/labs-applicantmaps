@@ -218,7 +218,11 @@ export default class UnderlyingZoningComponent extends TypesBaseComponent {
     const model = this.get('model');
     const project = await model.get('project');
 
-    await project.setRezoningArea();
+    const rezoningArea = project.get('geometricProperties')
+      .findBy('geometryType', 'rezoningArea');
+    console.log('special save');
+    await rezoningArea.setCanonical();
+    await rezoningArea.save();
 
     super.save();
   }

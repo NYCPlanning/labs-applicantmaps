@@ -6,12 +6,15 @@ import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
 
 export default class TypesBase extends Component {
-  init(...args) {
-    super.init(...args);
+  constructor(...args) {
+    super(...args);
 
     if (isEmpty(this.get('model.canonical'))) {
       this.get('model').setCanonical();
     }
+
+    // save the model so it's clean on init
+    this.get('model').save();
   }
 
   @service

@@ -68,23 +68,25 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
       },
     }));
 
-    const model = await store.findRecord('project', 1);
-    this.set('model', model);
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
+    const developmentSite = model.get('geometricProperties')
+      .findBy('geometryType', 'developmentSite');
+    this.set('model', developmentSite);
 
     await render(hbs`
       {{project-geometries/modes/lots
         map=(hash labs-layers=(component 'labs-layers'))
-        geometricProperty=model.developmentSite}}
+        geometricProperty=model.proposedGeometry}}
     `);
 
-    const startingArea = computeArea(model.get('developmentSite'));
+    const startingArea = computeArea(developmentSite.get('proposedGeometry'));
 
     await click('[data-test-lot-selector]');
     await click('[data-test-lot-selector]');
     await click('[data-test-lot-selector]');
 
     // geometry property gets mutated
-    assert.equal(model.get('hasDirtyAttributes'), true);
+    assert.equal(developmentSite.get('hasDirtyAttributes'), true);
 
     // area is increased
     assert.equal(computeArea(model.get('developmentSite')) > startingArea, true);
@@ -111,14 +113,14 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
       },
     }));
 
-    const model = await store.findRecord('project', 1);
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
 
-    this.set('model', model);
+    this.set('model', model.get('geometricProperties').findBy('geometryType', 'developmentSite'));
 
     await render(hbs`
       {{project-geometries/modes/lots
         map=(hash labs-layers=(component 'labs-layers'))
-        geometricProperty=model.developmentSite}}
+        geometricProperty=model.proposedGeometry}}
     `);
     await click('[data-test-lot-selector]', { clientX: 1 });
     const initialArea = computeArea(model.get('developmentSite'));

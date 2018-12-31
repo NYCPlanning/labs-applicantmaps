@@ -13,14 +13,5 @@ module('Integration | Component | project-geometries/modes/draw/annotation', fun
     await render(hbs`{{project-geometries/modes/draw/annotation}}`);
 
     assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
-    await render(hbs`
-      {{#project-geometries/modes/draw/annotation}}
-        template block text
-      {{/project-geometries/modes/draw/annotation}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

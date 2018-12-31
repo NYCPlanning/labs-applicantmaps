@@ -1,8 +1,15 @@
 import DS from 'ember-data';
 import { attr, belongsTo } from '@ember-decorators/data';
-import { type, oneOf } from '@ember-decorators/argument/type';
+import {
+  type,
+  oneOf,
+  arrayOf,
+  shapeOf,
+  unionOf,
+  optional,
+} from '@ember-decorators/argument/type';
 import { next } from '@ember/runloop';
-import { FeatureCollection, EmptyFeatureCollection } from './project';
+import { EmptyFeatureCollection } from 'labs-applicant-maps/models/project';
 import underlyingZoning from '../utils/queries/intersecting-zoning-query';
 import commercialOverlays from '../utils/queries/proposed-commercial-overlays-query';
 import specialPurposeDistricts from '../utils/queries/proposed-special-districts-query';
@@ -17,6 +24,21 @@ const queries = {
   rezoningArea,
 };
 
+const Feature = shapeOf({
+  // TODO
+  // id: oneOf('number', 'string'),
+  type: oneOf('Feature'),
+  geometry: unionOf(Object, null),
+  properties: optional(Object),
+});
+
+export const FeatureCollection = shapeOf({
+  type: oneOf('FeatureCollection'),
+  features: arrayOf(
+    Feature,
+  ),
+});
+
 export const GEOMETRY_TYPES = [
   'developmentSite',
   'projectArea',
@@ -30,7 +52,7 @@ export default class extends Model {
   @belongsTo('project')
   project;
 
-  @type(oneOf(...GEOMETRY_TYPES))
+  // @type(oneOf(...GEOMETRY_TYPES))
   @attr('string')
   geometryType;
 
