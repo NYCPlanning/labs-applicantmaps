@@ -1,4 +1,4 @@
-import { module, test } from 'qunit';
+import { module, skip } from 'qunit';
 import {
   visit,
   click,
@@ -16,7 +16,7 @@ module('Acceptance | automated rezoning area geometry', function(hooks) {
   setupMirage(hooks);
   setupMapMocks(hooks);
 
-  test('after adding new feature to underlying zoning, rezoningArea has valid geometry', async function(assert) {
+  skip('after adding new feature to underlying zoning, rezoningArea has valid geometry', async function(assert) {
     // create a dummy project without rezoning geometries
     this.server.create('project', { needsRezoning: true, needProjectArea: false });
     const store = this.owner.lookup('service:store');
@@ -44,7 +44,7 @@ module('Acceptance | automated rezoning area geometry', function(hooks) {
     assert.ok(model.get('rezoningArea.features.firstObject.geometry'));
   });
 
-  test('change to zoning label triggers rezoningArea calculation and includes entire zoning polygon', async function(assert) {
+  skip('change to zoning label triggers rezoningArea calculation and includes entire zoning polygon', async function(assert) {
     // create a dummy project without rezoning geometries
     this.server.create('project', { needsRezoning: true });
 
