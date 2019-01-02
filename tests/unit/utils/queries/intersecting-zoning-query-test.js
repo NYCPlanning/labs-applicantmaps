@@ -11,7 +11,7 @@ module('Unit | Utility | queries/intersecting-zoning-query', function(hooks) {
   test('it works', async function(assert) {
     this.server.createList('project', 1);
     const store = this.owner.lookup('service:store');
-    const model = await store.findRecord('project', 1);
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
 
     const result = queriesIntersectingZoningQuery(
       model.get('developmentSite'),
