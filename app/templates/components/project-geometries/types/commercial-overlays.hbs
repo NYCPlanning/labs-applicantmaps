@@ -2,11 +2,16 @@
   map=map
   geometricProperty=model.proposedGeometry as |edit-mode|
 }}
+  {{project-geometry-renderer map=map model=model}}
+
   {{edit-mode.feature-label-form
       options=labelOptions}}
 
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
     <div class="fade-in-on-load text-small">
+
+      {{back-to-dashboard-button model=model}}
+
       <h1 class="header-large small-margin-bottom">Rezoning: <span class="text-weight-normal">Commercial Overlays</span></h1>
       <p><a href='https://www1.nyc.gov/site/planning/zoning/districts-tools/commercial-districts-c1-c8.page' target="_blank">Commercial Overlays</a> are C1 or C2 district mapped within residential districts to serve local retail needs. These boundaries are not dependent on lot lines and can sometimes intersect tax lots.</p>
 

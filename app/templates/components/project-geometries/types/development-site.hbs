@@ -2,8 +2,13 @@
   map=map
   geometricProperty=model.proposedGeometry as |edit-mode|
 }}
+  {{project-geometry-renderer map=map model=model}}
+
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
     <div class="fade-in-on-load text-small">
+
+      {{back-to-dashboard-button model=model}}
+
       <h1 class="header-large small-margin-bottom">Development Site</h1>
       <p>The Development Site refers to the zoning lot(s) you plan to develop, facilitated by land use actions.</p>
 

@@ -53,6 +53,17 @@
           }}
         {{/map.source}}
 
+        {{!-- labs-layers (includes tax-lots layer) --}}
+        {{#map.labs-layers
+          layerGroups=layerGroups.layerGroups
+          as |layers|}}
+          {{#layers.tooltip as |tooltip|}}
+            {{tooltip-renderer
+              feature=tooltip.feature
+              template=tooltip.layer.tooltipTemplate}}
+          {{/layers.tooltip}}
+        {{/map.labs-layers}}
+
         {{!-- invoke the component for the specified type --}}
         {{component projectGeometryType
           model=geometricPropertyForType
@@ -78,5 +89,32 @@
         {{/ember-wormhole}}
       {{/mapbox-gl-draw}}
     {{/labs-map}}
+  {{/if}}
+  {{#if
+    (or
+      (not (is-empty model.developmentSite))
+      (not (is-empty model.projectArea))
+      (not (is-empty model.underlyingZoning))
+      (not (is-empty model.specialPurposeDistricts))
+      (not (is-empty model.rezoningArea))
+    )
+  }}
+    <ul class="over-map-legend no-bullet">
+      {{#if (not (is-empty model.developmentSite))}}
+        <li><strong>Development Site</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.developmentSiteIcon}}</li>
+      {{/if}}
+      {{#if (not (is-empty model.projectArea))}}
+        <li><strong>Project Area</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.projectAreaIcon}}</li>
+      {{/if}}
+      {{#if (not (is-empty model.underlyingZoning))}}
+        <li><strong>Underlying Zoning</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.underlyingZoningIcon}}</li>
+      {{/if}}
+      {{#if (not (is-empty model.specialPurposeDistricts))}}
+        <li><strong>Special Purpose Districts</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.specialPurposeDistrictsIcon}}</li>
+      {{/if}}
+      {{#if (not (is-empty model.rezoningArea))}}
+        <li><strong>Rezoning Area</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.rezoningAreaIcon}}</li>
+      {{/if}}
+    </ul>
   {{/if}}
 </div>

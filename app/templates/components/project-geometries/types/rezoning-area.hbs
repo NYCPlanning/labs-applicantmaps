@@ -2,8 +2,12 @@
   map=map
   geometricProperty=model.proposedGeometry as |edit-mode|
 }}
+  {{project-geometry-renderer map=map model=model}}
   {{#ember-wormhole to='geometry-type-draw-explainer'}}
     <div class="fade-in-on-load text-small">
+
+      {{back-to-dashboard-button model=model}}
+
       <h1 class="header-large small-margin-bottom">Rezoning Area</h1>
       <p class="text-small">The Rezoning Area refers to all property subject to the proposed amendment to existing Zoning Districts and Boundaries. It should be graphically offset from the proposed Zoning District boundaries.</p>
 

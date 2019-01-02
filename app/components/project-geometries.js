@@ -7,6 +7,7 @@ import { tagName } from '@ember-decorators/component';
 import { camelize } from '@ember/string';
 import { developmentSiteLayer } from './project-geometries/types/development-site';
 import { projectAreaLayer } from './project-geometries/types/project-area';
+import projectGeometryIcons from '../utils/project-geom-icons';
 
 const mapEditingLayerGroups = {
   'layer-groups': [
@@ -141,6 +142,8 @@ export default class ProjectGeometryEditComponent extends Component {
   @service
   router;
 
+  projectGeometryIcons = projectGeometryIcons;
+
   developmentSiteLayer = developmentSiteLayer;
 
   projectAreaLayer = projectAreaLayer;
@@ -196,7 +199,7 @@ export default class ProjectGeometryEditComponent extends Component {
     const projectGeometryBoundingBox = this.get('model.projectGeometryBoundingBox');
     if (projectGeometryBoundingBox) {
       map.fitBounds(projectGeometryBoundingBox, {
-        padding: 50,
+        padding: 150,
         duration: 0,
       });
     }
@@ -205,23 +208,10 @@ export default class ProjectGeometryEditComponent extends Component {
       'highway_path',
       'highway_minor',
       'highway_major_casing',
-      'highway_major_inner',
-      'highway_major_subtle',
-      'highway_motorway_casing',
-      'highway_motorway_inner',
-      'highway_motorway_subtle',
-      'highway_motorway_bridge_casing',
-      'highway_motorway_bridge_inner',
       'highway_name_other',
       'highway_name_motorway',
-      'tunnel_motorway_casing',
-      'tunnel_motorway_inner',
       'railway_transit',
       'railway_transit_dashline',
-      'railway_service',
-      'railway_service_dashline',
-      'railway',
-      'railway_dashline',
     ];
 
     basemapLayersToHide.forEach(layer => map.removeLayer(layer));

@@ -3,10 +3,6 @@ import Controller from '@ember/controller';
 import mapboxgl from 'mapbox-gl';
 
 export default class ApplicationController extends Controller {
-  isDrawing = false;
-
-  drawMode = null;
-
   @action
   handleMapLoad(map) {
     this.set('mapInstance', map);
