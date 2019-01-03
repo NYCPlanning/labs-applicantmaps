@@ -33,17 +33,6 @@ export default class DrawComponent extends Component {
     this.set('geometricProperty', drawnFeatures);
   }
 
-  // adds geometric property from upstream model into mapbox-gl-draw
-  @observes('geometricProperty')
-  addGeometricPropertyCallback() {
-    const latestProperty = this.get('geometricProperty');
-    const { draw } = this.get('map');
-
-    if (!isEmpty(latestProperty)) {
-      draw.add(latestProperty);
-    }
-  }
-
   // update which is the selected feature
   selectedFeatureCallback() {
     const { draw: { drawInstance: draw } } = this.get('map');
@@ -151,10 +140,12 @@ export default class DrawComponent extends Component {
     super.willDestroyElement(...args);
   }
 
-  didInsertElement() {
+  didReceiveAttrs() {
     const { draw } = this.get('map');
     const geometricProperty = this.get('geometricProperty');
 
-    draw.add(geometricProperty);
+    if (!isEmpty(geometricProperty)) {
+      draw.add(geometricProperty);
+    }
   }
 }
