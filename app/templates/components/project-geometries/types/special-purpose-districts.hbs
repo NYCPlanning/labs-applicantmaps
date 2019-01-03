@@ -1,6 +1,6 @@
 {{#component (concat 'project-geometries/modes/' mode)
   map=map
-  geometricProperty=model.specialPurposeDistricts as |edit-mode|
+  geometricProperty=model.proposedGeometry as |edit-mode|
 }}
   {{project-geometry-renderer map=map model=model}}
 
@@ -68,3 +68,24 @@
     </div>
   {{/ember-wormhole}}
 {{/component}}
+
+{{#map.source
+  options=(mapbox-geojson-source model.proposedGeometry) as |source|}}
+  {{source.layer
+    layer=proposedSpecialPurposeDistrictsLayer
+    before='boundary_country'
+  }}
+  {{source.layer
+    layer=proposedSpecialPurposeDistrictsLabelsLayer
+    before='boundary_country'
+  }}
+{{/map.source}}
+
+{{#map.source
+  options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
+  {{source.layer
+    layer=developmentSiteLayer
+    before='boundary_country'
+  }}
+{{/map.source}}
+

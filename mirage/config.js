@@ -51,6 +51,8 @@ export default function() {
   this.get('/projects/:id');
   this.patch('/projects/:id');
   this.post('/projects');
+  this.patch('/geometric-properties/:id');
+  this.post('/geometric-properties');
   this.post('/area-maps');
   this.patch('/area-maps/:id');
   this.post('/tax-maps');

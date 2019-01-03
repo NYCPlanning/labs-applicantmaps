@@ -1,9 +1,4 @@
-import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
-import { action, computed } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
-import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
-import isEmpty from 'labs-applicant-maps/utils/is-empty';
+import TypesBaseComponent from '../-types';
 
 // Project Area
 export const projectAreaLayer = {
@@ -30,64 +25,12 @@ export const projectAreaIcon = {
   ],
 };
 
-export default class ProjectAreaComponent extends Component {
+export default class ProjectAreaComponent extends TypesBaseComponent {
   constructor(...args) {
     super(...args);
     const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');
 
     if (zoningDistricts && !this.get('isDestroyed')) zoningDistricts.set('visible', false);
-  }
-
-  @service
-  store;
-
-  @service
-  notificationMessages;
-
-  @service
-  router;
-
-  @argument
-  map;
-
-  @argument
-  model;
-
-  @argument
-  mode;
-
-  @computed('model.projectArea')
-  get isReadyToProceed() {
-    // here, it gets set once by the constructor
-    // const initial = model.get(attribute);
-    const [
-      initial,
-      proposed, // upstream proposed should always be FC
-    ] = this.get('model').changedAttributes().projectArea || [];
-
-    // console.log('if no initial and proposed');
-    if (!initial && proposed) return true;
-
-    // console.log('if no proposed, there are no changes');
-    if (!proposed) return false; // no changes are proposed to canonical
-
-    return !isEmpty(this.get('model.projectArea'))
-      && isFeatureCollectionChanged(initial, proposed);
-  }
-
-  @action
-  async save() {
-    const model = this.get('model');
-    const notifications = this.get('notificationMessages');
-
-    try {
-      const savedProject = await model.save();
-
-      notifications.success('Project saved!');
-      this.get('router').transitionTo('projects.show', savedProject);
-    } catch (e) {
-      notifications.error(`Something went wrong: ${e}`);
-    }
   }
 
   willDestroyElement() {
