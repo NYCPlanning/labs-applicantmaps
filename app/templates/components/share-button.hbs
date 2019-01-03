@@ -1,0 +1,39 @@
+<button class="button tiny gray text-orange no-margin" data-test-share-button>
+  <span data-test-share-message>{{fa-icon 'share-alt'}} Share {{label}}</span>
+  {{#ember-popover
+    event='click'
+    popperContainer='body'
+    tooltipClassName='ember-popover dark'
+    as |popover|
+  }}
+    <div class="data-test-share-popover"></div>
+    <p><strong>Anyone with the link can edit the {{label}}.</strong></p>
+    <div class="input-group">
+      <input id="share-url" class="input-group-field" type="text" value="{{shareURL}}" />
+      <div class="input-group-button" data-test-copy-button>
+        {{#copy-button
+          clipboardTarget="#share-url"
+          success=(action 'handleShareSuccess')
+          error=(action 'handleShareError')
+          class="button gray copy-butto"
+        }}
+          {{fa-icon 'paste'}}
+          <span class="size-hack">Copy Link</span>
+        {{/copy-button}}
+      </div>
+    </div>
+    {{#if copySuccess}}
+      <div class="share-controls-message">
+        <div class="share-controls-message--success">{{fa-icon 'check'}} Copied</div>
+      </div>
+    {{/if}}
+    {{#if copyError}}
+      <div class="share-controls-message">
+        <div class="share-controls-message--error">{{fa-icon 'times'}} Something went wrong</div>
+      </div>
+    {{/if}}
+    <a class="button gray expanded" href="mailto:?subject=Applicant Maps: {{project.projectName}}&body=Thanks for trying out NYC Planning's new Applicant Maps tool. You can access the project dashboard for the {{project.projectName}} project using the following URL: {{shareURL}}. Please note that anyone who possesses the project URL will be able to edit the project.">
+      {{fa-icon 'envelope'}} Email <span style="text-transform: capitalize;">{{label}}</span> Link
+    </a>
+  {{/ember-popover}}
+</button>
