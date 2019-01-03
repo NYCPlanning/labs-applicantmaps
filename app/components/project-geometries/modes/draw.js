@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { action, computed, observes } from '@ember-decorators/object';
+import { action, computed } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/geometric-property';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
