@@ -52,7 +52,7 @@ export default class extends Model {
   @belongsTo('project')
   project;
 
-  // @type(oneOf(...GEOMETRY_TYPES))
+  @type(oneOf(...GEOMETRY_TYPES))
   @attr('string')
   geometryType;
 
