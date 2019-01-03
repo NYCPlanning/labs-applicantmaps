@@ -1,4 +1,5 @@
-import TypesBaseComponent from '../-types';
+import Component from '@ember/component';
+import { service } from '@ember-decorators/service';
 
 export const developmentSiteLayer = {
   id: 'development-site-line',
@@ -10,7 +11,10 @@ export const developmentSiteLayer = {
   },
 };
 
-export default class DevelopmentSiteComponent extends TypesBaseComponent {
+export default class DevelopmentSiteComponent extends Component {
+  @service
+  store;
+
   constructor(...args) {
     super(...args);
 

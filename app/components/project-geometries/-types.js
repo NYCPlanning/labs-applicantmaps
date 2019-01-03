@@ -2,16 +2,13 @@ import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
 import { action, computed } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
+import { camelize } from '@ember/string';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
 
 export default class TypesBase extends Component {
   constructor(...args) {
     super(...args);
-
-    if (isEmpty(this.get('model.canonical'))) {
-      this.get('model').setCanonical();
-    }
 
     // save the model so it's clean on init
     this.get('model').save();
@@ -27,6 +24,9 @@ export default class TypesBase extends Component {
   notificationMessages;
 
   @argument
+  type;
+
+  @argument
   map;
 
   @argument
@@ -35,24 +35,38 @@ export default class TypesBase extends Component {
   @argument
   mode;
 
-  @computed('model.proposedGeometry')
+  @computed('type')
+  get projectGeometryType() {
+    return `project-geometries/types/${this.get('type')}`;
+  }
+
+  @computed('type')
+  get geometricPropertyForType() {
+    const model = this.get('model');
+    const typeName = camelize(this.get('type'));
+
+    return model.get('geometricProperties')
+      .findBy('geometryType', typeName);
+  }
+
+  @computed('geometricPropertyForType.proposedGeometry')
   get isReadyToProceed() {
     // here, it gets set once by the constructor
     // const initial = model.get(attribute);
     const [
       initial,
       proposed, // upstream proposed should always be FC
-    ] = this.get('model').changedAttributes().proposedGeometry || [];
+    ] = this.get('geometricPropertyForType').changedAttributes().proposedGeometry || [];
 
     // if nothing has been proposed at all, no
     // meaningful changes detected
     if (!proposed) return false;
 
     // only apply this check if this is a canonical geometric prop
-    if (this.get('model.hasCanonical')) {
+    if (this.get('geometricPropertyForType.hasCanonical')) {
       // check that proposed is not the canonical zoning
       if ((!initial || isEmpty(initial)) && proposed) {
-        return isFeatureCollectionChanged(this.get('model.canonical'), proposed);
+        return isFeatureCollectionChanged(this.get('geometricPropertyForType.canonical'), proposed);
       }
     }
 
@@ -61,13 +75,13 @@ export default class TypesBase extends Component {
 
     // finally, if the proposed is not empty, and it's a meaningful
     // change in the feature collection, proceed
-    return !isEmpty(this.get('model.proposedGeometry'))
+    return !isEmpty(this.get('geometricPropertyForType.proposedGeometry'))
       && isFeatureCollectionChanged(initial, proposed);
   }
 
   @action
   async save() {
-    const model = this.get('model');
+    const model = this.get('geometricPropertyForType');
 
     try {
       const savedGeometry = await model.save();
@@ -80,7 +94,7 @@ export default class TypesBase extends Component {
   }
 
   willDestroyElement() {
-    const model = this.get('model');
+    const model = this.get('geometricPropertyForType');
 
     if (model.hasDirtyAttributes) {
       // roll back attributes if route transitions and there are unsaved changes to the model

@@ -1,4 +1,5 @@
 import { action } from '@ember-decorators/object';
+import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import TypesBaseComponent from '../-types';
 
 // Underlying Zoning
@@ -207,6 +208,14 @@ const labelOptions = [
 ];
 
 export default class UnderlyingZoningComponent extends TypesBaseComponent {
+  constructor(...args) {
+    super(...args);
+
+    if (isEmpty(this.get('model.canonical'))) {
+      this.get('model').setCanonical();
+    }
+  }
+
   labelOptions=labelOptions
 
   underlyingZoningLayer = underlyingZoningLayer;
@@ -220,7 +229,7 @@ export default class UnderlyingZoningComponent extends TypesBaseComponent {
 
     const rezoningArea = project.get('geometricProperties')
       .findBy('geometryType', 'rezoningArea');
-    console.log('special save');
+
     await rezoningArea.setCanonical();
     await rezoningArea.save();
 
