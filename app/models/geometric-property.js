@@ -26,7 +26,7 @@ const queries = {
 
 const Feature = shapeOf({
   // TODO
-  // id: oneOf('number', 'string'),
+  // id: unionOf(Number, String),
   type: oneOf('Feature'),
   geometry: unionOf(Object, null),
   properties: optional(Object),
