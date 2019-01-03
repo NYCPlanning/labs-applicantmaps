@@ -1,6 +1,6 @@
 import { action } from '@ember-decorators/object';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
-import TypesBaseComponent from '../-types';
+import Component from '@ember/component';
 
 // Underlying Zoning
 export const underlyingZoningLayer = {
@@ -207,7 +207,7 @@ const labelOptions = [
   'R9X',
 ];
 
-export default class UnderlyingZoningComponent extends TypesBaseComponent {
+export default class UnderlyingZoningComponent extends Component {
   constructor(...args) {
     super(...args);
 
@@ -223,7 +223,7 @@ export default class UnderlyingZoningComponent extends TypesBaseComponent {
   underlyingZoningLabelsLayer = underlyingZoningLabelsLayer;
 
   @action
-  async save() {
+  async calculateRezoningOnSave() {
     const model = this.get('model');
     const project = await model.get('project');
 
@@ -233,6 +233,7 @@ export default class UnderlyingZoningComponent extends TypesBaseComponent {
     await rezoningArea.setCanonical();
     await rezoningArea.save();
 
-    super.save();
+    // call the passed save closure action
+    this.save();
   }
 }

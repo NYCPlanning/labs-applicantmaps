@@ -1,6 +1,8 @@
 {{component projectGeometryType
   model=geometricPropertyForType
   mode=mode
-  map=map}}
+  map=map
+  isReadyToProceed=isReadyToProceed
+  save=(action 'save')}}
 
 {{yield (hash isReady=isReadyToProceed)}}

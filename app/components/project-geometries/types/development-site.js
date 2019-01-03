@@ -12,9 +12,6 @@ export const developmentSiteLayer = {
 };
 
 export default class DevelopmentSiteComponent extends Component {
-  @service
-  store;
-
   constructor(...args) {
     super(...args);
 
@@ -22,6 +19,9 @@ export default class DevelopmentSiteComponent extends Component {
 
     if (zoningDistricts && !this.get('isDestroyed')) zoningDistricts.set('visible', false);
   }
+
+  @service
+  store;
 
   willDestroyElement() {
     const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');

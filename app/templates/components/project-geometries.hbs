@@ -55,12 +55,12 @@
         {{/map.source}}
 
         {{!-- invoke the component for the specified type --}}
-        {{#project-geometries/-types
+        {{#project-geometries/types
           type=type
           model=model
           mode=mode
           map=drawableMap as |geometryType|}}
-          {{log geometryType.isReady}}
+
           {{!-- transport this markup when map is done loading --}}
           {{#ember-wormhole to='geometry-type-save-box'}}
             <div class="stable">
@@ -78,7 +78,7 @@
               {{/if}}
             </div>
           {{/ember-wormhole}}
-        {{/project-geometries/-types}}
+        {{/project-geometries/types}}
       {{/mapbox-gl-draw}}
     {{/labs-map}}
   {{/if}}

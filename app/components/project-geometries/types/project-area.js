@@ -1,4 +1,5 @@
-import TypesBaseComponent from '../-types';
+import Component from '@ember/component';
+import { service } from '@ember-decorators/service';
 
 // Project Area
 export const projectAreaLayer = {
@@ -25,13 +26,16 @@ export const projectAreaIcon = {
   ],
 };
 
-export default class ProjectAreaComponent extends TypesBaseComponent {
+export default class ProjectAreaComponent extends Component {
   constructor(...args) {
     super(...args);
     const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');
 
     if (zoningDistricts && !this.get('isDestroyed')) zoningDistricts.set('visible', false);
   }
+
+  @service
+  store;
 
   willDestroyElement() {
     const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');

@@ -1,5 +1,6 @@
+import Component from '@ember/component';
 import { action } from '@ember-decorators/object';
-import TypesBaseComponent from '../-types';
+import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
 const labelOptions = [
   'C1-1',
@@ -134,7 +135,15 @@ export const c25Layer = {
   filter: ['all', ['==', 'label', 'C2-5']],
 };
 
-export default class CommercialOverlayComponent extends TypesBaseComponent {
+export default class CommercialOverlayComponent extends Component {
+  constructor(...args) {
+    super(...args);
+
+    if (isEmpty(this.get('model.canonical'))) {
+      this.get('model').setCanonical();
+    }
+  }
+
   labelOptions=labelOptions
 
   coLayer = coLayer;
@@ -160,12 +169,12 @@ export default class CommercialOverlayComponent extends TypesBaseComponent {
   c25Layer = c25Layer;
 
   @action
-  async save() {
+  async calculateRezoningOnSave() {
     const model = this.get('model');
     const project = await model.get('project');
 
     await project.setRezoningArea();
 
-    super.save();
+    await this.save();
   }
 }
