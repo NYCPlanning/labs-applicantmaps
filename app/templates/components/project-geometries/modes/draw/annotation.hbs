@@ -1,5 +1,5 @@
-<div class="draw-controls">
-<button class="trash" {{action 'handleTrashButtonClick'}}>
+{{#ember-wormhole to="draw-controls"}}
+  <button class="trash" {{action 'handleTrashButtonClick'}}>
     {{fa-icon 'trash-alt' prefix='far' size='2x' fixedWidth=true}}
     {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip"}}
       <h5 class="small-margin-bottom">Trash</h5>
@@ -54,10 +54,4 @@
       <p class="no-margin">Annotate a centerline</p>
     {{/ember-tooltip}}
   </button>
-</div>
-
-{{yield (hash
-  button=(component 'project-geometries/utils/button'
-    data-test-project-geometry-save=true
-  )
-)}}
+{{/ember-wormhole}}

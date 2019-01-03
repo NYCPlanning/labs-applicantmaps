@@ -1,3 +1,4 @@
+import { action } from '@ember-decorators/object';
 import DrawComponent from '../draw';
 
 // annotation class that contains functionality specific to
@@ -11,5 +12,12 @@ export default class AnnotationMode extends DrawComponent {
 
     // do some stuff to drawnFeatures, like adding a type
     this.set('geometricProperty', drawnFeatures);
+  }
+
+  @action
+  handleStraightLine() {
+    const { draw: { drawInstance: draw } } = this.get('map');
+
+    draw.changeMode('draw_line_string');
   }
 }

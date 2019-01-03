@@ -60,24 +60,6 @@
           model=model
           mode=mode
           map=drawableMap as |geometryType|}}
-
-          {{!-- transport this markup when map is done loading --}}
-          {{#ember-wormhole to='geometry-type-save-box'}}
-            <div class="stable">
-              {{#if (eq mode 'lots')}}
-                {{#link-to 'projects.edit.geometry-edit' model.id (query-params mode='draw')
-                  tagName='button'
-                  class='button gray expanded'
-                  disabled=(not geometryType.isReady)
-                }}
-                  Switch to Manual Drawing
-                  <small style="display:block;line-height:1.75;">
-                    (edit the shape with draw tools)
-                  </small>
-                {{/link-to}}
-              {{/if}}
-            </div>
-          {{/ember-wormhole}}
         {{/project-geometries/types}}
       {{/mapbox-gl-draw}}
     {{/labs-map}}

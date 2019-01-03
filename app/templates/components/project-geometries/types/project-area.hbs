@@ -55,11 +55,14 @@
 
       <hr />
 
-      {{#edit-mode.button
+      {{#project-geometries/utils/button
         enabled=isReadyToProceed
         handleClick=(action save)}}
         Save Project Area
-      {{/edit-mode.button}}
+      {{/project-geometries/utils/button}}
+
+      {{edit-mode.toggle-mode-button
+        isReadyToProceed=isReadyToProceed}}
     </div>
   {{/ember-wormhole}}
 {{/component}}

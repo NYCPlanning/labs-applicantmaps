@@ -44,12 +44,12 @@
 
       <hr />
 
-      {{#edit-mode.button
+      {{#project-geometries/utils/button
         enabled=model.hasDirtyAttributes
         handleClick=(action save)}}
         Save
         <small style="display:block;line-height:1.75;">Rezoning Area</small>
-      {{/edit-mode.button}}
+      {{/project-geometries/utils/button}}
     </div>
   {{/ember-wormhole}}
 {{/component}}

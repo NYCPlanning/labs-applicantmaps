@@ -60,12 +60,12 @@
 
       <hr />
 
-      {{#edit-mode.button
+      {{#project-geometries/utils/button
         enabled=isReadyToProceed
         handleClick=(action 'calculateRezoningOnSave')}}
         Save
         <small style="display:block;line-height:1.75;">Commercial Overlays</small>
-      {{/edit-mode.button}}
+      {{/project-geometries/utils/button}}
     </div>
   {{/ember-wormhole}}
 {{/component}}
