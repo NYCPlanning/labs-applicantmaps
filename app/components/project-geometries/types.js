@@ -7,13 +7,6 @@ import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
 
 export default class TypesBase extends Component {
-  constructor(...args) {
-    super(...args);
-
-    // save the model so it's clean on init
-    this.get('model').save();
-  }
-
   @service
   router;
 
@@ -91,6 +84,11 @@ export default class TypesBase extends Component {
     } catch (e) {
       this.get('notificationMessages').error(`Something went wrong: ${e}`);
     }
+  }
+
+  didReceiveAttrs() {
+    // save the model so it's clean on init
+    this.get('geometricPropertyForType').save();
   }
 
   willDestroyElement() {
