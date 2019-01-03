@@ -55,12 +55,11 @@
         {{/map.source}}
 
         {{!-- invoke the component for the specified type --}}
-        {{#project-geometries/types
+        {{project-geometries/types
           type=type
           model=model
           mode=mode
-          map=drawableMap as |geometryType|}}
-        {{/project-geometries/types}}
+          map=drawableMap}}
       {{/mapbox-gl-draw}}
     {{/labs-map}}
   {{/if}}
