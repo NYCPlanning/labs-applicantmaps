@@ -53,17 +53,6 @@
           }}
         {{/map.source}}
 
-        {{!-- labs-layers (includes tax-lots layer) --}}
-        {{#map.labs-layers
-          layerGroups=layerGroups.layerGroups
-          as |layers|}}
-          {{#layers.tooltip as |tooltip|}}
-            {{tooltip-renderer
-              feature=tooltip.feature
-              template=tooltip.layer.tooltipTemplate}}
-          {{/layers.tooltip}}
-        {{/map.labs-layers}}
-
         {{!-- invoke the component for the specified type --}}
         {{component projectGeometryType
           model=geometricPropertyForType
