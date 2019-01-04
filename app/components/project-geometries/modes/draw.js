@@ -121,10 +121,30 @@ export default class DrawComponent extends Component {
     this.drawStateCallback();
   }
 
+  shouldReset() {
+    const { draw } = this.get('map');
+    const { deleteAll } = draw;
+    const geometricProperty = this.get('geometricProperty');
+
+    deleteAll();
+
+    if (!isEmpty(geometricProperty)) {
+      draw.add(geometricProperty);
+    }
+  }
+
   /* =================================================
   =            COMPONENT LIFECYCLE HOOKS            =
   ================================================= */
+
+  didInsertElement(...params) {
+    console.log('did insert');
+    this.shouldReset();
+    super.didInsertElement(...params);
+  }
+
   willDestroyElement(...args) {
+    console.log('will destroy');
     const { mapInstance } = this.get('map');
 
     mapInstance.off('draw.create', this.callbacks.drawState);
@@ -135,17 +155,5 @@ export default class DrawComponent extends Component {
     mapInstance.off('draw.selectionchange', this.callbacks.skipToDirectSelect);
 
     super.willDestroyElement(...args);
-  }
-
-  didReceiveAttrs() {
-    const { draw } = this.get('map');
-    const { deleteAll } = draw;
-    const geometricProperty = this.get('geometricProperty');
-
-    deleteAll();
-
-    if (!isEmpty(geometricProperty)) {
-      draw.add(geometricProperty);
-    }
   }
 }

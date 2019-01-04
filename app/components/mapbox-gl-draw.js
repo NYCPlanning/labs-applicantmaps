@@ -87,7 +87,8 @@ export default class MapboxGlDraw extends Component {
     const drawInstance = this.get('drawInstance');
 
     // if geometry exists for this mode, add it to the drawing canvas
-    if (!isEmpty(featureCollection) && !this.get('isDestroying')) {
+    if (!isEmpty(featureCollection)
+      && !this.get('isDestroying')) {
       drawInstance.add(featureCollection);
     }
   }

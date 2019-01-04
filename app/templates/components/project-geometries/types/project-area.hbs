@@ -56,8 +56,10 @@
       Save Project Area
     {{/project-geometries/utils/button}}
 
-    {{editMode.toggle-mode-button
-      isReadyToProceed=isReadyToProceed}}
+    {{#component modeComponent as |editMode|}}
+      {{editMode.toggle-mode-button
+        isReadyToProceed=isReadyToProceed}}
+    {{/component}}
   </div>
 {{/ember-wormhole}}
 
