@@ -2,9 +2,11 @@ import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import { next } from '@ember/runloop';
-import AnnotationsMode from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/mode';
+import { service } from '@ember-decorators/service';
 import { action, computed } from '@ember-decorators/object';
 import { setProperties } from '@ember/object';
+
+import AnnotationsMode from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/mode';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
 const DirectSelectUndraggable = MapboxDraw.modes.direct_select;
@@ -44,6 +46,7 @@ export default class MapboxGlDraw extends Component {
         // these methods are wrapped to help with runloop
         deleteAll: () => next(() => this.deleteAll()),
         add: featureCollection => next(() => this.add(featureCollection)),
+        shouldReset: featureCollection => this.shouldReset(featureCollection),
       },
     });
 
@@ -58,7 +61,13 @@ export default class MapboxGlDraw extends Component {
     // add controls
     const { mapInstance } = this.get('map');
     mapInstance.addControl(draw, 'top-left');
+
+    // provide methods to service
+    this.get('currentMode').set('componentInstance', this.get('map.draw'));
   }
+
+  @service
+  currentMode;
 
   // @required
   // should be the ember-mapbox-gl contextual object
@@ -90,6 +99,14 @@ export default class MapboxGlDraw extends Component {
     if (!isEmpty(featureCollection)
       && !this.get('isDestroying')) {
       drawInstance.add(featureCollection);
+    }
+  }
+
+  shouldReset(geometricProperty) {
+    this.deleteAll();
+
+    if (!isEmpty(geometricProperty)) {
+      this.add(geometricProperty);
     }
   }
 

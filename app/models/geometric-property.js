@@ -88,6 +88,6 @@ export default class extends Model {
       this.set('canonical', result);
     });
 
-    return this;
+    return result;
   }
 }

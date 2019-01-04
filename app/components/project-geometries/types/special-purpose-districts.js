@@ -1,6 +1,7 @@
 import { action } from '@ember-decorators/object';
 import Component from '@ember/component';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
+import { service } from '@ember-decorators/service';
 
 // Proposed Special Purpose Districts
 export const specialPurposeDistrictsLayer = {
@@ -46,10 +47,20 @@ export default class specialPurposeDistrictsComponent extends Component {
   constructor(...args) {
     super(...args);
 
+    this.fetchCanonical();
+  }
+
+  async fetchCanonical() {
     if (isEmpty(this.get('model.canonical'))) {
-      this.get('model').setCanonical();
+      const value = await this.get('model').setCanonical();
+      const { componentInstance: draw } = this.get('currentMode');
+
+      if (draw) draw.shouldReset(value);
     }
   }
+
+  @service
+  currentMode;
 
   specialPurposeDistrictsLayer = specialPurposeDistrictsLayer;
 

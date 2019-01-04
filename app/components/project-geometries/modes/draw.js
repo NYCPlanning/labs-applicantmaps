@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { action, computed } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/geometric-property';
-import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
 export default class DrawComponent extends Component {
   constructor(...args) {
@@ -121,30 +120,18 @@ export default class DrawComponent extends Component {
     this.drawStateCallback();
   }
 
-  shouldReset() {
-    const { draw } = this.get('map');
-    const { deleteAll } = draw;
-    const geometricProperty = this.get('geometricProperty');
-
-    deleteAll();
-
-    if (!isEmpty(geometricProperty)) {
-      draw.add(geometricProperty);
-    }
-  }
-
   /* =================================================
   =            COMPONENT LIFECYCLE HOOKS            =
   ================================================= */
 
   didInsertElement(...params) {
-    console.log('did insert');
-    this.shouldReset();
+    const { draw: { shouldReset } } = this.get('map');
+    shouldReset(this.get('geometricProperty'));
+
     super.didInsertElement(...params);
   }
 
   willDestroyElement(...args) {
-    console.log('will destroy');
     const { mapInstance } = this.get('map');
 
     mapInstance.off('draw.create', this.callbacks.drawState);
