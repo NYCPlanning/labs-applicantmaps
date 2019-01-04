@@ -35,6 +35,9 @@ export default class TypesBase extends Component {
   @argument
   type;
 
+  @argument
+  target = 'proposedGeometry';
+
   @computed('type')
   get componentForType() {
     return `project-geometries/types/${this.get('type')}`;
@@ -52,6 +55,20 @@ export default class TypesBase extends Component {
 
     return model.get('geometricProperties')
       .findBy('geometryType', typeName);
+  }
+
+  @computed('geometricPropertyForType', 'target')
+  get geometricPropertyForMode() {
+    const target = this.get('target');
+
+    return this.get(`geometricPropertyForType.${target}`);
+  }
+
+  set geometricPropertyForMode(value) {
+    const geometricPropertyForType = this.get('geometricPropertyForType');
+    const target = this.get('target');
+
+    geometricPropertyForType.set(target, value);
   }
 
   @computed('geometricPropertyForType.proposedGeometry')
