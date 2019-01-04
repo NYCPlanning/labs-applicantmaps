@@ -9,6 +9,9 @@ import { sanitizeStyle } from 'labs-applicant-maps/helpers/sanitize-style';
 // TODO import geom layers from the various modes that export them,
 // this util should be deprecated
 import projectGeomLayers from '../utils/project-geom-layers';
+import config from '../config/environment';
+
+const { host } = config;
 
 const defaultLayerGroups = {
   'layer-groups': [
@@ -240,7 +243,7 @@ export default class MapFormComponent extends Component {
   @computed
   get downloadURL() {
     const id = this.get('model.project.id');
-    return `http://localhost:3000/export-pdf/${id}`;
+    return `${host}/export-pdf/${encodeURIComponent(id)}`;
   }
 
   @action
