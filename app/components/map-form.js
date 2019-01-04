@@ -237,6 +237,12 @@ export default class MapFormComponent extends Component {
     }]);
   }
 
+  @computed
+  get downloadURL() {
+    const id = this.get('model.project.id');
+    return `http://localhost:3000/export-pdf/${id}`;
+  }
+
   @action
   handleMapLoaded(map) {
     this.set('mapInstance', map);
