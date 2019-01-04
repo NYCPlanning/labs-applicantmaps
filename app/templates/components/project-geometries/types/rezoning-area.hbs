@@ -1,70 +1,49 @@
-{{#component (concat 'project-geometries/modes/' mode)
-  map=map
-  geometricProperty=model.proposedGeometry as |edit-mode|
-}}
-  {{project-geometry-renderer map=map model=model}}
-  {{#ember-wormhole to='geometry-type-draw-explainer'}}
-    <div class="fade-in-on-load text-small">
+{{#ember-wormhole to='geometry-type-draw-explainer'}}
+  <div class="fade-in-on-load text-small">
 
-      {{back-to-dashboard-button model=model}}
+    {{back-to-dashboard-button model=model}}
 
-      <h1 class="header-large small-margin-bottom">Rezoning Area</h1>
-      <p class="text-small">The Rezoning Area refers to all property subject to the proposed amendment to existing Zoning Districts and Boundaries. It should be graphically offset from the proposed Zoning District boundaries.</p>
+    <h1 class="header-large small-margin-bottom">Rezoning Area</h1>
+    <p class="text-small">The Rezoning Area refers to all property subject to the proposed amendment to existing Zoning Districts and Boundaries. It should be graphically offset from the proposed Zoning District boundaries.</p>
 
-      <hr />
+    <hr />
 
-      <p class="text-weight-bold small-margin-bottom">Adding new shapes:</p>
-      <ul class="small-margin-bottom">
-        <li>
-          Use the
-          <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
-            {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
-            {{fa-icon 'square' transform='grow-8' class='white'}}
-            {{fa-icon 'draw-polygon' transform='shrink-2'}}
-          </span>
-          polygon tool to add a new shape
-        </li>
-        <li>Complete a new shape by clicking its final vertex a second time</li>
-      </ul>
+    <p class="text-weight-bold small-margin-bottom">Adding new shapes:</p>
+    <ul class="small-margin-bottom">
+      <li>
+        Use the
+        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+          {{fa-icon 'square' transform='grow-8' class='white'}}
+          {{fa-icon 'draw-polygon' transform='shrink-2'}}
+        </span>
+        polygon tool to add a new shape
+      </li>
+      <li>Complete a new shape by clicking its final vertex a second time</li>
+    </ul>
 
-      <p class="text-weight-bold small-margin-bottom">Editing existing shapes:</p>
-      <ul>
-        <li>Edit an existing shape by selecting it and dragging its vertices</li>
-        <li>Add a vertex by clicking the midpoint of a line</li>
-        <li>
-          Use the
-          <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
-            {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
-            {{fa-icon 'square' transform='grow-8' class='white'}}
-            {{fa-icon 'trash-alt' prefix='far' transform='shrink-2'}}
-          </span>
-          trash button to delete a selected shape or vertex
-        </li>
-      </ul>
+    <p class="text-weight-bold small-margin-bottom">Editing existing shapes:</p>
+    <ul>
+      <li>Edit an existing shape by selecting it and dragging its vertices</li>
+      <li>Add a vertex by clicking the midpoint of a line</li>
+      <li>
+        Use the
+        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+          {{fa-icon 'square' transform='grow-8' class='white'}}
+          {{fa-icon 'trash-alt' prefix='far' transform='shrink-2'}}
+        </span>
+        trash button to delete a selected shape or vertex
+      </li>
+    </ul>
 
-      <hr />
+    <hr />
 
-      {{#project-geometries/utils/button
-        enabled=model.hasDirtyAttributes
-        handleClick=(action save)}}
-        Save
-        <small style="display:block;line-height:1.75;">Rezoning Area</small>
-      {{/project-geometries/utils/button}}
-    </div>
-  {{/ember-wormhole}}
-{{/component}}
-
-{{#map.source options=(mapbox-geojson-source model.proposedGeometry) as |source|}}
-  {{source.layer
-    layer=rezoningAreaLayer
-    before='boundary_country'
-  }}
-{{/map.source}}
-
-{{#map.source
-  options=(mapbox-geojson-source model.project.developmentSite) as |source|}}
-  {{source.layer
-    layer=developmentSiteLayer
-    before='boundary_country'
-  }}
-{{/map.source}}
+    {{#project-geometries/utils/button
+      enabled=model.hasDirtyAttributes
+      handleClick=(action save)}}
+      Save
+      <small style="display:block;line-height:1.75;">Rezoning Area</small>
+    {{/project-geometries/utils/button}}
+  </div>
+{{/ember-wormhole}}

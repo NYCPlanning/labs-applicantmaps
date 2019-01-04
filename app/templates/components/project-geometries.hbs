@@ -37,23 +37,6 @@
           {{/layers.tooltip}}
         {{/map.labs-layers}}
 
-        {{!-- Annotations here --}}
-        {{!-- we need a separate component to render annotations --}}
-
-        {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
-          {{source.layer
-            layer=developmentSiteLayer
-            before='boundary_country'
-          }}
-        {{/map.source}}
-
-        {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
-          {{source.layer
-            layer=projectAreaLayer
-            before='boundary_country'
-          }}
-        {{/map.source}}
-
         {{!-- invoke the component for the specified type --}}
         {{project-geometries/types
           type=type

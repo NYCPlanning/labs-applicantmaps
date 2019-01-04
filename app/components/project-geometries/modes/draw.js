@@ -125,10 +125,7 @@ export default class DrawComponent extends Component {
   =            COMPONENT LIFECYCLE HOOKS            =
   ================================================= */
   willDestroyElement(...args) {
-    const { draw: { deleteAll } } = this.get('map');
     const { mapInstance } = this.get('map');
-
-    deleteAll();
 
     mapInstance.off('draw.create', this.callbacks.drawState);
     mapInstance.off('draw.update', this.callbacks.drawState);
@@ -142,7 +139,10 @@ export default class DrawComponent extends Component {
 
   didReceiveAttrs() {
     const { draw } = this.get('map');
+    const { deleteAll } = draw;
     const geometricProperty = this.get('geometricProperty');
+
+    deleteAll();
 
     if (!isEmpty(geometricProperty)) {
       draw.add(geometricProperty);

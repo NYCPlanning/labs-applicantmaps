@@ -1,8 +1,16 @@
-{{component projectGeometryType
-  model=geometricPropertyForType
-  mode=mode
+{{#component (concat 'project-geometries/modes/' mode)
   map=map
-  isReadyToProceed=isReadyToProceed
-  save=(action 'save')}}
+  geometricProperty=geometricPropertyForType.proposedGeometry as |edit-mode|
+}}
+  {{project-geometry-renderer map=map model=model}}
+
+  {{component projectGeometryType
+    model=geometricPropertyForType
+    mode=mode
+    map=map
+    editMode=edit-mode
+    isReadyToProceed=isReadyToProceed
+    save=(action 'save')}}
+{{/component}}
 
 {{yield (hash isReady=isReadyToProceed)}}
