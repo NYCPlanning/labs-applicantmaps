@@ -1,10 +1,13 @@
-{{#component (concat 'project-geometries/modes/' mode)
+{{!-- invoke the mode and pass its context --}}
+{{#component componentForMode
   map=map
   geometricProperty=geometricPropertyForType.proposedGeometry as |edit-mode|
 }}
+  {{!-- render the common reference geometries --}}
   {{project-geometry-renderer map=map model=model}}
 
-  {{component projectGeometryType
+  {{!-- invoke the type component --}}
+  {{component componentForType
     model=geometricPropertyForType
     mode=mode
     map=map
@@ -13,4 +16,4 @@
     save=(action 'save')}}
 {{/component}}
 
-{{yield (hash isReady=isReadyToProceed)}}
+{{yield}}

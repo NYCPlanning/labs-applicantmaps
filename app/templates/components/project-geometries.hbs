@@ -37,7 +37,7 @@
           {{/layers.tooltip}}
         {{/map.labs-layers}}
 
-        {{!-- invoke the component for the specified type --}}
+        {{!-- pass type and mode to invoke both --}}
         {{project-geometries/types
           type=type
           model=model
@@ -46,6 +46,7 @@
       {{/mapbox-gl-draw}}
     {{/labs-map}}
   {{/if}}
+
   {{#if
     (or
       (not (is-empty model.developmentSite))

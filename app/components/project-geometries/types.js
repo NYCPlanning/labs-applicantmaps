@@ -17,9 +17,6 @@ export default class TypesBase extends Component {
   notificationMessages;
 
   @argument
-  type;
-
-  @argument
   map;
 
   @argument
@@ -28,9 +25,17 @@ export default class TypesBase extends Component {
   @argument
   mode;
 
+  @argument
+  type;
+
   @computed('type')
-  get projectGeometryType() {
+  get componentForType() {
     return `project-geometries/types/${this.get('type')}`;
+  }
+
+  @computed('mode')
+  get componentForMode() {
+    return `project-geometries/modes/${this.get('mode')}`;
   }
 
   @computed('type')
