@@ -1,8 +1,5 @@
-import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
 import { action } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
-import isEmpty from '../../../utils/is-empty';
+import TypesBaseComponent from '../-types';
 
 const labelOptions = [
   'C1-1',
@@ -137,31 +134,8 @@ export const c25Layer = {
   filter: ['all', ['==', 'label', 'C2-5']],
 };
 
-export default class CommercialOverlayComponent extends Component {
-  init(...args) {
-    super.init(...args);
-
-    if (isEmpty(this.get('model.commercialOverlays'))) {
-      this.get('model').setDefaultCommercialOverlays();
-    }
-  }
-
+export default class CommercialOverlayComponent extends TypesBaseComponent {
   labelOptions=labelOptions
-
-  @argument
-  map;
-
-  @argument
-  model;
-
-  @argument
-  mode;
-
-  @service
-  router;
-
-  @service
-  notificationMessages;
 
   coLayer = coLayer;
 
@@ -188,18 +162,10 @@ export default class CommercialOverlayComponent extends Component {
   @action
   async save() {
     const model = this.get('model');
+    const project = await model.get('project');
 
-    // because we've just changed the proposed zoning,
-    // we should also calculate the rezoning area
-    await model.setRezoningArea();
+    await project.setRezoningArea();
 
-    try {
-      const savedProject = await model.save();
-
-      this.get('notificationMessages').success('Project saved!');
-      this.get('router').transitionTo('projects.show', savedProject);
-    } catch (e) {
-      this.get('notificationMessages').success(`Something went wrong: ${e}`);
-    }
+    super.save();
   }
 }

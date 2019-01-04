@@ -1,7 +1,4 @@
-import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
-import { action } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
+import TypesBaseComponent from '../-types';
 
 // Project Area
 export const projectAreaLayer = {
@@ -28,45 +25,12 @@ export const projectAreaIcon = {
   ],
 };
 
-export default class ProjectAreaComponent extends Component {
+export default class ProjectAreaComponent extends TypesBaseComponent {
   constructor(...args) {
     super(...args);
     const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');
 
     if (zoningDistricts && !this.get('isDestroyed')) zoningDistricts.set('visible', false);
-  }
-
-  @service
-  store;
-
-  @service
-  notificationMessages;
-
-  @service
-  router;
-
-  @argument
-  map;
-
-  @argument
-  model;
-
-  @argument
-  mode;
-
-  @action
-  async save() {
-    const model = this.get('model');
-    const notifications = this.get('notificationMessages');
-
-    try {
-      const savedProject = await model.save();
-
-      notifications.success('Project saved!');
-      this.get('router').transitionTo('projects.show', savedProject);
-    } catch (e) {
-      notifications.success(`Something went wrong: ${e}`);
-    }
   }
 
   willDestroyElement() {

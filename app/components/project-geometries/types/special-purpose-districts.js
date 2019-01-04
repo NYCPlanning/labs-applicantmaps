@@ -1,8 +1,5 @@
-import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
 import { action } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
-import isEmpty from '../../../utils/is-empty';
+import TypesBaseComponent from '../-types';
 
 // Proposed Special Purpose Districts
 export const specialPurposeDistrictsLayer = {
@@ -44,30 +41,7 @@ export const specialPurposeDistrictsLabelsLayer = {
   },
 };
 
-export default class specialPurposeDistrictsComponent extends Component {
-  init(...args) {
-    super.init(...args);
-
-    if (isEmpty(this.get('model.specialPurposeDistricts'))) {
-      this.get('model').setDefaultSpecialPurposeDistricts();
-    }
-  }
-
-  @argument
-  map;
-
-  @argument
-  model;
-
-  @argument
-  mode;
-
-  @service
-  router;
-
-  @service
-  notificationMessages;
-
+export default class specialPurposeDistrictsComponent extends TypesBaseComponent {
   specialPurposeDistrictsLayer = specialPurposeDistrictsLayer;
 
   specialPurposeDistrictsLabelsLayer = specialPurposeDistrictsLabelsLayer;
@@ -75,18 +49,10 @@ export default class specialPurposeDistrictsComponent extends Component {
   @action
   async save() {
     const model = this.get('model');
+    const project = await model.get('project');
 
-    // because we've just changed the proposed zoning,
-    // we should also calculate the rezoning area
-    await model.setRezoningArea();
+    await project.setRezoningArea();
 
-    try {
-      const savedProject = await model.save();
-
-      this.get('notificationMessages').success('Project saved!');
-      this.get('router').transitionTo('projects.show', savedProject);
-    } catch (e) {
-      this.get('notificationMessages').success(`Something went wrong: ${e}`);
-    }
+    super.save();
   }
 }

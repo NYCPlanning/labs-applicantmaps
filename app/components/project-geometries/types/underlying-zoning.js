@@ -1,8 +1,5 @@
-import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
 import { action } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
-import isEmpty from '../../../utils/is-empty';
+import TypesBaseComponent from '../-types';
 
 // Underlying Zoning
 export const underlyingZoningLayer = {
@@ -209,31 +206,8 @@ const labelOptions = [
   'R9X',
 ];
 
-export default class UnderlyingZoningComponent extends Component {
-  init(...args) {
-    super.init(...args);
-
-    if (isEmpty(this.get('model.underlyingZoning'))) {
-      this.get('model').setDefaultUnderlyingZoning();
-    }
-  }
-
+export default class UnderlyingZoningComponent extends TypesBaseComponent {
   labelOptions=labelOptions
-
-  @argument
-  map;
-
-  @argument
-  model;
-
-  @argument
-  mode;
-
-  @service
-  router;
-
-  @service
-  notificationMessages;
 
   underlyingZoningLayer = underlyingZoningLayer;
 
@@ -242,18 +216,14 @@ export default class UnderlyingZoningComponent extends Component {
   @action
   async save() {
     const model = this.get('model');
+    const project = await model.get('project');
 
-    // because we've just changed the proposed zoning,
-    // we should also calculate the rezoning area
-    await model.setRezoningArea();
+    const rezoningArea = project.get('geometricProperties')
+      .findBy('geometryType', 'rezoningArea');
+    console.log('special save');
+    await rezoningArea.setCanonical();
+    await rezoningArea.save();
 
-    try {
-      const savedProject = await model.save();
-
-      this.get('notificationMessages').success('Project saved!');
-      this.get('router').transitionTo('projects.show', savedProject);
-    } catch (e) {
-      this.get('notificationMessages').success(`Something went wrong: ${e}`);
-    }
+    super.save();
   }
 }

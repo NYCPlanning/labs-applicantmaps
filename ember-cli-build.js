@@ -19,6 +19,9 @@ module.exports = function (defaults) {
     },
     autoImport: {
       webpack: {
+        node: {
+          fs: 'empty',
+        },
         module: {
           rules: [
             /* see: https://github.com/graphql/graphql-js/issues/1272#issuecomment-393903706 */
@@ -32,6 +35,8 @@ module.exports = function (defaults) {
       },
     },
   });
+
+  app.import('node_modules/@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css');
 
   // Use `app.import` to add additional libraries to the generated
   // output files.
