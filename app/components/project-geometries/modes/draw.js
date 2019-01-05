@@ -102,13 +102,6 @@ export default class DrawComponent extends Component {
   }
 
   @action
-  handleDrawButtonClick() {
-    const { draw: { drawInstance: draw } } = this.get('map');
-
-    draw.changeMode('draw_polygon');
-  }
-
-  @action
   updateSelectedFeature(label) {
     const { draw: { drawInstance: draw } } = this.get('map');
     const { features: [firstFeature] } = this.get('selectedFeature');

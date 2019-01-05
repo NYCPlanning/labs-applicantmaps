@@ -69,6 +69,9 @@ export default class MapboxGlDraw extends Component {
   @service
   currentMode;
 
+  @service
+  router;
+
   // @required
   // should be the ember-mapbox-gl contextual object
   // passed from within a mapbox-gl component block
@@ -100,6 +103,34 @@ export default class MapboxGlDraw extends Component {
       && !this.get('isDestroying')) {
       drawInstance.add(featureCollection);
     }
+  }
+
+  @action
+  handleDrawButtonClick() {
+    this.router.transitionTo({
+      queryParams: {
+        mode: 'draw',
+        target: 'proposedGeometry',
+      },
+    });
+
+    next(() => {
+      this.drawInstance.changeMode('draw_polygon');
+    });
+  }
+
+  @action
+  handleStraightLine() {
+    this.router.transitionTo({
+      queryParams: {
+        mode: 'draw/annotation',
+        target: 'annotations',
+      },
+    });
+
+    next(() => {
+      this.drawInstance.changeMode('draw_line_string');
+    });
   }
 
   shouldReset(geometricProperty) {

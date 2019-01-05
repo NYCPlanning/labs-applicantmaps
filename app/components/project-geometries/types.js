@@ -71,8 +71,11 @@ export default class TypesBase extends Component {
     geometricPropertyForType.set(target, value);
   }
 
-  @computed('geometricPropertyForType.proposedGeometry')
+  @computed('geometricPropertyForType.{canonical,proposedGeometry,annotations}')
   get isReadyToProceed() {
+    // short-circuit this if we're in annotation mode
+    if (this.get('mode') === 'draw/annotation') return true;
+
     // here, it gets set once by the constructor
     // const initial = model.get(attribute);
     const [
@@ -109,7 +112,11 @@ export default class TypesBase extends Component {
       const savedGeometry = await model.save();
 
       this.get('notificationMessages').success('Project saved!');
-      this.get('router').transitionTo('projects.show', savedGeometry.get('project'));
+
+      // only transition to the next step if it's not annotation mode
+      if (this.get('mode') !== 'draw/annotation') {
+        this.get('router').transitionTo('projects.show', savedGeometry.get('project'));
+      }
     } catch (e) {
       this.get('notificationMessages').error(`Something went wrong: ${e}`);
     }

@@ -215,6 +215,8 @@ export default class UnderlyingZoningComponent extends Component {
     this.fetchCanonical();
   }
 
+  // this is wrong because it doesn't honor the correct target
+  // it should be using the model's API, not passing stuff in directly
   async fetchCanonical() {
     if (isEmpty(this.get('model.canonical'))) {
       const value = await this.get('model').setCanonical();
