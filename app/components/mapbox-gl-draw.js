@@ -62,6 +62,7 @@ export default class MapboxGlDraw extends Component {
     const { mapInstance } = this.get('map');
     mapInstance.addControl(draw, 'top-left');
 
+    mapInstance.on('draw.selectionchange', this.callbacks.selectedFeature);
     // provide methods to service
     this.get('currentMode').set('componentInstance', this.get('map.draw'));
   }
@@ -101,7 +102,13 @@ export default class MapboxGlDraw extends Component {
     // if geometry exists for this mode, add it to the drawing canvas
     if (!isEmpty(featureCollection)
       && !this.get('isDestroying')) {
-      drawInstance.add(featureCollection);
+      featureCollection.features.forEach((feature) => {
+        if (!feature.properties['meta:mode']) {
+          feature.properties['meta:mode'] = 'draw'; // default mode
+        }
+      });
+
+      drawInstance.set(featureCollection);
     }
   }
 
@@ -110,7 +117,6 @@ export default class MapboxGlDraw extends Component {
     this.router.transitionTo({
       queryParams: {
         mode: 'draw',
-        target: 'proposedGeometry',
       },
     });
 
@@ -124,7 +130,6 @@ export default class MapboxGlDraw extends Component {
     this.router.transitionTo({
       queryParams: {
         mode: 'draw/annotation',
-        target: 'annotations',
       },
     });
 
@@ -133,8 +138,22 @@ export default class MapboxGlDraw extends Component {
     });
   }
 
+  selectedFeatureCallback() {
+    const { features: [firstSelectedFeature] } = this.drawInstance.getSelected();
+
+    if (firstSelectedFeature) {
+      const { properties: { 'meta:mode': mode = 'draw' } } = firstSelectedFeature;
+
+      this.router.transitionTo({
+        queryParams: {
+          mode,
+        },
+      });
+    }
+  }
+
   shouldReset(geometricProperty) {
-    this.deleteAll();
+    // this.deleteAll();
 
     if (!isEmpty(geometricProperty)) {
       this.add(geometricProperty);
@@ -145,6 +164,7 @@ export default class MapboxGlDraw extends Component {
     const { mapInstance, draw: { drawInstance } } = this.get('map');
 
     mapInstance.removeControl(drawInstance);
+    mapInstance.on('draw.selectionchange', this.callbacks.selectedFeature);
 
     super.willDestroyElement(...args);
   }

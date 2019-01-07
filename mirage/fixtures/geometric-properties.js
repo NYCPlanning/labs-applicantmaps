@@ -51,6 +51,7 @@ export default [
       type: 'FeatureCollection',
       features: [
         {
+          id: 2,
           type: 'Feature',
           properties: {},
           geometry: {

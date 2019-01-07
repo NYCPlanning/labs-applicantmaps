@@ -64,11 +64,18 @@ export default class TypesBase extends Component {
     return this.get(`geometricPropertyForType.${target}`);
   }
 
-  set geometricPropertyForMode(value) {
+  set geometricPropertyForMode(featureCollection) {
     const geometricPropertyForType = this.get('geometricPropertyForType');
     const target = this.get('target');
+    const mode = this.get('mode');
 
-    geometricPropertyForType.set(target, value);
+    featureCollection.features.forEach((feature) => {
+      if (!feature.properties['meta:mode']) {
+        feature.properties['meta:mode'] = mode;
+      }
+    });
+
+    geometricPropertyForType.set(target, featureCollection);
   }
 
   @computed('geometricPropertyForType.{canonical,proposedGeometry,annotations}')
@@ -114,9 +121,7 @@ export default class TypesBase extends Component {
       this.get('notificationMessages').success('Project saved!');
 
       // only transition to the next step if it's not annotation mode
-      if (this.get('mode') !== 'draw/annotation') {
-        this.get('router').transitionTo('projects.show', savedGeometry.get('project'));
-      }
+      this.get('router').transitionTo('projects.show', savedGeometry.get('project'));
     } catch (e) {
       this.get('notificationMessages').error(`Something went wrong: ${e}`);
     }

@@ -75,18 +75,40 @@ export default class extends Model {
   @attr({ defaultValue: () => EmptyFeatureCollection })
   annotations;
 
-  @computed('proposedGeometry', 'canonical', 'annotations')
+  @computed('proposedGeometry', 'annotations')
   get data() {
-    const { proposedGeometry, canonical, annotations } = this;
+    const { proposedGeometry, annotations } = this;
 
     return {
       type: 'FeatureCollection',
       features: [
-        ...canonical.features,
-        ...annotations.features,
-        ...proposedGeometry.features,
+        ...annotations.features
+          .filterBy('geometry'),
+        ...proposedGeometry.features
+          .filterBy('geometry'),
       ],
     };
+  }
+
+  set data(featureCollection) {
+    const proposedGeometry = {
+      type: 'FeatureCollection',
+      features: featureCollection.features
+        .filterBy('properties.meta:mode', 'draw')
+        .filterBy('geometry'), // need non-null geoms only, mapbox-gl-draw bug
+    };
+
+    const annotations = {
+      type: 'FeatureCollection',
+      features: featureCollection.features
+        .filterBy('properties.meta:mode', 'draw/annotation')
+        .filterBy('geometry'), // need non-null geoms only, mapbox-gl-draw bug
+    };
+
+    this.setProperties({
+      proposedGeometry,
+      annotations,
+    });
   }
 
   async setCanonical(...args) {
