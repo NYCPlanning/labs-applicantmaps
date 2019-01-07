@@ -127,10 +127,12 @@ export default class MapboxGlDraw extends Component {
 
   @action
   handleStraightLine() {
-    this.router.transitionTo({
-      queryParams: {
-        mode: 'draw/annotation',
-      },
+    next(() => {
+      this.router.transitionTo({
+        queryParams: {
+          mode: 'draw/annotation',
+        },
+      });
     });
 
     next(() => {
@@ -144,19 +146,21 @@ export default class MapboxGlDraw extends Component {
     if (firstSelectedFeature) {
       const { properties: { 'meta:mode': mode = 'draw' } } = firstSelectedFeature;
 
-      this.router.transitionTo({
-        queryParams: {
-          mode,
-        },
+      next(() => {
+        this.router.transitionTo({
+          queryParams: {
+            mode,
+          },
+        });
       });
     }
   }
 
   shouldReset(geometricProperty) {
-    // this.deleteAll();
-
     if (!isEmpty(geometricProperty)) {
       this.add(geometricProperty);
+    } else {
+      this.deleteAll();
     }
   }
 

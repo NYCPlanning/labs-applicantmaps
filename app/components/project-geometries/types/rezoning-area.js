@@ -1,4 +1,4 @@
-import Component from '@ember/component';
+import BaseClass from './-type';
 
 export const rezoningAreaLayer = {
   type: 'line',
@@ -24,6 +24,6 @@ export const rezoningAreaIcon = {
   ],
 };
 
-export default class RezoningArea extends Component {
+export default class RezoningArea extends BaseClass {
   rezoningAreaLayer = rezoningAreaLayer;
 }

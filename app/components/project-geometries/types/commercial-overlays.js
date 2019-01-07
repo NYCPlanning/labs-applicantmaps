@@ -1,7 +1,7 @@
-import Component from '@ember/component';
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
+import BaseClass from './-type';
 
 const labelOptions = [
   'C1-1',
@@ -136,7 +136,7 @@ export const c25Layer = {
   filter: ['all', ['==', 'label', 'C2-5']],
 };
 
-export default class CommercialOverlayComponent extends Component {
+export default class CommercialOverlayComponent extends BaseClass {
   constructor(...args) {
     super(...args);
 

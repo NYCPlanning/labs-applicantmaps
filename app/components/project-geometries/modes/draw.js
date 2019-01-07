@@ -26,6 +26,7 @@ export default class DrawComponent extends Component {
     mapInstance.on('draw.delete', this.callbacks.drawState);
     mapInstance.on('draw.selectionchange', this.callbacks.selectedFeature);
     mapInstance.on('draw.selectionchange', this.callbacks.skipToDirectSelect);
+    mapInstance.on('draw.modechange', this.callbacks.selectedFeature);
   }
 
   drawStateCallback() {
@@ -123,6 +124,7 @@ export default class DrawComponent extends Component {
 
   didInsertElement(...params) {
     const { draw: { shouldReset } } = this.get('map');
+
     shouldReset(this.get('geometricProperty'));
 
     super.didInsertElement(...params);
@@ -134,7 +136,7 @@ export default class DrawComponent extends Component {
     mapInstance.off('draw.create', this.callbacks.drawState);
     mapInstance.off('draw.update', this.callbacks.drawState);
     mapInstance.off('draw.delete', this.callbacks.drawState);
-    mapInstance.off('draw.modechange', this.callbacks.drawMode);
+    mapInstance.off('draw.modechange', this.callbacks.selectedFeature);
     mapInstance.off('draw.selectionchange', this.callbacks.selectedFeature);
     mapInstance.off('draw.selectionchange', this.callbacks.skipToDirectSelect);
 

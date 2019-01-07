@@ -1,7 +1,7 @@
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
-import Component from '@ember/component';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
+import BaseClass from './-type';
 
 // Underlying Zoning
 export const underlyingZoningLayer = {
@@ -208,7 +208,7 @@ const labelOptions = [
   'R9X',
 ];
 
-export default class UnderlyingZoningComponent extends Component {
+export default class UnderlyingZoningComponent extends BaseClass {
   constructor(...args) {
     super(...args);
 

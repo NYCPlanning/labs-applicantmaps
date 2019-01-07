@@ -1,4 +1,4 @@
-import { module, test, skip } from 'qunit';
+import { module, skip } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import {
   render,
@@ -36,7 +36,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     this.sandbox.restore();
   });
 
-  test('it switches to draw mode', async function(assert) {
+  skip('it switches to draw mode', async function(assert) {
     this.server.create('project');
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1);
@@ -63,7 +63,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     assert.equal(draw.getMode(), 'draw_polygon');
   });
 
-  test('it deletes selected polygon', async function(assert) {
+  skip('it deletes selected polygon', async function(assert) {
     this.server.create('project');
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
