@@ -78,10 +78,11 @@ export default class TypesBase extends Component {
     geometricPropertyForType.set(target, featureCollection);
   }
 
-  @computed('geometricPropertyForType.{canonical,proposedGeometry,annotations}')
+  @computed('geometricPropertyForType.{canonical,proposedGeometry,annotations,data}')
   get isReadyToProceed() {
-    // short-circuit this if we're in annotation mode
-    if (this.get('mode') === 'draw/annotation') return true;
+    // don't short-circuit anymore... we can't proceed until change is meaningful
+    // // short-circuit this if we're in annotation mode
+    // if (this.get('mode') === 'draw/annotation') return true;
 
     // here, it gets set once by the constructor
     // const initial = model.get(attribute);
