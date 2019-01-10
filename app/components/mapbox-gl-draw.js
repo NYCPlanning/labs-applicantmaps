@@ -1,12 +1,13 @@
 import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import DefaultMapboxDrawStyles from '@mapbox/mapbox-gl-draw/src/lib/theme';
 import { next } from '@ember/runloop';
 import { service } from '@ember-decorators/service';
 import { action, computed } from '@ember-decorators/object';
 import { setProperties } from '@ember/object';
-
 import AnnotationsMode from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/mode';
+import AnnotationsStyles from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/styles';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
 const DirectSelectUndraggable = MapboxDraw.modes.direct_select;
@@ -15,6 +16,9 @@ DirectSelectUndraggable.onFeature = function() {
   // Enable map.dragPan when user clicks on feature, overrides ability to drag shape
   this.map.dragPan.enable();
 };
+
+// extend styles
+const styles = [...DefaultMapboxDrawStyles, ...AnnotationsStyles].uniqBy('id');
 
 export const DefaultDraw = MapboxDraw.bind(null, {
   displayControlsDefault: false,
@@ -26,6 +30,7 @@ export const DefaultDraw = MapboxDraw.bind(null, {
     direct_select_undraggable: DirectSelectUndraggable,
     draw_annotations: AnnotationsMode,
   }, MapboxDraw.modes),
+  styles,
 });
 
 export default class MapboxGlDraw extends Component {
@@ -47,6 +52,7 @@ export default class MapboxGlDraw extends Component {
         deleteAll: () => next(() => this.deleteAll()),
         add: featureCollection => next(() => this.add(featureCollection)),
         shouldReset: featureCollection => this.shouldReset(featureCollection),
+        getMode: () => this.drawInstance.getMode(),
       },
     });
 
@@ -54,7 +60,6 @@ export default class MapboxGlDraw extends Component {
     this.callbacks = {
       drawState: () => this.drawStateCallback(),
       drawMode: () => this.drawModeCallback(),
-      selectedFeature: () => this.selectedFeatureCallback(),
       skipToDirectSelect: () => this.skipToDirectSelectCallback(),
     };
 
@@ -62,7 +67,6 @@ export default class MapboxGlDraw extends Component {
     const { mapInstance } = this.get('map');
     mapInstance.addControl(draw, 'top-left');
 
-    mapInstance.on('draw.selectionchange', this.callbacks.selectedFeature);
     // provide methods to service
     this.get('currentMode').set('componentInstance', this.get('map.draw'));
   }
@@ -129,34 +133,8 @@ export default class MapboxGlDraw extends Component {
   @action
   handleAnnotation(mode) {
     next(() => {
-      this.router.transitionTo({
-        queryParams: {
-          mode: 'draw/annotation',
-        },
-      });
-      next(() => {
-        this.drawInstance.changeMode(mode);
-      });
+      this.drawInstance.changeMode(mode);
     });
-  }
-
-  selectedFeatureCallback() {
-    const { features: [firstSelectedFeature] } = this.drawInstance.getSelected();
-
-    if (firstSelectedFeature) {
-      const { properties: { 'meta:mode': mode = 'draw' } } = firstSelectedFeature;
-
-      // don't transition to lots imprints
-      if (mode !== 'lots') {
-        next(() => {
-          this.router.transitionTo({
-            queryParams: {
-              mode,
-            },
-          });
-        });
-      }
-    }
   }
 
   shouldReset(geometricProperty) {
