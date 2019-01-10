@@ -146,13 +146,16 @@ export default class MapboxGlDraw extends Component {
     if (firstSelectedFeature) {
       const { properties: { 'meta:mode': mode = 'draw' } } = firstSelectedFeature;
 
-      next(() => {
-        this.router.transitionTo({
-          queryParams: {
-            mode,
-          },
+      // don't transition to lots imprints
+      if (mode !== 'lots') {
+        next(() => {
+          this.router.transitionTo({
+            queryParams: {
+              mode,
+            },
+          });
         });
-      });
+      }
     }
   }
 

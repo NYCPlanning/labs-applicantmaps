@@ -32,7 +32,6 @@ export default class DrawComponent extends Component {
   // upstream set to model
   drawStateCallback() {
     const drawnFeatures = this.get('drawnFeatures');
-    const { draw: { add } } = this.get('map');
 
     this.set('geometricProperty', drawnFeatures);
   }
