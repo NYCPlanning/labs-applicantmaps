@@ -114,17 +114,12 @@ export default class extends Model {
   async setCanonical(...args) {
     const query = queries[this.get('geometryType')];
     const developmentSite = this.get('project.developmentSite');
-
-    if (!query) return new Error(`query not found for ${this.get('geometryType')}`);
-
     const result = await query(developmentSite, this.get('project.geometricProperties'), ...args);
 
-    next(() => {
-      this.set('proposedGeometry', result);
-      this.set('hasCanonical', true);
-      this.set('canonical', result);
+    this.setProperties({
+      proposedGeometry: result,
+      hasCanonical: true,
+      canonical: result,
     });
-
-    return result;
   }
 }

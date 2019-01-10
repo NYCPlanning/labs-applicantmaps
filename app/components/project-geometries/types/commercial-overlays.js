@@ -143,9 +143,12 @@ export default class CommercialOverlayComponent extends BaseClass {
     this.fetchCanonical();
   }
 
+  // this is wrong because it doesn't honor the correct target
+  // it should be using the model's API, not passing stuff in directly
   async fetchCanonical() {
     if (isEmpty(this.get('model.canonical'))) {
-      const value = await this.get('model').setCanonical();
+      await this.get('model').setCanonical();
+      const value = this.get('model.data');
       const { componentInstance: draw } = this.get('currentMode');
 
       if (draw) draw.shouldReset(value);
