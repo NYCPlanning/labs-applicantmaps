@@ -11,6 +11,7 @@ import {
 import { computed } from '@ember-decorators/object';
 import { alias } from '@ember-decorators/object/computed';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/project';
+import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import underlyingZoning from '../utils/queries/intersecting-zoning-query';
 import commercialOverlays from '../utils/queries/proposed-commercial-overlays-query';
 import specialPurposeDistricts from '../utils/queries/proposed-special-districts-query';
@@ -115,10 +116,19 @@ export default class extends Model {
     const developmentSite = this.get('project.developmentSite');
     const result = await query(developmentSite, this.get('project.geometricProperties'), ...args);
 
-    await this.setProperties({
-      proposedGeometry: result,
-      hasCanonical: true,
-      canonical: result,
-    });
+    if (isEmpty(result)) {
+      // if it's empty, the proposed geometry is the canonical geometry
+      this.setProperties({
+        hasCanonical: false,
+        canonical: this.get('proposedGeometry'),
+      });
+    } else {
+      // otherwise, the canonical geometry is what is received from the server
+      this.setProperties({
+        proposedGeometry: result,
+        hasCanonical: true,
+        canonical: result,
+      });
+    }
   }
 }
