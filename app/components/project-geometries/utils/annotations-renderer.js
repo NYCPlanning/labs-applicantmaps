@@ -6,5 +6,11 @@ export default class AnnotationsRenderer extends Component {
   @argument
   annotations;
 
-  // @computed('annotations')
+  @argument
+  map;
+
+  @computed('annotations')
+  get generatedLayers() {
+    // return buildDimensionLayers(this.get('annotations'));
+  }
 }
