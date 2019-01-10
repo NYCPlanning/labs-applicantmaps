@@ -94,14 +94,14 @@ export default class extends Model {
     const proposedGeometry = {
       type: 'FeatureCollection',
       features: featureCollection.features
-        .filter(({ properties: { 'meta:mode': mode } }) => mode !== 'draw/annotation')
+        .filter(({ properties: { 'meta:mode': mode } }) => mode !== 'draw_annotations')
         .filterBy('geometry'), // need non-null geoms only, mapbox-gl-draw bug
     };
 
     const annotations = {
       type: 'FeatureCollection',
       features: featureCollection.features
-        .filterBy('properties.meta:mode', 'draw/annotation')
+        .filterBy('properties.meta:mode', 'draw_annotations')
         .filterBy('geometry'), // need non-null geoms only, mapbox-gl-draw bug
     };
 

@@ -67,13 +67,6 @@ export default class TypesBase extends Component {
   set geometricPropertyForMode(featureCollection) {
     const geometricPropertyForType = this.get('geometricPropertyForType');
     const target = this.get('target');
-    const mode = this.get('mode');
-
-    featureCollection.features.forEach((feature) => {
-      if (!feature.properties['meta:mode']) {
-        feature.properties['meta:mode'] = mode;
-      }
-    });
 
     geometricPropertyForType.set(target, featureCollection);
   }

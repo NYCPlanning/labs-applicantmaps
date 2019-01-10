@@ -120,7 +120,6 @@ export default class DrawComponent extends Component {
   /* =================================================
   =            COMPONENT LIFECYCLE HOOKS            =
   ================================================= */
-
   didInsertElement(...params) {
     const { draw: { shouldReset } } = this.get('map');
 
