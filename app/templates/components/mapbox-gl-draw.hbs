@@ -9,7 +9,7 @@
       <p class="no-margin text-tiny">Edit an existing shape by selecting it and dragging its vertices. Add a vertex by clicking the midpoint of a line.</p>
     {{/ember-tooltip}}
   </button>
-  <button class="annotation--parallel-offset" {{action 'handleStraightLine'}}>
+  <button class="annotation--parallel-offset" {{action 'handleAnnotation' 'draw_line_string'}}>
     <span class="fa-layers fa-2x">
       {{fa-icon 'arrows-alt-h' transform='down-4'}}
       {{fa-icon 'times' transform='shrink-9 up-3'}}

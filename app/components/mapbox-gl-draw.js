@@ -127,7 +127,7 @@ export default class MapboxGlDraw extends Component {
   }
 
   @action
-  handleStraightLine() {
+  handleAnnotation(mode) {
     next(() => {
       this.router.transitionTo({
         queryParams: {
@@ -135,7 +135,7 @@ export default class MapboxGlDraw extends Component {
         },
       });
       next(() => {
-        this.drawInstance.changeMode('draw_line_string');
+        this.drawInstance.changeMode(mode);
       });
     });
   }
