@@ -95,6 +95,7 @@ export default class MapboxGlDraw extends Component {
     }
   }
 
+  // downstream add into mapbox-gl-draw
   @action
   add(featureCollection) {
     const drawInstance = this.get('drawInstance');
