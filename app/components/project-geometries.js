@@ -133,9 +133,6 @@ export default class ProjectGeometryEditComponent extends Component {
   @argument
   mode;
 
-  @argument
-  target = 'proposedGeometry';
-
   @service
   notificationMessages;
 

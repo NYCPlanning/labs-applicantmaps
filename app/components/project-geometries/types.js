@@ -36,7 +36,7 @@ export default class TypesBase extends Component {
   type;
 
   @argument
-  target = 'proposedGeometry';
+  target = 'data';
 
   @computed('type')
   get componentForType() {
