@@ -148,6 +148,9 @@ export default class Project extends Model {
 
   @hasMany('geometric-property', { async: false }) geometricProperties;
 
+  @attr({ defaultValue: () => EmptyFeatureCollection })
+  annotations;
+
   // ******** BASIC PROJECT CREATION INFO ********
   @attr('string') projectName;
 

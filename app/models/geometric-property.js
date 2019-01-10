@@ -8,8 +8,8 @@ import {
   unionOf,
   optional,
 } from '@ember-decorators/argument/type';
-import { next } from '@ember/runloop';
 import { computed } from '@ember-decorators/object';
+import { alias } from '@ember-decorators/object/computed';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/project';
 import underlyingZoning from '../utils/queries/intersecting-zoning-query';
 import commercialOverlays from '../utils/queries/proposed-commercial-overlays-query';
@@ -71,11 +71,10 @@ export default class extends Model {
   @attr({ defaultValue: () => EmptyFeatureCollection })
   canonical;
 
-  @type(FeatureCollection)
-  @attr({ defaultValue: () => EmptyFeatureCollection })
+  @alias('project.annotations')
   annotations;
 
-  @computed('proposedGeometry', 'annotations')
+  @computed('proposedGeometry', 'canonical', 'annotations')
   get data() {
     const { proposedGeometry, annotations } = this;
 
@@ -116,7 +115,7 @@ export default class extends Model {
     const developmentSite = this.get('project.developmentSite');
     const result = await query(developmentSite, this.get('project.geometricProperties'), ...args);
 
-    this.setProperties({
+    await this.setProperties({
       proposedGeometry: result,
       hasCanonical: true,
       canonical: result,
