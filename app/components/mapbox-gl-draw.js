@@ -134,10 +134,9 @@ export default class MapboxGlDraw extends Component {
           mode: 'draw/annotation',
         },
       });
-    });
-
-    next(() => {
-      this.drawInstance.changeMode('draw_line_string');
+      next(() => {
+        this.drawInstance.changeMode('draw_line_string');
+      });
     });
   }
 
