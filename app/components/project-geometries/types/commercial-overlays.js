@@ -153,7 +153,11 @@ export default class CommercialOverlayComponent extends BaseClass {
 
       if (draw) draw.shouldReset(value);
     }
+
+    this.set('isReady', true);
   }
+
+  isReady = false;
 
   @service
   currentMode;

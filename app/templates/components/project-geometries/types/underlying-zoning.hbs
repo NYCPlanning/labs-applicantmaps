@@ -1,7 +1,9 @@
-{{#component modeComponent as |editMode|}}
-  {{editMode.feature-label-form
-      options=labelOptions}}
-{{/component}}
+{{#if isReady}}
+  {{#component modeComponent as |editMode|}}
+    {{editMode.feature-label-form
+        options=labelOptions}}
+  {{/component}}
+{{/if}}
 
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <div class="fade-in-on-load text-small">
