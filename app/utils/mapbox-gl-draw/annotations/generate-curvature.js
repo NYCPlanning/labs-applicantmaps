@@ -26,7 +26,6 @@ const getArrowLayers = (lineFeature, id, annotationType) => {
   };
 
   const startArrowLayer = {
-    id: `${id}-dimension-startarrow-symbol`,
     type: 'symbol',
     source: {
       type: 'geojson',
@@ -45,7 +44,6 @@ const getArrowLayers = (lineFeature, id, annotationType) => {
   };
 
   const endArrowLayer = {
-    id: `${id}-dimension-endarrow-symbol`,
     type: 'symbol',
     source: {
       type: 'geojson',
@@ -120,7 +118,6 @@ export default function (lineFeature, annotationType) {
 
   // generate the line layer
   const lineLayer = {
-    id: `${id}-dimension-line`,
     type: 'line',
     source: {
       type: 'geojson',
@@ -130,7 +127,6 @@ export default function (lineFeature, annotationType) {
 
   // generate the label layer
   const labelLayer = {
-    id: `${id}-dimension-line-label`,
     type: 'symbol',
     source: {
       type: 'geojson',
