@@ -16,8 +16,6 @@ export default class DrawComponent extends Component {
     this._bindCallbacks();
   }
 
-  target = 'draw';
-
   _bindCallbacks() {
     const { mapInstance } = this.get('map');
 

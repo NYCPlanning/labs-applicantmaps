@@ -16,7 +16,10 @@ export default class AnnotationsRenderer extends Component {
     let displayLayers = [];
 
     annotations.features.forEach((feature) => {
-      displayLayers = [...displayLayers, ...generateCurvature(feature, 'curved')];
+      const { properties: { 'meta:mode': mode = '' } } = feature;
+      const [, type] = mode.split(':');
+
+      displayLayers = [...displayLayers, ...generateCurvature(feature, type)];
     });
 
     return displayLayers;

@@ -28,7 +28,8 @@ export const DefaultDraw = MapboxDraw.bind(null, {
   },
   modes: Object.assign({
     direct_select_undraggable: DirectSelectUndraggable,
-    draw_annotations: AnnotationsMode,
+    'draw_annotations:linear': AnnotationsMode,
+    'draw_annotations:curved': AnnotationsMode,
   }, MapboxDraw.modes),
   styles,
 });
@@ -107,12 +108,6 @@ export default class MapboxGlDraw extends Component {
     // if geometry exists for this mode, add it to the drawing canvas
     if (!isEmpty(featureCollection)
       && !this.get('isDestroying')) {
-      featureCollection.features.forEach((feature) => {
-        if (!feature.properties['meta:mode']) {
-          feature.properties['meta:mode'] = 'draw'; // default mode
-        }
-      });
-
       drawInstance.set(featureCollection);
     }
   }

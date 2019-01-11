@@ -9,7 +9,7 @@
       <p class="no-margin text-tiny">Edit an existing shape by selecting it and dragging its vertices. Add a vertex by clicking the midpoint of a line.</p>
     {{/ember-tooltip}}
   </button>
-  <button class="annotation--parallel-offset" {{action 'handleAnnotation' 'draw_annotations'}}>
+  <button class="annotation--parallel-offset" {{action 'handleAnnotation' 'draw_annotations:linear'}}>
     <span class="fa-layers fa-2x">
       {{fa-icon 'arrows-alt-h' transform='down-4'}}
       {{fa-icon 'times' transform='shrink-9 up-3'}}
@@ -19,6 +19,18 @@
       <p class="no-margin">Annotate a parallel offset measurement</p>
     {{/ember-tooltip}}
   </button>
+  <button class="annotation--point-to-point-offset" {{action 'handleAnnotation' 'draw_annotations:curved'}}>
+      <span class="fa-layers fa-2x">
+        {{fa-icon 'square-full' mask='circle-notch' transform='up-4'}}
+        {{fa-icon 'caret-left' transform='shrink-4 left-6 rotate-45 down-4'}}
+        {{fa-icon 'caret-right' transform='shrink-4 right-6 rotate-315 down-4'}}
+        {{fa-icon 'times' transform='shrink-9 up-3'}}
+      </span>
+      {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip"}}
+        <h5 class="small-margin-bottom">Curved Line</h5>
+        <p class="no-margin">Annotate a point-to-point offset measurement</p>
+      {{/ember-tooltip}}
+    </button>
 {{!--   <button class="annotation--point-to-point-offset">
     <span class="fa-layers fa-2x">
       {{fa-icon 'square-full' mask='circle-notch' transform='up-4'}}

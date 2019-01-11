@@ -87,8 +87,8 @@ AnnotationMode.onStop = function(state) {
 
 AnnotationMode.toDisplayFeatures = function(state, geojson, display) {
   // categorize this internally as a product of this mode
-  geojson.properties['meta:mode'] = 'draw_annotations';
-  state.line.properties['meta:mode'] = 'draw_annotations';
+  geojson.properties['meta:mode'] = this._ctx.events.currentModeName();
+  state.line.properties['meta:mode'] = this._ctx.events.currentModeName();
 
   // calculate label, append to properties
   const label = `${(length(geojson) * 3280.84).toFixed(0)} ft`; // km to feet
