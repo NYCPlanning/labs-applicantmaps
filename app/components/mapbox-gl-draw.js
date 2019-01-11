@@ -18,7 +18,7 @@ DirectSelectUndraggable.onFeature = function() {
 };
 
 // extend styles
-const styles = [...DefaultMapboxDrawStyles, ...AnnotationsStyles].uniqBy('id');
+const styles = [...AnnotationsStyles, ...DefaultMapboxDrawStyles].uniqBy('id');
 
 export const DefaultDraw = MapboxDraw.bind(null, {
   displayControlsDefault: false,

@@ -200,6 +200,11 @@ export default class ProjectGeometryEditComponent extends Component {
     ];
 
     basemapLayersToHide.forEach(layer => map.removeLayer(layer));
+
+    map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Black_Arrow_Up.svg/240px-Black_Arrow_Up.svg.png', function(error, image) {
+      if (error) throw error;
+      map.addImage('arrow', image);
+    });
   }
 
   loadLayerGroups() {

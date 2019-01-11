@@ -85,7 +85,7 @@ const getCurve = (lineFeature) => {
   const center = along(lineFeature, lineLength / 2).geometry.coordinates; // get coordinates for the center of the original line
   const newCoordinates = []; // empty array to push the offset coordinates to
 
-  for (let i = 1; i < (chunks); i + 1) {
+  for (let i = 1; i < (chunks); i += 1) {
     // calculate the position of a new vertex along the original line
     const originalCoordinate = along(lineFeature, (i * chunkLength)).geometry.coordinates;
 

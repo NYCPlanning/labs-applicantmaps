@@ -1,12 +1,20 @@
 export default [
-  // ACTIVE (being drawn)
-  // line stroke
   {
-    id: 'gl-draw-line',
+    id: 'gl-draw-line-inactive',
     type: 'line',
-    filter: ['all', ['==', '$type', 'LineString'], ['!=', 'mode', 'static']],
+    filter: ['all',
+      ['==', 'active', 'false'],
+      ['==', '$type', 'LineString'],
+      ['!=', 'mode', 'static'],
+    ],
+    layout: {
+      'line-cap': 'round',
+      'line-join': 'round',
+    },
     paint: {
-      'line-color': '#D96B27',
+      'line-color': '#3bb2d0',
+      'line-width': 4,
+      'line-opacity': 0.4,
     },
   },
 
@@ -108,8 +116,8 @@ export default [
       'line-join': 'round',
     },
     paint: {
-      'line-color': '#000',
-      'line-width': 3,
+      'line-color': '#9932CC',
+      'line-width': 5,
     },
   },
 ];
