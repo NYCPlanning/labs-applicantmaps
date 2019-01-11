@@ -29,7 +29,7 @@ const doubleClickZoom = {
   },
 };
 
-const AnnotationMode = MapboxDraw.modes.draw_line_string;
+const AnnotationMode = { ...MapboxDraw.modes.draw_line_string };
 
 AnnotationMode.clickAnywhere = function(state, e) {
   // this ends the drawing after the user creates a second point, triggering this.onStop
@@ -86,6 +86,10 @@ AnnotationMode.onStop = function(state) {
 };
 
 AnnotationMode.toDisplayFeatures = function(state, geojson, display) {
+  // categorize this internally as a product of this mode
+  geojson.properties['meta:mode'] = this._ctx.events.currentModeName();
+  state.line.properties['meta:mode'] = this._ctx.events.currentModeName();
+
   // calculate label, append to properties
   const label = `${(length(geojson) * 3280.84).toFixed(0)} ft`; // km to feet
   state.line.properties.label = label;

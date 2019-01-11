@@ -1,10 +1,13 @@
 import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import DefaultMapboxDrawStyles from '@mapbox/mapbox-gl-draw/src/lib/theme';
 import { next } from '@ember/runloop';
-import AnnotationsMode from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/mode';
+import { service } from '@ember-decorators/service';
 import { action, computed } from '@ember-decorators/object';
 import { setProperties } from '@ember/object';
+import AnnotationsMode from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/mode';
+import AnnotationsStyles from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/styles';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
 const DirectSelectUndraggable = MapboxDraw.modes.direct_select;
@@ -14,6 +17,9 @@ DirectSelectUndraggable.onFeature = function() {
   this.map.dragPan.enable();
 };
 
+// extend styles
+const styles = [...AnnotationsStyles, ...DefaultMapboxDrawStyles].uniqBy('id');
+
 export const DefaultDraw = MapboxDraw.bind(null, {
   displayControlsDefault: false,
   controls: {
@@ -22,8 +28,10 @@ export const DefaultDraw = MapboxDraw.bind(null, {
   },
   modes: Object.assign({
     direct_select_undraggable: DirectSelectUndraggable,
-    draw_annotations: AnnotationsMode,
+    'draw_annotations:linear': AnnotationsMode, // These are identical because they function the same
+    'draw_annotations:curved': AnnotationsMode, // but only really need to be named differently
   }, MapboxDraw.modes),
+  styles,
 });
 
 export default class MapboxGlDraw extends Component {
@@ -44,6 +52,8 @@ export default class MapboxGlDraw extends Component {
         // these methods are wrapped to help with runloop
         deleteAll: () => next(() => this.deleteAll()),
         add: featureCollection => next(() => this.add(featureCollection)),
+        shouldReset: featureCollection => this.shouldReset(featureCollection),
+        getMode: () => this.drawInstance.getMode(),
       },
     });
 
@@ -51,14 +61,22 @@ export default class MapboxGlDraw extends Component {
     this.callbacks = {
       drawState: () => this.drawStateCallback(),
       drawMode: () => this.drawModeCallback(),
-      selectedFeature: () => this.selectedFeatureCallback(),
       skipToDirectSelect: () => this.skipToDirectSelectCallback(),
     };
 
     // add controls
     const { mapInstance } = this.get('map');
     mapInstance.addControl(draw, 'top-left');
+
+    // provide methods to service
+    this.get('currentMode').set('componentInstance', this.get('map.draw'));
   }
+
+  @service
+  currentMode;
+
+  @service
+  router;
 
   // @required
   // should be the ember-mapbox-gl contextual object
@@ -82,13 +100,23 @@ export default class MapboxGlDraw extends Component {
     }
   }
 
+  // downstream add into mapbox-gl-draw
   @action
   add(featureCollection) {
     const drawInstance = this.get('drawInstance');
 
     // if geometry exists for this mode, add it to the drawing canvas
-    if (!isEmpty(featureCollection) && !this.get('isDestroying')) {
-      drawInstance.add(featureCollection);
+    if (!isEmpty(featureCollection)
+      && !this.get('isDestroying')) {
+      drawInstance.set(featureCollection);
+    }
+  }
+
+  shouldReset(geometricProperty) {
+    if (!isEmpty(geometricProperty)) {
+      this.add(geometricProperty);
+    } else {
+      this.deleteAll();
     }
   }
 

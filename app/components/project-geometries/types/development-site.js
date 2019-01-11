@@ -1,4 +1,5 @@
-import TypesBaseComponent from '../-types';
+import { service } from '@ember-decorators/service';
+import BaseClass from './-type';
 
 export const developmentSiteLayer = {
   id: 'development-site-line',
@@ -10,7 +11,7 @@ export const developmentSiteLayer = {
   },
 };
 
-export default class DevelopmentSiteComponent extends TypesBaseComponent {
+export default class DevelopmentSiteComponent extends BaseClass {
   constructor(...args) {
     super(...args);
 
@@ -18,6 +19,9 @@ export default class DevelopmentSiteComponent extends TypesBaseComponent {
 
     if (zoningDistricts && !this.get('isDestroyed')) zoningDistricts.set('visible', false);
   }
+
+  @service
+  store;
 
   willDestroyElement() {
     const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');

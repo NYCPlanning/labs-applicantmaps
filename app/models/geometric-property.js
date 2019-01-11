@@ -8,8 +8,10 @@ import {
   unionOf,
   optional,
 } from '@ember-decorators/argument/type';
-import { next } from '@ember/runloop';
+import { computed } from '@ember-decorators/object';
+import { alias } from '@ember-decorators/object/computed';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/project';
+import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import underlyingZoning from '../utils/queries/intersecting-zoning-query';
 import commercialOverlays from '../utils/queries/proposed-commercial-overlays-query';
 import specialPurposeDistricts from '../utils/queries/proposed-special-districts-query';
@@ -26,7 +28,7 @@ const queries = {
 
 const Feature = shapeOf({
   // TODO
-  // id: oneOf('number', 'string'),
+  // id: unionOf(Number, String),
   type: oneOf('Feature'),
   geometry: unionOf(Object, null),
   properties: optional(Object),
@@ -52,7 +54,7 @@ export default class extends Model {
   @belongsTo('project')
   project;
 
-  // @type(oneOf(...GEOMETRY_TYPES))
+  @type(oneOf(...GEOMETRY_TYPES))
   @attr('string')
   geometryType;
 
@@ -70,24 +72,63 @@ export default class extends Model {
   @attr({ defaultValue: () => EmptyFeatureCollection })
   canonical;
 
-  @type(FeatureCollection)
-  @attr({ defaultValue: () => EmptyFeatureCollection })
+  @alias('project.annotations')
   annotations;
+
+  @computed('proposedGeometry', 'canonical', 'annotations')
+  get data() {
+    const { proposedGeometry, annotations } = this;
+
+    return {
+      type: 'FeatureCollection',
+      features: [
+        ...annotations.features
+          .filterBy('geometry'),
+        ...proposedGeometry.features
+          .filterBy('geometry'),
+      ],
+    };
+  }
+
+  set data(featureCollection) {
+    const proposedGeometry = {
+      type: 'FeatureCollection',
+      features: featureCollection.features
+        .filter(({ properties: { 'meta:mode': mode = '' } }) => !mode.includes('draw_annotations'))
+        .filterBy('geometry'), // need non-null geoms only, mapbox-gl-draw bug
+    };
+
+    const annotations = {
+      type: 'FeatureCollection',
+      features: featureCollection.features
+        .filter(({ properties: { 'meta:mode': mode = '' } }) => mode.includes('draw_annotations'))
+        .filterBy('geometry'), // need non-null geoms only, mapbox-gl-draw bug
+    };
+
+    this.setProperties({
+      proposedGeometry,
+      annotations,
+    });
+  }
 
   async setCanonical(...args) {
     const query = queries[this.get('geometryType')];
     const developmentSite = this.get('project.developmentSite');
-
-    if (!query) return new Error(`query not found for ${this.get('geometryType')}`);
-
     const result = await query(developmentSite, this.get('project.geometricProperties'), ...args);
 
-    next(() => {
-      this.set('proposedGeometry', result);
-      this.set('hasCanonical', true);
-      this.set('canonical', result);
-    });
-
-    return this;
+    if (isEmpty(result)) {
+      // if it's empty, the proposed geometry is the canonical geometry
+      this.setProperties({
+        hasCanonical: false,
+        canonical: this.get('proposedGeometry'),
+      });
+    } else {
+      // otherwise, the canonical geometry is what is received from the server
+      this.setProperties({
+        proposedGeometry: result,
+        hasCanonical: true,
+        canonical: result,
+      });
+    }
   }
 }

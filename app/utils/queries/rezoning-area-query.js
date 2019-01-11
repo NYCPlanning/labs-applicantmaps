@@ -55,11 +55,18 @@ export default async (...args) => {
       return turfBuffer(union, -0.0005);
     }, null);
 
-  // buffer the geoms by ~20 feet
-  const bufferedUnionedGeoms = turfBuffer(unionedGeoms, 0.006);
+  console.log(unionedGeoms);
+
+  let bufferedUnionedGeoms = [];
+  try {
+    // buffer the geoms by ~20 feet
+    bufferedUnionedGeoms = [turfBuffer(unionedGeoms, 0.006)];
+  } catch (e) {
+    console.log(e);
+  }
 
   return {
     type: 'FeatureCollection',
-    features: [bufferedUnionedGeoms],
+    features: bufferedUnionedGeoms,
   };
 };

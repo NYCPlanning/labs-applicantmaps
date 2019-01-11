@@ -45,6 +45,8 @@ export default function() {
   this.passthrough('https://search-api.planninglabs.nyc/**');
   this.passthrough('http://localhost:3000/**');
   this.passthrough('https://maputnik-push.planninglabs.nyc/**');
+  this.passthrough('https://upload.wikimedia.org/**');
+  this.passthrough('/img/**');
 
   // REST Endpoints
   this.get('/projects');

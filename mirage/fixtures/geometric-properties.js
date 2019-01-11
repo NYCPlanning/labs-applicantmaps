@@ -8,6 +8,7 @@ export default [
         {
           type: 'Feature',
           properties: {},
+          id: 1,
           geometry: {
             type: 'Polygon',
             coordinates: [
@@ -50,6 +51,7 @@ export default [
       type: 'FeatureCollection',
       features: [
         {
+          id: 2,
           type: 'Feature',
           properties: {},
           geometry: {

@@ -1,5 +1,7 @@
 import { action } from '@ember-decorators/object';
-import TypesBaseComponent from '../-types';
+import { service } from '@ember-decorators/service';
+import isEmpty from 'labs-applicant-maps/utils/is-empty';
+import BaseClass from './-type';
 
 // Underlying Zoning
 export const underlyingZoningLayer = {
@@ -206,7 +208,32 @@ const labelOptions = [
   'R9X',
 ];
 
-export default class UnderlyingZoningComponent extends TypesBaseComponent {
+export default class UnderlyingZoningComponent extends BaseClass {
+  constructor(...args) {
+    super(...args);
+
+    this.fetchCanonical();
+  }
+
+  // this is wrong because it doesn't honor the correct target
+  // it should be using the model's API, not passing stuff in directly
+  async fetchCanonical() {
+    if (isEmpty(this.get('model.canonical')) && isEmpty(this.get('model.proposedGeometry'))) {
+      await this.get('model').setCanonical();
+      const value = this.get('model.data');
+      const { componentInstance: draw } = this.get('currentMode');
+
+      if (draw) draw.shouldReset(value);
+    }
+
+    this.set('isReady', true);
+  }
+
+  isReady = false;
+
+  @service
+  currentMode;
+
   labelOptions=labelOptions
 
   underlyingZoningLayer = underlyingZoningLayer;
@@ -214,16 +241,17 @@ export default class UnderlyingZoningComponent extends TypesBaseComponent {
   underlyingZoningLabelsLayer = underlyingZoningLabelsLayer;
 
   @action
-  async save() {
+  async calculateRezoningOnSave() {
     const model = this.get('model');
     const project = await model.get('project');
 
     const rezoningArea = project.get('geometricProperties')
       .findBy('geometryType', 'rezoningArea');
-    console.log('special save');
+
     await rezoningArea.setCanonical();
     await rezoningArea.save();
 
-    super.save();
+    // call the passed save closure action
+    this.save();
   }
 }

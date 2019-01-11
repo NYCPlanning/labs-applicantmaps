@@ -1,8 +1,7 @@
 import Component from '@ember/component';
-import { action, computed, observes } from '@ember-decorators/object';
+import { action, computed } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/geometric-property';
-import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
 export default class DrawComponent extends Component {
   constructor(...args) {
@@ -25,23 +24,14 @@ export default class DrawComponent extends Component {
     mapInstance.on('draw.delete', this.callbacks.drawState);
     mapInstance.on('draw.selectionchange', this.callbacks.selectedFeature);
     mapInstance.on('draw.selectionchange', this.callbacks.skipToDirectSelect);
+    mapInstance.on('draw.modechange', this.callbacks.selectedFeature);
   }
 
+  // upstream set to model
   drawStateCallback() {
     const drawnFeatures = this.get('drawnFeatures');
 
     this.set('geometricProperty', drawnFeatures);
-  }
-
-  // adds geometric property from upstream model into mapbox-gl-draw
-  @observes('geometricProperty')
-  addGeometricPropertyCallback() {
-    const latestProperty = this.get('geometricProperty');
-    const { draw } = this.get('map');
-
-    if (!isEmpty(latestProperty)) {
-      draw.add(latestProperty);
-    }
   }
 
   // update which is the selected feature
@@ -114,13 +104,6 @@ export default class DrawComponent extends Component {
   }
 
   @action
-  handleDrawButtonClick() {
-    const { draw: { drawInstance: draw } } = this.get('map');
-
-    draw.changeMode('draw_polygon');
-  }
-
-  @action
   updateSelectedFeature(label) {
     const { draw: { drawInstance: draw } } = this.get('map');
     const { features: [firstFeature] } = this.get('selectedFeature');
@@ -132,29 +115,37 @@ export default class DrawComponent extends Component {
     this.drawStateCallback();
   }
 
+  @action
+  handleDrawButtonClick() {
+    this.map.draw.drawInstance.changeMode('draw_polygon');
+  }
+
+  @action
+  handleAnnotation(mode) {
+    this.map.draw.drawInstance.changeMode(mode);
+  }
+
   /* =================================================
   =            COMPONENT LIFECYCLE HOOKS            =
   ================================================= */
-  willDestroyElement(...args) {
-    const { draw: { deleteAll } } = this.get('map');
-    const { mapInstance } = this.get('map');
+  didInsertElement(...params) {
+    const { draw: { shouldReset } } = this.get('map');
 
-    deleteAll();
+    shouldReset(this.get('geometricProperty'));
+
+    super.didInsertElement(...params);
+  }
+
+  willDestroyElement(...args) {
+    const { mapInstance } = this.get('map');
 
     mapInstance.off('draw.create', this.callbacks.drawState);
     mapInstance.off('draw.update', this.callbacks.drawState);
     mapInstance.off('draw.delete', this.callbacks.drawState);
-    mapInstance.off('draw.modechange', this.callbacks.drawMode);
+    mapInstance.off('draw.modechange', this.callbacks.selectedFeature);
     mapInstance.off('draw.selectionchange', this.callbacks.selectedFeature);
     mapInstance.off('draw.selectionchange', this.callbacks.skipToDirectSelect);
 
     super.willDestroyElement(...args);
-  }
-
-  didInsertElement() {
-    const { draw } = this.get('map');
-    const geometricProperty = this.get('geometricProperty');
-
-    draw.add(geometricProperty);
   }
 }

@@ -4,6 +4,8 @@ import destination from '@turf/destination';
 import along from '@turf/along';
 import distance from '@turf/distance';
 
+const deepCopy = object => JSON.parse(JSON.stringify(object));
+
 // this function takes a geojson LineString Feature
 // and returns the mapboxGL layers necessary to display the various components
 // the layers all carry their own sources, so no need to add sources separately beforehand
@@ -26,7 +28,6 @@ const getArrowLayers = (lineFeature, id, annotationType) => {
   };
 
   const startArrowLayer = {
-    id: `${id}-dimension-startarrow-symbol`,
     type: 'symbol',
     source: {
       type: 'geojson',
@@ -45,7 +46,6 @@ const getArrowLayers = (lineFeature, id, annotationType) => {
   };
 
   const endArrowLayer = {
-    id: `${id}-dimension-endarrow-symbol`,
     type: 'symbol',
     source: {
       type: 'geojson',
@@ -85,7 +85,7 @@ const getCurve = (lineFeature) => {
   const center = along(lineFeature, lineLength / 2).geometry.coordinates; // get coordinates for the center of the original line
   const newCoordinates = []; // empty array to push the offset coordinates to
 
-  for (let i = 1; i < (chunks); i + 1) {
+  for (let i = 1; i < (chunks); i += 1) {
     // calculate the position of a new vertex along the original line
     const originalCoordinate = along(lineFeature, (i * chunkLength)).geometry.coordinates;
 
@@ -111,7 +111,8 @@ const getCurve = (lineFeature) => {
   return lineFeature;
 };
 
-export default function (lineFeature, annotationType) {
+export default function (rawLineFeature, annotationType) {
+  const lineFeature = deepCopy(rawLineFeature);
   // takes a GeoJson LineString Feature with two vertices, and annotationType ('linear' or 'curved')
 
   // TODO validate the linefeature to make sure it has only two vertices,
@@ -120,7 +121,6 @@ export default function (lineFeature, annotationType) {
 
   // generate the line layer
   const lineLayer = {
-    id: `${id}-dimension-line`,
     type: 'line',
     source: {
       type: 'geojson',
@@ -130,7 +130,6 @@ export default function (lineFeature, annotationType) {
 
   // generate the label layer
   const labelLayer = {
-    id: `${id}-dimension-line-label`,
     type: 'symbol',
     source: {
       type: 'geojson',
