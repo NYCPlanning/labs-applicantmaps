@@ -1,4 +1,6 @@
-{{component modeComponent}}
+{{#component modeComponent as |editMode|}}
+  {{editMode.annotations}}
+{{/component}}
 
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <div class="fade-in-on-load text-small">
