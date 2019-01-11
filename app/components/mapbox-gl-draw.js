@@ -112,26 +112,6 @@ export default class MapboxGlDraw extends Component {
     }
   }
 
-  @action
-  handleDrawButtonClick() {
-    this.router.transitionTo({
-      queryParams: {
-        mode: 'draw',
-      },
-    });
-
-    next(() => {
-      this.drawInstance.changeMode('draw_polygon');
-    });
-  }
-
-  @action
-  handleAnnotation(mode) {
-    next(() => {
-      this.drawInstance.changeMode(mode);
-    });
-  }
-
   shouldReset(geometricProperty) {
     if (!isEmpty(geometricProperty)) {
       this.add(geometricProperty);

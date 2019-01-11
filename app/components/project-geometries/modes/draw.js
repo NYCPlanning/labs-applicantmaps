@@ -115,6 +115,16 @@ export default class DrawComponent extends Component {
     this.drawStateCallback();
   }
 
+  @action
+  handleDrawButtonClick() {
+    this.map.draw.drawInstance.changeMode('draw_polygon');
+  }
+
+  @action
+  handleAnnotation(mode) {
+    this.map.draw.drawInstance.changeMode(mode);
+  }
+
   /* =================================================
   =            COMPONENT LIFECYCLE HOOKS            =
   ================================================= */
