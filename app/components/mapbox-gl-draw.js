@@ -28,8 +28,8 @@ export const DefaultDraw = MapboxDraw.bind(null, {
   },
   modes: Object.assign({
     direct_select_undraggable: DirectSelectUndraggable,
-    'draw_annotations:linear': AnnotationsMode,
-    'draw_annotations:curved': AnnotationsMode,
+    'draw_annotations:linear': AnnotationsMode, // These are identical because they function the same
+    'draw_annotations:curved': AnnotationsMode, // but only really need to be named differently
   }, MapboxDraw.modes),
   styles,
 });
@@ -144,7 +144,6 @@ export default class MapboxGlDraw extends Component {
     const { mapInstance, draw: { drawInstance } } = this.get('map');
 
     mapInstance.removeControl(drawInstance);
-    mapInstance.on('draw.selectionchange', this.callbacks.selectedFeature);
 
     super.willDestroyElement(...args);
   }

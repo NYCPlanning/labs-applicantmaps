@@ -4,6 +4,8 @@ import destination from '@turf/destination';
 import along from '@turf/along';
 import distance from '@turf/distance';
 
+const deepCopy = object => JSON.parse(JSON.stringify(object));
+
 // this function takes a geojson LineString Feature
 // and returns the mapboxGL layers necessary to display the various components
 // the layers all carry their own sources, so no need to add sources separately beforehand
@@ -109,7 +111,8 @@ const getCurve = (lineFeature) => {
   return lineFeature;
 };
 
-export default function (lineFeature, annotationType) {
+export default function (rawLineFeature, annotationType) {
+  const lineFeature = deepCopy(rawLineFeature);
   // takes a GeoJson LineString Feature with two vertices, and annotationType ('linear' or 'curved')
 
   // TODO validate the linefeature to make sure it has only two vertices,
