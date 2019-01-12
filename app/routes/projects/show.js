@@ -10,7 +10,9 @@ export default class ProjectsShowRoute extends Route {
   notificationMessages;
 
   model({ project_id }) {
-    return this.store.findRecord('project', project_id, { include: mapTypes.toString() });
+    const include = ['geometric-properties', ...mapTypes].toString();
+
+    return this.store.findRecord('project', project_id, { include });
   }
 
   afterModel(model) {
