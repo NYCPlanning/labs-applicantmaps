@@ -110,12 +110,14 @@ export default class TypesBase extends Component {
     const model = this.get('geometricPropertyForType');
 
     try {
-      const savedGeometry = await model.save();
+      await model.save();
+
+      const project = await model.get('project');
+      project.save();
 
       this.get('notificationMessages').success('Project saved!');
-
       // only transition to the next step if it's not annotation mode
-      this.get('router').transitionTo('projects.show', savedGeometry.get('project'));
+      this.get('router').transitionTo('projects.show', project);
     } catch (e) {
       this.get('notificationMessages').error(`Something went wrong: ${e}`);
     }
