@@ -6,8 +6,6 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import setupMapMocks from 'labs-applicant-maps/tests/helpers/setup-map-mocks';
 import hbs from 'htmlbars-inline-precompile';
 
-import { EmptyFeatureCollection } from 'labs-applicant-maps/models/project';
-
 module('Integration | Component | project-geometry-renderer', function(hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
@@ -26,13 +24,6 @@ module('Integration | Component | project-geometry-renderer', function(hooks) {
     const store = this.owner.lookup('service:store');
     const currentMapService = this.owner.lookup('service:mock-map-service');
     const model = await store.findRecord('project', 1);
-
-    model.set('developmentSite', EmptyFeatureCollection);
-    model.set('projectArea', EmptyFeatureCollection);
-    model.set('rezoningArea', EmptyFeatureCollection);
-    model.set('underlyingZoning', EmptyFeatureCollection);
-    model.set('commercialOverlays', EmptyFeatureCollection);
-    model.set('specialPurposeDistricts', EmptyFeatureCollection);
 
     this.set('model', model);
 

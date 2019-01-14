@@ -5,4 +5,5 @@ export default Model.extend({
   taxMaps: hasMany('tax-map'),
   zoningChangeMaps: hasMany('zoning-change-map'),
   zoningSectionMaps: hasMany('zoning-section-map'),
+  geometricProperties: hasMany('geometric-property'),
 });

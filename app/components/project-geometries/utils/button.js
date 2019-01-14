@@ -5,7 +5,9 @@ import { argument } from '@ember-decorators/argument';
 
 @tagName('button')
 @classNames('button large expanded project-save-button')
-export default class DrawLotsButtonComponent extends Component {
+export default class DrawLotsButtonComponent extends Component.extend({
+    'data-test-project-geometry-save': true,
+  }) {
   @attribute
   @computed('enabled')
   get disabled() {

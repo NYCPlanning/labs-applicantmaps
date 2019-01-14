@@ -12,7 +12,7 @@ module('Unit | Utility | queries/proposed-special-districts-query', function(hoo
     this.server.createList('project', 1);
 
     const store = this.owner.lookup('service:store');
-    const model = await store.findRecord('project', 1);
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
     const result = queriesProposedSpecialDistrictsQuery(
       model.get('developmentSite'),
     );

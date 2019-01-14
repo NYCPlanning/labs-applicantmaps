@@ -68,6 +68,7 @@ export default class LotsComponent extends Component {
 
   generateBuffer() {
     const { features } = this.get('selectedLots');
+
     if (!features.length) return {};
     const [{ geometry }] = features;
     const { length } = features;
