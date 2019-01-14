@@ -1,26 +1,12 @@
 import DS from 'ember-data';
 import { attr, hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
+import { service } from '@ember-decorators/service';
 import turfBbox from '@turf/bbox';
-import { camelize } from '@ember/string';
-import {
-  type,
-  arrayOf,
-  shapeOf,
-  unionOf,
-  optional,
-  oneOf,
-} from '@ember-decorators/argument/type';
-import intersectingZoningQuery from 'labs-applicant-maps/utils/queries/intersecting-zoning-query';
-import proposedCommercialOverlaysQuery from 'labs-applicant-maps/utils/queries/proposed-commercial-overlays-query';
-import proposedSpecialDistrictsQuery from 'labs-applicant-maps/utils/queries/proposed-special-districts-query';
-import rezoningAreaQuery from 'labs-applicant-maps/utils/queries/rezoning-area-query';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import wizard from 'labs-applicant-maps/utils/wizard';
-import computeDifference from 'labs-applicant-maps/utils/compute-difference';
-import config from 'labs-applicant-maps/config/environment';
+import { GEOMETRY_TYPES } from './geometric-property';
 
-const { mapTypes } = config;
 const { Model } = DS;
 
 export const EmptyFeatureCollection = {
@@ -33,20 +19,6 @@ export const EmptyFeatureCollection = {
     },
   }],
 };
-
-const Feature = shapeOf({
-  type: oneOf('Feature'),
-  geometry: unionOf(Object, null),
-  properties: optional(Object),
-});
-
-export const FeatureCollection = shapeOf({
-  type: oneOf('FeatureCollection'),
-  features: arrayOf(
-    Feature,
-  ),
-});
-
 
 const hasAnswered = property => property === true || property === false;
 const hasFilledOut = property => !isEmpty(property);
@@ -148,7 +120,24 @@ export const projectProcedure = [
 const procedureKeys = projectProcedure
   .reduce((acc, { conditions }) => acc.concat(conditions ? Object.keys(conditions) : []), []);
 
-export default class extends Model {
+export default class Project extends Model {
+  constructor(...args) {
+    super(...args);
+
+    // add geometries of each type if they don't exist
+    GEOMETRY_TYPES.forEach((geometryType) => {
+      if (!this.get('geometricProperties').findBy('geometryType', geometryType)) {
+        this.get('geometricProperties')
+          .pushObject(this.store.createRecord('geometric-property', {
+            geometryType,
+            project: this,
+          }));
+      }
+    });
+  }
+
+  @service store;
+
   @hasMany('area-map', { async: false }) areaMaps;
 
   @hasMany('tax-map', { async: false }) taxMaps;
@@ -157,11 +146,10 @@ export default class extends Model {
 
   @hasMany('zoning-section-map', { async: false }) zoningSectionMaps;
 
-  @computed(...mapTypes.map(mapType => `${camelize(mapType)}.@each.length`))
-  get applicantMaps() {
-    const maps = this.getProperties('areaMaps', 'taxMaps', 'zoningChangeMaps', 'zoningSectionMaps');
-    return Object.values(maps).reduce((acc, curr) => acc.concat(...curr.toArray()), []);
-  }
+  @hasMany('geometric-property', { async: false }) geometricProperties;
+
+  @attr({ defaultValue: () => EmptyFeatureCollection })
+  annotations;
 
   // ******** BASIC PROJECT CREATION INFO ********
   @attr('string') projectName;
@@ -188,101 +176,58 @@ export default class extends Model {
   @attr('boolean', { allowNull: true, defaultValue: null }) needSpecialDistrict;
 
   // ******** GEOMETRIES ********
-  // FeatureCollection of polygons or multipolygons
-  @type(FeatureCollection)
-  @attr({ defaultValue: () => EmptyFeatureCollection }) developmentSite
+  /**
+   *
+   * DevelopmentSite
+   * FeatureCollection of polygons or multipolygons
+   */
 
-  // FeatureCollection of polygons or multipolygons
-  @type(FeatureCollection)
-  @attr({ defaultValue: () => EmptyFeatureCollection }) projectArea
-
-  // FeatureCollection
-  // includes label information that must be stored as properties
-  @type(FeatureCollection)
-  @attr({ defaultValue: () => EmptyFeatureCollection }) underlyingZoning
-
-  async setDefaultUnderlyingZoning() {
-    const developmentSite = this.get('developmentSite');
-    const result = await intersectingZoningQuery(developmentSite);
-
-    this.set('underlyingZoning', result);
+  @computed('geometricProperties.@each.proposedGeometry')
+  get developmentSite() {
+    return this.get('geometricProperties')
+      .findBy('geometryType', 'developmentSite')
+      .get('proposedGeometry');
   }
 
-  // FeatureCollection
-  // includes label information that must be stored as properties
-  @type(FeatureCollection)
-  @attr({ defaultValue: () => EmptyFeatureCollection }) commercialOverlays
-
-  async setDefaultCommercialOverlays() {
-    const developmentSite = this.get('developmentSite');
-    const result = await proposedCommercialOverlaysQuery(developmentSite);
-
-    this.set('commercialOverlays', result);
+  @computed('geometricProperties.@each.proposedGeometry')
+  get projectArea() {
+    return this.get('geometricProperties')
+      .findBy('geometryType', 'projectArea')
+      .get('proposedGeometry');
   }
 
-  // FeatureCollection
-  // includes label information that must be stored as properties
-  @type(FeatureCollection)
-  @attr({ defaultValue: () => EmptyFeatureCollection }) specialPurposeDistricts
-
-  async setDefaultSpecialPurposeDistricts() {
-    const developmentSite = this.get('developmentSite');
-    const result = await proposedSpecialDistrictsQuery(developmentSite);
-
-    this.set('specialPurposeDistricts', result);
+  @computed('geometricProperties.@each.proposedGeometry')
+  get underlyingZoning() {
+    return this.get('geometricProperties')
+      .findBy('geometryType', 'underlyingZoning')
+      .get('proposedGeometry');
   }
 
-  // FeatureCollection of polygons or multipolygons
-  @type(FeatureCollection)
-  @attr({ defaultValue: () => EmptyFeatureCollection }) rezoningArea
+  @computed('geometricProperties.@each.proposedGeometry')
+  get commercialOverlays() {
+    return this.get('geometricProperties')
+      .findBy('geometryType', 'commercialOverlays')
+      .get('proposedGeometry');
+  }
 
-  // returns a promise
-  async defaultRezoningArea() {
-    const {
-      underlyingZoning,
-      commercialOverlays,
-      specialPurposeDistricts,
-    } = this.getProperties('underlyingZoning', 'commercialOverlays', 'specialPurposeDistricts');
+  @computed('geometricProperties.@each.proposedGeometry')
+  get specialPurposeDistricts() {
+    return this.get('geometricProperties')
+      .findBy('geometryType', 'specialPurposeDistricts')
+      .get('proposedGeometry');
+  }
 
-    const combinedFC = {
-      type: 'FeatureCollection',
-      features: [],
-    };
-
-    // underlyingZoning
-    if (!isEmpty(underlyingZoning)) {
-      const currentZoning = await intersectingZoningQuery(this.get('developmentSite'));
-      const underlyingZoningDiff = computeDifference(currentZoning, underlyingZoning);
-
-      combinedFC.features = [...combinedFC.features, ...underlyingZoningDiff.features];
-    }
-
-    // commercial Overlays
-    if (!isEmpty(commercialOverlays)) {
-      const currentCommercialOverlays = await proposedCommercialOverlaysQuery(this.get('developmentSite'));
-      const commercialOverlaysDiff = computeDifference(currentCommercialOverlays, commercialOverlays);
-
-      combinedFC.features = [...combinedFC.features, ...commercialOverlaysDiff.features];
-    }
-
-    // special purpose districts
-    if (!isEmpty(specialPurposeDistricts)) {
-      const currentSpecialPurposeDistricts = await proposedSpecialDistrictsQuery(this.get('developmentSite'));
-      const specialPurposeDistrictsDiff = computeDifference(currentSpecialPurposeDistricts, specialPurposeDistricts);
-
-      combinedFC.features = [...combinedFC.features, ...specialPurposeDistrictsDiff.features];
-    }
-
-    if (!isEmpty(combinedFC)) {
-      return rezoningAreaQuery(combinedFC);
-    }
-
-    return EmptyFeatureCollection;
+  @computed('geometricProperties.@each.proposedGeometry')
+  get rezoningArea() {
+    return this.get('geometricProperties')
+      .findBy('geometryType', 'rezoningArea')
+      .get('proposedGeometry');
   }
 
   async setRezoningArea() {
-    const defaultRezoningArea = await this.defaultRezoningArea();
-    this.set('rezoningArea', defaultRezoningArea);
+    const rezoningArea = this.get('geometricProperties').findBy('geometryType', 'rezoningArea');
+
+    await rezoningArea.setCanonical();
   }
 
   // ******** COMPUTING THE CURRENT STEP FOR ROUTING ********
@@ -323,23 +268,20 @@ export default class extends Model {
 
   // ********************************
 
-  @computed('projectArea')
-  get projectAreaSource() {
-    const projectArea = this.get('projectArea');
-    return {
-      type: 'geojson',
-      data: projectArea,
-    };
-  }
-
-  @computed('developmentSite', 'projectArea', 'rezoningArea')
+  @computed('geometricProperties.@each.proposedGeometry')
   get projectGeometryBoundingBox() {
     // build a geojson FeatureCollection from all three project geoms
+    // const featureCollections = this
+    //   .getProperties('developmentSite.proposedGeometry', 'projectArea.proposedGeometry', 'rezoningArea.proposedGeometry');
+
     const featureCollections = this
-      .getProperties('developmentSite', 'projectArea', 'rezoningArea');
+      .get('geometricProperties')
+      .filter(geometricProperty => geometricProperty.get('geometryType') === 'developmentSite'
+        || geometricProperty.get('geometryType') === 'projectArea')
+      .mapBy('proposedGeometry');
 
     // flatten feature collections
-    const featureCollection = Object.values(featureCollections)
+    const featureCollection = featureCollections
       .reduce((acc, { features }) => {
         acc.features.push(...features);
 

@@ -43,12 +43,17 @@ export default function() {
   this.passthrough('/write-coverage');
   this.passthrough('https://search-api.planninglabs.nyc/**');
   this.passthrough('http://localhost:3000/**');
+  this.passthrough('https://maputnik-push.planninglabs.nyc/**');
+  this.passthrough('https://upload.wikimedia.org/**');
+  this.passthrough('/img/**');
 
   // REST Endpoints
   this.get('/projects');
   this.get('/projects/:id');
   this.patch('/projects/:id');
   this.post('/projects');
+  this.patch('/geometric-properties/:id');
+  this.post('/geometric-properties');
   this.post('/area-maps');
   this.patch('/area-maps/:id');
   this.post('/tax-maps');

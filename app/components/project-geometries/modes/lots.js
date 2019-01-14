@@ -31,6 +31,13 @@ export default class LotsComponent extends Component {
       type: 'FeatureCollection',
       features: [],
     });
+
+    const plutoFillLayer = this.get('store').peekRecord('layer', 'pluto-fill');
+
+    if (plutoFillLayer && !this.get('isDestroyed')) {
+      plutoFillLayer.set('highlightable', true);
+      plutoFillLayer.set('tooltipable', true);
+    }
   }
 
   @argument
@@ -46,7 +53,8 @@ export default class LotsComponent extends Component {
 
   @computed()
   get taxLots() {
-    return this.get('store').peekRecord('layer-group', 'tax-lots');
+    const taxLotsLayerGroup = this.get('store').peekRecord('layer-group', 'tax-lots');
+    return taxLotsLayerGroup;
   }
 
   @computed('geometricProperty.features.@each.geometry')
@@ -60,6 +68,7 @@ export default class LotsComponent extends Component {
 
   generateBuffer() {
     const { features } = this.get('selectedLots');
+
     if (!features.length) return {};
     const [{ geometry }] = features;
     const { length } = features;
@@ -123,6 +132,15 @@ export default class LotsComponent extends Component {
 
       this.set('selectedLots.features', newLots);
       this.generateBuffer();
+    }
+  }
+
+  willDestroyElement() {
+    const plutoFillLayer = this.get('store').peekRecord('layer', 'pluto-fill');
+
+    if (plutoFillLayer && !this.get('isDestroyed')) {
+      plutoFillLayer.set('highlightable', false);
+      plutoFillLayer.set('tooltipable', false);
     }
   }
 }

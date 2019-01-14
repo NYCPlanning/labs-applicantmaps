@@ -120,9 +120,21 @@
     <hr/>
 
     <div class="grid-x grid-margin-x">
-      <p class="cell shrink medium-5">
+      <p class="cell shrink medium-6">
         <button class="button gray expanded" type="button" onClick=print()>{{fa-icon 'print'}} Print</button></p>
       <p class="cell auto text-tiny dark-gray">Make sure your system's print settings enable printing background graphics and that the paper size and orientation match your map.</p>
+    </div>
+
+    <div class="grid-x grid-margin-x">
+      <p class="cell shrink medium-6">
+        <form action="{{downloadURL}}" target="_blank">
+          <input type=hidden name=orientation value={{model.paperOrientation}}>
+          <input type=hidden name=size value={{model.paperSize}}>
+          <button class="button gray expanded" type="submit">{{fa-icon 'file-pdf'}} Download</button>
+        </form>
+      </p>
+
+      <p class="cell auto text-tiny dark-gray">The PDF may take several seconds to generate.</p>
     </div>
 
   </div>
@@ -177,6 +189,7 @@
             initOptions=(hash
               style=mapConfiguration.meta.mapboxStyle
               pitchWithRotate=false
+              preserveDrawingBuffer=true
             )
             mapLoaded=(action 'handleMapLoaded') as |map|
           }}

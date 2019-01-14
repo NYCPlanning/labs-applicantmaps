@@ -1,7 +1,5 @@
-import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
-import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
+import BaseClass from './-type';
 
 export const developmentSiteLayer = {
   id: 'development-site-line',
@@ -13,45 +11,17 @@ export const developmentSiteLayer = {
   },
 };
 
-export default class DevelopmentSiteComponent extends Component {
+export default class DevelopmentSiteComponent extends BaseClass {
   constructor(...args) {
     super(...args);
+
     const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');
 
     if (zoningDistricts && !this.get('isDestroyed')) zoningDistricts.set('visible', false);
   }
 
   @service
-  router;
-
-  @service
   store;
-
-  @service
-  notificationMessages;
-
-  @argument
-  map;
-
-  @argument
-  model;
-
-  @argument
-  mode;
-
-  @action
-  async save() {
-    const model = this.get('model');
-
-    try {
-      const savedProject = await model.save();
-
-      this.get('notificationMessages').success('Project saved!');
-      this.get('router').transitionTo('projects.show', savedProject);
-    } catch (e) {
-      this.get('notificationMessages').error(`Something went wrong: ${e}`);
-    }
-  }
 
   willDestroyElement() {
     const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');

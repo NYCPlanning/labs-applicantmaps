@@ -1,79 +1,68 @@
-{{#project-geometries/draw-lots-to-union
-  mode=mode
-  map=map
-  geometricProperty=model.underlyingZoning as |selection|
-}}
-  {{selection.mode.feature-label-form
-    options=labelOptions
-  }}
+{{#if isReady}}
+  {{#component modeComponent as |editMode|}}
+    {{editMode.feature-label-form
+        options=labelOptions}}
+    {{editMode.annotations}}
+  {{/component}}
+{{/if}}
 
-  {{#ember-wormhole to='geometry-type-draw-explainer'}}
-    <div class="fade-in-on-load text-small">
-      <h1 class="header-large small-margin-bottom">Rezoning: <span class="text-weight-normal">Underlying Zoning Districts</span></h1>
-      <p><a href='https://www1.nyc.gov/site/planning/zoning/districts-tools.page' target="_blank">Zoning Districts</a> are residential, commercial, or manufac­turing areas within which regulations govern land use and building bulk. These boundaries <strong>extend to the centerline of streets</strong>, are not dependent on lot lines, and can sometimes intersect tax lots.</p>
+{{#ember-wormhole to='geometry-type-draw-explainer'}}
+  <div class="fade-in-on-load text-small">
 
-      <hr />
+    {{back-to-dashboard-button model=model}}
 
-      <p class="text-weight-bold small-margin-bottom">Adding new shapes:</p>
-      <ul class="small-margin-bottom">
-        <li>
-          Use the
-          <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
-            {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
-            {{fa-icon 'square' transform='grow-8' class='white'}}
-            {{fa-icon 'draw-polygon' transform='shrink-2'}}
-          </span>
-          polygon tool to add a new shape
-        </li>
-        <li>Complete a new shape by clicking its final vertex a second time</li>
-      </ul>
+    <h1 class="header-large small-margin-bottom">Rezoning: <span class="text-weight-normal">Underlying Zoning Districts</span></h1>
+    <p><a href='https://www1.nyc.gov/site/planning/zoning/districts-tools.page' target="_blank">Zoning Districts</a> are residential, commercial, or manufacturing areas within which regulations govern land use and building bulk. These boundaries <strong>extend to the centerline of streets</strong>, are not dependent on lot lines, and can sometimes intersect tax lots.</p>
+    <p>Remember, if you are moving district boundaries or mapping new district, you must remove existing district(s) from the rezoning area as well as drawing the new boundaries.</p>
 
-      <p class="text-weight-bold small-margin-bottom">Editing existing shapes:</p>
-      <ul class="small-margin-bottom">
-        <li>Edit an existing shape by selecting it and dragging its vertices</li>
-        <li>Add a vertex by clicking the midpoint of a line</li>
-        <li>
-          Use the
-          <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
-            {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
-            {{fa-icon 'square' transform='grow-8' class='white'}}
-            {{fa-icon 'trash-alt' prefix='far' transform='shrink-2'}}
-          </span>
-          trash button to delete a selected shape or vertex
-        </li>
-      </ul>
+    <p class="text-weight-bold small-margin-bottom">Adding new shapes:</p>
+    <ul class="small-margin-bottom">
+      <li>
+        Use the
+        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+          {{fa-icon 'square' transform='grow-8' class='white'}}
+          {{fa-icon 'draw-polygon' transform='shrink-2'}}
+        </span>
+        polygon tool to add a new shape
+      </li>
+      <li>Complete a new shape by clicking its final vertex a second time</li>
+    </ul>
 
-      <p class="text-weight-bold small-margin-bottom">Labeling shapes:</p>
-      <ul>
-        <li>
-          Select a shape then edit the
-          <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
-            {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
-            {{fa-icon 'tag' transform='shrink-2'}}
-          </span>
-          label text
-        </li>
-      </ul>
+    <p class="text-weight-bold small-margin-bottom">Editing existing shapes:</p>
+    <ul class="small-margin-bottom">
+      <li>Edit an existing shape by selecting it and dragging its vertices</li>
+      <li>Add a vertex by clicking the midpoint of a line</li>
+      <li>
+        Use the
+        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+          {{fa-icon 'square' transform='grow-8' class='white'}}
+          {{fa-icon 'trash-alt' prefix='far' transform='shrink-2'}}
+        </span>
+        trash button to delete a selected shape or vertex
+      </li>
+    </ul>
 
-      <hr />
+    <p class="text-weight-bold small-margin-bottom">Labeling shapes:</p>
+    <ul>
+      <li>
+        Select a shape then edit the
+        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+          {{fa-icon 'tag' transform='shrink-2'}}
+        </span>
+        label text
+      </li>
+    </ul>
 
-      {{#selection.button
-        enabled=model.hasDirtyAttributes
-        handleClick=(action 'save')}}
-        Save
-        <small style="display:block;line-height:1.75;">Zoning Districts</small>
-      {{/selection.button}}
-    </div>
-  {{/ember-wormhole}}
-{{/project-geometries/draw-lots-to-union}}
+    <hr />
 
-{{#map.source options=(mapbox-geojson-source model.underlyingZoning) as |source|}}
-  {{source.layer
-    layer=underlyingZoningLayer
-    before='boundary_country'
-  }}
-  {{source.layer
-    layer=underlyingZoningLabelsLayer
-    before='boundary_country'
-  }}
-{{/map.source}}
+    {{#project-geometries/utils/button
+      enabled=isReadyToProceed
+      handleClick=(action 'calculateRezoningOnSave')}}
+      Save
+      <small style="display:block;line-height:1.75;">Zoning Districts</small>
+    {{/project-geometries/utils/button}}
+  </div>
+{{/ember-wormhole}}

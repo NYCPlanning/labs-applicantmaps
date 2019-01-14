@@ -19,4 +19,6 @@
   }}
 {{/map.source}}
 
-{{yield}}
+{{yield (hash
+  toggle-mode-button=(component 'project-geometries/modes/lots/toggle-mode-button')
+)}}

@@ -1,0 +1,7 @@
+{{#if (eq model.currentStep.step 'complete')}}
+  <p class="text-tiny small-margin-bottom">
+    {{#link-to "projects.show" model.id}}
+      {{fa-icon 'arrow-left'}} Back to project dashboard
+    {{/link-to}}
+  </p>
+{{/if}}

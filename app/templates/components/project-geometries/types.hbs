@@ -1,0 +1,21 @@
+{{!-- render the common reference geometries --}}
+{{project-geometry-renderer map=map model=model}}
+
+{{!-- invoke the mode and pass its context --}}
+{{!-- TODO: these need to be inverted so that changes across types
+      trigger re-renders --}}
+
+{{!-- invoke the type component --}}
+{{!-- pass down the mode component --}}
+{{component componentForType
+  model=geometricPropertyForType
+  mode=mode
+  map=map
+  isReadyToProceed=isReadyToProceed
+  save=(action 'save')
+  modeComponent=(component componentForMode
+    map=map
+    geometricProperty=geometricPropertyForMode)
+}}
+
+{{yield}}

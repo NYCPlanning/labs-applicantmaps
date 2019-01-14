@@ -1,8 +1,7 @@
-import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
 import { action } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
-import isEmpty from '../../../utils/is-empty';
+import isEmpty from 'labs-applicant-maps/utils/is-empty';
+import BaseClass from './-type';
 
 const labelOptions = [
   'C1-1',
@@ -137,31 +136,33 @@ export const c25Layer = {
   filter: ['all', ['==', 'label', 'C2-5']],
 };
 
-export default class CommercialOverlayComponent extends Component {
-  init(...args) {
-    super.init(...args);
+export default class CommercialOverlayComponent extends BaseClass {
+  constructor(...args) {
+    super(...args);
 
-    if (isEmpty(this.get('model.commercialOverlays'))) {
-      this.get('model').setDefaultCommercialOverlays();
-    }
+    this.fetchCanonical();
   }
 
+  // this is wrong because it doesn't honor the correct target
+  // it should be using the model's API, not passing stuff in directly
+  async fetchCanonical() {
+    if (isEmpty(this.get('model.canonical')) && isEmpty(this.get('model.proposedGeometry'))) {
+      await this.get('model').setCanonical();
+      const value = this.get('model.data');
+      const { componentInstance: draw } = this.get('currentMode');
+
+      if (draw) draw.shouldReset(value);
+    }
+
+    this.set('isReady', true);
+  }
+
+  isReady = false;
+
+  @service
+  currentMode;
+
   labelOptions=labelOptions
-
-  @argument
-  map;
-
-  @argument
-  model;
-
-  @argument
-  mode;
-
-  @service
-  router;
-
-  @service
-  notificationMessages;
 
   coLayer = coLayer;
 
@@ -186,20 +187,12 @@ export default class CommercialOverlayComponent extends Component {
   c25Layer = c25Layer;
 
   @action
-  async save() {
+  async calculateRezoningOnSave() {
     const model = this.get('model');
+    const project = await model.get('project');
 
-    // because we've just changed the proposed zoning,
-    // we should also calculate the rezoning area
-    await model.setRezoningArea();
+    await project.setRezoningArea();
 
-    try {
-      const savedProject = await model.save();
-
-      this.get('notificationMessages').success('Project saved!');
-      this.get('router').transitionTo('projects.show', savedProject);
-    } catch (e) {
-      this.get('notificationMessages').error(`Something went wrong: ${e}`);
-    }
+    await this.save();
   }
 }

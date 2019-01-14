@@ -1,0 +1,115 @@
+{{!-- Ad-hoc source and layer for developmentSite --}}
+{{#if (not (is-empty model.developmentSite))}}
+  {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
+    {{source.layer
+      layer=developmentSiteLayer
+      before='boundary_country'
+    }}
+  {{/map.source}}
+{{/if}}
+
+{{!-- Ad-hoc source and layer for projectArea --}}
+{{#if (not (is-empty model.projectArea))}}
+  {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
+    {{source.layer
+      layer=projectAreaLayer
+      before='boundary_country'
+    }}
+  {{/map.source}}
+{{/if}}
+
+{{!-- Ad-hoc source and layer for rezoningArea --}}
+{{#if (not (is-empty model.rezoningArea))}}
+  {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
+    {{source.layer
+      layer=rezoningAreaLayer
+      before='boundary_country'
+    }}
+  {{/map.source}}
+{{/if}}
+
+{{!-- Ad-hoc source and layer for proposedZoning --}}
+{{#if (not (is-empty model.underlyingZoning))}}
+  {{#map.source options=(mapbox-geojson-source model.underlyingZoning) as |source|}}
+    {{source.layer
+      layer=underlyingZoningLayer
+      before='boundary_country'
+    }}
+    {{source.layer
+      layer=underlyingZoningLabelsLayer
+      before='boundary_country'
+    }}
+  {{/map.source}}
+{{/if}}
+
+{{!-- Ad-hoc source and layer for proposedCommercialOverlays --}}
+{{#if (not (is-empty model.commercialOverlays))}}
+  {{#map.source options=(mapbox-geojson-source model.commercialOverlays) as |source|}}
+    {{source.layer
+      layer=commercialOverlaysLayer
+      before='boundary_country'
+    }}
+    {{source.layer
+      layer=coLayer
+      before='boundary_country'
+    }}
+    {{source.layer
+      layer=c11Layer
+      before='boundary_country'
+    }}
+    {{source.layer
+      layer=c12Layer
+      before='boundary_country'
+    }}
+    {{source.layer
+      layer=c13Layer
+      before='boundary_country'
+    }}
+    {{source.layer
+      layer=c14Layer
+      before='boundary_country'
+    }}
+    {{source.layer
+      layer=c15Layer
+      before='boundary_country'
+    }}
+    {{source.layer
+      layer=c21Layer
+      before='boundary_country'
+    }}
+    {{source.layer
+      layer=c22Layer
+      before='boundary_country'
+    }}
+    {{source.layer
+      layer=c23Layer
+      before='boundary_country'
+    }}
+    {{source.layer
+      layer=c24Layer
+      before='boundary_country'
+    }}
+    {{source.layer
+      layer=c25Layer
+      before='boundary_country'
+    }}
+  {{/map.source}}
+{{/if}}
+
+{{!-- Ad-hoc source and layer for proposedSpecialPurposeDistricts --}}
+{{#if (not (is-empty model.specialPurposeDistricts))}}
+  {{#map.source options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
+    {{source.layer
+      layer=specialPurposeDistrictsLayer
+      before='boundary_country'
+    }}
+    {{source.layer
+      layer=specialPurposeDistrictsLabelsLayer
+      before='boundary_country'
+    }}
+  {{/map.source}}
+{{/if}}
+
+{{#if (not (is-empty model.annotations))}}
+  {{project-geometries/utils/annotations-renderer map=map annotations=model.annotations}}
+{{/if}}

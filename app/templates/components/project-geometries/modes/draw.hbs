@@ -1,15 +1,28 @@
-<div class="draw-controls">
+{{#ember-wormhole to="draw-controls"}}
   <button class="polygon {{if (eq drawMode 'draw_polygon') 'active'}}" {{action 'handleDrawButtonClick'}}>
     {{fa-icon 'draw-polygon' size='2x' fixedWidth=true}}
+    {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip"}}
+      <h5 class="small-margin-bottom">Polygon</h5>
+      <p class="small-margin-bottom">Add a new shape. Complete it by clicking the final vertex a 2nd time.</p>
+      <p class="no-margin text-tiny">Edit an existing shape by selecting it and dragging its vertices. Add a vertex by clicking the midpoint of a line.</p>
+    {{/ember-tooltip}}
   </button>
   <button class="trash" {{action 'handleTrashButtonClick'}}>
     {{fa-icon 'trash-alt' prefix='far' size='2x' fixedWidth=true}}
+    {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip"}}
+      <h5 class="small-margin-bottom">Trash</h5>
+      <p class="no-margin">Delete a selected shape or vertex</p>
+    {{/ember-tooltip}}
   </button>
-</div>
+{{/ember-wormhole}}
 
 {{yield (hash
   feature-label-form=(component 'project-geometries/modes/draw/feature-label-form'
     selectedFeature=selectedFeature
     updateSelectedFeature=(action 'updateSelectedFeature')
+    drawStateCallback=(action drawStateCallback)
+  )
+  annotations=(component 'project-geometries/modes/draw/annotations'
+    handleAnnotation=(action 'handleAnnotation')
   )
 )}}
