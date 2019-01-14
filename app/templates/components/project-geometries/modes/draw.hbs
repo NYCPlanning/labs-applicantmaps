@@ -16,11 +16,14 @@
   </button>
 {{/ember-wormhole}}
 
+{{!-- Do not yield out feature-label-form if the feature is an annotation --}}
 {{yield (hash
-  feature-label-form=(component 'project-geometries/modes/draw/feature-label-form'
-    selectedFeature=selectedFeature
-    updateSelectedFeature=(action 'updateSelectedFeature')
-    drawStateCallback=(action drawStateCallback)
+  feature-label-form=(unless (get selectedFeature.features.firstObject.properties 'meta:mode')
+    (component 'project-geometries/modes/draw/feature-label-form'
+      selectedFeature=selectedFeature
+      updateSelectedFeature=(action 'updateSelectedFeature')
+      drawStateCallback=(action drawStateCallback)
+    )
   )
   annotations=(component 'project-geometries/modes/draw/annotations'
     handleAnnotation=(action 'handleAnnotation')
