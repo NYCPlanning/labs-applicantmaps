@@ -18,6 +18,7 @@ export default [
         type: 'Feature',
         properties: {
           'meta:mode': 'draw_annotations:linear',
+          label: '29 ft',
         },
         geometry: {
           coordinates: [

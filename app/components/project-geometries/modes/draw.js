@@ -37,22 +37,21 @@ export default class DrawComponent extends Component {
 
   // update which is the selected feature
   selectedFeatureCallback() {
-    const { draw: { drawInstance: draw } } = this.get('map');
+    const { draw: { drawInstance: draw }, mapInstance } = this.get('map');
     const { features: [firstSelectedFeature] } = draw.getSelected();
     const [selectedId] = draw.getSelectedIds();
-    const currentMode = draw.getMode();
-    console.log(currentMode);
 
     if (firstSelectedFeature) {
       this.set('selectedFeature', { type: 'FeatureCollection', features: [firstSelectedFeature] });
 
       const mode = get(firstSelectedFeature, 'properties.meta:mode');
 
-      if (mode && (currentMode === 'direct_select')) {
-        const { geometry: { coordinates: [start] } } = firstSelectedFeature;
-        console.log(start, selectedId);
+      if (mode) {
+        const originalFilter = mapInstance
+          .getFilter('gl-draw-polygon-midpoint.cold');
 
-        draw.changeMode(mode, { featureId: selectedId, from: start });
+        originalFilter.push(['!=', 'parent', selectedId]);
+        mapInstance.setFilter('gl-draw-polygon-midpoint.cold', originalFilter);
       }
     } else {
       this.set('selectedFeature', EmptyFeatureCollection);
