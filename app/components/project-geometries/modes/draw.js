@@ -1,4 +1,5 @@
 import Component from '@ember/component';
+import { get } from '@ember/object';
 import { action, computed } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/geometric-property';
@@ -38,9 +39,21 @@ export default class DrawComponent extends Component {
   selectedFeatureCallback() {
     const { draw: { drawInstance: draw } } = this.get('map');
     const { features: [firstSelectedFeature] } = draw.getSelected();
+    const [selectedId] = draw.getSelectedIds();
+    const currentMode = draw.getMode();
+    console.log(currentMode);
 
     if (firstSelectedFeature) {
       this.set('selectedFeature', { type: 'FeatureCollection', features: [firstSelectedFeature] });
+
+      const mode = get(firstSelectedFeature, 'properties.meta:mode');
+
+      if (mode && (currentMode === 'direct_select')) {
+        const { geometry: { coordinates: [start] } } = firstSelectedFeature;
+        console.log(start, selectedId);
+
+        draw.changeMode(mode, { featureId: selectedId, from: start });
+      }
     } else {
       this.set('selectedFeature', EmptyFeatureCollection);
     }
