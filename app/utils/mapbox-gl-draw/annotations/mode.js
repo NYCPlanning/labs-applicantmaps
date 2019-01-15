@@ -31,7 +31,7 @@ const doubleClickZoom = {
 
 const AnnotationMode = { ...MapboxDraw.modes.draw_line_string };
 
-AnnotationMode.clickAnywhere = function(state, e) {
+AnnotationMode.onClick = function(state, e) {
   console.log(state, e);
   // this ends the drawing after the user creates a second point, triggering this.onStop
   if (state.currentVertexPosition === 1) {
