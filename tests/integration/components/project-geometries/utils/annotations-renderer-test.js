@@ -44,4 +44,21 @@ module('Integration | Component | project-geometries/utils/annotations-renderer'
 
     assert.equal(this.element.textContent.trim(), '');
   });
+
+  test('it handles unknown labels', async function(assert) {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.set('myAction', function(val) { ... });
+    assert.expect(1);
+
+    this.set('features', {
+      type: 'FeatureCollection',
+      features: [
+        lineFeature('peanutbutter'),
+      ],
+    });
+
+    await render(hbs`{{project-geometries/utils/annotations-renderer annotations=features}}`);
+
+    assert.ok(true);
+  });
 });
