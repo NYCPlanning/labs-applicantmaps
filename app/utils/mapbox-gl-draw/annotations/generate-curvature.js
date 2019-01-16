@@ -111,7 +111,48 @@ const getCurve = (lineFeature) => {
   return lineFeature;
 };
 
-export default function (rawLineFeature, annotationType) {
+const buildSquareLayers = (lineFeature) => {
+  // takes a GeoJson LineString Feature with two vertices
+  // returns mapboxGL layers to show a right angle symbol
+  const { coordinates } = lineFeature.geometry;
+  const lineBearing = bearing(coordinates[0], coordinates[1]);
+  const lineLength = length(lineFeature); // get length of original line
+  const segmentLength = lineLength * 0.667;
+  const midPoint = along(lineFeature, segmentLength).geometry.coordinates; // get coordinates for the center of the original line
+
+  // pythagorean theorum!
+  const wingDistance = (segmentLength * Math.sqrt(2)) / 2;
+
+  // start with the center point of the line, and project away at a bearing + 135 degrees
+  const rightWingVertex = destination(midPoint, wingDistance, lineBearing + 135).geometry.coordinates;
+  const leftWingVertex = destination(midPoint, wingDistance, lineBearing - 135).geometry.coordinates;
+
+
+  const squareLayer = {
+    type: 'line',
+    source: {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: [
+            leftWingVertex,
+            midPoint,
+            rightWingVertex,
+          ],
+        },
+      },
+    },
+  };
+
+  return [
+    squareLayer,
+  ];
+};
+
+const buildLineLayers = function(rawLineFeature, annotationType) {
   const lineFeature = deepCopy(rawLineFeature);
   // takes a GeoJson LineString Feature with two vertices, and annotationType ('linear' or 'curved')
 
@@ -157,4 +198,18 @@ export default function (rawLineFeature, annotationType) {
     labelLayer,
     ...arrowLayers,
   ];
+};
+
+export default function(...args) {
+  const [, type] = args;
+
+  if (type === 'curved' || type === 'linear') {
+    return buildLineLayers(...args);
+  }
+
+  if (type === 'square') {
+    return buildSquareLayers(...args);
+  }
+
+  return buildLineLayers(...args);
 }

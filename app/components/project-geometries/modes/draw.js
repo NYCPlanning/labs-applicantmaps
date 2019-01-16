@@ -1,4 +1,5 @@
 import Component from '@ember/component';
+import { get } from '@ember/object';
 import { action, computed } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/geometric-property';
@@ -36,11 +37,23 @@ export default class DrawComponent extends Component {
 
   // update which is the selected feature
   selectedFeatureCallback() {
-    const { draw: { drawInstance: draw } } = this.get('map');
+    const { draw: { drawInstance: draw }, mapInstance } = this.get('map');
     const { features: [firstSelectedFeature] } = draw.getSelected();
+    const [selectedId] = draw.getSelectedIds();
 
     if (firstSelectedFeature) {
       this.set('selectedFeature', { type: 'FeatureCollection', features: [firstSelectedFeature] });
+
+      const mode = get(firstSelectedFeature, 'properties.meta:mode');
+
+      if (mode) {
+        const originalFilter = mapInstance
+          .getFilter('gl-draw-polygon-midpoint.cold');
+
+        originalFilter.push(['!=', 'parent', selectedId]);
+        mapInstance.setFilter('gl-draw-polygon-midpoint.cold', originalFilter);
+        mapInstance.setFilter('gl-draw-polygon-midpoint.hot', originalFilter);
+      }
     } else {
       this.set('selectedFeature', EmptyFeatureCollection);
     }

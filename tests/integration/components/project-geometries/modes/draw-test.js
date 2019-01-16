@@ -1,9 +1,10 @@
-import { module, skip } from 'qunit';
+import { module, skip, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import {
   render,
   click,
   waitUntil,
+  waitFor,
   typeIn,
   clearRender,
 } from '@ember/test-helpers';
@@ -36,7 +37,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     this.sandbox.restore();
   });
 
-  skip('it switches to draw mode', async function(assert) {
+  test('it switches to draw mode', async function(assert) {
     this.server.create('project');
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1);
@@ -63,7 +64,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     assert.equal(draw.getMode(), 'draw_polygon');
   });
 
-  skip('it deletes selected polygon', async function(assert) {
+  test('it deletes selected polygon', async function(assert) {
     this.server.create('project');
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
@@ -87,6 +88,8 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
       {{/mapbox-gl-draw}}
     `);
 
+    assert.equal(draw.getAll().features.length, 1);
+
     const { features: [{ id }] } = draw.getAll();
 
     draw.changeMode('direct_select', { featureId: id });
@@ -99,10 +102,10 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
   // again, I can't get these to work reliably. Manually, this feature works!
   // but since I'm having to simulate practically everything for DRAW
   // it doesn't work!
-  skip('it updates the draw layer label', async function(assert) {
+  test('it updates the draw layer label', async function(assert) {
     this.server.create('project');
     const store = this.owner.lookup('service:store');
-    const model = await store.findRecord('project', 1);
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
     const { map, draw } = this;
 
     const geometricProperty = model.get('geometricProperties')
@@ -130,78 +133,15 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     const { features: [{ id }] } = draw.getAll();
 
     draw.changeMode('direct_select', { featureId: id });
-    await waitUntil(() => map.loaded(), { timeout: 15000 });
+
+    await waitFor('[data-test-feature-label-form]');
     await typeIn('[data-test-feature-label-form]', 'test');
 
-    assert.equal(model.developmentSite.features[0].properties.label, 'test');
-  });
-
-  // again, I can't get these to work reliably. Manually, this feature works!
-  // but since I'm having to simulate practically everything for DRAW
-  // it doesn't work!
-  skip('it selects and deletes', async function(assert) {
-    this.server.create('project', {
-      developmentSite: {
-        type: 'FeatureCollection',
-        features: [{
-          type: 'Feature',
-          id: 'd69a525591aac508d9a045e1883bb213',
-          geometry: {
-            type: 'Polygon',
-            coordinates: [[[-3, -3], [-3, 3], [3, 3], [3, -3], [-3, -3]]],
-          },
-          properties: {
-            id: 'd69a525591aac508d9a045e1883bb213',
-          },
-        }],
-      },
-    });
-
-    const store = this.owner.lookup('service:store');
-    const model = await store.findRecord('project', 1);
-    const { map, draw } = this;
-
-    this.set('model', model);
-    this.set('mapObject', {
-      mapInstance: map,
-      draw,
-    });
-
-    assert.equal(model.get('developmentSite.features.length'), 1);
-
-    await render(hbs`
-      {{#mapbox-gl-draw map=mapObject as |drawable|}}
-        {{#project-geometries/modes/draw
-          map=drawable
-          geometricProperty=model.developmentSite as |draw|}}
-          {{draw.feature-label-form
-            selectedFeature=model.developmentSite}}
-        {{/project-geometries/modes/draw}}
-      {{/mapbox-gl-draw}}
-    `);
-
-    await waitUntil(() => map.queryRenderedFeatures().length, { timeout: 15000 });
-
-    const allRenderedFeatures = map.queryRenderedFeatures();
-
-    // stub in an return all the rendered features
-    const stub = this.sandbox.stub(map, 'queryRenderedFeatures').callsFake((point, options) => { // eslint-disable-line
-      return allRenderedFeatures;
-    });
-
-    await click(map.getCanvas());
-
-    assert.equal(draw.getSelectedIds()[0], 'd69a525591aac508d9a045e1883bb213');
-
-    await click('.trash');
-
-    assert.equal(model.get('developmentSite.features.length'), 0);
-
-    stub.resetBehavior();
+    assert.equal(draw.getAll().features[0].properties.label, 'test');
   });
 
   // too flaky to ever rely upon
-  skip('it draws and saves', async function(assert) {
+  test('it draws and saves', async function(assert) {
     this.server.create('project', {
       developmentSite: {
         type: 'FeatureCollection',
@@ -210,9 +150,14 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     });
 
     const store = this.owner.lookup('service:store');
-    const model = await store.findRecord('project', 1);
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
     const map = await createMap();
     const draw = new DefaultDraw();
+
+    const geometricProperty = model.get('geometricProperties')
+      .findBy('geometryType', 'developmentSite')
+      .get('proposedGeometry');
+    this.set('geometricProperty', geometricProperty);
 
     this.set('model', model);
     this.set('mapObject', {
@@ -221,9 +166,11 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     });
 
     await render(hbs`
-      {{project-geometries/modes/draw
-        map=mapObject
-        geometricProperty=model.developmentSite}}
+      {{#mapbox-gl-draw map=mapObject as |drawable|}}
+        {{project-geometries/modes/draw
+          map=drawable
+          geometricProperty=geometricProperty}}
+      {{/mapbox-gl-draw}}
     `);
 
     draw.changeMode('draw_polygon');

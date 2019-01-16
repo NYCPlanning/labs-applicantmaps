@@ -18,6 +18,7 @@ export default function createMap(container = document.createElement('div')) {
         version: 8,
         sources: {},
         layers: [],
+        glyphs: '{fontstack}/{range}.pbf',
       },
     });
 
