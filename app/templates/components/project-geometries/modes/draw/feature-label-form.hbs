@@ -3,7 +3,7 @@
     <div class="input-group">
       <span class="input-group-label text-small">{{fa-icon 'tag' transform='grow-6'}}</span>
       {{!-- if an array of values was passed in as the 'options' property, use power select --}}
-      {{#if options}}
+      {{#if (and options (not (get selectedFeature.features.firstObject.properties 'meta:mode')))}}
         <div class="input-group-field">
           {{#power-select
             options=options
