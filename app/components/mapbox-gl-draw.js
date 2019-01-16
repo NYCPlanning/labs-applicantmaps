@@ -6,7 +6,7 @@ import { next } from '@ember/runloop';
 import { service } from '@ember-decorators/service';
 import { action, computed } from '@ember-decorators/object';
 import { setProperties } from '@ember/object';
-import AnnotationsMode from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/mode';
+import AnnotationsMode, { annotatable } from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/mode';
 import AnnotationsStyles from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/styles';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
@@ -19,6 +19,7 @@ DirectSelectUndraggable.onFeature = function() {
 
 // extend styles
 const styles = [...AnnotationsStyles, ...DefaultMapboxDrawStyles].uniqBy('id');
+const AnnotationsDrawPoint = { ...annotatable(MapboxDraw.modes.draw_point) };
 
 export const DefaultDraw = MapboxDraw.bind(null, {
   displayControlsDefault: false,
@@ -31,6 +32,7 @@ export const DefaultDraw = MapboxDraw.bind(null, {
     'draw_annotations:linear': AnnotationsMode, // These are identical because they function the same
     'draw_annotations:curved': AnnotationsMode, // but only really need to be named differently
     'draw_annotations:square': AnnotationsMode,
+    'draw_annotations:label': AnnotationsDrawPoint,
   }, MapboxDraw.modes),
   styles,
 });

@@ -31,6 +31,13 @@
       <p class="no-margin">Annotate a right angle</p>
     {{/ember-tooltip}}
   </button>
+  <button class="annotation--custom-text" {{action handleAnnotation 'draw_annotations:label'}} data-test-draw-label-tool>
+    {{fa-icon 'i-cursor' size='2x' fixedWidth=true transform='shrink-4'}}
+    {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip"}}
+      <h5 class="small-margin-bottom">Text Label</h5>
+      <p class="no-margin">Annotate a custom label</p>
+    {{/ember-tooltip}}
+  </button>
   {{!--   <button class="annotation--point-to-point-offset">
     <span class="fa-layers fa-2x">
       {{fa-icon 'square-full' mask='circle-notch' transform='up-4'}}

@@ -99,6 +99,7 @@
     "@turf/difference": "6.0.2",
     "@turf/distance": "6.0.1",
     "@turf/helpers": "6.1.4",
+    "@turf/invariant": "6.1.2",
     "@turf/length": "6.0.2",
     "@turf/random": "6.0.2",
     "@turf/simplify": "^5.1.5",

@@ -6,7 +6,6 @@ import {
   waitUntil,
   waitFor,
   typeIn,
-  clearRender,
 } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -140,7 +139,6 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     assert.equal(draw.getAll().features[0].properties.label, 'test');
   });
 
-  // too flaky to ever rely upon
   test('it draws and saves', async function(assert) {
     this.server.create('project', {
       developmentSite: {
@@ -187,52 +185,54 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
   });
 
   // this test is too brittle at this point
-  skip('events are properly torn down across subsequent renders', async function(assert) {
-    this.server.create('project');
-    const store = this.owner.lookup('service:store');
-    const model = await store.findRecord('project', 1);
-    const { map, draw } = this;
+  skip('events are properly torn down across subsequent renders', function() {});
 
-    this.set('geometricProperty', model.get('developmentSite'));
+  test('it can handle label tool', async function(assert) {
+    this.server.create('project', {
+      developmentSite: {
+        type: 'FeatureCollection',
+        features: [],
+      },
+    });
+
+    const store = this.owner.lookup('service:store');
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
+    const map = await createMap();
+    const draw = new DefaultDraw();
+
+    const geometricProperty = model.get('geometricProperties')
+      .findBy('geometryType', 'developmentSite')
+      .get('proposedGeometry');
+    this.set('geometricProperty', geometricProperty);
+
+    this.set('model', model);
     this.set('mapObject', {
       mapInstance: map,
       draw,
     });
 
-    const drawGetAllSpy = this.sandbox.spy(draw, 'getAll');
-
     await render(hbs`
-      {{project-geometries/modes/draw
-        map=mapObject
-        geometricProperty=geometricProperty}}
+      {{#mapbox-gl-draw map=mapObject as |drawable|}}
+        {{#project-geometries/modes/draw
+          map=drawable
+          geometricProperty=geometricProperty as |drawMode|}}
+          {{drawMode.annotations}}
+          {{drawMode.feature-label-form}}
+        {{/project-geometries/modes/draw}}
+      {{/mapbox-gl-draw}}
     `);
 
-    const { features: [{ id }] } = draw.getAll();
+    await click('[data-test-draw-label-tool]');
 
-    draw.changeMode('direct_select', { featureId: id });
+    assert.equal(draw.getMode(), 'draw_annotations:label');
 
-    assert.equal(drawGetAllSpy.callCount, 2);
+    await waitUntil(() => map.isSourceLoaded('mapbox-gl-draw-cold') && map.isSourceLoaded('mapbox-gl-draw-hot'));
+    const mapCanvas = map.getCanvas();
+    await click(mapCanvas, { clientX: 40, clientY: 40 });
 
-    await clearRender();
+    await waitFor('[data-test-feature-label-form]');
+    await typeIn('[data-test-feature-label-form]', 'test');
 
-    await render(hbs`
-      {{project-geometries/modes/draw
-        map=mapObject
-        geometricProperty=geometricProperty}}
-    `);
-
-    draw.changeMode('direct_select', { featureId: id });
-
-    await clearRender();
-
-    await render(hbs`
-      {{project-geometries/modes/draw
-        map=mapObject
-        geometricProperty=geometricProperty}}
-    `);
-
-    draw.changeMode('direct_select', { featureId: id });
-
-    assert.equal(drawGetAllSpy.callCount, 4);
+    assert.equal(draw.getAll().features[1].properties.label, 'test');
   });
 });

@@ -29,9 +29,9 @@ const doubleClickZoom = {
   },
 };
 
-const AnnotationMode = { ...MapboxDraw.modes.draw_line_string };
+const MeasurementMode = { ...MapboxDraw.modes.draw_line_string };
 
-AnnotationMode.onClick = function(state, e) {
+MeasurementMode.onClick = function(state, e) {
   // this ends the drawing after the user creates a second point, triggering this.onStop
   if (state.currentVertexPosition === 1) {
     state.line.addCoordinate(0, e.lngLat.lng, e.lngLat.lat);
@@ -51,7 +51,7 @@ AnnotationMode.onClick = function(state, e) {
 
 // creates the final geojson point feature with a radius property
 // triggers draw.create
-AnnotationMode.onStop = function(state) {
+MeasurementMode.onStop = function(state) {
   doubleClickZoom.enable(this);
 
   this.activateUIButton();
@@ -85,11 +85,7 @@ AnnotationMode.onStop = function(state) {
   }
 };
 
-AnnotationMode.toDisplayFeatures = function(state, geojson, display) {
-  // categorize this internally as a product of this mode
-  geojson.properties['meta:mode'] = this._ctx.events.currentModeName();
-  state.line.properties['meta:mode'] = this._ctx.events.currentModeName();
-
+MeasurementMode.toDisplayFeatures = function(state, geojson, display) {
   // calculate label, append to properties
   const label = `${(length(geojson) * 3280.84).toFixed(0)} ft`; // km to feet
   state.line.properties.label = label;
@@ -132,4 +128,27 @@ AnnotationMode.toDisplayFeatures = function(state, geojson, display) {
   return null;
 };
 
-export default AnnotationMode;
+export function annotatable(mode) {
+  return {
+    ...mode,
+    ...{
+      toDisplayFeatures(state, geojson, display) {
+        // categorize this internally as a product of this mode
+        geojson.properties['meta:mode'] = this._ctx.events.currentModeName();
+
+        // the "state" param will be structured based on the geometry type
+        // so we look for props to imprint the current type
+        Object.keys(state).forEach((typeKey) => {
+          // some of the other props in here are unrelated
+          if (state[typeKey].properties) {
+            state[typeKey].properties['meta:mode'] = this._ctx.events.currentModeName();
+          }
+        });
+
+        return mode.toDisplayFeatures(state, geojson, display);
+      },
+    },
+  };
+}
+
+export default annotatable(MeasurementMode);
