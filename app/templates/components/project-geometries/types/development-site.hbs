@@ -4,9 +4,9 @@
     {{back-to-dashboard-button model=model}}
 
     <h1 class="header-large small-margin-bottom">Development Site</h1>
+
     <p>The Development Site refers to the zoning lot(s) you plan to develop, facilitated by your requested land use actions.</p>
 
-    <p>Create a Development Site that is coterminous with chosen lots.  You can also select tax lots and modify them to include partial lots.</p>
     <hr />
 
     {{#if (eq mode 'draw')}}
@@ -47,6 +47,7 @@
         <span class="cell shrink" style="padding-right:0.25rem;">{{fa-icon 'hand-pointer' prefix='far' fixedWidth=true}}</span>
         <span class="cell auto">Select lots to add them to your Development Site (selected lots will be yellow)</span>
       </p>
+      <p><img src="/img/gif-select-lot-development-site.gif" alt="Select Lot Project Area" class="shadowed" /></p>
     {{/if}}
 
     <hr />
