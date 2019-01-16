@@ -133,7 +133,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
 
     draw.changeMode('direct_select', { featureId: id });
 
-    await waitFor('[data-test-feature-label-form]');
+    await waitFor('[data-test-feature-label-form]', { timeout: 10000 });
     await typeIn('[data-test-feature-label-form]', 'test');
 
     assert.equal(draw.getAll().features[0].properties.label, 'test');
@@ -230,7 +230,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     const mapCanvas = map.getCanvas();
     await click(mapCanvas, { clientX: 40, clientY: 40 });
 
-    await waitFor('[data-test-feature-label-form]');
+    await waitFor('[data-test-feature-label-form]', { timeout: 10000 });
     await typeIn('[data-test-feature-label-form]', 'test');
 
     assert.equal(draw.getAll().features[1].properties.label, 'test');
