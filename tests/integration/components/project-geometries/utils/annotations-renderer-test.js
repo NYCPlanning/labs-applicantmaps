@@ -36,6 +36,7 @@ module('Integration | Component | project-geometries/utils/annotations-renderer'
         lineFeature('linear'),
         lineFeature('curved'),
         lineFeature('square'),
+        lineFeature('label'),
       ],
     });
 
