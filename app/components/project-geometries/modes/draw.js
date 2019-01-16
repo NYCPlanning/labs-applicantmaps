@@ -52,6 +52,7 @@ export default class DrawComponent extends Component {
 
         originalFilter.push(['!=', 'parent', selectedId]);
         mapInstance.setFilter('gl-draw-polygon-midpoint.cold', originalFilter);
+        mapInstance.setFilter('gl-draw-polygon-midpoint.hot', originalFilter);
       }
     } else {
       this.set('selectedFeature', EmptyFeatureCollection);

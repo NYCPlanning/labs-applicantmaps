@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { argument } from '@ember-decorators/argument';
 import { computed } from '@ember-decorators/object';
-import generateCurvature from '../../../utils/mapbox-gl-draw/annotations/generate-curvature';
+import presentationLayerGenerator from '../../../utils/mapbox-gl-draw/annotations/generate-curvature';
 
 export default class AnnotationsRenderer extends Component {
   @argument
@@ -19,7 +19,7 @@ export default class AnnotationsRenderer extends Component {
       const { properties: { 'meta:mode': mode = '' } } = feature;
       const [, type] = mode.split(':');
 
-      displayLayers = [...displayLayers, ...generateCurvature(feature, type)];
+      displayLayers = [...displayLayers, ...presentationLayerGenerator(feature, type)];
     });
 
     return displayLayers;

@@ -30,6 +30,7 @@ export const DefaultDraw = MapboxDraw.bind(null, {
     direct_select_undraggable: DirectSelectUndraggable,
     'draw_annotations:linear': AnnotationsMode, // These are identical because they function the same
     'draw_annotations:curved': AnnotationsMode, // but only really need to be named differently
+    'draw_annotations:square': AnnotationsMode,
   }, MapboxDraw.modes),
   styles,
 });
