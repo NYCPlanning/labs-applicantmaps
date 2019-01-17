@@ -33,6 +33,7 @@ export const DefaultDraw = MapboxDraw.bind(null, {
     'draw_annotations:curved': AnnotationsMode, // but only really need to be named differently
     'draw_annotations:square': AnnotationsMode,
     'draw_annotations:label': AnnotationsDrawPoint,
+    'draw_annotations:centerline': AnnotationsDrawPoint,
   }, MapboxDraw.modes),
   styles,
 });

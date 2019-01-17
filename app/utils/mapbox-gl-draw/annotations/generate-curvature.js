@@ -232,5 +232,27 @@ export default function(...args) {
     }];
   }
 
-  return new Error('annotation mode handler not found');
+  if (type === 'centerline') {
+    return [{
+      type: 'symbol',
+      source: {
+        type: 'geojson',
+        data: feature,
+      },
+      layout: {
+        'icon-image': 'centerline',
+        'symbol-placement': 'point',
+        'icon-size': 0.01,
+        'text-offset': [
+          0,
+          -1,
+        ],
+        'text-justify': 'center',
+        'text-anchor': 'center',
+        'text-size': 16,
+      },
+    }];
+  }
+
+  return [];
 }

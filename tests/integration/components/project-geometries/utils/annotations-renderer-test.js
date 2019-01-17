@@ -37,6 +37,7 @@ module('Integration | Component | project-geometries/utils/annotations-renderer'
         lineFeature('curved'),
         lineFeature('square'),
         lineFeature('label'),
+        lineFeature('centerline'),
       ],
     });
 
@@ -56,8 +57,6 @@ module('Integration | Component | project-geometries/utils/annotations-renderer'
         lineFeature('peanutbutter'),
       ],
     });
-
-    await render(hbs`{{project-geometries/utils/annotations-renderer annotations=features}}`);
 
     assert.ok(true);
   });
