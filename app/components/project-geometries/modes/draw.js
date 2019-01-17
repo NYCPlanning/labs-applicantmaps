@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import { get } from '@ember/object';
 import { action, computed } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
+import { containsNumber } from '@turf/invariant';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/geometric-property';
 
 export default class DrawComponent extends Component {
@@ -65,10 +66,12 @@ export default class DrawComponent extends Component {
   skipToDirectSelectCallback() {
     const { draw: { drawInstance: draw } } = this.get('map');
     const mode = draw.getMode();
-    const [selected] = draw.getSelectedIds();
+    const [selectedID] = draw.getSelectedIds();
+    const { features: [{ geometry: { type } = {} } = {}] } = draw.getSelected();
 
-    if (selected && mode === 'simple_select') {
-      draw.changeMode('direct_select', { featureId: selected });
+    // can't direct select a point
+    if (selectedID && type !== 'Point' && mode === 'simple_select') {
+      draw.changeMode('direct_select', { featureId: selectedID });
     }
   }
 
@@ -81,7 +84,7 @@ export default class DrawComponent extends Component {
   get drawnFeatures() {
     const { draw: { drawInstance: draw } } = this.get('map');
     const features = draw.getAll().features
-      .filter(({ geometry: { coordinates: [[firstCoord]] = [] } }) => firstCoord !== null);
+      .filter(({ geometry: { coordinates } }) => containsNumber(coordinates));
 
     return {
       type: 'FeatureCollection',

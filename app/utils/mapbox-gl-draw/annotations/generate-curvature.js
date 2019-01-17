@@ -201,7 +201,7 @@ const buildLineLayers = function(rawLineFeature, annotationType) {
 };
 
 export default function(...args) {
-  const [, type] = args;
+  const [feature, type] = args;
 
   if (type === 'curved' || type === 'linear') {
     return buildLineLayers(...args);
@@ -211,5 +211,26 @@ export default function(...args) {
     return buildSquareLayers(...args);
   }
 
-  return buildLineLayers(...args);
+  if (type === 'label') {
+    return [{
+      type: 'symbol',
+      source: {
+        type: 'geojson',
+        data: feature,
+      },
+      layout: {
+        'text-field': '{label}',
+        'symbol-placement': 'point',
+        'text-offset': [
+          0,
+          -1,
+        ],
+        'text-justify': 'center',
+        'text-anchor': 'center',
+        'text-size': 12,
+      },
+    }];
+  }
+
+  return new Error('annotation mode handler not found');
 }
