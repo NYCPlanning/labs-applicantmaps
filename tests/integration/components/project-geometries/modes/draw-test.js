@@ -189,7 +189,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
   skip('events are properly torn down across subsequent renders', function() {});
 
   // need to look at this later - firefox is behaving differently with the clicks
-  skip('it can handle label tool', async function(assert) {
+  test('it can handle label tool', async function(assert) {
     this.server.create('project', {
       developmentSite: {
         type: 'FeatureCollection',
@@ -199,14 +199,42 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
 
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
-    const map = await createMap();
-    const draw = new DefaultDraw();
-
     const geometricProperty = model.get('geometricProperties')
       .findBy('geometryType', 'developmentSite')
       .get('proposedGeometry');
-    this.set('geometricProperty', geometricProperty);
 
+    const callbacks = {};
+    const map = {
+      addControl() {},
+      removeControl() {},
+      on(event, callback) {
+        callbacks[event] = callback;
+      },
+      off() {},
+      isSourceLoaded() { return true; },
+    };
+
+    const draw = {
+      changeMode() {
+        callbacks['draw.modechange']();
+      },
+      getMode() {},
+      set() {},
+      getSelected() {
+        return geometricProperty;
+      },
+      getSelectedIds() {
+        return [geometricProperty.id];
+      },
+      getAll() {
+        return geometricProperty;
+      },
+      setFeatureProperty() {
+
+      },
+    };
+
+    this.set('geometricProperty', geometricProperty);
     this.set('model', model);
     this.set('mapObject', {
       mapInstance: map,
@@ -226,15 +254,15 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
 
     await click('[data-test-draw-label-tool]');
 
-    assert.equal(draw.getMode(), 'draw_annotations:label');
+    // trigger the create callback;
+    callbacks['draw.create']();
 
-    await waitUntil(() => map.isSourceLoaded('mapbox-gl-draw-cold') && map.isSourceLoaded('mapbox-gl-draw-hot'));
-    const mapCanvas = map.getCanvas();
-    await click(mapCanvas, { clientX: 40, clientY: 40 });
-    await pauseTest();
     await waitFor('[data-test-feature-label-form]');
     await typeIn('[data-test-feature-label-form]', 'test');
 
-    assert.equal(draw.getAll().features[1].properties.label, 'test');
+    assert.equal(draw.getAll().features[0].properties.label, 'test');
   });
+
+  // test('it can handle label tool', async function(assert) {
+  // });
 });
