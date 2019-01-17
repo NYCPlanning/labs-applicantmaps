@@ -57,8 +57,6 @@ module('Integration | Component | project-geometries/utils/annotations-renderer'
       ],
     });
 
-    await render(hbs`{{project-geometries/utils/annotations-renderer annotations=features}}`);
-
     assert.ok(true);
   });
 });

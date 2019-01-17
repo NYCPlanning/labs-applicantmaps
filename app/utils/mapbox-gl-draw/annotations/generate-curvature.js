@@ -254,5 +254,5 @@ export default function(...args) {
     }];
   }
 
-  throw Error('annotation mode handler not found');
+  return [];
 }
