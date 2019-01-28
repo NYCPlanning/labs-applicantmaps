@@ -1,70 +1,36 @@
-{{#component (concat 'project-geometries/modes/' mode)
-  map=map
-  geometricProperty=model.specialPurposeDistricts as |edit-mode|
-}}
-  {{project-geometry-renderer map=map model=model}}
+{{#if isReady}}
+  {{#component modeComponent as |editMode|}}
+    {{editMode.feature-label-form}}
+    {{editMode.annotations}}
+  {{/component}}
+{{/if}}
 
-  {{edit-mode.feature-label-form}}
+{{#ember-wormhole to='geometry-type-draw-explainer'}}
+  <div class="fade-in-on-load text-small">
 
-  {{#ember-wormhole to='geometry-type-draw-explainer'}}
-    <div class="fade-in-on-load text-small">
+    {{back-to-dashboard-button model=model}}
 
-      {{back-to-dashboard-button model=model}}
+    <h1 class="header-large small-margin-bottom">
+      Rezoning:
+      <span class="text-weight-normal" style="display:block;">
+        Special Purpose Districts
+      </span>
+    </h1>
 
-      <h1 class="header-large small-margin-bottom">Rezoning: <span class="text-weight-normal">Special Purpose Districts</span></h1>
-      <p><a href="https://www1.nyc.gov/site/planning/zoning/districts-tools/special-purpose-districts.page" target="_blank">Special Purpose Districts</a> supplement and modify the underlying zoning in distinctive neighborhoods with particular issues and goals. These boundaries <strong>extend to the centerline of streets</strong>, are not dependent on lot lines, and can sometimes intersect tax lots.</p>
+    <p><a href="https://www1.nyc.gov/site/planning/zoning/districts-tools/special-purpose-districts.page" target="_blank">Special Purpose Districts</a> supplement and modify the underlying zoning in distinctive neighborhoods with particular issues and goals.</p>
 
-      <hr />
+    <hr />
 
-      <p class="text-weight-bold small-margin-bottom">Adding new shapes:</p>
-      <ul class="small-margin-bottom">
-        <li>
-          Use the
-          <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
-            {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
-            {{fa-icon 'square' transform='grow-8' class='white'}}
-            {{fa-icon 'draw-polygon' transform='shrink-2'}}
-          </span>
-          polygon tool to add a new shape
-        </li>
-        <li>Complete a new shape by clicking its final vertex a second time</li>
-      </ul>
+    <p>Special Purpose Districts usually extend to the <strong>street centerline</strong> (not lot boundaries).</p>
+    <p><img src="/img/gif-special-purpose.gif" alt="Draw Special Purpose Districts" class="shadowed" /></p>
 
-      <p class="text-weight-bold small-margin-bottom">Editing existing shapes:</p>
-      <ul class="small-margin-bottom">
-        <li>Edit an existing shape by selecting it and dragging its vertices</li>
-        <li>Add a vertex by clicking the midpoint of a line</li>
-        <li>
-          Use the
-          <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
-            {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
-            {{fa-icon 'square' transform='grow-8' class='white'}}
-            {{fa-icon 'trash-alt' prefix='far' transform='shrink-2'}}
-          </span>
-          trash button to delete a selected shape or vertex
-        </li>
-      </ul>
+    <hr />
 
-      <p class="text-weight-bold small-margin-bottom">Labeling shapes:</p>
-      <ul>
-        <li>
-          Select a shape then edit the
-          <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
-            {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
-            {{fa-icon 'tag' transform='shrink-2'}}
-          </span>
-          label text
-        </li>
-      </ul>
-
-      <hr />
-
-      {{#edit-mode.button
-        enabled=isReadyToProceed
-        handleClick=(action 'save')}}
-        Save
-        <small style="display:block;line-height:1.75;">Special Purpose Districts</small>
-      {{/edit-mode.button}}
-    </div>
-  {{/ember-wormhole}}
-{{/component}}
+    {{#project-geometries/utils/button
+      enabled=isReadyToProceed
+      handleClick=(action 'calculateRezoningOnSave')}}
+      Save
+      <small style="display:block;line-height:1.75;">Special Purpose Districts</small>
+    {{/project-geometries/utils/button}}
+  </div>
+{{/ember-wormhole}}

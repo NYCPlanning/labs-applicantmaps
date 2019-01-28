@@ -1,17 +1,17 @@
-import { module, test, skip } from 'qunit';
+import { module, skip, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import {
   render,
   click,
   waitUntil,
+  waitFor,
   typeIn,
-  clearRender,
 } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import createMap from 'labs-applicant-maps/tests/helpers/create-map';
 import setupMapMocks from 'labs-applicant-maps/tests/helpers/setup-map-mocks';
-import { DefaultDraw } from 'labs-applicant-maps/components/project-geometries/modes/draw';
+import { DefaultDraw } from 'labs-applicant-maps/components/mapbox-gl-draw';
 import Sinon from 'sinon';
 
 module('Integration | Component | project-geometries/modes/draw', function(hooks) {
@@ -32,22 +32,30 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     this.map.remove();
   });
 
+  hooks.afterEach(function() {
+    this.sandbox.restore();
+  });
+
   test('it switches to draw mode', async function(assert) {
     this.server.create('project');
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1);
     const { map, draw } = this;
 
-    this.set('geometricProperty', model.get('developmentSite'));
+    this.set('geometricProperty', model.get('geometricProperties')
+      .findBy('geometryType', 'developmentSite')
+      .get('proposedGeometry'));
     this.set('mapObject', {
       mapInstance: map,
       draw,
     });
 
     await render(hbs`
-      {{project-geometries/modes/draw
-        map=mapObject
-        geometricProperty=geometricProperty}}
+      {{#mapbox-gl-draw map=mapObject as |drawable|}}
+        {{project-geometries/modes/draw
+          map=drawable
+          geometricProperty=geometricProperty}}
+      {{/mapbox-gl-draw}}
     `);
 
     await click('.polygon');
@@ -58,20 +66,28 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
   test('it deletes selected polygon', async function(assert) {
     this.server.create('project');
     const store = this.owner.lookup('service:store');
-    const model = await store.findRecord('project', 1);
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
     const { map, draw } = this;
 
-    this.set('model', model);
+    const geometricProperty = model.get('geometricProperties')
+      .findBy('geometryType', 'developmentSite')
+      .get('proposedGeometry');
+    this.set('geometricProperty', geometricProperty);
+
     this.set('mapObject', {
       mapInstance: map,
       draw,
     });
 
     await render(hbs`
-      {{project-geometries/modes/draw
-        map=mapObject
-        geometricProperty=model.developmentSite}}
+      {{#mapbox-gl-draw map=mapObject as |drawable|}}
+        {{project-geometries/modes/draw
+          map=drawable
+          geometricProperty=geometricProperty}}
+      {{/mapbox-gl-draw}}
     `);
+
+    assert.equal(draw.getAll().features.length, 1);
 
     const { features: [{ id }] } = draw.getAll();
 
@@ -79,14 +95,22 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
 
     await click('.trash');
 
-    assert.equal(model.get('developmentSite').features.length, 0);
+    assert.equal(draw.getAll().features.length, 0);
   });
 
+  // again, I can't get these to work reliably. Manually, this feature works!
+  // but since I'm having to simulate practically everything for DRAW
+  // it doesn't work!
   test('it updates the draw layer label', async function(assert) {
     this.server.create('project');
     const store = this.owner.lookup('service:store');
-    const model = await store.findRecord('project', 1);
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
     const { map, draw } = this;
+
+    const geometricProperty = model.get('geometricProperties')
+      .findBy('geometryType', 'developmentSite')
+      .get('proposedGeometry');
+    this.set('geometricProperty', geometricProperty);
 
     this.set('model', model);
     this.set('mapObject', {
@@ -95,70 +119,242 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     });
 
     await render(hbs`
-      {{#project-geometries/modes/draw
-        map=mapObject
-        geometricProperty=model.developmentSite as |draw|}}
-        {{draw.feature-label-form
-          selectedFeature=model.developmentSite}}
-      {{/project-geometries/modes/draw}}
+      {{#mapbox-gl-draw map=mapObject as |drawable|}}
+        {{#project-geometries/modes/draw
+          map=drawable
+          geometricProperty=geometricProperty as |draw|}}
+          {{draw.feature-label-form
+            selectedFeature=geometricProperty}}
+        {{/project-geometries/modes/draw}}
+      {{/mapbox-gl-draw}}
     `);
 
     const { features: [{ id }] } = draw.getAll();
 
     draw.changeMode('direct_select', { featureId: id });
-    await waitUntil(() => map.loaded(), { timeout: 15000 });
+
+    await waitFor('[data-test-feature-label-form]');
     await typeIn('[data-test-feature-label-form]', 'test');
 
-    assert.equal(model.developmentSite.features[0].properties.label, 'test');
+    assert.equal(draw.getAll().features[0].properties.label, 'test');
   });
 
-  // this test is too brittle at this point
-  skip('events are properly torn down across subsequent renders', async function(assert) {
-    this.server.create('project');
-    const store = this.owner.lookup('service:store');
-    const model = await store.findRecord('project', 1);
-    const { map, draw } = this;
+  test('it draws and saves', async function(assert) {
+    this.server.create('project', {
+      developmentSite: {
+        type: 'FeatureCollection',
+        features: [],
+      },
+    });
 
-    this.set('geometricProperty', model.get('developmentSite'));
+    const store = this.owner.lookup('service:store');
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
+    const map = await createMap();
+    const draw = new DefaultDraw();
+
+    const geometricProperty = model.get('geometricProperties')
+      .findBy('geometryType', 'developmentSite')
+      .get('proposedGeometry');
+    this.set('geometricProperty', geometricProperty);
+
+    this.set('model', model);
     this.set('mapObject', {
       mapInstance: map,
       draw,
     });
 
-    const drawGetAllSpy = this.sandbox.spy(draw, 'getAll');
-
     await render(hbs`
-      {{project-geometries/modes/draw
-        map=mapObject
-        geometricProperty=geometricProperty}}
+      {{#mapbox-gl-draw map=mapObject as |drawable|}}
+        {{project-geometries/modes/draw
+          map=drawable
+          geometricProperty=geometricProperty}}
+      {{/mapbox-gl-draw}}
     `);
 
-    const { features: [{ id }] } = draw.getAll();
+    draw.changeMode('draw_polygon');
 
-    draw.changeMode('direct_select', { featureId: id });
+    await waitUntil(() => map.isSourceLoaded('mapbox-gl-draw-cold') && map.isSourceLoaded('mapbox-gl-draw-hot'));
 
-    assert.equal(drawGetAllSpy.callCount, 2);
+    const mapCanvas = map.getCanvas();
+    await click(mapCanvas, { clientX: 40, clientY: 40 });
+    await click(mapCanvas, { clientX: 50, clientY: 50 });
+    await click(mapCanvas, { clientX: 55, clientY: 55 });
+    await click(mapCanvas, { clientX: 55, clientY: 55 });
 
-    await clearRender();
+    assert.ok(true);
+  });
+
+  // this test is too brittle at this point
+  skip('events are properly torn down across subsequent renders', function() {});
+
+  // need to look at this later - firefox is behaving differently with the clicks
+  test('it can handle label tool', async function(assert) {
+    this.server.create('project', {
+      developmentSite: {
+        type: 'FeatureCollection',
+        features: [],
+      },
+    });
+
+    const store = this.owner.lookup('service:store');
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
+    const geometricProperty = model.get('geometricProperties')
+      .findBy('geometryType', 'developmentSite')
+      .get('proposedGeometry');
+
+    const callbacks = {};
+    const map = {
+      addControl() {},
+      removeControl() {},
+      on(event, callback) {
+        callbacks[event] = callback;
+      },
+      off() {},
+      isSourceLoaded() { return true; },
+    };
+
+    const draw = {
+      changeMode() {
+        callbacks['draw.modechange']();
+      },
+      getMode() {},
+      set() {},
+      getSelected() {
+        return geometricProperty;
+      },
+      getSelectedIds() {
+        return [geometricProperty.id];
+      },
+      getAll() {
+        return geometricProperty;
+      },
+      setFeatureProperty() {
+
+      },
+    };
+
+    this.set('geometricProperty', geometricProperty);
+    this.set('mapObject', {
+      mapInstance: map,
+      draw,
+    });
 
     await render(hbs`
-      {{project-geometries/modes/draw
-        map=mapObject
-        geometricProperty=geometricProperty}}
+      {{#mapbox-gl-draw map=mapObject as |drawable|}}
+        {{#project-geometries/modes/draw
+          map=drawable
+          geometricProperty=geometricProperty as |drawMode|}}
+          {{drawMode.annotations}}
+          {{drawMode.feature-label-form}}
+        {{/project-geometries/modes/draw}}
+      {{/mapbox-gl-draw}}
     `);
 
-    draw.changeMode('direct_select', { featureId: id });
+    await click('[data-test-draw-label-tool]');
 
-    await clearRender();
+    // trigger the create callback;
+    callbacks['draw.create']();
+
+    await waitFor('[data-test-feature-label-form]');
+    await typeIn('[data-test-feature-label-form]', 'test');
+
+    assert.equal(draw.getAll().features[0].properties.label, 'test');
+  });
+
+  test('it can handle centerline tool', async function(assert) {
+    this.server.create('project', {
+      developmentSite: {
+        type: 'FeatureCollection',
+        features: [],
+      },
+    });
+
+    const store = this.owner.lookup('service:store');
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
+    const geometricProperty = model.get('geometricProperties')
+      .findBy('geometryType', 'developmentSite')
+      .get('proposedGeometry');
+
+    const callbacks = {};
+    const map = {
+      addControl() {},
+      removeControl() {},
+      on(event, callback) {
+        callbacks[event] = callback;
+      },
+      off() {},
+      isSourceLoaded() { return true; },
+    };
+
+    const draw = {
+      changeMode() {
+        callbacks['draw.modechange']();
+      },
+      getMode() {},
+      set() {},
+      getSelected() {
+        return geometricProperty;
+      },
+      getSelectedIds() {
+        return [geometricProperty.id];
+      },
+      getSelectedPoints() {
+        return {
+          type: 'FeatureCollection',
+          features: [{
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [0, 0],
+            },
+          }, {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [0, 0],
+            },
+          }],
+        };
+      },
+      trash() {
+        geometricProperty.features = [];
+      },
+      getAll() {
+        return geometricProperty;
+      },
+      setFeatureProperty() {
+
+      },
+    };
+
+    this.set('geometricProperty', geometricProperty);
+    this.set('mapObject', {
+      mapInstance: map,
+      draw,
+    });
 
     await render(hbs`
-      {{project-geometries/modes/draw
-        map=mapObject
-        geometricProperty=geometricProperty}}
+      {{#mapbox-gl-draw map=mapObject as |drawable|}}
+        {{#project-geometries/modes/draw
+          map=drawable
+          geometricProperty=geometricProperty as |drawMode|}}
+          {{drawMode.annotations}}
+          {{drawMode.feature-label-form}}
+        {{/project-geometries/modes/draw}}
+      {{/mapbox-gl-draw}}
     `);
 
-    draw.changeMode('direct_select', { featureId: id });
+    await click('[data-test-draw-centerline-tool]');
 
-    assert.equal(drawGetAllSpy.callCount, 4);
+    // trigger the create callback;
+    callbacks['draw.create']();
+    callbacks['draw.selectionchange']();
+    callbacks['draw.selectionchange']();
+
+    assert.equal(geometricProperty.features.length, 1);
+
+    await click('.trash');
+
+    assert.equal(geometricProperty.features.length, 0);
   });
 });

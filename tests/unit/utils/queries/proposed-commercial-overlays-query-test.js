@@ -12,7 +12,7 @@ module('Unit | Utility | queries/proposed-commercial-overlays-query', function(h
     this.server.createList('project', 1);
 
     const store = this.owner.lookup('service:store');
-    const model = await store.findRecord('project', 1);
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
     const result = queriesProposedCommercialOverlaysQuery(
       model.get('developmentSite'),
     );

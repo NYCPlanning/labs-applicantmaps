@@ -109,3 +109,7 @@
     }}
   {{/map.source}}
 {{/if}}
+
+{{#if (not (is-empty model.annotations))}}
+  {{project-geometries/utils/annotations-renderer map=map annotations=model.annotations}}
+{{/if}}

@@ -11,6 +11,9 @@ export default class FeatureLabelFormComponent extends Component {
   updateSelectedFeature() {}
 
   @argument
+  drawStateCallback() {}
+
+  @argument
   options=null;
 
   @alias('selectedFeature.features.firstObject.properties.label')
@@ -20,5 +23,6 @@ export default class FeatureLabelFormComponent extends Component {
   handleSelectChange(newLabel) {
     this.set('label', newLabel);
     this.updateSelectedFeature(newLabel);
+    this.drawStateCallback();
   }
 }

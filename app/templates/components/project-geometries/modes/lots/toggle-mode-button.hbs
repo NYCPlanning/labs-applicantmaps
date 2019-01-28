@@ -1,0 +1,10 @@
+{{#link-to 'projects.edit.geometry-edit' (query-params mode='draw')
+  tagName='button'
+  class='button gray expanded'
+  disabled=(not isReadyToProceed)
+}}
+  Switch to Manual Drawing
+  <small style="display:block;line-height:1.75;">
+    (edit the shape with draw tools)
+  </small>
+{{/link-to}}
