@@ -604,28 +604,28 @@
     ember-cli-babel-plugin-helpers "^1.0.0"
     ember-cli-version-checker "^2.1.0"
 
-"@ember-decorators/component@^2.1.0", "@ember-decorators/component@^2.3.0", "@ember-decorators/component@^2.3.1":
+"@ember-decorators/component@^2.1.0", "@ember-decorators/component@^2.3.0":
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/@ember-decorators/component/-/component-2.5.2.tgz#54ceb0edbf8cc089b25174897639c5704532274f"
   dependencies:
     "@ember-decorators/utils" "^2.5.2"
     ember-cli-babel "^6.6.0"
 
-"@ember-decorators/controller@^2.1.0", "@ember-decorators/controller@^2.3.0", "@ember-decorators/controller@^2.3.1":
+"@ember-decorators/controller@^2.1.0", "@ember-decorators/controller@^2.3.0":
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/@ember-decorators/controller/-/controller-2.5.2.tgz#f74a537ba79d966b5bb1402f6407692c849ef9db"
   dependencies:
     "@ember-decorators/utils" "^2.5.2"
     ember-cli-babel "^6.6.0"
 
-"@ember-decorators/data@^2.1.0", "@ember-decorators/data@^2.3.0", "@ember-decorators/data@^2.3.1":
+"@ember-decorators/data@^2.1.0", "@ember-decorators/data@^2.3.0":
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/@ember-decorators/data/-/data-2.5.2.tgz#11411ccf2b94437ab3a6a23077cd39bd990ab334"
   dependencies:
     "@ember-decorators/utils" "^2.5.2"
     ember-cli-babel "^6.6.0"
 
-"@ember-decorators/object@^2.1.0", "@ember-decorators/object@^2.3.0", "@ember-decorators/object@^2.3.1":
+"@ember-decorators/object@^2.1.0", "@ember-decorators/object@^2.3.0":
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/@ember-decorators/object/-/object-2.5.2.tgz#3f0d238212da13bda94a129964b47387ed90054c"
   dependencies:
@@ -633,7 +633,7 @@
     ember-cli-babel "^6.6.0"
     ember-compatibility-helpers "^1.0.0"
 
-"@ember-decorators/service@^2.1.0", "@ember-decorators/service@^2.3.0", "@ember-decorators/service@^2.3.1":
+"@ember-decorators/service@^2.1.0", "@ember-decorators/service@^2.3.0":
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/@ember-decorators/service/-/service-2.5.2.tgz#0ec93ca10f5e8baa8d93364c794de23a526e8493"
   dependencies:
@@ -3244,7 +3244,6 @@ cartobox-promises-utility@nycplanning/cartobox-promises-utility#v1.0.2:
   resolved "https://codeload.github.com/nycplanning/cartobox-promises-utility/tar.gz/57f1c96a0bf03c47e048c30d202643cc49db3c69"
   dependencies:
     ember-cli-babel "^6.6.0"
-    ember-fetch "4.0.1"
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -4817,18 +4816,6 @@ ember-decorators@2.3.0:
     ember-cli-babel "^6.0.0"
     semver "^5.5.0"
 
-ember-decorators@2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/ember-decorators/-/ember-decorators-2.3.1.tgz#aef98f6a3e15666bd414576d07cbfc15d39cfe97"
-  dependencies:
-    "@ember-decorators/component" "^2.3.1"
-    "@ember-decorators/controller" "^2.3.1"
-    "@ember-decorators/data" "^2.3.1"
-    "@ember-decorators/object" "^2.3.1"
-    "@ember-decorators/service" "^2.3.1"
-    ember-cli-babel "^6.0.0"
-    semver "^5.5.0"
-
 ember-export-application-global@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ember-export-application-global/-/ember-export-application-global-2.0.0.tgz#8d6d7619ac8a1a3f8c43003549eb21ebed685bd2"
@@ -5093,9 +5080,9 @@ ember-text-measurer@^0.4.0:
   dependencies:
     ember-cli-babel "^6.8.2"
 
-ember-tooltips@3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/ember-tooltips/-/ember-tooltips-3.1.0.tgz#99c6b9d96eaf907a6f7a2285a7a43239ae62698d"
+ember-tooltips@^3.1.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/ember-tooltips/-/ember-tooltips-3.1.1.tgz#ce0b94c092b119feae668358f0aa416eab56f608"
   dependencies:
     broccoli-funnel "^2.0.1"
     broccoli-merge-trees "^2.0.0"
@@ -7409,12 +7396,10 @@ labs-ember-search@2.4.5:
     ember-promise-helpers "1.0.6"
     ember-truth-helpers "2.0.0"
 
-labs-ui@^0.0.14:
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/labs-ui/-/labs-ui-0.0.14.tgz#7e63f644c4fab64d0c42d7a327347a474961ea4e"
+labs-ui@^0.0.24:
+  version "0.0.24"
+  resolved "https://registry.yarnpkg.com/labs-ui/-/labs-ui-0.0.24.tgz#6ee3b9f991de37b8e3766e875e70617e4cd26ed7"
   dependencies:
-    "@ember-decorators/argument" "0.8.15"
-    "@ember-decorators/babel-transforms" "^2.0.0"
     "@fortawesome/ember-fontawesome" "^0.1.5"
     "@fortawesome/free-brands-svg-icons" "^5.2.0"
     "@fortawesome/free-regular-svg-icons" "^5.1.0"
@@ -7425,8 +7410,7 @@ labs-ui@^0.0.14:
     ember-cli-htmlbars-inline-precompile "^1.0.0"
     ember-cli-sass "^6.2.0"
     ember-cli-what-input "^1.0.0"
-    ember-decorators "2.3.1"
-    ember-tooltips "3.1.0"
+    ember-tooltips "^3.1.0"
     foundation-sites "^6.3.1"
     mapbox-gl "^0.48.0"
 

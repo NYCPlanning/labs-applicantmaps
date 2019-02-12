@@ -148,23 +148,11 @@ export default class ProjectGeometryEditComponent extends Component {
   projectAreaLayer = projectAreaLayer;
 
   /* ----------  General Map  ---------- */
-  showDrawInstructions = true;
-
   layerGroups = null;
 
   @computed('lat', 'lng')
   get center() {
     return [this.get('lat'), this.get('lng')];
-  }
-
-  @action
-  hideInstructions() {
-    this.set('showDrawInstructions', false);
-  }
-
-  @action
-  showInstructions() {
-    this.set('showDrawInstructions', true);
   }
 
   @action
