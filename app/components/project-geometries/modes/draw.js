@@ -75,12 +75,6 @@ export default class DrawComponent extends Component {
     }
   }
 
-  @computed()
-  get taxLots() {
-    const taxLotsLayerGroup = this.get('store').peekRecord('layer-group', 'tax-lots');
-    return taxLotsLayerGroup;
-  }
-
   // Get drawn features, if they're valid
   // We need to remove weird null coordinates.
   // This makes the component expect a certain type of FC

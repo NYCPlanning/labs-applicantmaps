@@ -194,14 +194,6 @@ export default class ProjectGeometryEditComponent extends Component {
     const store = this.get('store');
     store.query('layer-group', mapEditingLayerGroups).then((allLayerGroups) => {
       const { meta } = allLayerGroups;
-
-      // let layerGroups = allLayerGroups;
-      //
-      // // If we're selecting lots, disable the default tax lots layer group
-      // // The selectable tax lots layer is added in lots.hbs
-      // if (this.get('mode') === 'lots') {
-      //   layerGroups = allLayerGroups.filter(layerGroup => layerGroup.get('id') !== 'tax-lots');
-      // }
       const layerGroups = allLayerGroups;
 
       this.set('layerGroups', {
