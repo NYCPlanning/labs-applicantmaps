@@ -17,7 +17,7 @@
 {{/ember-wormhole}}
 
 {{!-- We need this twice so alias it in a let and pass it down in two spots --}}
-{{#let 
+{{#let
   (component 'project-geometries/modes/draw/feature-label-form'
     selectedFeature=selectedFeature
     updateSelectedFeature=(action 'updateSelectedFeature')
