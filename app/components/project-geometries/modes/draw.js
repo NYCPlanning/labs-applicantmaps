@@ -32,7 +32,6 @@ export default class DrawComponent extends Component {
   // upstream set to model
   drawStateCallback() {
     const drawnFeatures = this.get('drawnFeatures');
-
     this.set('geometricProperty', drawnFeatures);
   }
 
@@ -73,6 +72,8 @@ export default class DrawComponent extends Component {
     if (selectedID && type !== 'Point' && mode === 'simple_select') {
       draw.changeMode('direct_select', { featureId: selectedID });
     }
+
+    this.set('tool', mode);
   }
 
   // Get drawn features, if they're valid
@@ -91,6 +92,14 @@ export default class DrawComponent extends Component {
       features,
     };
   }
+
+  @computed('tool')
+  get currentTool() {
+    return this.get('tool');
+  }
+
+  @argument
+  tool;
 
   // @required
   // mapbox-gl map context with draw instance
@@ -134,11 +143,13 @@ export default class DrawComponent extends Component {
   @action
   handleDrawButtonClick() {
     this.map.draw.drawInstance.changeMode('draw_polygon');
+    this.set('tool', 'draw_polygon');
   }
 
   @action
   handleAnnotation(mode) {
     this.map.draw.drawInstance.changeMode(mode);
+    this.set('tool', mode);
   }
 
   /* =================================================
