@@ -14,7 +14,7 @@
   <div class="grid-x">
     <div class="cell xlarge-auto">
 
-      {{#mapbox-gl
+      {{#labs-map
           id='dashboard-map'
           mapLoaded=(action 'handleMapLoad')
           initOptions=(hash
@@ -26,7 +26,8 @@
           as | map |
         }}
         {{project-geometry-renderer map=map model=model}}
-      {{/mapbox-gl}}
+        {{map.labs-layers layerGroups=(array taxLotsLayerGroup)}}
+      {{/labs-map}}
 
     </div>
     <div class="cell xlarge-shrink dashboard-controls">
