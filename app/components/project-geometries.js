@@ -195,11 +195,11 @@ export default class ProjectGeometryEditComponent extends Component {
     basemapLayersToHide.forEach(layer => map.removeLayer(layer));
   }
 
+  // TODO: This function seems awkward. layerGroups.layerGroups?
   loadLayerGroups() {
     const store = this.get('store');
-    store.query('layer-group', mapEditingLayerGroups).then((allLayerGroups) => {
-      const { meta } = allLayerGroups;
-      const layerGroups = allLayerGroups;
+    store.query('layer-group', mapEditingLayerGroups).then((layerGroups) => {
+      const { meta } = layerGroups;
 
       this.set('layerGroups', {
         layerGroups,
