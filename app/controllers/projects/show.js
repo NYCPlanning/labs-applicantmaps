@@ -1,5 +1,7 @@
 import Controller from '@ember/controller';
-import { action } from '@ember-decorators/object';
+import { action, computed } from '@ember-decorators/object';
+import { service } from '@ember-decorators/service';
+
 import { EmptyFeatureCollection } from '../../models/project';
 import projectGeometryIcons from '../../utils/project-geom-icons';
 
@@ -8,6 +10,14 @@ export default class ShowProjectController extends Controller {
   EmptyFeatureCollection = EmptyFeatureCollection;
 
   projectGeometryIcons = projectGeometryIcons;
+
+  @service
+  store;
+
+  @computed()
+  get taxLotsLayerGroup() {
+    return this.get('store').peekRecord('layer-group', 'tax-lots');
+  }
 
   @action
   handleMapLoad(map) {

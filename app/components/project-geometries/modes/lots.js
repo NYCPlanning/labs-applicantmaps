@@ -32,12 +32,28 @@ export default class LotsComponent extends Component {
       features: [],
     });
 
-    const plutoFillLayer = this.get('store').peekRecord('layer', 'pluto-fill');
+    // Add the interactive tax lots layer group to the store
+    const interactiveTaxLotsLayerGroup = this.store.createRecord('layer-group', {
+      id: 'tax-lots-interactive',
+      visible: true,
+    });
 
-    if (plutoFillLayer && !this.get('isDestroyed')) {
-      plutoFillLayer.set('highlightable', true);
-      plutoFillLayer.set('tooltipable', true);
-    }
+    // Add the interactive tax lots layer to the store
+    this.store.createRecord('layer', {
+      id: 'pluto-fill-interactive',
+      style: {
+        id: 'pluto-fill-interactive',
+        type: 'fill',
+        source: 'pluto',
+        minzoom: 15,
+        'source-layer': 'pluto',
+        paint: {
+          'fill-opacity': 0,
+        },
+      },
+      clickable: true,
+      layerGroup: interactiveTaxLotsLayerGroup,
+    });
   }
 
   @argument
@@ -52,9 +68,8 @@ export default class LotsComponent extends Component {
   selectedLotsLayer = selectedLotsLayer;
 
   @computed()
-  get taxLots() {
-    const taxLotsLayerGroup = this.get('store').peekRecord('layer-group', 'tax-lots');
-    return taxLotsLayerGroup;
+  get interactiveTaxLots() {
+    return this.get('store').peekRecord('layer-group', 'tax-lots-interactive');
   }
 
   @computed('geometricProperty.features.@each.geometry')
@@ -136,11 +151,12 @@ export default class LotsComponent extends Component {
   }
 
   willDestroyElement() {
-    const plutoFillLayer = this.get('store').peekRecord('layer', 'pluto-fill');
+    // Remove the interactive tax lots layer from the store
+    const destroyableTaxLotsLayer = this.get('store').peekRecord('layer', 'pluto-fill-interactive');
+    destroyableTaxLotsLayer.unloadRecord();
 
-    if (plutoFillLayer && !this.get('isDestroyed')) {
-      plutoFillLayer.set('highlightable', false);
-      plutoFillLayer.set('tooltipable', false);
-    }
+    // Remove the interactive tax lots layer group from the store
+    const destroyableTaxLotsLayerGroup = this.get('store').peekRecord('layer-group', 'tax-lots-interactive');
+    destroyableTaxLotsLayerGroup.unloadRecord();
   }
 }
