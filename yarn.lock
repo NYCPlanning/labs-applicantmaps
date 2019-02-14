@@ -4865,7 +4865,7 @@ ember-fetch@5.1.3:
     node-fetch "^2.0.0-alpha.9"
     rollup-plugin-babel "^3.0.7"
 
-ember-font-awesome@4.0.0-rc.4, ember-font-awesome@^4.0.0-rc.2:
+ember-font-awesome@4.0.0-rc.4:
   version "4.0.0-rc.4"
   resolved "https://registry.yarnpkg.com/ember-font-awesome/-/ember-font-awesome-4.0.0-rc.4.tgz#7d4b7fbb401e21afeb7068cbb42ac8d8a84873f7"
   dependencies:
@@ -4928,11 +4928,10 @@ ember-macro-helpers@^2.0.0:
     ember-cli-test-info "^1.0.0"
     ember-weakmap "^3.0.0"
 
-ember-mapbox-composer@0.0.21:
-  version "0.0.21"
-  resolved "https://registry.yarnpkg.com/ember-mapbox-composer/-/ember-mapbox-composer-0.0.21.tgz#11aa43fdf1b43aed64118c4c63ae60d2ec3e0bb3"
+ember-mapbox-composer@0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/ember-mapbox-composer/-/ember-mapbox-composer-0.2.3.tgz#6ab2e1d5081764cd6560274a086b925b96dc4ab2"
   dependencies:
-    "@ember-decorators/babel-transforms" "^2.0.0"
     "@turf/union" "^6.0.0"
     cartobox-promises-utility "1.0.2"
     ember-auto-import "1.2.5"
@@ -4940,10 +4939,9 @@ ember-mapbox-composer@0.0.21:
     ember-cli-htmlbars "^2.0.1"
     ember-cli-htmlbars-inline-precompile "^1.0.0"
     ember-copy "1.0.0"
-    ember-decorators "2.1.0"
     ember-fetch "5.1.3"
-    ember-font-awesome "^4.0.0-rc.2"
-    ember-truth-helpers "2.0.0"
+    ember-truth-helpers "^2.0.0"
+    lodash "^4.17.11"
     mapbox-gl ">=0.47.0"
     pretender "2.0.0"
 
@@ -7870,7 +7868,7 @@ lodash@^3.10.1:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
-lodash@^4.0.0, lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.4, lodash@^4.3.0, lodash@^4.5.1, lodash@^4.6.1, lodash@~4.17.10:
+lodash@^4.0.0, lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.4, lodash@^4.3.0, lodash@^4.5.1, lodash@^4.6.1, lodash@~4.17.10:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
 

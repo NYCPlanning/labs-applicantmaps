@@ -56,7 +56,7 @@
     "ember-decorators": "2.1.0",
     "ember-export-application-global": "^2.0.0",
     "ember-inline-edit": "^1.1.1",
-    "ember-mapbox-composer": "0.0.21",
+    "ember-mapbox-composer": "0.2.3",
     "ember-mapbox-gl": "0.12.0",
     "ember-maybe-import-regenerator": "^0.1.6",
     "ember-power-select": "^2.0.8",

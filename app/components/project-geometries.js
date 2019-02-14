@@ -14,7 +14,12 @@ const mapEditingLayerGroups = {
       id: 'tax-lots',
       visible: true,
       layers: [
-        { tooltipable: true, highlightable: true, tooltipTemplate: '{{address}} (BBL: {{bbl}})' },
+        {
+          highlightable: true,
+          clickable: false,
+          tooltipable: true,
+          tooltipTemplate: '{{address}} (BBL: {{bbl}})',
+        },
         {},
         { style: { layout: { 'text-field': '{lot}' } } },
         {
