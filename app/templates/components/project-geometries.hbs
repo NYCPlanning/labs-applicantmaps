@@ -53,7 +53,6 @@
       (not (is-empty model.projectArea))
       (not (is-empty model.underlyingZoning))
       (not (is-empty model.specialPurposeDistricts))
-      (not (is-empty model.rezoningArea))
     )
   }}
     <ul class="over-map-legend no-bullet">
@@ -68,9 +67,6 @@
       {{/if}}
       {{#if (not (is-empty model.specialPurposeDistricts))}}
         <li><strong>Special Purpose Districts</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.specialPurposeDistrictsIcon}}</li>
-      {{/if}}
-      {{#if (not (is-empty model.rezoningArea))}}
-        <li><strong>Rezoning Area</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.rezoningAreaIcon}}</li>
       {{/if}}
     </ul>
   {{/if}}
