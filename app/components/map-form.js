@@ -228,6 +228,25 @@ export default class MapFormComponent extends Component {
 
   projectGeomLayers = projectGeomLayers;
 
+  @computed()
+  get timestamp() {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const d = new Date();
+    let hr = d.getHours();
+    let min = d.getMinutes();
+    if (min < 10) { min = `0${min}`; }
+    let ampm = 'am';
+    if (hr > 12) {
+      hr -= 12;
+      ampm = 'pm';
+    }
+    const date = d.getDate();
+    const month = months[d.getMonth()];
+    const year = d.getFullYear();
+
+    return `${month} ${date}, ${year}, ${hr}:${min}${ampm}`;
+  }
+
   @computed('model.mapBearing', 'mapPitch')
   get northArrowTransforms() {
     const bearing = this.get('model.mapBearing');
