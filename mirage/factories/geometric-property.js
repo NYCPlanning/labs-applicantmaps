@@ -1,5 +1,6 @@
 import { Factory, faker } from 'ember-cli-mirage';
-import random from '../helpers/random-geometry';
+import random from 'labs-applicant-maps/tests/helpers/random-geometry';
+// import random from '../../tests/helpers/random-geometry'; // this doesn't work either
 
 const { randomPolygon } = random;
 
