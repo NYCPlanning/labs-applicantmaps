@@ -2,11 +2,11 @@
 
   {{project-setup-status project=model}}
 
-  <h4 class="header-small">Project Maps</h4>
-  {{link-to 'Area Map' 'projects.edit.map.edit' model.id (query-params mapType=(dasherize 'Area Map'))
-    data-test-add-area-map
-    class='button large expanded map-type-area-map'
-  }}
+  <hr />
+
+  <p class="lead">From this dashboard, you can edit your proposed geometries and view, print, or download your project maps.</p>
+
+  <p class="text-small dark-gray">* <em>Currently, this tool only produces an Area Map. But more applicant maps are coming soon.</em></p>
 
 </div>
 <div class="cell large-auto dashboard">
@@ -30,12 +30,15 @@
       {{/labs-map}}
 
     </div>
-    <div class="cell xlarge-shrink dashboard-controls">
-      <h6>Your proposed changes</h6>
+    <div class="cell xlarge-4 dashboard-controls">
+      <h4 class="">Proposed Geometries</h4>
+
       {{!-- Development Site --}}
       <div class="grid-x control">
         <div class="cell auto">
-          <strong>Development Site</strong>
+          <span class="{{if (not (is-empty model.developmentSite)) 'text-weight-bold charcoal' 'gray'}}">
+            Development Site
+          </span>
           {{#if (not (is-empty model.developmentSite))}}
             {{labs-ui/legend-icon icon=projectGeometryIcons.developmentSiteIcon}}
           {{/if}}
@@ -82,7 +85,9 @@
       {{!-- Project Area --}}
       <div class="grid-x control">
         <div class="cell auto">
-          <strong>Project Area</strong>
+          <span class="{{if (not (is-empty model.projectArea)) 'text-weight-bold charcoal' 'gray'}}">
+            Project Area
+          </span>
           {{#if (not (is-empty model.projectArea))}}
             {{labs-ui/legend-icon icon=projectGeometryIcons.projectAreaIcon}}
           {{/if}}
@@ -129,7 +134,9 @@
       {{!-- Underlying Zoning --}}
       <div class="grid-x control">
         <div class="cell auto">
-          <strong>Underlying Zoning</strong>
+          <span class="{{if (not (is-empty model.underlyingZoning)) 'text-weight-bold charcoal' 'gray'}}">
+            Underlying Zoning
+          </span>
           {{#if (not (is-empty model.underlyingZoning))}}
             {{labs-ui/legend-icon icon=projectGeometryIcons.underlyingZoningIcon}}
           {{/if}}
@@ -162,7 +169,9 @@
       {{!-- Commercial Overlays --}}
       <div class="grid-x control">
         <div class="cell auto">
-          <strong>Commercial Overlays</strong>
+          <span class="{{if (not (is-empty model.commercialOverlays)) 'text-weight-bold charcoal' 'gray'}}">
+            Commercial Overlays
+          </span>
           {{#if (not (is-empty model.commercialOverlays))}}
             <div class="legend-icon">
               <div class="sprite c1-1"></div>
@@ -198,7 +207,9 @@
       {{!-- Special Purpose Districts --}}
       <div class="grid-x control">
         <div class="cell auto">
-          <strong>Special Purpose Districts</strong>
+          <span class="{{if (not (is-empty model.specialPurposeDistricts)) 'text-weight-bold charcoal' 'gray'}}">
+            Special Purpose Districts
+          </span>
           {{#if (not (is-empty model.specialPurposeDistricts))}}
             {{labs-ui/legend-icon icon=projectGeometryIcons.specialPurposeDistrictsIcon}}
           {{/if}}
@@ -231,7 +242,9 @@
       {{!-- Rezoning Area --}}
       <div class="grid-x control">
         <div class="cell auto">
-          <strong>Rezoning Area</strong>
+          <span class="{{if (not (is-empty model.rezoningArea)) 'text-weight-bold charcoal' 'gray'}}">
+            Rezoning Area
+          </span>
           {{#if (not (is-empty model.rezoningArea))}}
             {{labs-ui/legend-icon icon=projectGeometryIcons.rezoningAreaIcon}}
           {{/if}}
@@ -260,6 +273,17 @@
           </div>
         {{/if}}
       </div>
+
+      <hr />
+
+      <h4 class="">Project Maps</h4>
+
+      {{link-to 'Area Map' 'projects.edit.map.edit' model.id (query-params mapType=(dasherize 'Area Map'))
+        data-test-add-area-map
+        class='button large expanded map-type-area-map'
+      }}
+      <button class="button gray expanded" disabled>Tax Map</button>
+      <button class="button gray expanded" disabled>Zoning Change Map</button>
 
     </div>
   </div>

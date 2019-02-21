@@ -189,11 +189,23 @@ export default class Project extends Model {
       .get('proposedGeometry');
   }
 
+  set developmentSite(devSite) {
+    this.get('geometricProperties')
+      .findBy('geometryType', 'developmentSite')
+      .set('proposedGeometry', devSite);
+  }
+
   @computed('geometricProperties.@each.proposedGeometry')
   get projectArea() {
     return this.get('geometricProperties')
       .findBy('geometryType', 'projectArea')
       .get('proposedGeometry');
+  }
+
+  set projectArea(devSite) {
+    this.get('geometricProperties')
+      .findBy('geometryType', 'projectArea')
+      .set('proposedGeometry', devSite);
   }
 
   @computed('geometricProperties.@each.proposedGeometry')
@@ -203,11 +215,23 @@ export default class Project extends Model {
       .get('proposedGeometry');
   }
 
+  set underlyingZoning(devSite) {
+    this.get('geometricProperties')
+      .findBy('geometryType', 'underlyingZoning')
+      .set('proposedGeometry', devSite);
+  }
+
   @computed('geometricProperties.@each.proposedGeometry')
   get commercialOverlays() {
     return this.get('geometricProperties')
       .findBy('geometryType', 'commercialOverlays')
       .get('proposedGeometry');
+  }
+
+  set commercialOverlays(devSite) {
+    this.get('geometricProperties')
+      .findBy('geometryType', 'commercialOverlays')
+      .set('proposedGeometry', devSite);
   }
 
   @computed('geometricProperties.@each.proposedGeometry')
@@ -217,11 +241,23 @@ export default class Project extends Model {
       .get('proposedGeometry');
   }
 
+  set specialPurposeDistricts(devSite) {
+    this.get('geometricProperties')
+      .findBy('geometryType', 'specialPurposeDistricts')
+      .set('proposedGeometry', devSite);
+  }
+
   @computed('geometricProperties.@each.proposedGeometry')
   get rezoningArea() {
     return this.get('geometricProperties')
       .findBy('geometryType', 'rezoningArea')
       .get('proposedGeometry');
+  }
+
+  set rezoningArea(devSite) {
+    this.get('geometricProperties')
+      .findBy('geometryType', 'rezoningArea')
+      .set('proposedGeometry', devSite);
   }
 
   async setRezoningArea() {
