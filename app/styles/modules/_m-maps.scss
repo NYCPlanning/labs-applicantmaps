@@ -315,9 +315,20 @@
       border-top-left-radius: 6px;
     }
 
-    &:last-child {
+    &:nth-last-child(2) {
       border-bottom-right-radius: 6px;
       border-bottom-left-radius: 6px;
+    }
+
+    &:last-child {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 12px;
+      border-radius: 2px;
+      box-shadow:
+        0 0 0 2px $a11y-yellow,
+        0 0 0 4px rgba(0,0,0,0.1);
     }
 
     &:hover {
