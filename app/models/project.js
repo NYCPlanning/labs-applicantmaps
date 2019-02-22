@@ -308,12 +308,13 @@ export default class Project extends Model {
   get projectGeometryBoundingBox() {
     // build a geojson FeatureCollection from all three project geoms
     // const featureCollections = this
-    //   .getProperties('developmentSite.proposedGeometry', 'projectArea.proposedGeometry', 'rezoningArea.proposedGeometry');
 
     const featureCollections = this
       .get('geometricProperties')
-      .filter(geometricProperty => geometricProperty.get('geometryType') === 'developmentSite'
-        || geometricProperty.get('geometryType') === 'projectArea')
+      .filter((geometricProperty) => {
+        const geometryType = geometricProperty.get('geometryType');
+        return ['developmentSite', 'projectArea', 'rezoningArea'].indexOf(geometryType) > -1;
+      })
       .mapBy('proposedGeometry');
 
     // flatten feature collections
