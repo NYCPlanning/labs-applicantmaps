@@ -1,4 +1,4 @@
-import { roundLength } from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/mode';
+import { roundLength, toDisplayFeatures } from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/mode';
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
@@ -29,5 +29,29 @@ module('Unit | Utility | mapbox-gl-draw/annotation-mode', function(hooks) {
       const result = roundLength(raw);
       assert.equal(result, rounded);
     });
+  });
+
+  test('it adds rounded length label', function (assert) {
+    const geojson = {
+      type: 'Feature',
+      geometry: {
+        type: 'LineString',
+        coordinates: [[0, 0], [10, 10]],
+      },
+      properties: {},
+    };
+
+    const state = {
+      line: {
+        id: 1,
+        properties: {},
+      },
+      direction: 'forward',
+    };
+
+    const display = function() {};
+
+    toDisplayFeatures(state, geojson, display);
+    assert.ok(geojson.properties.label);
   });
 });
