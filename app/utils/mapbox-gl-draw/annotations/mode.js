@@ -4,6 +4,7 @@ import MapboxDraw from '@mapbox/mapbox-gl-draw';
 export function roundLength(len) {
   return Math.round(len / 5) * 5;
 }
+
 function createVertex(parentId, coordinates, path, selected) {
   return {
     type: 'Feature',
@@ -88,7 +89,7 @@ MeasurementMode.onStop = function(state) {
   }
 };
 
-MeasurementMode.toDisplayFeatures = function(state, geojson, display) {
+export function toDisplayFeatures(state, geojson, display) {
   // calculate label, append to properties
   const label = `${roundLength(length(geojson) * 3280.84)} ft`; // km to feet
   state.line.properties.label = label;
@@ -129,8 +130,9 @@ MeasurementMode.toDisplayFeatures = function(state, geojson, display) {
 
   // display label
   return null;
-};
+}
 
+MeasurementMode.toDisplayFeatures = toDisplayFeatures;
 export function annotatable(mode) {
   return {
     ...mode,
