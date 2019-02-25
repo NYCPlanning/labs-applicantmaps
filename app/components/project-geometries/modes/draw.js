@@ -33,7 +33,7 @@ export default class DrawComponent extends Component {
 
     this.set('geometricProperty', drawnFeatures);
   }
- 
+
   // update which is the selected feature
   selectedFeatureCallback() {
     const { draw: { drawInstance: draw } } = this.get('map');
