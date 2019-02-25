@@ -18,17 +18,14 @@ export default function isFeatureCollectionChanged(initial, proposed) {
     });
 
   return (() => {
-    // console.log('if the lengths differ, return true');
     if (initialGeoms.length !== proposedGeoms.length) return true;
 
-    // console.log('check for null geoms');
     // null geoms are considered invalid and so a comparison can't be made
     if (initialGeoms.every(({ geometry }) => geometry === null)
       && proposedGeoms.every(({ geometry }) => geometry === null)) {
       return false;
     }
 
-    // console.log('check if any are unequal');
     return initialGeoms
       .any((feature, index) => !booleanEqual(feature, proposedGeoms[index]));
   })();

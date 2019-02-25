@@ -10,7 +10,6 @@ export default function wizard(steps, project) {
     return attributeKeys.any((attr) => {
       const currentCondition = currentAttributes[attr];
       // make project conditionalChecks's 'this'
-      // console.log(currentCondition);
       const conditionalCheck = (conditions[attr]).bind(project, currentCondition);
       const generatedValue = !conditionalCheck();
 

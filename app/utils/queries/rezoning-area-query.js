@@ -55,14 +55,12 @@ export default async (...args) => {
       return turfBuffer(union, -0.0005);
     }, null);
 
-  console.log(unionedGeoms);
-
   let bufferedUnionedGeoms = [];
   try {
     // buffer the geoms by ~20 feet
     bufferedUnionedGeoms = [turfBuffer(unionedGeoms, 0.006)];
   } catch (e) {
-    console.log(e);
+    console.log(e); // eslint-disable-line
   }
 
   return {
