@@ -31,6 +31,8 @@ export default [
       ],
       'text-justify': 'center',
       'text-anchor': 'center',
+      'text-allow-overlap': true,
+      'text-ignore-placement': true,
     },
   },
 
@@ -46,6 +48,8 @@ export default [
         property: 'rotation',
       },
       'icon-anchor': 'top',
+      'icon-allow-overlap': true,
+      'icon-ignore-placement': true,
     },
   },
 
@@ -83,6 +87,8 @@ export default [
         0,
       ],
       'text-size': 22,
+      'text-allow-overlap': true,
+      'text-ignore-placement': true,
     },
     paint: {
       'text-color': 'rgba(0, 0, 0, 1)',
