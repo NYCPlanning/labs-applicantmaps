@@ -3,6 +3,16 @@ import turfBuffer from '@turf/buffer';
 import computeDifference from 'labs-applicant-maps/utils/compute-difference';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
+/* 
+ * Generates a feature collection that includes the full diff of all proposed geometries vs canonical.
+ *
+ * Parameters:
+ *  developmentSite: UNUSED (TODO: remove)
+ *  allGeometricProperties: Object containing geometricProperty objects, keyed by type
+ *  ( see: app/models/geometric-property)
+ * 
+ * Returns: FeatureCollection
+ */
 export async function combineFeatureCollections(developmentSite, allGeometricProperties) {
   const underlyingZoning = allGeometricProperties.findBy('geometryType', 'underlyingZoning');
   const commercialOverlays = allGeometricProperties.findBy('geometryType', 'commercialOverlays');
@@ -11,12 +21,11 @@ export async function combineFeatureCollections(developmentSite, allGeometricPro
   const combinedFC = {
     type: 'FeatureCollection',
     features: [],
-  };
+  }; 
 
-  // underlyingZoning
+  // underlyingZoning 
   if (!isEmpty(underlyingZoning.get('proposedGeometry'))) {
     const currentZoning = underlyingZoning.get('canonical');
-
     const underlyingZoningDiff = computeDifference(currentZoning, underlyingZoning.get('proposedGeometry'));
     combinedFC.features = [...combinedFC.features, ...underlyingZoningDiff.features];
   }
@@ -40,6 +49,13 @@ export async function combineFeatureCollections(developmentSite, allGeometricPro
   return combinedFC;
 }
 
+/*
+ * Creates a "rezoning area" geometry by getting FC of combined diffs of all proposed geometries,
+ * unioning it with turfUnion, cleaning it with turfBuffer by applying slight negative buffer, 
+ * and finally buffering the final unioned, cleaned geometries by ~20ft 
+ * 
+ * Returns: FeatureCollection
+ */
 export default async (...args) => {
   const combinedFC = await combineFeatureCollections(...args);
 
