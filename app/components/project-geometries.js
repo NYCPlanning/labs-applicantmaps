@@ -37,7 +37,7 @@ export default class ProjectGeometryEditComponent extends Component {
     const projectGeometryBoundingBox = this.get('model.projectGeometryBoundingBox');
     if (projectGeometryBoundingBox) {
       map.fitBounds(projectGeometryBoundingBox, {
-        padding: 50,
+        padding: 120,
         duration: 0,
       });
     }

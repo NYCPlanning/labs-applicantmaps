@@ -50,7 +50,7 @@ export default class SearchHandlerComponent extends Component {
     const { map: { mapInstance } } = this;
 
     this.set('geocodedFeature', { type: 'geojson', data: geometry });
-    mapInstance.flyTo({ center: coordinates, zoom: 16 });
+    mapInstance.flyTo({ center: coordinates, zoom: 18 });
   }
 
   // search
