@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, click, pauseTest } from '@ember/test-helpers';
+import { render, click, clearRender } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import Service from '@ember/service';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -24,8 +24,10 @@ module('Integration | Component | project-geometries/commercial-overlays', funct
     assert.ok(true);
   });
 
-  test('it fetches canonical geometry', async function(assert) {
-    assert.expect(4);
+
+  // note: this test checks underlying-zoning, commercial-overlays, AND special-purpose-districts
+  test('it fetches canonical geometry for ALL canonical types', async function(assert) {
+    assert.expect(11);
     // stub in the current mode service with a noop method
     this.owner.register('service:current-mode', Service.extend({
       componentInstance: {
@@ -44,6 +46,17 @@ module('Integration | Component | project-geometries/commercial-overlays', funct
         setRezoningArea() {
           assert.ok(true);
         },
+        geometricProperties: [{
+          geometryType: 'rezoningArea',
+          setRezoningArea() {},
+          setCanonical() {},
+          save() {},
+        }],
+
+        // utility getter
+        get(prop) {
+          return this[prop];
+        },
       },
 
       // utility getter
@@ -56,14 +69,19 @@ module('Integration | Component | project-geometries/commercial-overlays', funct
       assert.ok(true);
     });
 
-    await render(hbs`
-      <div id="geometry-type-draw-explainer"></div>
-      {{project-geometries/types/commercial-overlays
-        isReadyToProceed=true
-        save=(action save)
-        model=model}}
-    `);
+    for (let type of ['commercial-overlays', 'special-purpose-districts', 'underlying-zoning']) { // eslint-disable-line
+      this.set('type', type);
 
-    await click('[data-test-project-geometry-save]');
+      /* eslint-disable-line */ await render(hbs`
+        <div id="geometry-type-draw-explainer"></div>
+        {{component (concat 'project-geometries/types/' type)
+          isReadyToProceed=true
+          save=(action save)
+          model=model}}
+      `);
+
+      await click('[data-test-project-geometry-save]'); /* eslint-disable-line */ 
+      await clearRender(); /* eslint-disable-line */ 
+    }
   });
 });
