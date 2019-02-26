@@ -1,13 +1,29 @@
 import elevateGeojsonIds from 'labs-applicant-maps/utils/elevate-geojson-ids';
 import { module, test } from 'qunit';
-import random from 'labs-applicant-maps/tests/helpers/random-geometry';
-
-const { randomPolygon } = random;
 
 module('Unit | Utility | elevate-geojson-ids', function() {
-  // Replace this with your real tests.
   test('it works', function(assert) {
-    const result = elevateGeojsonIds(randomPolygon(10));
-    assert.ok(result);
+    const testPoly = {
+      type: 'FeatureCollection',
+      features: [{
+        type: 'Feature',
+        // ...
+        properties: {
+          id: 'almond',
+        },
+      }, {
+        type: 'Feature',
+        // ...
+        properties: {
+          id: 'walnut',
+        },
+      }],
+    };
+
+    const result = elevateGeojsonIds(testPoly);
+
+    result.features.forEach((feature) => {
+      assert.equal(feature.id, feature.properties.id);
+    });
   });
 });
