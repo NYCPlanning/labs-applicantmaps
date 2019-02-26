@@ -7,8 +7,10 @@ const { randomPolygon } = random;
 module('Unit | Utility | unify-polygons', function() {
   const dummyFeatureCollection = randomPolygon(10);
 
-  test('it works', function(assert) {
+  test('it takes a FC and returns a single multipolygon', function(assert) {
     const result = unifyPolygons(dummyFeatureCollection);
+
     assert.ok(result);
+    assert.equal(result.type, 'MultiPolygon');
   });
 });
