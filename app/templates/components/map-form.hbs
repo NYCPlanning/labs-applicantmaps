@@ -178,7 +178,10 @@
                   <br />
                   {{#each mapConfiguration.sources as |source index|}}
                     {{~if index ';'}}
-                    {{source.id}}
+                    <strong>{{source.id}}</strong>
+                    {{#if (eq source.id 'pluto')}}
+                      {{source.meta.description}}
+                    {{/if}}
                     {{if source.meta.updated_at (concat '(' source.meta.updated_at ')')~}}
                   {{/each}}
                 </div>
