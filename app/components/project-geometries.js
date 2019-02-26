@@ -1,18 +1,13 @@
 import Component from '@ember/component';
-import { action, computed } from '@ember-decorators/object';
+import { action } from '@ember-decorators/object';
 import mapboxgl from 'mapbox-gl';
-import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { tagName } from '@ember-decorators/component';
-import { developmentSiteLayer } from './project-geometries/types/development-site';
-import { projectAreaLayer } from './project-geometries/types/project-area';
-import projectGeometryIcons from '../utils/project-geom-icons';
 
 // it:
 // renders the map
 // sets up a drawable map
 // invokes the types-/mode-renderer with drawable map
-// and conditionally loads the map legend
 @tagName('')
 export default class ProjectGeometryEditComponent extends Component {
   // required
@@ -31,26 +26,7 @@ export default class ProjectGeometryEditComponent extends Component {
   @argument
   layerGroups;
 
-  @service
-  notificationMessages;
-
-  @service store;
-
-  @service
-  router;
-
-  projectGeometryIcons = projectGeometryIcons;
-
-  developmentSiteLayer = developmentSiteLayer;
-
-  projectAreaLayer = projectAreaLayer;
-
   /* ----------  General Map  ---------- */
-  @computed('lat', 'lng')
-  get center() {
-    return [this.get('lat'), this.get('lng')];
-  }
-
   @action
   handleMapLoad(map) {
     this.set('mapInstance', map);

@@ -1,9 +1,11 @@
-{{!-- {{log model.layerGroups}} --}}
-
-{{project-geometries
+{{#project-geometries
   model=model.project
   layerGroups=model.layerGroups
   type=type
   mode=mode}}
+  {{project-geometries/map-legend
+    model=model.project
+    type=type}}
+{{/project-geometries}}
 
 {{outlet}}
