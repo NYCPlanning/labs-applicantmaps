@@ -1,7 +1,17 @@
-{{#if (eq model.currentStep.step 'complete')}}
-  <p class="text-tiny small-margin-bottom">
-    {{#link-to "projects.show" model.id}}
-      {{fa-icon 'arrow-left'}} Back to project dashboard
-    {{/link-to}}
-  </p>
+{{#if (eq model.project.currentStep.step 'development-site')}}
+  {{#link-to "projects.edit.steps.development-site" model.project.id class="button gray"}}
+    {{fa-icon 'arrow-left'}} Back
+  {{/link-to}}
+{{else if (eq model.project.currentStep.step 'project-area')}}
+  {{#link-to "projects.edit.steps.project-area" model.project.id class="button gray"}}
+    {{fa-icon 'arrow-left'}} Back
+  {{/link-to}}
+{{else if (eq model.project.currentStep.step 'rezoning')}}
+  {{#link-to "projects.edit.steps.rezoning" model.project.id class="button gray"}}
+    {{fa-icon 'arrow-left'}} Back
+  {{/link-to}}
+{{else}}
+  {{#link-to "projects.show" model.project.id class="button gray"}}
+    Cancel
+  {{/link-to}}
 {{/if}}

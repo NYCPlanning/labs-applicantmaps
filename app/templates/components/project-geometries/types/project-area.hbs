@@ -1,7 +1,7 @@
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <div class="fade-in-on-load text-small">
 
-    {{back-to-dashboard-button model=model}}
+    {{!-- {{back-to-dashboard-button model=model}} --}}
 
     <h1 class="header-large small-margin-bottom">Project Area</h1>
 
@@ -52,19 +52,29 @@
       <p><img src="/img/gif-select-lot-project-area.gif" alt="Select Lot Project Area" class="shadowed" /></p>
     {{/if}}
 
-    <hr />
-
-    {{#project-geometries/utils/button
-      enabled=isReadyToProceed
-      handleClick=(action save)}}
-      Save Project Area
-    {{/project-geometries/utils/button}}
-
     {{#component modeComponent as |editMode|}}
       {{editMode.toggle-mode-button
         isReadyToProceed=isReadyToProceed}}
     {{/component}}
+
+    <hr />
+
+    <div class="grid-x">
+      <div class="cell shrink" style="padding-right:1rem;">
+        {{back-to-dashboard-button model=model}}
+      </div>
+      <div class="cell auto">
+        {{#project-geometries/utils/button
+          enabled=isReadyToProceed
+          handleClick=(action save)}}
+          {{#if (eq model.project.currentStep.step 'complete')}}
+            Save
+          {{else}}
+            Next {{fa-icon 'arrow-right'}}
+          {{/if}}
+        {{/project-geometries/utils/button}}
+      </div>
+    </div>
+
   </div>
 {{/ember-wormhole}}
-
-{{yield}}
