@@ -25,6 +25,8 @@ const getArrowLayers = (lineFeature, id, annotationType) => {
     },
     'icon-anchor': 'top',
     'icon-rotation-alignment': 'map',
+    'icon-allow-overlap': true,
+    'icon-ignore-placement': true,
   };
 
   const startArrowLayer = {
@@ -186,6 +188,8 @@ const buildLineLayers = function(rawLineFeature, annotationType) {
       'text-justify': 'center',
       'text-anchor': 'center',
       'text-size': 12,
+      'text-allow-overlap': true,
+      'text-ignore-placement': true,
     },
   };
 
@@ -228,6 +232,8 @@ export default function(...args) {
         'text-justify': 'center',
         'text-anchor': 'center',
         'text-size': 12,
+        'text-allow-overlap': true,
+        'text-ignore-placement': true,
       },
     }];
   }
@@ -250,6 +256,8 @@ export default function(...args) {
         'text-justify': 'center',
         'text-anchor': 'center',
         'text-size': 16,
+        'text-allow-overlap': true,
+        'text-ignore-placement': true,
       },
     }];
   }
