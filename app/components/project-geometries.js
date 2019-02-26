@@ -126,16 +126,18 @@ export default class ProjectGeometryEditComponent extends Component {
   constructor(...args) {
     super(...args);
 
-    // this.loadLayerGroups();
+    this.loadLayerGroups();
   }
 
   // required
   @argument
   model;
 
+  // required
   @argument
   type;
 
+  // required
   @argument
   mode;
 

@@ -20,7 +20,10 @@ module('Integration | Component | project-geometries', function(hooks) {
     this.set('model', model);
 
     await render(hbs`
-      {{project-geometries model=model}}
+      {{project-geometries
+        model=model
+        type='development-site'
+        mode='draw'}}
     `);
 
     assert.ok(this.element.textContent);
