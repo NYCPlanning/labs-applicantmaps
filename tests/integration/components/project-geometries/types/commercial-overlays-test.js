@@ -1,7 +1,8 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, click, pauseTest } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import Service from '@ember/service';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 
 module('Integration | Component | project-geometries/commercial-overlays', function(hooks) {
@@ -21,5 +22,48 @@ module('Integration | Component | project-geometries/commercial-overlays', funct
     `);
 
     assert.ok(true);
+  });
+
+  test('it fetches canonical geometry', async function(assert) {
+    assert.expect(4);
+    // stub in the current mode service with a noop method
+    this.owner.register('service:current-mode', Service.extend({
+      componentInstance: {
+        shouldReset() {
+          assert.ok(true);
+        },
+      },
+    }));
+
+    // stub in a mock model with some fake methods
+    this.set('model', {
+      setCanonical() {
+        assert.ok(true);
+      },
+      project: {
+        setRezoningArea() {
+          assert.ok(true);
+        },
+      },
+
+      // utility getter
+      get(prop) {
+        return this[prop];
+      },
+    });
+
+    this.set('save', function() {
+      assert.ok(true);
+    });
+
+    await render(hbs`
+      <div id="geometry-type-draw-explainer"></div>
+      {{project-geometries/types/commercial-overlays
+        isReadyToProceed=true
+        save=(action save)
+        model=model}}
+    `);
+
+    await click('[data-test-project-geometry-save]');
   });
 });
