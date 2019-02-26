@@ -16,12 +16,15 @@ module('Integration | Component | project-geometries', function(hooks) {
 
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1);
+    const layerGroups = await store.peekAll('layer-group');
 
     this.set('model', model);
+    this.set('layerGroups', layerGroups);
 
     await render(hbs`
       {{project-geometries
         model=model
+        layerGroups=layerGroups
         type='development-site'
         mode='draw'}}
     `);
