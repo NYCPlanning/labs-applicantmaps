@@ -6,12 +6,21 @@ import hbs from 'htmlbars-inline-precompile';
 module('Integration | Helper | dasherize', function(hooks) {
   setupRenderingTest(hooks);
 
-  // Replace this with your real tests.
-  test('it renders', async function(assert) {
-    this.set('inputValue', '1234');
-
+  test('it dasherizes a camelCase string', async function(assert) {
+    this.set('inputValue', 'fooBarBazQux');
     await render(hbs`{{dasherize inputValue}}`);
+    assert.equal(this.element.textContent.trim(), 'foo-bar-baz-qux');
+  });
 
-    assert.equal(this.element.textContent.trim(), '1234');
+  test('it dasherizes a snake_case string', async function(assert) {
+    this.set('inputValue', 'foo_bar_baz_qux');
+    await render(hbs`{{dasherize inputValue}}`);
+    assert.equal(this.element.textContent.trim(), 'foo-bar-baz-qux');
+  });
+
+  test('it dasherizes a string with multiple words separated by spaces', async function(assert) {
+    this.set('inputValue', 'foo bar baz qux');
+    await render(hbs`{{dasherize inputValue}}`);
+    assert.equal(this.element.textContent.trim(), 'foo-bar-baz-qux');
   });
 });
