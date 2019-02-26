@@ -178,7 +178,7 @@
                   <br />
                   {{#each mapConfiguration.sources as |source index|}}
                     {{~if index ';'}}
-                    <strong>{{source.id}}</strong>
+                    {{source.id}}
                     {{#if (eq source.id 'pluto')}}
                       {{source.meta.description}}
                     {{/if}}
