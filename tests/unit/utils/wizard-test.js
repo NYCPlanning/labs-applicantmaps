@@ -1,9 +1,107 @@
 import EmberObject from '@ember/object';
 import wizard from 'labs-applicant-maps/utils/wizard';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
-import { projectProcedure } from 'labs-applicant-maps/models/project';
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+
+// we're testing the wizard, not the domain
+// so, we pull a version of the procedure for the test.
+const hasAnswered = property => property === true || property === false;
+const hasFilledOut = property => !isEmpty(property);
+const requiredIf = function(question, conditionalTest = hasAnswered) {
+  return function(property) {
+    return this.get(question) ? conditionalTest(property) : true;
+  };
+};
+
+const projectProcedure = [
+  {
+    step: 'project-creation',
+    routing: {
+      route: 'projects.new',
+    },
+    conditions: {
+      projectName: hasFilledOut,
+    },
+  },
+  {
+    step: 'development-site',
+    routing: {
+      route: 'projects.edit.steps.development-site',
+    },
+    conditions: {
+      developmentSite: hasFilledOut,
+    },
+  },
+  {
+    step: 'project-area',
+    routing: {
+      route: 'projects.edit.steps.project-area',
+    },
+    conditions: {
+      needProjectArea: hasAnswered,
+      projectArea: requiredIf('needProjectArea', hasFilledOut),
+    },
+  },
+  {
+    step: 'rezoning',
+    routing: {
+      route: 'projects.edit.steps.rezoning',
+    },
+    conditions: {
+      needRezoning: hasAnswered,
+      needUnderlyingZoning: requiredIf('needRezoning', hasAnswered),
+      needCommercialOverlay: requiredIf('needRezoning', hasAnswered),
+      needSpecialDistrict: requiredIf('needRezoning', hasAnswered),
+    },
+  },
+  {
+    step: 'rezoning-underlying',
+    routing: {
+      route: 'projects.edit.geometry-edit',
+      mode: 'draw',
+      type: 'underlying-zoning',
+    },
+    conditions: {
+      needRezoning: hasAnswered,
+      needUnderlyingZoning: requiredIf('needRezoning', hasAnswered),
+      underlyingZoning: requiredIf('needUnderlyingZoning', hasFilledOut),
+    },
+  },
+  {
+    step: 'rezoning-commercial',
+    routing: {
+      route: 'projects.edit.geometry-edit',
+      mode: 'draw',
+      type: 'commercial-overlays',
+    },
+    conditions: {
+      needRezoning: hasAnswered,
+      needCommercialOverlay: requiredIf('needRezoning', hasAnswered),
+      commercialOverlays: requiredIf('needCommercialOverlay', hasFilledOut),
+    },
+  },
+  {
+    step: 'rezoning-special',
+    routing: {
+      route: 'projects.edit.geometry-edit',
+      mode: 'draw',
+      type: 'special-purpose-districts',
+    },
+    conditions: {
+      needRezoning: hasAnswered,
+      needSpecialDistrict: requiredIf('needRezoning', hasAnswered),
+      specialPurposeDistricts: requiredIf('needSpecialDistrict', hasFilledOut),
+    },
+  },
+  {
+    step: 'complete',
+    routing: {
+      label: 'complete',
+      route: 'projects.show',
+    },
+  },
+];
 
 const DUMMY_FEATURE_COLLECTION = {
   type: 'FeatureCollection',

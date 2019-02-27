@@ -23,9 +23,18 @@ export const EmptyFeatureCollection = {
 
 const hasAnswered = property => property === true || property === false;
 const hasFilledOut = property => !isEmpty(property);
+const hasFilledOutAndProposedDifferingZoning = function(property, key) {
+  console.log(`
+    check;
+      ${key}
+      is it empty? ${!isEmpty(property)}
+      proposedDiffersFromCanonical is ${this.underlyingZoningModel.proposedDiffersFromCanonical}
+  `);
+  return !isEmpty(property) && this.get(`${key}Model.proposedDiffersFromCanonical`);
+};
 const requiredIf = function(question, conditionalTest = hasAnswered) {
-  return function(property) {
-    return this.get(question) ? conditionalTest(property) : true;
+  return function(property, key) {
+    return this.get(question) ? conditionalTest.bind(this)(property, key) : true;
   };
 };
 
@@ -73,40 +82,40 @@ export const projectProcedure = [
   {
     step: 'rezoning-underlying',
     routing: {
-      route: 'projects.edit.geometry-edit',
+      route: 'projects.edit.steps.rezoning',
       mode: 'draw',
       type: 'underlying-zoning',
     },
     conditions: {
       needRezoning: hasAnswered,
       needUnderlyingZoning: requiredIf('needRezoning', hasAnswered),
-      underlyingZoning: requiredIf('needUnderlyingZoning', hasFilledOut),
+      underlyingZoning: requiredIf('needUnderlyingZoning', hasFilledOutAndProposedDifferingZoning),
     },
   },
   {
     step: 'rezoning-commercial',
     routing: {
-      route: 'projects.edit.geometry-edit',
+      route: 'projects.edit.steps.rezoning',
       mode: 'draw',
       type: 'commercial-overlays',
     },
     conditions: {
       needRezoning: hasAnswered,
       needCommercialOverlay: requiredIf('needRezoning', hasAnswered),
-      commercialOverlays: requiredIf('needCommercialOverlay', hasFilledOut),
+      commercialOverlays: requiredIf('needCommercialOverlay', hasFilledOutAndProposedDifferingZoning),
     },
   },
   {
     step: 'rezoning-special',
     routing: {
-      route: 'projects.edit.geometry-edit',
+      route: 'projects.edit.steps.rezoning',
       mode: 'draw',
       type: 'special-purpose-districts',
     },
     conditions: {
       needRezoning: hasAnswered,
       needSpecialDistrict: requiredIf('needRezoning', hasAnswered),
-      specialPurposeDistricts: requiredIf('needSpecialDistrict', hasFilledOut),
+      specialPurposeDistricts: requiredIf('needSpecialDistrict', hasFilledOutAndProposedDifferingZoning),
     },
   },
   {
@@ -252,7 +261,9 @@ export default class Project extends Model {
 
   @computed(...procedureKeys)
   get currentStep() {
-    return wizard(projectProcedure, this);
+    const currStep = wizard(projectProcedure, this);
+    console.log(currStep);
+    return currStep;
   }
 
   @not('hasDirtyAttributes') isClean;
