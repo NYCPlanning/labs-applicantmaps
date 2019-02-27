@@ -1,35 +1,38 @@
-<h1 class="header-large">
+<h1 class="header-large" data-test-project-name>
   {{ember-inline-edit
+    data-test-inline-edit="project-name"
     value=(readonly project.projectName)
-    onSave=(action (mut project.projectName))
-    saveButtonClass='button tiny'
+    onSave=(action 'save' 'projectName')
+    saveButtonClass='save-button button tiny'
     cancelButtonClass='button tiny'
     showEditButton=true
-    editButtonClass='button tiny no-margin clear'
+    editButtonClass='edit-button button tiny no-margin clear'
   }}
 </h1>
 
 <h6>Applicant:</h6>
 <p class="header-small" data-test-applicant-name>
   {{ember-inline-edit
+    data-test-inline-edit="applicant-name"
     value=(readonly project.applicantName)
-    onSave=(action (mut project.applicantName))
-    saveButtonClass='button tiny'
+    onSave=(action 'save' 'applicantName')
+    saveButtonClass='save-button button tiny'
     cancelButtonClass='button tiny'
     showEditButton=true
-    editButtonClass='button tiny no-margin clear'
+    editButtonClass='edit-button button tiny no-margin clear'
   }}
 </p>
 
 <h6>Project Number:</h6>
 <p class="header-small" data-test-zap-project-id>
   {{ember-inline-edit
+    data-test-inline-edit="zap-project-id"
     value=(readonly project.zapProjectId)
-    onSave=(action (mut project.zapProjectId))
-    saveButtonClass='button tiny'
+    onSave=(action 'save' 'zapProjectId')
+    saveButtonClass='save-button button tiny'
     cancelButtonClass='button tiny'
     showEditButton=true
-    editButtonClass='button tiny no-margin clear'
+    editButtonClass='edit-button button tiny no-margin clear'
   }}
 </p>
 
