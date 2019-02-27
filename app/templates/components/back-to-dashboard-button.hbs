@@ -1,13 +1,5 @@
-{{#if (eq model.project.currentStep.step 'development-site')}}
-  {{#link-to "projects.edit.steps.development-site" model.project.id class="button gray"}}
-    {{fa-icon 'arrow-left'}} Back
-  {{/link-to}}
-{{else if (eq model.project.currentStep.step 'project-area')}}
-  {{#link-to "projects.edit.steps.project-area" model.project.id class="button gray"}}
-    {{fa-icon 'arrow-left'}} Back
-  {{/link-to}}
-{{else if (eq model.project.currentStep.step 'rezoning')}}
-  {{#link-to "projects.edit.steps.rezoning" model.project.id class="button gray"}}
+{{#if (not-eq model.project.currentStep.step 'complete')}}
+  {{#link-to model.project.currentStep.routing.route class="button gray"}}
     {{fa-icon 'arrow-left'}} Back
   {{/link-to}}
 {{else}}

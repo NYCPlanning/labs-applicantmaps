@@ -12,6 +12,7 @@ import { computed } from '@ember-decorators/object';
 import { alias } from '@ember-decorators/object/computed';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/project';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
+import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
 import underlyingZoning from '../utils/queries/intersecting-zoning-query';
 import commercialOverlays from '../utils/queries/proposed-commercial-overlays-query';
 import specialPurposeDistricts from '../utils/queries/proposed-special-districts-query';
@@ -50,6 +51,38 @@ export const GEOMETRY_TYPES = [
   'rezoningArea',
 ];
 
+// returns true or false based on whether the change to the geometric
+// property was "meaningful"
+// first argument is a geometric-property model
+export function isMeaningfulChange(geometricPropertyForType /* model */) {
+  // here, it gets set once by the constructor
+  // const initial = model.get(attribute);
+  const [
+    initial,
+    proposed, // upstream proposed should always be FC
+  ] = geometricPropertyForType.changedAttributes().proposedGeometry || [];
+
+  // if nothing has been proposed at all, no
+  // meaningful changes detected
+  if (!proposed) return false;
+
+  // only apply this check if this is a canonical geometric prop
+  if (geometricPropertyForType.get('hasCanonical')) {
+    // check that proposed is not the canonical zoning
+    if ((!initial || isEmpty(initial)) && proposed) {
+      return isFeatureCollectionChanged(geometricPropertyForType.get('canonical'), proposed);
+    }
+  }
+
+  // check for FC-ish empties
+  if (isEmpty(initial) && !isEmpty(proposed)) return true;
+
+  // finally, if the proposed is not empty, and it's a meaningful
+  // change in the feature collection, proceed
+  return !isEmpty(geometricPropertyForType.get('proposedGeometry'))
+    && isFeatureCollectionChanged(initial, proposed);
+}
+
 export default class extends Model {
   @belongsTo('project')
   project;
@@ -61,6 +94,16 @@ export default class extends Model {
   @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection })
   proposedGeometry;
+
+  @computed('canonical', 'proposedGeometry', 'annotations', 'data')
+  get isReadyToProceed() {
+    return isMeaningfulChange(this);
+  }
+
+  @computed('canonical', 'proposedGeometry', 'hasDirtyAttributes')
+  get proposedDiffersFromCanonical() {
+    return isFeatureCollectionChanged(this.get('canonical'), this.get('proposedGeometry'));
+  }
 
   @attr('string')
   queryName;

@@ -3,40 +3,6 @@ import { argument } from '@ember-decorators/argument';
 import { action, computed } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 import { camelize } from '@ember/string';
-import isEmpty from 'labs-applicant-maps/utils/is-empty';
-import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
-
-// returns true or false based on whether the change to the geometric
-// property was "meaningful"
-// first argument is a geometric-property model
-export function isMeaningfulChange(geometricPropertyForType /* model */) {
-  // here, it gets set once by the constructor
-  // const initial = model.get(attribute);
-  const [
-    initial,
-    proposed, // upstream proposed should always be FC
-  ] = geometricPropertyForType.changedAttributes().proposedGeometry || [];
-
-  // if nothing has been proposed at all, no
-  // meaningful changes detected
-  if (!proposed) return false;
-
-  // only apply this check if this is a canonical geometric prop
-  if (geometricPropertyForType.get('hasCanonical')) {
-    // check that proposed is not the canonical zoning
-    if ((!initial || isEmpty(initial)) && proposed) {
-      return isFeatureCollectionChanged(geometricPropertyForType.get('canonical'), proposed);
-    }
-  }
-
-  // check for FC-ish empties
-  if (isEmpty(initial) && !isEmpty(proposed)) return true;
-
-  // finally, if the proposed is not empty, and it's a meaningful
-  // change in the feature collection, proceed
-  return !isEmpty(geometricPropertyForType.get('proposedGeometry'))
-    && isFeatureCollectionChanged(initial, proposed);
-}
 
 // This class takes FIVE arguments: map model mode type target
 // prepares dynamic component invocations (for type and mode)
@@ -105,11 +71,6 @@ export default class TypesBase extends Component {
     const target = this.get('target');
 
     geometricPropertyForType.set(target, featureCollection);
-  }
-
-  @computed('geometricPropertyForType.{canonical,proposedGeometry,annotations,data}')
-  get isReadyToProceed() {
-    return isMeaningfulChange(this.get('geometricPropertyForType'));
   }
 
   @action

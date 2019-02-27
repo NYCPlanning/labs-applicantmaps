@@ -1,6 +1,7 @@
 import DS from 'ember-data';
 import { attr, hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
+import { not, alias } from '@ember-decorators/object/computed';
 import { service } from '@ember-decorators/service';
 import turfBbox from '@turf/bbox';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
@@ -182,83 +183,64 @@ export default class Project extends Model {
    * FeatureCollection of polygons or multipolygons
    */
 
+  // questions:
+  // can we have these return the model? Then in the wizard, use dot notation
+  // too get the proposedGeometry?
+  // how are these setters used? used in tests, they could remain the same actually
+  // we need to change these and create new computeds that only return the model
   @computed('geometricProperties.@each.proposedGeometry')
-  get developmentSite() {
+  get developmentSiteModel() {
     return this.get('geometricProperties')
-      .findBy('geometryType', 'developmentSite')
-      .get('proposedGeometry');
-  }
-
-  set developmentSite(devSite) {
-    this.get('geometricProperties')
-      .findBy('geometryType', 'developmentSite')
-      .set('proposedGeometry', devSite);
+      .findBy('geometryType', 'developmentSite');
   }
 
   @computed('geometricProperties.@each.proposedGeometry')
-  get projectArea() {
+  get projectAreaModel() {
     return this.get('geometricProperties')
-      .findBy('geometryType', 'projectArea')
-      .get('proposedGeometry');
+      .findBy('geometryType', 'projectArea');
   }
 
-  set projectArea(devSite) {
-    this.get('geometricProperties')
-      .findBy('geometryType', 'projectArea')
-      .set('proposedGeometry', devSite);
-  }
-
-  @computed('geometricProperties.@each.proposedGeometry')
-  get underlyingZoning() {
+  @computed('geometricProperties.@each')
+  get underlyingZoningModel() {
     return this.get('geometricProperties')
-      .findBy('geometryType', 'underlyingZoning')
-      .get('proposedGeometry');
+      .findBy('geometryType', 'underlyingZoning');
   }
 
-  set underlyingZoning(devSite) {
-    this.get('geometricProperties')
-      .findBy('geometryType', 'underlyingZoning')
-      .set('proposedGeometry', devSite);
-  }
-
-  @computed('geometricProperties.@each.proposedGeometry')
-  get commercialOverlays() {
+  @computed('geometricProperties.@each')
+  get commercialOverlaysModel() {
     return this.get('geometricProperties')
-      .findBy('geometryType', 'commercialOverlays')
-      .get('proposedGeometry');
+      .findBy('geometryType', 'commercialOverlays');
   }
 
-  set commercialOverlays(devSite) {
-    this.get('geometricProperties')
-      .findBy('geometryType', 'commercialOverlays')
-      .set('proposedGeometry', devSite);
-  }
-
-  @computed('geometricProperties.@each.proposedGeometry')
-  get specialPurposeDistricts() {
+  @computed('geometricProperties.@each')
+  get specialPurposeDistrictsModel() {
     return this.get('geometricProperties')
-      .findBy('geometryType', 'specialPurposeDistricts')
-      .get('proposedGeometry');
+      .findBy('geometryType', 'specialPurposeDistricts');
   }
 
-  set specialPurposeDistricts(devSite) {
-    this.get('geometricProperties')
-      .findBy('geometryType', 'specialPurposeDistricts')
-      .set('proposedGeometry', devSite);
-  }
-
-  @computed('geometricProperties.@each.proposedGeometry')
-  get rezoningArea() {
+  @computed('geometricProperties.@each')
+  get rezoningAreaModel() {
     return this.get('geometricProperties')
-      .findBy('geometryType', 'rezoningArea')
-      .get('proposedGeometry');
+      .findBy('geometryType', 'rezoningArea');
   }
 
-  set rezoningArea(devSite) {
-    this.get('geometricProperties')
-      .findBy('geometryType', 'rezoningArea')
-      .set('proposedGeometry', devSite);
-  }
+  @alias('developmentSiteModel.proposedGeometry')
+  developmentSite;
+
+  @alias('projectAreaModel.proposedGeometry')
+  projectArea;
+
+  @alias('underlyingZoningModel.proposedGeometry')
+  underlyingZoning;
+
+  @alias('commercialOverlaysModel.proposedGeometry')
+  commercialOverlays;
+
+  @alias('specialPurposeDistrictsModel.proposedGeometry')
+  specialPurposeDistricts;
+
+  @alias('rezoningAreaModel.proposedGeometry')
+  rezoningArea;
 
   async setRezoningArea() {
     const rezoningArea = this.get('geometricProperties').findBy('geometryType', 'rezoningArea');
@@ -272,6 +254,8 @@ export default class Project extends Model {
   get currentStep() {
     return wizard(projectProcedure, this);
   }
+
+  @not('hasDirtyAttributes') isClean;
 
   // ******** CHECKS AND METHODS FOR REZONING QUESTIONS ********
   setRezoningFalse() {
