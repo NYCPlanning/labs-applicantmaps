@@ -6,6 +6,42 @@ import { camelize } from '@ember/string';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
 
+// returns true or false based on whether the change to the geometric
+// property was "meaningful"
+// first argument is a geometric-property model
+export function isMeaningfulChange(geometricPropertyForType /* model */) {
+  // here, it gets set once by the constructor
+  // const initial = model.get(attribute);
+  const [
+    initial,
+    proposed, // upstream proposed should always be FC
+  ] = geometricPropertyForType.changedAttributes().proposedGeometry || [];
+
+  // if nothing has been proposed at all, no
+  // meaningful changes detected
+  if (!proposed) return false;
+
+  // only apply this check if this is a canonical geometric prop
+  if (geometricPropertyForType.get('hasCanonical')) {
+    // check that proposed is not the canonical zoning
+    if ((!initial || isEmpty(initial)) && proposed) {
+      return isFeatureCollectionChanged(geometricPropertyForType.get('canonical'), proposed);
+    }
+  }
+
+  // check for FC-ish empties
+  if (isEmpty(initial) && !isEmpty(proposed)) return true;
+
+  // finally, if the proposed is not empty, and it's a meaningful
+  // change in the feature collection, proceed
+  return !isEmpty(geometricPropertyForType.get('proposedGeometry'))
+    && isFeatureCollectionChanged(initial, proposed);
+}
+
+// This class takes FIVE arguments: map model mode type target
+// prepares dynamic component invocations (for type and mode)
+// cleans up input data
+// saves data and transitions the router
 export default class TypesBase extends Component {
   constructor(...args) {
     super(...args);
@@ -13,15 +49,6 @@ export default class TypesBase extends Component {
     // save the model so it's clean on init
     this.get('geometricPropertyForType').save();
   }
-
-  @service
-  router;
-
-  @service
-  store;
-
-  @service
-  notificationMessages;
 
   @argument
   map;
@@ -37,6 +64,15 @@ export default class TypesBase extends Component {
 
   @argument
   target = 'data';
+
+  @service
+  router;
+
+  @service
+  store;
+
+  @service
+  notificationMessages;
 
   @computed('type')
   get componentForType() {
@@ -73,36 +109,7 @@ export default class TypesBase extends Component {
 
   @computed('geometricPropertyForType.{canonical,proposedGeometry,annotations,data}')
   get isReadyToProceed() {
-    // don't short-circuit anymore... we can't proceed until change is meaningful
-    // // short-circuit this if we're in annotation mode
-    // if (this.get('mode') === 'draw/annotation') return true;
-
-    // here, it gets set once by the constructor
-    // const initial = model.get(attribute);
-    const [
-      initial,
-      proposed, // upstream proposed should always be FC
-    ] = this.get('geometricPropertyForType').changedAttributes().proposedGeometry || [];
-
-    // if nothing has been proposed at all, no
-    // meaningful changes detected
-    if (!proposed) return false;
-
-    // only apply this check if this is a canonical geometric prop
-    if (this.get('geometricPropertyForType.hasCanonical')) {
-      // check that proposed is not the canonical zoning
-      if ((!initial || isEmpty(initial)) && proposed) {
-        return isFeatureCollectionChanged(this.get('geometricPropertyForType.canonical'), proposed);
-      }
-    }
-
-    // check for FC-ish empties
-    if (isEmpty(initial) && !isEmpty(proposed)) return true;
-
-    // finally, if the proposed is not empty, and it's a meaningful
-    // change in the feature collection, proceed
-    return !isEmpty(this.get('geometricPropertyForType.proposedGeometry'))
-      && isFeatureCollectionChanged(initial, proposed);
+    return isMeaningfulChange(this.get('geometricPropertyForType'));
   }
 
   @action

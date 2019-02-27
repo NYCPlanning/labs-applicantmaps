@@ -6,8 +6,7 @@ import hbs from 'htmlbars-inline-precompile';
 module('Integration | Helper | mapbox-geojson-source', function(hooks) {
   setupRenderingTest(hooks);
 
-  // Replace this with your real tests.
-  test('it renders', async function(assert) {
+  test('it wraps the source for mapbox-gl', async function(assert) {
     this.set('inputValue', {
       type: 'FeatureCollection',
       features: [],
