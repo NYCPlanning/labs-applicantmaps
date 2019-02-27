@@ -35,7 +35,7 @@ export const underlyingZoningLabelsLayer = {
     'text-max-angle': 90,
   },
   paint: {
-    'text-color': '#444',
+    'text-color': { type: 'identity', property: '{textCOLOR}' },
     'text-halo-color': '#FFFFFF',
     'text-halo-width': 2,
     'text-halo-blur': 2,

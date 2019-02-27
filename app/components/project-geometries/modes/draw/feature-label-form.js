@@ -21,10 +21,16 @@ export default class FeatureLabelFormComponent extends Component {
   @alias('selectedFeature.features.firstObject.properties.label')
   label;
 
+  @alias('selectedFeature.features.firstObject.properties.textCOLOR')
+  textCOLOR;
+
   @action
   handleSelectChange(newLabel) {
     this.set('label', newLabel);
-    this.updateSelectedFeature(newLabel);
+    this.set('textCOLOR', 'FF7034');
+    this.updateSelectedFeature(newLabel, 'FF7034');
+    const bigGuy = this.get('selectedFeature.features.firstObject.properties');
+    console.log('bigGuy', bigGuy);
     this.drawStateCallback();
   }
 }
