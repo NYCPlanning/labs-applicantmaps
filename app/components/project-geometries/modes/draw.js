@@ -1,9 +1,11 @@
 import Component from '@ember/component';
 import { get } from '@ember/object';
 import { action, computed } from '@ember-decorators/object';
+import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { containsNumber } from '@turf/invariant';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/geometric-property';
+
 
 export default class DrawComponent extends Component {
   constructor(...args) {
@@ -35,9 +37,9 @@ export default class DrawComponent extends Component {
     this.set('geometricProperty', drawnFeatures);
   }
 
-  // update which is the selected feature
-  // TODO: document better!
   // Simply gets what new feature is selected and sets it to the class
+  // disallows multiply selectable polygon and line features
+  // point features can still be selected as groups
   selectedFeatureCallback() {
     const { draw: { drawInstance: draw }, mapInstance } = this.get('map');
     const { features: [firstSelectedFeature] } = draw.getSelected();
@@ -48,6 +50,7 @@ export default class DrawComponent extends Component {
 
       const mode = get(firstSelectedFeature, 'properties.meta:mode');
 
+      // what is this doing? why do we need to manually alter filters?
       if (mode) {
         const originalFilter = mapInstance
           .getFilter('gl-draw-polygon-midpoint.cold');
@@ -115,18 +118,40 @@ export default class DrawComponent extends Component {
   // @type(FeatureCollection)
   selectedFeature = EmptyFeatureCollection;
 
+  @service
+  notificationMessages;
+
+  /*
+   * Handles trash button click in draw mode
+   * To be able to delete all features regardless of current draw mode,
+   * we cannot always rely on draw.trash(), which is mode-specific.
+   * When a single point of a larger feature is selected, we use draw.trash()
+   * to delete a single polygon vertex, or an entire line (behavior provided by trash()).
+   * When an entire feature is selected (full polygon, line or point type), we rely on draw.delete(),
+   * deleting all selected features by id
+   */
   @action
   handleTrashButtonClick() {
     const { draw: { drawInstance: draw } } = this.get('map');
-    const selectedFeature = draw.getSelectedIds();
-    const { features: [feature] } = draw.getSelectedPoints();
+    const { features: [selectedFeaturePoint] } = draw.getSelectedPoints();
+    const { features: [selectedFeature] } = draw.getSelected();
 
-    if (feature) {
-      draw.trash();
-    } else {
-      draw.delete(selectedFeature);
+    // if user attempts to delete a vertex that renders the polygon invalid (i.e. < 4 vertices)
+    // then select the entire polygon Feature for deletion in simple_select_delete mode
+    if (selectedFeaturePoint
+        && selectedFeature.geometry.type === 'Polygon'
+        && selectedFeature.geometry.coordinates[0].length < 5) {
+      draw.changeMode('simple_select_delete', { featureIds: [selectedFeature.id] });
     }
 
+    // if user selects entire Feature(s) (polygon, line, or point(s)) for deletion
+    // then switch to simple_select_delete mode (cannot delete entire Feature in direct_select mode)
+    if (!selectedFeaturePoint && !['simple_select', 'simple_select_delete'].includes(draw.getMode())) {
+      const selectedFeatureIds = draw.getSelectedIds();
+      draw.changeMode('simple_select_delete', { featureIds: selectedFeatureIds });
+    }
+
+    draw.trash();
     this.drawStateCallback();
   }
 
