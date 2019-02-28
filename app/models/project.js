@@ -22,6 +22,7 @@ export const EmptyFeatureCollection = {
   }],
 };
 
+// (property,key) basic checks
 const hasAnswered = property => property === true || property === false;
 const hasFilledOut = property => !isEmpty(property);
 const hasFilledOutAndProposedDifferingZoning = function(property, key) {
@@ -33,9 +34,24 @@ const hasFilledOutAndProposedDifferingZoning = function(property, key) {
   `);
   return !isEmpty(property) && this.get(`${key}Model.proposedDiffersFromCanonical`);
 };
+
+// checks that the schema key isn't dirty
+const isClean = function(property, key) {
+  console.log(this.get(`${key}Model`).changedAttributes());
+  // console.log(this.get('project').changedAttributes());
+  // const [, changedAttrs] = this.changedAttributes();
+  return !this.get(`${key}Model`).hasDirtyAttributes;
+};
+
+// aggregate checks
 const requiredIf = function(question, conditionalTest = hasAnswered) {
   return function(property, key) {
     return this.get(question) ? conditionalTest.bind(this)(property, key) : true;
+  };
+};
+const and = function(...checks) {
+  return function(property, key) {
+    return checks.every(check => check.bind(this)(property, key));
   };
 };
 
@@ -67,8 +83,8 @@ export const projectProcedure = [
       type: 'development-site',
     },
     conditions: {
-      developmentSite: hasFilledOut,
-      isClean: Boolean,
+      developmentSite: and(hasFilledOut, isClean),
+      // isClean: Boolean,
     },
   },
   {

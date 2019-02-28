@@ -56,7 +56,7 @@ module('Unit | Model | project', (hooks) => {
       proposedGeometry: dummyFeatureCollection,
       geometryType: 'developmentSite',
     });
-
+    await geometricProperty.save();
     const model = run(() => store.createRecord('project', {
       projectName: 'some project',
       needDevelopmentSite: true,
@@ -77,6 +77,7 @@ module('Unit | Model | project', (hooks) => {
       proposedGeometry: dummyFeatureCollection,
       geometryType: 'developmentSite',
     });
+    await geometricProperty.save();
     const model = run(() => store.createRecord('project', {
       projectName: 'some project',
       needDevelopmentSite: true,
