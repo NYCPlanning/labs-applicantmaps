@@ -15,7 +15,6 @@ const { host } = config;
 
 const defaultLayerGroups = {
   'layer-groups': [
-    { id: 'transportation-structures', visible: true },
     { id: 'sidewalks', visible: true },
     {
       id: 'subway',
