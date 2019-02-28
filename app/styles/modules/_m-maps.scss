@@ -361,6 +361,23 @@
   box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
   width: 15rem;
   padding: 4px 4px 0;
+
+  &.invalid {
+    box-shadow: 0 0 0 2px $red;
+  }
+
+  .input-group {
+    margin: 0;
+  }
+
+  .input-group-label {
+    background-color: $a11y-yellow;
+    border-color: transparent;
+  }
+
+  .input-group-field {
+    width: 9rem;
+  }
 }
 
 

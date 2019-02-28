@@ -42,7 +42,7 @@ module('Acceptance | back button works', function(hooks) {
     this.owner.register('component:project-geometries/modes/draw', DrawMode.extend({
       'data-test-draw-mock': true,
       click() {
-        const randomFeatures = randomPolygon(1);
+        const randomFeatures = randomPolygon(1, true);
         this.set('geometricProperty', randomFeatures);
       },
     }));
