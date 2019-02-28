@@ -36,6 +36,8 @@ export default class DrawComponent extends Component {
   }
 
   // update which is the selected feature
+  // TODO: document better!
+  // Simply gets what new feature is selected and sets it to the class
   selectedFeatureCallback() {
     const { draw: { drawInstance: draw }, mapInstance } = this.get('map');
     const { features: [firstSelectedFeature] } = draw.getSelected();

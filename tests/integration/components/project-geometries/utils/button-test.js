@@ -1,26 +1,32 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, click, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | project-geometries/draw-lots-to-union/button', function(hooks) {
+module('Integration | Component | project-geometries/utils/button', function(hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+  test('it accepts and triggers a click handler', async function(assert) {
+    assert.expect(1);
 
-    await render(hbs`{{project-geometries/draw-lots-to-union/button}}`);
+    this.set('handleClick', function() {
+      assert.ok(true);
+    });
 
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
     await render(hbs`
-      {{#project-geometries/utils/button}}
-        template block text
-      {{/project-geometries/utils/button}}
+      {{project-geometries/utils/button
+        handleClick=(action handleClick)}}
     `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    await click('button');
+  });
+
+  test('it disables when passed a property', async function(assert) {
+    await render(hbs`
+      {{project-geometries/utils/button
+        enabled=false}}
+    `);
+
+    assert.equal(find('button').disabled, true);
   });
 });
