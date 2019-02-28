@@ -54,6 +54,8 @@ export const GEOMETRY_TYPES = [
 // returns true or false based on whether the change to the geometric
 // property was "meaningful"
 // first argument is a geometric-property model
+// todo: I think there are two separate handling here, one for
+// canonical geometries, one for regular
 export function isMeaningfulChange(geometricPropertyForType /* model */) {
   // here, it gets set once by the constructor
   // const initial = model.get(attribute);
@@ -62,9 +64,10 @@ export function isMeaningfulChange(geometricPropertyForType /* model */) {
     proposed, // upstream proposed should always be FC
   ] = geometricPropertyForType.changedAttributes().proposedGeometry || [];
 
-  // if nothing has been proposed at all, no
-  // meaningful changes detected
-  if (!proposed) return false;
+  // "initial" means whatever is currently proposed. If it's _not_ empty and
+  // the geometric property doesn't have something canonical to compare,
+  // it should return true
+  if (!isEmpty(initial) && !geometricPropertyForType.get('hasCanonical')) return true;
 
   // only apply this check if this is a canonical geometric prop
   if (geometricPropertyForType.get('hasCanonical')) {
@@ -72,7 +75,17 @@ export function isMeaningfulChange(geometricPropertyForType /* model */) {
     if ((!initial || isEmpty(initial)) && proposed) {
       return isFeatureCollectionChanged(geometricPropertyForType.get('canonical'), proposed);
     }
+
+    // if there is already initial, check that it's non-canonical
+    if (!isEmpty(geometricPropertyForType.get('proposedGeometry'))
+      && geometricPropertyForType.get('proposedDiffersFromCanonical')) {
+      return true;
+    }
   }
+
+  // if nothing has been proposed at all, no
+  // meaningful changes detected
+  if (!proposed) return false;
 
   // check for FC-ish empties
   if (isEmpty(initial) && !isEmpty(proposed)) return true;

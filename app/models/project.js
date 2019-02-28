@@ -37,9 +37,6 @@ const hasFilledOutAndProposedDifferingZoning = function(property, key) {
 
 // checks that the schema key isn't dirty
 const isClean = function(property, key) {
-  console.log(this.get(`${key}Model`).changedAttributes());
-  // console.log(this.get('project').changedAttributes());
-  // const [, changedAttrs] = this.changedAttributes();
   return !this.get(`${key}Model`).hasDirtyAttributes;
 };
 
@@ -84,7 +81,6 @@ export const projectProcedure = [
     },
     conditions: {
       developmentSite: and(hasFilledOut, isClean),
-      // isClean: Boolean,
     },
   },
   {
@@ -255,37 +251,37 @@ export default class Project extends Model {
   // too get the proposedGeometry?
   // how are these setters used? used in tests, they could remain the same actually
   // we need to change these and create new computeds that only return the model
-  @computed('geometricProperties.@each.proposedGeometry')
+  @computed('geometricProperties.@each.{proposedGeometry,hasDirtyAttributes}')
   get developmentSiteModel() {
     return this.get('geometricProperties')
       .findBy('geometryType', 'developmentSite');
   }
 
-  @computed('geometricProperties.@each.proposedGeometry')
+  @computed('geometricProperties.@each.{proposedGeometry,hasDirtyAttributes}')
   get projectAreaModel() {
     return this.get('geometricProperties')
       .findBy('geometryType', 'projectArea');
   }
 
-  @computed('geometricProperties.@each')
+  @computed('geometricProperties.@each.{proposedGeometry,hasDirtyAttributes}')
   get underlyingZoningModel() {
     return this.get('geometricProperties')
       .findBy('geometryType', 'underlyingZoning');
   }
 
-  @computed('geometricProperties.@each')
+  @computed('geometricProperties.@each.{proposedGeometry,hasDirtyAttributes}')
   get commercialOverlaysModel() {
     return this.get('geometricProperties')
       .findBy('geometryType', 'commercialOverlays');
   }
 
-  @computed('geometricProperties.@each')
+  @computed('geometricProperties.@each.{proposedGeometry,hasDirtyAttributes}')
   get specialPurposeDistrictsModel() {
     return this.get('geometricProperties')
       .findBy('geometryType', 'specialPurposeDistricts');
   }
 
-  @computed('geometricProperties.@each')
+  @computed('geometricProperties.@each.{proposedGeometry,hasDirtyAttributes}')
   get rezoningAreaModel() {
     return this.get('geometricProperties')
       .findBy('geometryType', 'rezoningArea');
@@ -316,7 +312,7 @@ export default class Project extends Model {
   }
 
   // ******** COMPUTING THE CURRENT STEP FOR ROUTING ********
-  @computed(...procedureKeys)
+  @computed(...procedureKeys, 'isClean')
   get currentStep() {
     const currStep = wizard(projectProcedure, this);
     debug(`
