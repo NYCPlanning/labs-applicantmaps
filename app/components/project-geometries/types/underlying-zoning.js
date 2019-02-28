@@ -20,6 +20,8 @@ export const underlyingZoningLabelsLayer = {
     'symbol-placement': 'line',
     'text-field': '{label}',
     'text-size': 16,
+    'text-font': ['{textFont}'],
+    // 'text-font': ,
     visibility: 'visible',
     'symbol-avoid-edges': false,
     'text-offset': [
@@ -35,7 +37,7 @@ export const underlyingZoningLabelsLayer = {
     'text-max-angle': 90,
   },
   paint: {
-    'text-color': { type: 'identity', property: '{textCOLOR}' },
+    'text-color': '#444',
     'text-halo-color': '#FFFFFF',
     'text-halo-width': 2,
     'text-halo-blur': 2,

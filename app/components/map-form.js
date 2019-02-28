@@ -182,8 +182,6 @@ const defaultLayerGroups = {
             },
           },
         },
-        { id: 'transportation-structures', visible: true },
-        { id: 'sidewalks', visible: true },
       ],
     },
   ],

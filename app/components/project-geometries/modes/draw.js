@@ -131,12 +131,14 @@ export default class DrawComponent extends Component {
   }
 
   @action
-  updateSelectedFeature(label, text) {
+  updateSelectedFeature(label, textFont) {
     const { draw: { drawInstance: draw } } = this.get('map');
     const { features: [firstFeature] } = this.get('selectedFeature');
 
     draw.setFeatureProperty(firstFeature.id, 'label', label);
-    draw.setFeatureProperty(firstFeature.id, 'text', text);
+    draw.setFeatureProperty(firstFeature.id, 'textFont', textFont);
+    // console.log('first feature label', firstFeature.properties.label);
+    // console.log('first feature textCOLOR', firstFeature.properties.textCOLOR);
 
     // this triggers an update that renders the new label as mutated above to show up in the selected feature
     // see https://github.com/mapbox/mapbox-gl-draw/blob/master/docs/API.md#events
