@@ -6,6 +6,7 @@ import { service } from '@ember-decorators/service';
 import turfBbox from '@turf/bbox';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import wizard from 'labs-applicant-maps/utils/wizard';
+import { debug } from '@ember/debug';
 import { GEOMETRY_TYPES } from './geometric-property';
 
 const { Model } = DS;
@@ -24,7 +25,7 @@ export const EmptyFeatureCollection = {
 const hasAnswered = property => property === true || property === false;
 const hasFilledOut = property => !isEmpty(property);
 const hasFilledOutAndProposedDifferingZoning = function(property, key) {
-  console.log(`
+  debug(`
     check;
       ${key}
       is it empty? ${!isEmpty(property)}
@@ -38,11 +39,12 @@ const requiredIf = function(question, conditionalTest = hasAnswered) {
   };
 };
 
+// TODO add steps for the real edit pages bt the steps
 export const projectProcedure = [
   {
     step: 'project-creation',
     routing: {
-      route: 'projects.new',
+      route: 'projects.edit',
     },
     conditions: {
       projectName: hasFilledOut,
@@ -54,7 +56,19 @@ export const projectProcedure = [
       route: 'projects.edit.steps.development-site',
     },
     conditions: {
+      needDevelopmentSite: hasFilledOut,
+    },
+  },
+  {
+    step: 'development-site-create',
+    routing: {
+      route: 'projects.edit.geometry-edit',
+      mode: 'draw',
+      type: 'development-site',
+    },
+    conditions: {
       developmentSite: hasFilledOut,
+      isClean: Boolean,
     },
   },
   {
@@ -64,7 +78,30 @@ export const projectProcedure = [
     },
     conditions: {
       needProjectArea: hasAnswered,
+    },
+  },
+  {
+    step: 'project-area-create',
+    routing: {
+      route: 'projects.edit.geometry-edit',
+      mode: 'draw',
+      type: 'project-area',
+    },
+    conditions: {
+      needProjectArea: hasAnswered,
       projectArea: requiredIf('needProjectArea', hasFilledOut),
+      isClean: Boolean,
+    },
+  },
+  {
+    step: 'development-site-create',
+    routing: {
+      route: 'projects.edit.geometry-edit',
+      mode: 'draw',
+      type: 'commercial-overlays',
+    },
+    conditions: {
+      projectName: hasFilledOut,
     },
   },
   {
@@ -90,12 +127,13 @@ export const projectProcedure = [
       needRezoning: hasAnswered,
       needUnderlyingZoning: requiredIf('needRezoning', hasAnswered),
       underlyingZoning: requiredIf('needUnderlyingZoning', hasFilledOutAndProposedDifferingZoning),
+      isClean: Boolean,
     },
   },
   {
     step: 'rezoning-commercial',
     routing: {
-      route: 'projects.edit.steps.rezoning',
+      route: 'projects.edit.geometry-edit',
       mode: 'draw',
       type: 'commercial-overlays',
     },
@@ -103,12 +141,13 @@ export const projectProcedure = [
       needRezoning: hasAnswered,
       needCommercialOverlay: requiredIf('needRezoning', hasAnswered),
       commercialOverlays: requiredIf('needCommercialOverlay', hasFilledOutAndProposedDifferingZoning),
+      isClean: Boolean,
     },
   },
   {
     step: 'rezoning-special',
     routing: {
-      route: 'projects.edit.steps.rezoning',
+      route: 'projects.edit.geometry-edit',
       mode: 'draw',
       type: 'special-purpose-districts',
     },
@@ -116,6 +155,7 @@ export const projectProcedure = [
       needRezoning: hasAnswered,
       needSpecialDistrict: requiredIf('needRezoning', hasAnswered),
       specialPurposeDistricts: requiredIf('needSpecialDistrict', hasFilledOutAndProposedDifferingZoning),
+      isClean: Boolean,
     },
   },
   {
@@ -175,6 +215,8 @@ export default class Project extends Model {
   @attr('number') stepLabel
 
   // ******** REQUIRED ANSWERS ********
+  @attr('boolean', { allowNull: true, defaultValue: null }) needDevelopmentSite;
+
   @attr('boolean', { allowNull: true, defaultValue: null }) needProjectArea;
 
   @attr('boolean', { allowNull: true, defaultValue: null }) needRezoning;
@@ -258,12 +300,32 @@ export default class Project extends Model {
   }
 
   // ******** COMPUTING THE CURRENT STEP FOR ROUTING ********
-
   @computed(...procedureKeys)
   get currentStep() {
     const currStep = wizard(projectProcedure, this);
-    console.log(currStep);
+    debug(`
+      currStep:
+        step: ${currStep.step}
+        route: ${currStep.routing.route}
+        one of these is falsey: ${currStep.conditions ? Object.keys(currStep.conditions) : ''}
+    `);
     return currStep;
+  }
+
+  @computed('currentStep')
+  get previousStep() {
+    const { step } = this.get('currentStep');
+    const previousStepIndex = projectProcedure.findIndex(({ step: thisStep }) => thisStep === step) - 1;
+    const previousStep = projectProcedure[previousStepIndex];
+    debug(`
+        previousStep: 
+          previous: ${previousStep.step}
+          route: ${previousStep.routing.route}
+          index: ${previousStepIndex}
+          currStep: ${step}
+    `);
+
+    return previousStep;
   }
 
   @not('hasDirtyAttributes') isClean;

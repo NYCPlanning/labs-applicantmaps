@@ -81,7 +81,7 @@ export default class TypesBase extends Component {
       await model.save();
 
       const project = await model.get('project');
-      project.save();
+      await project.save();
 
       this.get('notificationMessages').success('Project saved!');
       // only transition to the next step if it's not annotation mode

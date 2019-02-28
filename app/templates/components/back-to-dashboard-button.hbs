@@ -1,5 +1,5 @@
 {{#if (not-eq model.project.currentStep.step 'complete')}}
-  {{#link-to model.project.currentStep.routing.route class="button gray"}}
+  {{#link-to model.project.previousStep.routing.route class="button gray"}}
     {{fa-icon 'arrow-left'}} Back
   {{/link-to}}
 {{else}}
