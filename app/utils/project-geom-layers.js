@@ -47,8 +47,13 @@ const underlyingZoningLayer = {
   },
 };
 
+const newLetterSpacing = '{newLetterSpacing}';
+const newHaloColor = '{newHaloColor}';
+const newHaloBlur = '{newHaloBlur}';
+const newHaloWidth = '{newHaloWidth}';
+
 const underlyingZoningLabelsLayer = {
-  id: 'underlying-zoning-label',
+  id: 'proposed-zoningdistrict-labels',
   type: 'symbol',
   layout: {
     'symbol-placement': 'line',
@@ -67,12 +72,33 @@ const underlyingZoningLabelsLayer = {
     'text-justify': 'left',
     'text-anchor': 'center',
     'text-max-angle': 90,
+    'text-letter-spacing': [
+      'match',
+      ['get', 'textLetterSpacing'],
+      'newLetterSpacing', 0.2,
+      0,
+    ],
   },
   paint: {
     'text-color': '#444',
-    'text-halo-color': '#FFFFFF',
-    'text-halo-width': 2,
-    'text-halo-blur': 2,
+    'text-halo-color': [
+      'match',
+      ['get', 'textHaloColor'],
+      'newHaloColor', '#444',
+      '#FFFFFF',
+    ],
+    'text-halo-width': [
+      'match',
+      ['get', 'textHaloWidth'],
+      'newHaloWidth', 1,
+      2,
+    ],
+    'text-halo-blur': [
+      'match',
+      ['get', 'textHaloBlur'],
+      'newHaloBlur', 0,
+      2,
+    ],
     'text-opacity': 1,
   },
 };

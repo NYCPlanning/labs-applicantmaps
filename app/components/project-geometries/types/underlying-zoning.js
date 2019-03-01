@@ -13,6 +13,7 @@ export const underlyingZoningLayer = {
   },
 };
 
+// use match expressions in this layer to set different styles for new zoning districts
 export const underlyingZoningLabelsLayer = {
   id: 'proposed-zoningdistrict-labels',
   type: 'symbol',
@@ -20,8 +21,6 @@ export const underlyingZoningLabelsLayer = {
     'symbol-placement': 'line',
     'text-field': '{label}',
     'text-size': 16,
-    // 'text-font': ['{textFont}'],
-    // 'text-font': ,
     visibility: 'visible',
     'symbol-avoid-edges': false,
     'text-offset': [
@@ -38,7 +37,7 @@ export const underlyingZoningLabelsLayer = {
     'text-letter-spacing': [
       'match',
       ['get', 'textLetterSpacing'],
-      1, 1,
+      'newLetterSpacing', 0.2,
       0,
     ],
   },
@@ -47,19 +46,19 @@ export const underlyingZoningLabelsLayer = {
     'text-halo-color': [
       'match',
       ['get', 'textHaloColor'],
-      '#444', '#444',
+      'newHaloColor', '#444',
       '#FFFFFF',
     ],
     'text-halo-width': [
       'match',
       ['get', 'textHaloWidth'],
-      1, 1,
+      'newHaloWidth', 1,
       2,
     ],
     'text-halo-blur': [
       'match',
       ['get', 'textHaloBlur'],
-      0, 0,
+      'newHaloBlur', 0,
       2,
     ],
     'text-opacity': 1,

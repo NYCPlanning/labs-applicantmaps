@@ -136,7 +136,7 @@ export default class DrawComponent extends Component {
     const { features: [firstFeature] } = this.get('selectedFeature');
 
     draw.setFeatureProperty(firstFeature.id, 'label', label);
-    draw.setFeatureProperty(firstFeature.id, 'textHaloColor', textLetterSpacing);
+    draw.setFeatureProperty(firstFeature.id, 'textLetterSpacing', textLetterSpacing);
     draw.setFeatureProperty(firstFeature.id, 'textHaloColor', textHaloColor);
     draw.setFeatureProperty(firstFeature.id, 'textHaloWidth', textHaloWidth);
     draw.setFeatureProperty(firstFeature.id, 'textHaloBlur', textHaloBlur);

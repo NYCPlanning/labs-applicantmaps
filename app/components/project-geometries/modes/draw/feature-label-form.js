@@ -33,18 +33,20 @@ export default class FeatureLabelFormComponent extends Component {
   @alias('selectedFeature.features.firstObject.properties.textHaloBlur')
   textHaloBlur;
 
-  // whatever district you choose in the power select is what goes in bigGuy
   @action
   handleSelectChange(newLabel) {
-    this.set('label', newLabel); // this is saving it to memory (console)
+    this.set('label', newLabel);
     this.set('textLetterSpacing', 0.2);
     this.set('textHaloColor', '#444');
     this.set('textHaloWidth', 1);
     this.set('textHaloBlur', 0);
-    const newHaloColor = '#444';
-    this.updateSelectedFeature(newLabel, 1, newHaloColor, 1, 0); // this is what changes it on the map
-    const bigGuy = this.get('selectedFeature.features.firstObject.properties');
-    console.log('bigGuy', bigGuy);
+
+    // these constants are used in a match expression in underlyingZoningLabelsLayer to set different styles for new zoning districts
+    const newDistrictLetterSpacing = 'newLetterSpacing';
+    const newDistrictHaloColor = 'newHaloColor';
+    const newDistrictHaloBlur = 'newHaloBlur';
+    const newDistrictHaloWidth = 'newHaloWidth';
+    this.updateSelectedFeature(newLabel, newDistrictLetterSpacing, newDistrictHaloColor, newDistrictHaloWidth, newDistrictHaloBlur);
     this.drawStateCallback();
   }
 }
