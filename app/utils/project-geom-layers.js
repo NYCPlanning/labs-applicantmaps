@@ -47,11 +47,7 @@ const underlyingZoningLayer = {
   },
 };
 
-const newLetterSpacing = '{newLetterSpacing}';
-const newHaloColor = '{newHaloColor}';
-const newHaloBlur = '{newHaloBlur}';
-const newHaloWidth = '{newHaloWidth}';
-
+// use match expressions in this layer to set different styles for new zoning districts
 const underlyingZoningLabelsLayer = {
   id: 'proposed-zoningdistrict-labels',
   type: 'symbol',
