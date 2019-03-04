@@ -75,6 +75,10 @@ export default class extends Model {
   @alias('project.annotations')
   annotations;
 
+  // Takes all feature collection data and splits it out
+  // into separate properties, geometric and annotations.
+  // This splitting happens because downstream rezoning
+  // gets affected
   @computed('proposedGeometry', 'canonical', 'annotations')
   get data() {
     const { proposedGeometry, annotations } = this;

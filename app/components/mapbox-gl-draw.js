@@ -116,6 +116,7 @@ export default class MapboxGlDraw extends Component {
     }
   }
 
+  // TODO: clarify the purpose of this
   shouldReset(geometricProperty) {
     if (!isEmpty(geometricProperty)) {
       this.add(geometricProperty);
