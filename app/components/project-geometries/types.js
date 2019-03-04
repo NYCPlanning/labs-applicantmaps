@@ -9,11 +9,13 @@ import { camelize } from '@ember/string';
 // cleans up input data
 // saves data and transitions the router
 export default class TypesBase extends Component {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     // save the model so it's clean on init
-    this.get('geometricPropertyForType').save();
+    if (!this.get('isDestroyed') && !this.get('isDestroying')) {
+      this.get('geometricPropertyForType').save();
+    }
   }
 
   @argument

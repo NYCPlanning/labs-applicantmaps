@@ -183,17 +183,20 @@ const procedureKeys = projectProcedure
   .reduce((acc, { conditions }) => acc.concat(conditions ? Object.keys(conditions) : []), []);
 
 export default class Project extends Model {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     // add geometries of each type if they don't exist
+    // this really should happen on the server
     GEOMETRY_TYPES.forEach((geometryType) => {
       if (!this.get('geometricProperties').findBy('geometryType', geometryType)) {
+        const geometricProp = this.store.createRecord('geometric-property', {
+          geometryType,
+          project: this,
+        });
+
         this.get('geometricProperties')
-          .pushObject(this.store.createRecord('geometric-property', {
-            geometryType,
-            project: this,
-          }));
+          .pushObject(geometricProp);
       }
     });
   }

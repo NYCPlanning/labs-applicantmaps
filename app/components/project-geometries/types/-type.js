@@ -10,5 +10,7 @@ export default class TypeBaseClass extends Component {
     if (draw) draw.deleteAll();
 
     super.willDestroyElement(...args);
+
+    this.set('isReady', false);
   }
 }

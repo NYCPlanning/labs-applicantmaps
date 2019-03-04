@@ -115,9 +115,9 @@ const mapEditingLayerGroups = {
 
 export default class GeometryEditRoute extends Route {
   queryParams = {
-    mode: { replace: true, refreshModel: false },
-    type: { replace: true, refreshModel: false },
-    target: { replace: true, refreshModel: false },
+    mode: { replace: true },
+    type: { replace: true },
+    target: { replace: true },
   };
 
   async model() {
