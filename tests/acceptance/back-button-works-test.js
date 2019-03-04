@@ -71,7 +71,6 @@ module('Acceptance | back button works', function(hooks) {
   });
 
   test('being able to click "Next" when you already have a geom and havent made any changes', async function(assert) {
-    this.server.timing = 2000;
     await visit('/');
 
     // go through sequence up until project area
@@ -120,9 +119,35 @@ module('Acceptance | back button works', function(hooks) {
 
     await click('[data-test-project-geometry-save]');
     await click('[data-test-geometry-edit-back=""]');
-    await click('[data-test-alter-zoning]');
+
+    assert.equal(currentURL(), '/projects/1/edit/geometry-edit?mode=draw&type=underlying-zoning');
+
+    await click('[data-test-project-geometry-save]');
+
+
+    assert.equal(currentURL(), '/projects/1/edit/geometry-edit?mode=draw&type=commercial-overlays');
+
+    await click('[data-test-project-geometry-save]');
+    await click('[data-test-geometry-edit-back=""]');
+
+    assert.equal(currentURL(), '/projects/1/edit/geometry-edit?mode=draw&type=underlying-zoning');
+
     await click('[data-test-project-geometry-save]');
 
     assert.equal(currentURL(), '/projects/1/edit/geometry-edit?mode=draw&type=commercial-overlays');
+
+    await click('[data-test-draw-mock]');
+    await click('[data-test-project-geometry-save]');
+
+    assert.equal(currentURL(), '/projects/1/edit/geometry-edit?mode=draw&type=special-purpose-districts');
+
+    await click('[data-test-draw-mock]');
+
+    await click('[data-test-geometry-edit-back=""]');
+    await click('[data-test-project-geometry-save]');
+
+    await click('[data-test-project-geometry-save]');
+
+    assert.equal(currentURL(), '/projects/1');
   });
 });

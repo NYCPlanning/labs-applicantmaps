@@ -9,8 +9,6 @@
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <div class="fade-in-on-load text-small">
 
-    {{!-- {{back-to-dashboard-button model=model}} --}}
-
     <h1 class="header-large small-margin-bottom">
       Rezoning:
       <span class="text-weight-normal" style="display:block;">
@@ -32,9 +30,7 @@
     <hr />
 
     <div class="grid-x">
-      <div class="cell shrink" style="padding-right:1rem;">
-        {{back-to-dashboard-button model=model}}
-      </div>
+      {{yield}}
       <div class="cell auto">
         {{#project-geometries/utils/button
           enabled=isReadyToProceed
