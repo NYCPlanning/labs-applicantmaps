@@ -115,22 +115,41 @@ const mapEditingLayerGroups = {
 
 export default class GeometryEditRoute extends Route {
   queryParams = {
-    mode: { replace: true },
-    type: { replace: true },
-    target: { replace: true },
+    mode: { replace: true, refreshModel: false },
+    type: { replace: true, refreshModel: false },
+    target: { replace: true, refreshModel: false },
   };
 
   async model() {
-    const layerGroups = await this.store.query('layer-group', mapEditingLayerGroups);
+    const layerGroupCount = mapEditingLayerGroups['layer-groups'].length;
+    const layerGroupsInStore = this.store.peekAll('layer-group');
+    let layerGroups;
+    if (layerGroupsInStore.length === layerGroupCount) {
+      layerGroups = layerGroupsInStore;
+    } else {
+      layerGroups = await this.store.query('layer-group', mapEditingLayerGroups);
+    }
+
     const project = this.modelFor('projects.edit');
     const { meta } = layerGroups;
 
     return {
       layerGroups: {
+        // meta is a critical part of the map - it's all the style information
+        // however, it's only accessible from a "query". This suggests it's more
+        // important that side information. It should probably be it's own model
         meta,
         layerGroups,
       },
       project,
     };
+  }
+
+  setupController(controller, model) {
+    if (!controller.get('layerGroups')) {
+      controller.set('layerGroups', model.layerGroups);
+    }
+
+    super.setupController(controller, model);
   }
 }
