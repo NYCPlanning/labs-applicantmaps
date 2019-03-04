@@ -84,21 +84,6 @@ export default class TypesBase extends Component {
       const project = await model.get('project');
       await project.save();
 
-      // bt dev and local API, currentStep does NOT seem to get recomputed here.
-      // it is determing there are no updated keys.
-      // only AFTER does it think that the keys get updated, probably after it gets fetched
-      // from the server again.
-
-      // I believe it may have something to do with how model "dirty" state is handled
-      // across implementations, since the currentSTep computed has Keys that rely on
-      // "hasDirtyAttributes"
-
-      // this is a hacky solution to get this to cooperate
-      // project.notifyPropertyChange('currentStep');
-
-      // UPDATE: I needed to add a new dependent key to listen for hasDirtyAttributes
-      // on geometric property models.
-
       this.get('notificationMessages').success('Project saved!');
       // only transition to the next step if it's not annotation mode
 

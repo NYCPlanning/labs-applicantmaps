@@ -6,7 +6,6 @@ import { service } from '@ember-decorators/service';
 import turfBbox from '@turf/bbox';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import wizard from 'labs-applicant-maps/utils/wizard';
-import { debug } from '@ember/debug';
 import { GEOMETRY_TYPES } from './geometric-property';
 
 const { Model } = DS;
@@ -26,24 +25,20 @@ export const EmptyFeatureCollection = {
 const hasAnswered = property => property === true || property === false;
 const hasFilledOut = property => !isEmpty(property);
 const hasFilledOutAndProposedDifferingZoning = function(property, key) {
-  debug(`
-    check;
-      ${key}
-      is it empty? ${!isEmpty(property)}
-      proposedDiffersFromCanonical is ${this.underlyingZoningModel.proposedDiffersFromCanonical}
-  `);
   return !isEmpty(property) && this.get(`${key}Model.proposedDiffersFromCanonical`);
 };
 
-// checks that the schema key isn't dirty
+// checks that the schema key isn't dirty by referencing
+// the _model_ for the geometry type. There are computed
+// properties below that return the model by doing a findBy
 const isClean = function(property, key) {
   return !this.get(`${key}Model`).hasDirtyAttributes;
 };
 
 // aggregate checks
 const requiredIf = function(question, conditionalTest = hasAnswered) {
-  return function(property, key) {
-    return this.get(question) ? conditionalTest.bind(this)(property, key) : true;
+  return function(...args) {
+    return this.get(question) ? conditionalTest.bind(this)(...args) : true;
   };
 };
 const and = function(...checks) {
@@ -101,19 +96,7 @@ export const projectProcedure = [
     },
     conditions: {
       needProjectArea: hasAnswered,
-      projectArea: requiredIf('needProjectArea', hasFilledOut),
-      isClean: Boolean,
-    },
-  },
-  {
-    step: 'development-site-create',
-    routing: {
-      route: 'projects.edit.geometry-edit',
-      mode: 'draw',
-      type: 'commercial-overlays',
-    },
-    conditions: {
-      projectName: hasFilledOut,
+      projectArea: requiredIf('needProjectArea', and(hasFilledOut, isClean)),
     },
   },
   {
@@ -131,15 +114,14 @@ export const projectProcedure = [
   {
     step: 'rezoning-underlying',
     routing: {
-      route: 'projects.edit.steps.rezoning',
+      route: 'projects.edit.geometry-edit',
       mode: 'draw',
       type: 'underlying-zoning',
     },
     conditions: {
       needRezoning: hasAnswered,
       needUnderlyingZoning: requiredIf('needRezoning', hasAnswered),
-      underlyingZoning: requiredIf('needUnderlyingZoning', hasFilledOutAndProposedDifferingZoning),
-      isClean: Boolean,
+      underlyingZoning: requiredIf('needUnderlyingZoning', and(hasFilledOutAndProposedDifferingZoning, isClean)),
     },
   },
   {
@@ -152,8 +134,7 @@ export const projectProcedure = [
     conditions: {
       needRezoning: hasAnswered,
       needCommercialOverlay: requiredIf('needRezoning', hasAnswered),
-      commercialOverlays: requiredIf('needCommercialOverlay', hasFilledOutAndProposedDifferingZoning),
-      isClean: Boolean,
+      commercialOverlays: requiredIf('needCommercialOverlay', and(hasFilledOutAndProposedDifferingZoning, isClean)),
     },
   },
   {
@@ -166,8 +147,7 @@ export const projectProcedure = [
     conditions: {
       needRezoning: hasAnswered,
       needSpecialDistrict: requiredIf('needRezoning', hasAnswered),
-      specialPurposeDistricts: requiredIf('needSpecialDistrict', hasFilledOutAndProposedDifferingZoning),
-      isClean: Boolean,
+      specialPurposeDistricts: requiredIf('needSpecialDistrict', and(hasFilledOutAndProposedDifferingZoning, isClean)),
     },
   },
   {
@@ -318,12 +298,7 @@ export default class Project extends Model {
   @computed(...procedureKeys, 'isClean')
   get currentStep() {
     const currStep = wizard(projectProcedure, this);
-    debug(`
-      currStep:
-        step: ${currStep.step}
-        route: ${currStep.routing.route}
-        one of these is falsey: ${currStep.conditions ? Object.keys(currStep.conditions) : ''}
-    `);
+
     return currStep;
   }
 
@@ -332,13 +307,6 @@ export default class Project extends Model {
     const { step } = this.get('currentStep');
     const previousStepIndex = projectProcedure.findIndex(({ step: thisStep }) => thisStep === step) - 1;
     const previousStep = projectProcedure[previousStepIndex];
-    debug(`
-        previousStep: 
-          previous: ${previousStep.step}
-          route: ${previousStep.routing.route}
-          index: ${previousStepIndex}
-          currStep: ${step}
-    `);
 
     return previousStep;
   }

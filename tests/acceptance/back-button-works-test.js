@@ -1,4 +1,4 @@
-import { module, test } from 'qunit';
+import { module, test, skip } from 'qunit';
 import {
   visit,
   currentURL,
@@ -71,7 +71,6 @@ module('Acceptance | back button works', function(hooks) {
   });
 
   test('being able to click "Next" when you already have a geom and havent made any changes', async function(assert) {
-    this.server.timing = 2000;
     await visit('/');
 
     // go through sequence up until project area
@@ -120,9 +119,59 @@ module('Acceptance | back button works', function(hooks) {
 
     await click('[data-test-project-geometry-save]');
     await click('[data-test-geometry-edit-back=""]');
-    await click('[data-test-alter-zoning]');
+
+    assert.equal(currentURL(), '/projects/1/edit/geometry-edit?mode=draw&type=underlying-zoning');
+
+    await click('[data-test-project-geometry-save]');
+
+
+    assert.equal(currentURL(), '/projects/1/edit/geometry-edit?mode=draw&type=commercial-overlays');
+
+    await click('[data-test-project-geometry-save]');
+    await click('[data-test-geometry-edit-back=""]');
+
+    assert.equal(currentURL(), '/projects/1/edit/geometry-edit?mode=draw&type=underlying-zoning');
+
     await click('[data-test-project-geometry-save]');
 
     assert.equal(currentURL(), '/projects/1/edit/geometry-edit?mode=draw&type=commercial-overlays');
+
+    await click('[data-test-draw-mock]');
+    await click('[data-test-project-geometry-save]');
+
+    assert.equal(currentURL(), '/projects/1/edit/geometry-edit?mode=draw&type=special-purpose-districts');
+
+    await click('[data-test-draw-mock]');
+
+    await click('[data-test-geometry-edit-back=""]');
+    await click('[data-test-project-geometry-save]');
+
+    await click('[data-test-project-geometry-save]');
+
+    assert.equal(currentURL(), '/projects/1');
+  });
+
+  // address this in a later issue
+  skip('move back from project area question to development site & can click "next"', async function(assert) {
+    await visit('/');
+
+    await click('[data-test-get-started]');
+    await fillIn('[data-test-new-project-project-name]', 'Mulholland Drive');
+    await click('[data-test-create-new-project]');
+
+    assert.equal(currentURL(), '/projects/1/edit/development-site');
+
+    await click('[data-test-select-lots]');
+    await click('[data-test-labs-layers]');
+
+    await click('[data-test-project-geometry-save]');
+
+    assert.equal(currentURL(), '/projects/1/edit/project-area');
+
+    await click('[data-test-step-back=""]');
+    await click('[data-test-select-lots]');
+    await click('[data-test-project-geometry-save]');
+
+    assert.equal(currentURL(), '/projects/1/edit/project-area');
   });
 });

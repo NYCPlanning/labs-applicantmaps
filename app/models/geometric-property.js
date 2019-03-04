@@ -52,7 +52,10 @@ export const GEOMETRY_TYPES = [
 ];
 
 // returns true or false based on whether the change to the geometric
-// property was "meaningful"
+// property was "meaningful", or a change to the `proposedGeometry` attr
+// that is:
+//  a) different from canonical, which it has a canonical change
+//  b) different from what was there before, if it exists (a true geometric difference)
 // first argument is a geometric-property model
 // todo: I think there are two separate handling here, one for
 // canonical geometries, one for regular

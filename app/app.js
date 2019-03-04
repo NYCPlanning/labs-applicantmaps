@@ -6,8 +6,6 @@ import config from './config/environment';
 const App = Application.extend({
   modulePrefix: config.modulePrefix,
   podModulePrefix: config.podModulePrefix,
-  LOG_TRANSITIONS: true,
-  LOG_TRANSITIONS_INTERNAL: true,
   Resolver,
 });
 
