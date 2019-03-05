@@ -15,6 +15,7 @@ const { host } = config;
 
 const defaultLayerGroups = {
   'layer-groups': [
+    { id: 'sidewalks', visible: true },
     {
       id: 'subway',
       visible: true,
@@ -44,21 +45,6 @@ const defaultLayerGroups = {
             },
           },
         }, // subway_entrances_labels
-      ],
-    },
-    {
-      id: 'building-footprints',
-      visible: true,
-      layers: [
-        {
-          style: {
-            paint: {
-              'fill-opacity': 0.35,
-              'fill-color': 'rgba(33, 35, 38, 0)',
-              'fill-outline-color': 'rgba(33, 35, 38, 0.8)',
-            },
-          },
-        },
       ],
     },
     { id: 'special-purpose-districts', visible: false },
@@ -182,6 +168,7 @@ const defaultLayerGroups = {
             },
           },
         },
+
       ],
     },
   ],
@@ -196,6 +183,7 @@ export default class MapFormComponent extends Component {
 
     store.query('layer-group', query).then((layerGroups) => {
       const { meta } = layerGroups;
+
       const sources = store.peekAll('source').toArray().uniqBy('meta.description');
 
       this.set('mapConfiguration', {
@@ -275,6 +263,7 @@ export default class MapFormComponent extends Component {
     const scaleControl = new mapboxgl.ScaleControl({ maxWidth: 200, unit: 'imperial' });
     map.addControl(scaleControl, 'bottom-left');
 
+    // for editing the OpenStreetMap basemap style (look at maputnik, mapbox GL JS API docs, or style.json in the layers-api for reference)
     const basemapLayersToHide = [
       'background',
       'highway_path',
@@ -299,6 +288,11 @@ export default class MapFormComponent extends Component {
       'railway_dashline',
     ];
     basemapLayersToHide.forEach(layer => map.removeLayer(layer));
+
+    // editing building layer in the basemap to only show shape outlines and filtering for only ground floor structures
+    map.setPaintProperty('building', 'fill-color', 'rgba(234, 234, 229, 0)');
+    map.setPaintProperty('building', 'fill-outline-color', 'rgba(0, 0, 0, 1)');
+    map.setFilter('building', ['==', 'render_min_height', 0]);
   }
 
   @action
