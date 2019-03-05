@@ -35,11 +35,16 @@ export default class FeatureLabelFormComponent extends Component {
 
   @action
   handleSelectChange(newLabel) {
+    const boldTextLetterSpacing = 0.2;
+    const boldTextHaloColor = '#444';
+    const boldTextHaloWidth = 1;
+    const boldTextHaloBlur = 0;
+
     this.set('label', newLabel);
-    this.set('textLetterSpacing', 0.2);
-    this.set('textHaloColor', '#444');
-    this.set('textHaloWidth', 1);
-    this.set('textHaloBlur', 0);
+    this.set('textLetterSpacing', boldTextLetterSpacing);
+    this.set('textHaloColor', boldTextHaloColor);
+    this.set('textHaloWidth', boldTextHaloWidth);
+    this.set('textHaloBlur', boldTextHaloBlur);
 
     // these constants are used in a match expression in underlyingZoningLabelsLayer to set different styles for new zoning districts
     const newDistrictLetterSpacing = 'newLetterSpacing';
