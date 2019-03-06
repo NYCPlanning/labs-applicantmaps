@@ -120,17 +120,42 @@ export default class GeometryEditRoute extends Route {
     target: { replace: true },
   };
 
+  // This hook gets triggered multiple times, updating the data store with layer groups.
+  // When this happens, ember-mapbox-gl internals trigger an update to mapbox-gl's internal
+  // state, which throws errors about layers already existing.
+  // This is a workaround which returns what's already in the store if those keys already exist.
+  // This is a design flaw I think - the data store isn't really necessary for our layer group
+  // configuration.
   async model() {
-    const layerGroups = await this.store.query('layer-group', mapEditingLayerGroups);
+    const layerGroupCount = mapEditingLayerGroups['layer-groups'].length;
+    const layerGroupsInStore = this.store.peekAll('layer-group');
+    let layerGroups;
+    if (layerGroupsInStore.length === layerGroupCount) {
+      layerGroups = layerGroupsInStore;
+    } else {
+      layerGroups = await this.store.query('layer-group', mapEditingLayerGroups);
+    }
+
     const project = this.modelFor('projects.edit');
     const { meta } = layerGroups;
 
     return {
       layerGroups: {
+        // meta is a critical part of the map - it's all the style information
+        // however, it's only accessible from a "query". This suggests it's more
+        // important that side information. It should probably be it's own model
         meta,
         layerGroups,
       },
       project,
     };
+  }
+
+  setupController(controller, model) {
+    if (!controller.get('layerGroups')) {
+      controller.set('layerGroups', model.layerGroups);
+    }
+
+    super.setupController(controller, model);
   }
 }

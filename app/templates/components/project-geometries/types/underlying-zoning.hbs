@@ -9,8 +9,7 @@
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <div class="fade-in-on-load text-small">
 
-    {{back-to-dashboard-button model=model}}
-
+    
     <h1 class="header-large small-margin-bottom">
       Rezoning:
       <span class="text-weight-normal" style="display:block;">
@@ -27,11 +26,20 @@
 
     <hr />
 
-    {{#project-geometries/utils/button
-      enabled=isReadyToProceed
-      handleClick=(action 'calculateRezoningOnSave')}}
-      Save
-      <small style="display:block;line-height:1.75;">Zoning Districts</small>
-    {{/project-geometries/utils/button}}
+    <div class="grid-x">
+      {{yield}}
+      <div class="cell auto">
+        {{#project-geometries/utils/button
+          enabled=isReadyToProceed
+          handleClick=(action 'calculateRezoningOnSave')}}
+          {{#if (eq model.project.currentStep.step 'complete')}}
+            Save
+          {{else}}
+            Next {{fa-icon 'arrow-right'}}
+          {{/if}}
+        {{/project-geometries/utils/button}}
+      </div>
+    </div>
+
   </div>
 {{/ember-wormhole}}
