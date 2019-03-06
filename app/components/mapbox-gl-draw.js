@@ -19,7 +19,7 @@ DirectSelectUndraggable.onFeature = function() {
 
 // extend styles
 const styles = [...AnnotationsStyles, ...DefaultMapboxDrawStyles].uniqBy('id');
-const AnnotationsDrawPoint = { ...annotatable(MapboxDraw.modes.draw_point) };
+const AnnotationsDrawPointMode = { ...annotatable(MapboxDraw.modes.draw_point) };
 
 export const DefaultDraw = MapboxDraw.bind(null, {
   displayControlsDefault: false,
@@ -32,8 +32,10 @@ export const DefaultDraw = MapboxDraw.bind(null, {
     'draw_annotations:linear': AnnotationsMode, // These are identical because they function the same
     'draw_annotations:curved': AnnotationsMode, // but only really need to be named differently
     'draw_annotations:square': AnnotationsMode,
-    'draw_annotations:label': AnnotationsDrawPoint,
-    'draw_annotations:centerline': AnnotationsDrawPoint,
+    'draw_annotations:label': AnnotationsDrawPointMode,
+    'draw_annotations:centerline': AnnotationsDrawPointMode,
+    // duplicate mode with distinct name  to avoid `skipToDirectSelect` trigger when we switch to simple_select for delete
+    simple_select_delete: MapboxDraw.modes.simple_select,
   }, MapboxDraw.modes),
   styles,
 });
