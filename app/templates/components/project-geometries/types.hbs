@@ -9,15 +9,19 @@
 
 {{!-- invoke the type component --}}
 {{!-- pass down the mode component --}}
-{{component componentForType
+{{#component componentForType
   model=geometricPropertyForType
   mode=mode
   map=map
-  isReadyToProceed=isReadyToProceed
+  isReadyToProceed=geometricPropertyForType.isReadyToProceed
   save=(action 'save')
   modeComponent=(component componentForMode
     map=map
     geometricProperty=geometricPropertyForMode)
 }}
+  <div class="cell shrink" style="padding-right:1rem;">
+    {{back-to-dashboard-button model=geometricPropertyForType type=type mode=mode}}
+  </div>
+{{/component}}
 
 {{yield}}

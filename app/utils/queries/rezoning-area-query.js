@@ -1,12 +1,13 @@
 import turfUnion from '@turf/union';
 import turfBuffer from '@turf/buffer';
 import computeDifference from 'labs-applicant-maps/utils/compute-difference';
+import { get } from '@ember/object';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
 export async function combineFeatureCollections(developmentSite, allGeometricProperties) {
-  const underlyingZoning = allGeometricProperties.findBy('geometryType', 'underlyingZoning');
-  const commercialOverlays = allGeometricProperties.findBy('geometryType', 'commercialOverlays');
-  const specialPurposeDistricts = allGeometricProperties.findBy('geometryType', 'specialPurposeDistricts');
+  const underlyingZoning = allGeometricProperties.findBy('geometryType', 'underlyingZoning') || {};
+  const commercialOverlays = allGeometricProperties.findBy('geometryType', 'commercialOverlays') || {};
+  const specialPurposeDistricts = allGeometricProperties.findBy('geometryType', 'specialPurposeDistricts') || {};
 
   const combinedFC = {
     type: 'FeatureCollection',
@@ -14,25 +15,25 @@ export async function combineFeatureCollections(developmentSite, allGeometricPro
   };
 
   // underlyingZoning
-  if (!isEmpty(underlyingZoning.get('proposedGeometry'))) {
-    const currentZoning = underlyingZoning.get('canonical');
+  if (!isEmpty(get(underlyingZoning, 'proposedGeometry'))) {
+    const currentZoning = get(underlyingZoning, 'canonical');
 
-    const underlyingZoningDiff = computeDifference(currentZoning, underlyingZoning.get('proposedGeometry'));
+    const underlyingZoningDiff = computeDifference(currentZoning, get(underlyingZoning, 'proposedGeometry'));
     combinedFC.features = [...combinedFC.features, ...underlyingZoningDiff.features];
   }
 
   // commercial Overlays
-  if (!isEmpty(commercialOverlays.get('proposedGeometry'))) {
-    const currentCommercialOverlays = commercialOverlays.get('canonical');
-    const commercialOverlaysDiff = computeDifference(currentCommercialOverlays, commercialOverlays.get('proposedGeometry'));
+  if (!isEmpty(get(commercialOverlays, 'proposedGeometry'))) {
+    const currentCommercialOverlays = get(commercialOverlays, 'canonical');
+    const commercialOverlaysDiff = computeDifference(currentCommercialOverlays, get(commercialOverlays, 'proposedGeometry'));
 
     combinedFC.features = [...combinedFC.features, ...commercialOverlaysDiff.features];
   }
 
   // special purpose districts
-  if (!isEmpty(specialPurposeDistricts.get('proposedGeometry'))) {
-    const currentSpecialPurposeDistricts = specialPurposeDistricts.get('canonical');
-    const specialPurposeDistrictsDiff = computeDifference(currentSpecialPurposeDistricts, specialPurposeDistricts.get('proposedGeometry'));
+  if (!isEmpty(get(specialPurposeDistricts, 'proposedGeometry'))) {
+    const currentSpecialPurposeDistricts = get(specialPurposeDistricts, 'canonical');
+    const specialPurposeDistrictsDiff = computeDifference(currentSpecialPurposeDistricts, get(specialPurposeDistricts, 'proposedGeometry'));
 
     combinedFC.features = [...combinedFC.features, ...specialPurposeDistrictsDiff.features];
   }

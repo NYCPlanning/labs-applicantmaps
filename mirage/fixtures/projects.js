@@ -73,6 +73,7 @@ export default [
     projectName: 'test',
     applicantName: 'test',
     zapProjectId: 'test',
+    needDevelopmentSite: true,
     needProjectArea: true,
     needRezoning: true,
     needUnderlyingZoning: true,

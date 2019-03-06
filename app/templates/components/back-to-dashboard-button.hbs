@@ -1,7 +1,14 @@
-{{#if (eq model.currentStep.step 'complete')}}
-  <p class="text-tiny small-margin-bottom">
-    {{#link-to "projects.show" model.id}}
-      {{fa-icon 'arrow-left'}} Back to project dashboard
+{{#if (not-eq model.project.currentStep.step 'complete')}}
+  {{#let (find-relative-step (hash route=router.currentRouteName type=type mode=mode) -1) as |previous|}}
+    {{log previous}}
+    {{#link-to previous.routing.route (query-params mode=previous.routing.mode type=previous.routing.type)
+      class="button gray"
+      data-test-geometry-edit-back=true}}
+      {{fa-icon 'arrow-left'}} Back
     {{/link-to}}
-  </p>
+  {{/let}}
+{{else}}
+  {{#link-to "projects.show" model.project.id class="button gray"}}
+    Cancel
+  {{/link-to}}
 {{/if}}

@@ -48,7 +48,7 @@ module('Unit | Model | project', (hooks) => {
   });
 
   // Test for project completion when only development site is required
-  test('it produces complete status', function (assert) {
+  test('it produces complete status', async function (assert) {
     const dummyFeatureCollection = NonEmptyFeatureCollection;
 
     const store = this.owner.lookup('service:store');
@@ -56,18 +56,20 @@ module('Unit | Model | project', (hooks) => {
       proposedGeometry: dummyFeatureCollection,
       geometryType: 'developmentSite',
     });
-
+    await geometricProperty.save();
     const model = run(() => store.createRecord('project', {
       projectName: 'some project',
+      needDevelopmentSite: true,
       needProjectArea: false,
       needRezoning: false,
       geometricProperties: [geometricProperty],
     }));
+    await model.save();
     assert.equal(model.get('currentStep.step'), 'complete');
   });
 
   // Test for project incomplete project that hasn't answered rezoning question
-  test('it produces rezoning step', function (assert) {
+  test('it produces rezoning step', async function (assert) {
     const dummyFeatureCollection = NonEmptyFeatureCollection;
 
     const store = this.owner.lookup('service:store');
@@ -75,12 +77,15 @@ module('Unit | Model | project', (hooks) => {
       proposedGeometry: dummyFeatureCollection,
       geometryType: 'developmentSite',
     });
+    await geometricProperty.save();
     const model = run(() => store.createRecord('project', {
       projectName: 'some project',
+      needDevelopmentSite: true,
       needProjectArea: false,
       needRezoning: null,
       geometricProperties: [geometricProperty],
     }));
+    await model.save();
 
     assert.equal(model.get('currentStep.step'), 'rezoning');
   });

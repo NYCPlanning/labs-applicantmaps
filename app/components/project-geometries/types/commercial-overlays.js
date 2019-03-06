@@ -145,6 +145,7 @@ export default class CommercialOverlayComponent extends BaseClass {
 
   // this is wrong because it doesn't honor the correct target
   // it should be using the model's API, not passing stuff in directly
+  // this should also probably just happen in the API, when it gets posted!
   async fetchCanonical() {
     if (isEmpty(this.get('model.canonical')) && isEmpty(this.get('model.proposedGeometry'))) {
       await this.get('model').setCanonical();

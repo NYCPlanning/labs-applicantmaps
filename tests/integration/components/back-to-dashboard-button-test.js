@@ -16,7 +16,7 @@ module('Integration | Component | back-to-dashboard-button', function(hooks) {
     this.set('model', completeModel);
     await render(hbs`{{back-to-dashboard-button model=model}}`);
 
-    assert.equal(this.element.textContent.trim(), 'Back to project dashboard');
+    assert.equal(this.element.textContent.trim(), 'Back');
 
     const incompleteModel = {
       currentStep: {
@@ -27,6 +27,6 @@ module('Integration | Component | back-to-dashboard-button', function(hooks) {
     this.set('model.currentStep.step', incompleteModel);
     await render(hbs`{{back-to-dashboard-button model=model}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.equal(this.element.textContent.trim(), 'Back');
   });
 });
