@@ -84,11 +84,17 @@ export default class LotsComponent extends Component {
   generateBuffer() {
     const { features } = this.get('selectedLots');
 
-    if (!features.length) return {};
+    if (!features.length) {
+      this.set('geometricProperty', {
+        type: 'FeatureCollection',
+        features: [],
+      });
+      return;
+    }
     const [{ geometry }] = features;
     const { length } = features;
 
-    return waitForProperty(this, 'hydrateFeatures.isIdle')
+    waitForProperty(this, 'hydrateFeatures.isIdle')
       .then(() => {
         let union = turfBuffer(geometry, bufferkm);
 

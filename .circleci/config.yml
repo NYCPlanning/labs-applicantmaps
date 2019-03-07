@@ -31,9 +31,6 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      # connect
-      - run: yarn browserstack-connect
-
       # run tests!
       - run: COVERAGE=TRUE yarn test
 
