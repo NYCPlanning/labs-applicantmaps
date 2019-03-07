@@ -354,28 +354,13 @@
   position: absolute;
   top: 110px;
   left: 72px;
-  // bottom: 50px;
-  // left: 50%;
-  // transform: translateX(-50%);
   z-index: 1;
   background-color: $a11y-yellow;
   border: 4px solid $a11y-yellow;
   border-radius: 4px;
   box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
   width: 15rem;
-
-  .input-group {
-    margin: 0;
-  }
-
-  .input-group-label {
-    background-color: $a11y-yellow;
-    border-color: transparent;
-  }
-
-  .input-group-field {
-    width: 9rem;
-  }
+  padding: 4px 4px 0;
 }
 
 

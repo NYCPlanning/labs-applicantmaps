@@ -19,7 +19,13 @@ export const specialPurposeDistrictsLabelsLayer = {
   layout: {
     'symbol-placement': 'point',
     'text-field': '{label}',
-    'text-size': 12,
+    'text-size': 16,
+    'text-font': [
+      'match',
+      ['get', 'textFont'],
+      'bold', ['literal', ['Open Sans Bold', 'Arial Unicode MS Bold']],
+      ['literal', ['Open Sans Regular', 'Arial Unicode MS Regular']],
+    ],
     visibility: 'visible',
     'symbol-avoid-edges': false,
     'text-offset': [

@@ -237,7 +237,18 @@ export default function(...args) {
         ],
         'text-justify': 'center',
         'text-anchor': 'center',
-        'text-size': 12,
+        'text-size': [
+          'match',
+          ['get', 'textSize'],
+          'large', 16,
+          12,
+        ],
+        'text-font': [
+          'match', ['get', 'textFont'], 'bold', // condition
+          ['literal', ['Open Sans Bold', 'Arial Unicode MS Bold']], // match
+          ['literal', ['Open Sans Regular', 'Arial Unicode MS Regular']], // default
+        ],
+
         'text-allow-overlap': true,
         'text-ignore-placement': true,
       },
