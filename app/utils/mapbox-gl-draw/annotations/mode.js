@@ -99,6 +99,10 @@ export function toDisplayFeatures(state, geojson, display) {
   geojson.properties.active = (isActiveLine) ? 'true' : 'false';
   if (!isActiveLine) return display(geojson);
 
+  if (geojson.properties.mode === 'draw_annotations:square') {
+    geojson.properties.label = '';
+  }
+
   // Only render the line if it has at least one real coordinate
   if (geojson.geometry.coordinates.length < 2) return null;
   geojson.properties.meta = 'feature';
