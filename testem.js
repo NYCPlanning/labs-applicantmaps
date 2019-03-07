@@ -20,7 +20,7 @@ const crossBrowserTargets = [
 ];
 
 module.exports = {
-  test_page: 'tests/index.html?notrycatch',
+  test_page: 'tests/index.html?notrycatch&hidepassed',
   disable_watching: true,
   browser_start_timeout: 2000,
   launch_in_ci: [
