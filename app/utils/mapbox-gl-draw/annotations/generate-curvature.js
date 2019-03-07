@@ -237,7 +237,7 @@ export default function(...args) {
         ],
         'text-justify': 'center',
         'text-anchor': 'center',
-        'text-size': 8,
+        'text-size': 12,
         'text-allow-overlap': true,
         'text-ignore-placement': true,
       },
