@@ -183,13 +183,19 @@ const buildLineLayers = function(rawLineFeature, annotationType) {
       'symbol-placement': 'line-center',
       'text-offset': [
         0,
-        -0.75,
+        0,
       ],
       'text-justify': 'center',
       'text-anchor': 'center',
-      'text-size': 12,
+      'text-size': 13,
       'text-allow-overlap': true,
       'text-ignore-placement': true,
+    },
+    paint: {
+      'text-color': 'rgba(0, 0, 0, 1)',
+      'text-halo-color': 'rgba(255, 255, 255, 1)',
+      'text-halo-width': 3,
+      'text-halo-blur': 1,
     },
   };
 
