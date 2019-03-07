@@ -20,6 +20,11 @@ export const underlyingZoningLabelsLayer = {
     'symbol-placement': 'line',
     'text-field': '{label}',
     'text-size': 16,
+    'text-font': [
+      'match', ['get', 'textFont'], 'bold', // condition
+      ['literal', ['Open Sans Bold', 'Arial Unicode MS Bold']], // match
+      ['literal', ['Open Sans Regular', 'Arial Unicode MS Regular']], // default
+    ],
     visibility: 'visible',
     'symbol-avoid-edges': false,
     'text-offset': [
