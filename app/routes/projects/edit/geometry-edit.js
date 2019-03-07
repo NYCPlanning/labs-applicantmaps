@@ -58,6 +58,7 @@ const mapEditingLayerGroups = {
       layers: [
         {
           highlightable: false,
+          clickable: false,
           tooltipable: false,
           style: {
             paint: {
