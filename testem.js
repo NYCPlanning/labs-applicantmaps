@@ -13,14 +13,14 @@ const hasBrowserstackKeys = (!!process.env.BROWSERSTACK_USERNAME
   && hasBrowserstackConnection);
 
 const crossBrowserTargets = [
-  'BS_Firefox_Current',
-  'BS_Safari_Current',
-  'BS_MS_Edge',
-  // 'BS_IE_11', // can't do this yet
+  // 'BS_Firefox_Current',
+  // 'BS_Safari_Current',
+  // 'BS_MS_Edge',
+  // // 'BS_IE_11', // can't do this yet
 ];
 
 module.exports = {
-  test_page: 'tests/index.html?notrycatch',
+  test_page: 'tests/index.html?notrycatch&hidepassed',
   disable_watching: true,
   browser_start_timeout: 2000,
   launch_in_ci: [

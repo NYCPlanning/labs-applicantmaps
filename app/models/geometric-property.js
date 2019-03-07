@@ -13,6 +13,7 @@ import { alias } from '@ember-decorators/object/computed';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/project';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
+import length from '@turf/length';
 import underlyingZoning from '../utils/queries/intersecting-zoning-query';
 import commercialOverlays from '../utils/queries/proposed-commercial-overlays-query';
 import specialPurposeDistricts from '../utils/queries/proposed-special-districts-query';
@@ -167,6 +168,14 @@ export default class extends Model {
         .filter(({ properties: { 'meta:mode': mode = '' } }) => mode.includes('draw_annotations'))
         .filterBy('geometry'), // need non-null geoms only, mapbox-gl-draw bug
     };
+
+    annotations.features.forEach((annotationFeature) => {
+      const mode = annotationFeature.properties['meta:mode'];
+
+      if ((mode === 'draw_annotations:linear') || (mode === 'draw_annotations:curved')) {
+        annotationFeature.properties.label = `${(length(annotationFeature.geometry) * 3280.8).toFixed(1)} ft`;
+      }
+    });
 
     this.setProperties({
       proposedGeometry,
