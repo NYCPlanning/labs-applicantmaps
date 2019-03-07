@@ -208,6 +208,10 @@
             <div class="labs-map-loaded"></div>
             {{map.labs-layers layerGroups=mapConfiguration.layerGroups}}
 
+            {{#if (not (is-empty model.project.annotations))}}
+              {{project-geometries/utils/annotations-renderer map=map annotations=model.project.annotations}}
+            {{/if}}
+
             {{!-- Ad-hoc source and layer for showing commercial overlays --}}
             {{#if model.project.commercialOverlays}}
               {{#map.source options=(mapbox-geojson-source model.project.commercialOverlays) as |source|}}
