@@ -130,6 +130,47 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
     assert.equal(initialArea, computeArea(model.get('developmentSite')));
   });
 
+  test('it removes a singly selected lot', async function(assert) {
+    const store = this.owner.lookup('service:store');
+
+    // stable random feature
+    const randomFeatures = randomPolygon(1);
+    const { features: [randomFeature1] } = randomFeatures;
+    randomFeature1.properties.bbl = '100100100';
+
+    this.server.create('project');
+    this.server.get('https://planninglabs.carto.com/api/v2/sql', () => randomFeatures);
+    this.owner.register('component:labs-layers', Component.extend({
+      'data-test-lot-selector': true,
+      click() {
+        this.get('onLayerClick')(randomFeature1);
+      },
+    }));
+
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
+
+    this.set('model', model.get('geometricProperties').findBy('geometryType', 'developmentSite'));
+
+    // ensure the development site is empty to start
+    model.set('developmentSite', {
+      type: 'FeatureCollection',
+      features: [],
+    });
+
+    await render(hbs`
+      {{project-geometries/modes/lots
+        map=(hash labs-layers=(component 'labs-layers'))
+        geometricProperty=model.proposedGeometry}}
+    `);
+
+    const initialArea = computeArea(model.get('developmentSite'));
+    await click('[data-test-lot-selector]');
+    await click('[data-test-lot-selector]');
+
+    // area is the same
+    assert.equal(computeArea(model.get('developmentSite')), initialArea);
+  });
+
   // this fails
   skip('it removes a previously clicked lot when its first', async function(assert) {
     const store = this.owner.lookup('service:store');
