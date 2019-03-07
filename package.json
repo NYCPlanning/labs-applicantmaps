@@ -15,7 +15,6 @@
     "lint:js": "eslint .",
     "start": "ember serve",
     "test": "ember test",
-    "browserstack-connect": "ember browserstack:connect"
   },
   "devDependencies": {
     "@ember/jquery": "^0.5.2",

@@ -13,10 +13,10 @@ const hasBrowserstackKeys = (!!process.env.BROWSERSTACK_USERNAME
   && hasBrowserstackConnection);
 
 const crossBrowserTargets = [
-  'BS_Firefox_Current',
-  'BS_Safari_Current',
-  'BS_MS_Edge',
-  // 'BS_IE_11', // can't do this yet
+  // 'BS_Firefox_Current',
+  // 'BS_Safari_Current',
+  // 'BS_MS_Edge',
+  // // 'BS_IE_11', // can't do this yet
 ];
 
 module.exports = {
