@@ -192,6 +192,17 @@ export default class MapFormComponent extends Component {
         sources,
       });
     });
+
+    // get canonical geometries for missing zoning layers, which should be displayed regardless of if the user updated them
+    if (this.get('model.project.underlyingZoningModel.proposedGeometryIsEmptyDefault')) {
+      this.get('model.project.underlyingZoningModel').setCanonical();
+    }
+    if (this.get('model.project.commercialOverlaysModel.proposedGeometryIsEmptyDefault')) {
+      this.get('model.project.commercialOverlaysModel').setCanonical();
+    }
+    if (this.get('model.project.specialPurposeDistrictsModel.proposedGeometryIsEmptyDefault')) {
+      this.get('model.project.specialPurposeDistrictsModel').setCanonical();
+    }
   }
 
   @service
