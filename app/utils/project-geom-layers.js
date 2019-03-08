@@ -13,9 +13,6 @@ const developmentSiteLayer = {
 const projectAreaLayer = {
   id: 'project-area-line',
   type: 'line',
-  layout: {
-    visibility: 'visible',
-  },
   paint: {
     'line-color': 'rgba(0, 122, 122, 1)',
     'line-width': 2.5,
