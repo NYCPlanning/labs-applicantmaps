@@ -9,6 +9,17 @@ const developmentSiteLayer = {
   },
 };
 
+// Project Area
+const projectAreaLayer = {
+  id: 'project-area-line',
+  type: 'line',
+  paint: {
+    'line-color': 'rgba(0, 122, 122, 1)',
+    'line-width': 2.5,
+    'line-dasharray': [3, 1],
+  },
+};
+
 // Rezoning Area
 const rezoningAreaLayer = {
   id: 'rezoning-area-line',
@@ -233,6 +244,7 @@ export default {
   c24Layer,
   c25Layer,
   developmentSiteLayer,
+  projectAreaLayer,
   rezoningAreaLayer,
   projectBufferLayer,
   underlyingZoningLayer,
