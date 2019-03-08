@@ -1,6 +1,49 @@
 import length from '@turf/length';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 
+
+/** *************** DIRECT SELECT FOR POLYGON LABEL ENFORCEMENT MODE ****************** */
+/* see https://github.com/NYCPlanning/labs-applicantmaps/issues/417 for full context about this mode */
+function isUnlabeledPolygon(feature) {
+  // not polygon
+  if (feature.type !== 'Polygon') {
+    return false;
+  }
+
+  // labeled polygon
+  if (feature.properties.label) {
+    return false;
+  }
+
+  // unlabeled polygon
+  return true;
+}
+
+export const DirectSelect_RequiresPolygonLabelMode = { ...MapboxDraw.modes.direct_select };
+
+/* If the geometry we just drew is a polygon,
+ * then, check if the polygon is missing a label. If it is,
+ * then, block switching draw/annotation modes until label is created. Else,
+ * call parent onClick() from original direct_select mode to return to normal behavior.
+ *
+ * NOTE: use changeMode to trigger draw.selectionchange event, which triggers
+ * selectedFeatureCallback in the draw map object for feature post processing.
+ * Required b/c adding a top-level feature here does not persist back to draw map context
+ */
+DirectSelect_RequiresPolygonLabelMode.onClick = function(state, e) {
+  const selected = this.getSelected();
+  if (selected.length && isUnlabeledPolygon(selected[0])) {
+    selected[0].properties.missingLabel = true;
+    this.changeMode('direct_select', { featureId: selected[0].id });
+    return;
+  }
+
+  MapboxDraw.modes.direct_select.onClick.apply(this, [state, e]);
+};
+
+
+/** ********************* DRAW LINE STRING FOR DISTANCE MEASUREMENTS MODE *************** */
+// extend draw_line_string mode to include distance measurements with drawn lines
 export function roundLength(len) {
   return Math.round(len / 5) * 5;
 }

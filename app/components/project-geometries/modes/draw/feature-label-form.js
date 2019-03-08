@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { action, observes } from '@ember-decorators/object';
+import { action, observes, computed } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
 import { alias } from '@ember-decorators/object/computed';
 
@@ -14,6 +14,17 @@ export default class FeatureLabelFormComponent extends Component {
 
   @argument
   drawStateCallback() {}
+
+  /*
+   * Boolean flag computed from selectedFeature provided by calling draw/geom-type component
+   * Used to optionally display the label form in "invalid" style
+   * to indicate to the user that a label is required. As mode-switching is invalid w/out label,
+   * user needs visual cue to know why they're stuck.
+   */
+  @computed('selectedFeature.features.@each.missingLabel')
+  get isSelectedFeatureFormInvalid() {
+    return this.get('selectedFeature.features')[0].missingLabel === true;
+  }
 
   @argument
   options=null;
