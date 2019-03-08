@@ -86,6 +86,7 @@ export default [
     projectName: 'test',
     applicantName: 'test',
     zapProjectId: 'test',
+    needDevelopmentSite: false,
     needProjectArea: false,
     needRezoning: false,
   },
