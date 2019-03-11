@@ -65,6 +65,8 @@ export default class DrawComponent extends Component {
        */
       if ('missingLabel' in firstSelectedFeature.properties) {
         firstSelectedFeature.missingLabel = firstSelectedFeature.properties.missingLabel;
+        // delete property to ensure state is not incorrectly persisted
+        delete firstSelectedFeature.properties.missingLabel;
       }
       this.set('selectedFeature', { type: 'FeatureCollection', features: [firstSelectedFeature] });
 
