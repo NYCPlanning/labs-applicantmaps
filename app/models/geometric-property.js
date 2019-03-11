@@ -133,6 +133,9 @@ export default class extends Model {
   @attr({ defaultValue: () => EmptyFeatureCollection })
   proposedGeometry;
 
+  @alias('proposedGeometry.features.firstObject.properties.isEmptyDefault')
+  proposedGeometryIsEmptyDefault;
+
   @computed('canonical', 'proposedGeometry', 'annotations', 'data')
   get isReadyToProceed() {
     let ready = isMeaningfulChange(this);
