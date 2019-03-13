@@ -28,4 +28,22 @@ export default class ShowProjectController extends Controller {
       duration: 0,
     });
   }
+
+  @action
+  deleteUnderlyingZoning() {
+    this.set('model.needUnderlyingZoning', false);
+    this.set('model.underlyingZoning', EmptyFeatureCollection);
+  }
+
+  @action
+  deleteCommercialOverlay() {
+    this.set('model.needCommercialOverlay', false);
+    this.set('model.commercialOverlays', EmptyFeatureCollection);
+  }
+
+  @action
+  deleteSpecialDistrict() {
+    this.set('model.needSpecialDistrict', false);
+    this.set('model.specialPurposeDistricts', EmptyFeatureCollection);
+  }
 }

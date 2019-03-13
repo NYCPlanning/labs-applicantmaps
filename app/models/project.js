@@ -316,9 +316,10 @@ export default class Project extends Model {
   // ******** CHECKS AND METHODS FOR REZONING QUESTIONS ********
   setRezoningFalse() {
     this.set('needRezoning', false);
-    this.set('needUnderlyingZoning', null);
-    this.set('needCommercialOverlay', null);
-    this.set('needSpecialDistrict', null);
+
+    this.set('needUnderlyingZoning', false);
+    this.set('needCommercialOverlay', false);
+    this.set('needSpecialDistrict', false);
   }
 
   @computed('needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')

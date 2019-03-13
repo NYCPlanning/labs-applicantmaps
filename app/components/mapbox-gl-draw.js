@@ -6,7 +6,7 @@ import { next } from '@ember/runloop';
 import { service } from '@ember-decorators/service';
 import { action, computed } from '@ember-decorators/object';
 import { setProperties } from '@ember/object';
-import AnnotationsMode, { annotatable } from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/mode';
+import AnnotationsMode, { DirectSelect_RequiresPolygonLabelMode, annotatable } from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/mode';
 import AnnotationsStyles from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/styles';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
@@ -36,14 +36,15 @@ export const DefaultDraw = MapboxDraw.bind(null, {
     'draw_annotations:centerline': AnnotationsDrawPointMode,
     // duplicate mode with distinct name  to avoid `skipToDirectSelect` trigger when we switch to simple_select for delete
     simple_select_delete: MapboxDraw.modes.simple_select,
-  }, MapboxDraw.modes),
+  },
+  MapboxDraw.modes,
+  { direct_select: DirectSelect_RequiresPolygonLabelMode }),
   styles,
 });
 
 export default class MapboxGlDraw extends Component {
   constructor(...args) {
     super(...args);
-
     const {
       draw = new DefaultDraw(),
     } = this.get('map');

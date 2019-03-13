@@ -52,6 +52,26 @@ export const GEOMETRY_TYPES = [
   'rezoningArea',
 ];
 
+/*
+ * Checks that, if there are new polygons of given geometricProperty type,
+ * all of them have labels
+ */
+export function newPolygonsHaveLabels(geometricPropertyForType) {
+  const [
+    _initial, // eslint-disable-line
+    proposed,
+  ] = geometricPropertyForType.changedAttributes().proposedGeometry || [];
+
+  if (proposed) {
+    const polygonWithoutLabel = proposed.features.find(feature => !feature.properties.label);
+
+    if (polygonWithoutLabel) return false;
+  }
+
+  return true;
+}
+
+
 // returns true or false based on whether the change to the geometric
 // property was "meaningful", or a change to the `proposedGeometry` attr
 // that is:
@@ -71,6 +91,7 @@ export function isMeaningfulChange(geometricPropertyForType /* model */) {
   // "initial" means whatever is currently proposed. If it's _not_ empty and
   // the geometric property doesn't have something canonical to compare,
   // it should return true
+
   if (!isEmpty(initial) && !geometricPropertyForType.get('hasCanonical')) return true;
 
   // only apply this check if this is a canonical geometric prop
@@ -112,9 +133,21 @@ export default class extends Model {
   @attr({ defaultValue: () => EmptyFeatureCollection })
   proposedGeometry;
 
+  @alias('proposedGeometry.features.firstObject.properties.isEmptyDefault')
+  proposedGeometryIsEmptyDefault;
+
   @computed('canonical', 'proposedGeometry', 'annotations', 'data')
   get isReadyToProceed() {
-    return isMeaningfulChange(this);
+    let ready = isMeaningfulChange(this);
+
+    /*
+     * Check that proposed polygons have labels for rezoning geometries.
+     * NOT enforced for development site or project area
+     */
+    if (!['developmentSite', 'projectArea'].includes(this.geometryType)) {
+      ready = ready && newPolygonsHaveLabels(this);
+    }
+    return ready;
   }
 
   @computed('canonical', 'proposedGeometry', 'hasDirtyAttributes')
