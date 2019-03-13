@@ -1,11 +1,10 @@
 import Component from '@ember/component';
 import { get } from '@ember/object';
-import { action, computed } from '@ember-decorators/object';
+import { action, computed, observes } from '@ember-decorators/object';
 import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { containsNumber } from '@turf/invariant';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/geometric-property';
-import { observes } from '@ember-decorators/object'; 
 
 export default class DrawComponent extends Component {
   constructor(...args) {
