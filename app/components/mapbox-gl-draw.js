@@ -33,7 +33,7 @@ export const DefaultDraw = MapboxDraw.bind(null, {
     'draw_annotations:curved': AnnotationsMode, // but only really need to be named differently
     'draw_annotations:square': AnnotationsMode,
     'draw_annotations:label': AnnotationsDrawPointMode,
-    'draw_annotations:centerline': AnnotationsDrawPointMode,
+    'draw_annotations:centerline': AnnotationsMode,
     // duplicate mode with distinct name  to avoid `skipToDirectSelect` trigger when we switch to simple_select for delete
     simple_select_delete: MapboxDraw.modes.simple_select,
   },

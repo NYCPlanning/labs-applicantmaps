@@ -113,6 +113,131 @@ const getCurve = (lineFeature) => {
   return lineFeature;
 };
 
+// centerline layer
+const getCenterlineLayers = (lineFeature) => {
+  // calculate bearing
+  const { coordinates } = lineFeature.geometry;
+  const lineBearing = bearing(coordinates[0], coordinates[1]);
+
+  let c = null;
+  let cAngle = null;
+
+  // we use icon-translate (x and y) to offset the icon from the end of the line based on the lineBearing, calculations below
+
+  // set all lineBearing angles to be between 0 and 90
+  // this way we can measure how far the line is angled from the vertical axes
+  if (lineBearing > 0 && lineBearing < 90) { // quadrant I
+    cAngle = lineBearing;
+  } else if (lineBearing > -90 && lineBearing < 0) { // quadrant II
+    cAngle = -1 * lineBearing;
+  } else if (lineBearing < -90) { // quadrant III
+    cAngle = lineBearing + 180;
+  } else if (lineBearing > 90 && lineBearing < 180) { // quadrant IV
+    cAngle = 180 - lineBearing;
+  }
+
+  // c is the length of the offset, it represents c^2 in the pythagorean theorem
+  // because our centerline icon is taller than it is wide, we set c to be different lengths depending on the angle from the vertical axis
+  // we make it so that lines that are closer to vertical have a greater c length
+  // this way we can make it appear as if the icon is equally far from the end of each line regardless of lineBearing
+  if (cAngle < 30) {
+    c = 11;
+  } else if (cAngle > 30 && cAngle < 60) {
+    c = 10;
+  } else if (cAngle > 60) {
+    c = 9;
+  }
+
+  // we need to convert the lineBearing to radians in order to get its tangent
+  const radiansBearing = (lineBearing * Math.PI) / 180;
+  // These equations are based off of the pythagorean theorem: (a^2 + b^2 = c^2)
+  // and the equation of the tangent: tan(bearing angle) = opposite/adjacent OR tan(bearing angle) = x/y
+  // using substitution, y and x were isolated
+  let y = null;
+  let x = null;
+  y = Math.sqrt((c ** 2) / ((Math.tan(radiansBearing) ** 2) + 1));
+  x = Math.sqrt((c ** 2) - (y ** 2));
+
+  // the icon-translate property is "Distance that the icon's anchor is moved from its original placement"
+  // although it is the icon that actually moves, not the line, when "offsetting" the icon we have to set it up as if we are moving the anchor NOT the icon
+  // this means that if we are offsetting an icon to the RIGHT of the line, we would usually think of it as having a positive x value for icon-translate, but instead we are
+  // actually moving the anchor to the left, so the x value would be negative (same logic for the y value)
+  if (lineBearing > 0 && lineBearing < 90) { // quadrant I
+    x = -x;
+  } else if (lineBearing < -90) { // quadrant II
+    y = -y;
+  } else if (lineBearing > 90 && lineBearing < 180) { // quadrant IV
+    y = -y;
+    x = -x;
+  }
+
+  // set layout for centerline
+  const layoutCenterline = {
+    'icon-image': 'centerline',
+    'icon-size': 0.01,
+    'icon-keep-upright': true,
+    'icon-rotation-alignment': 'map',
+    'icon-allow-overlap': true,
+    'icon-ignore-placement': true,
+  };
+
+  // set layout for end arrow
+  const layoutArrow = {
+    'icon-image': 'arrow',
+    'icon-size': 0.04,
+    'icon-rotate': {
+      type: 'identity',
+      property: 'rotation',
+    },
+    'icon-anchor': 'top',
+    'icon-rotation-alignment': 'map',
+    'icon-allow-overlap': true,
+    'icon-ignore-placement': true,
+  };
+
+  const centerlineLayer = {
+    type: 'symbol',
+    source: {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: lineFeature.geometry.coordinates[0],
+        },
+      },
+    },
+    layout: layoutCenterline,
+    paint: {
+      'icon-translate': [
+        x,
+        y,
+      ],
+    },
+  };
+
+  const endArrowLayerForCenterline = {
+    type: 'symbol',
+    source: {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: lineFeature.geometry.coordinates[lineFeature.geometry.coordinates.length - 1],
+        },
+        properties: {
+          rotation: lineBearing,
+        },
+      },
+    },
+    layout: layoutArrow,
+  };
+
+  return [centerlineLayer, endArrowLayerForCenterline];
+};
+
+
 const buildSquareLayers = (lineFeature) => {
   // takes a GeoJson LineString Feature with two vertices
   // returns mapboxGL layers to show a right angle symbol
@@ -210,6 +335,31 @@ const buildLineLayers = function(rawLineFeature, annotationType) {
   ];
 };
 
+const buildcenterLineLayers = function(rawLineFeature) {
+  const lineFeature = deepCopy(rawLineFeature);
+
+  // TODO validate the linefeature to make sure it has only two vertices,
+  const { id } = lineFeature;
+
+  // generate the line layer
+  const lineLayer = {
+    type: 'line',
+    source: {
+      type: 'geojson',
+      data: lineFeature,
+    },
+  };
+
+  // generate the centerline symbol layers
+  const centerlineLayers = getCenterlineLayers(lineFeature, id);
+
+  // return an array of all of the layers
+  return [
+    lineLayer,
+    ...centerlineLayers,
+  ];
+};
+
 export default function(...args) {
   const [feature, type] = args;
 
@@ -256,27 +406,7 @@ export default function(...args) {
   }
 
   if (type === 'centerline') {
-    return [{
-      type: 'symbol',
-      source: {
-        type: 'geojson',
-        data: feature,
-      },
-      layout: {
-        'icon-image': 'centerline',
-        'symbol-placement': 'point',
-        'icon-size': 0.01,
-        'text-offset': [
-          0,
-          -1,
-        ],
-        'text-justify': 'center',
-        'text-anchor': 'center',
-        'text-size': 16,
-        'text-allow-overlap': true,
-        'text-ignore-placement': true,
-      },
-    }];
+    return buildcenterLineLayers(...args);
   }
 
   return [];
