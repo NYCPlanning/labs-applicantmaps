@@ -10,6 +10,9 @@ module.exports = function (defaults) {
     'ember-cli-foundation-6-sass': {
       foundationJs: 'all',
     },
+    '@ember-decorators/babel-transforms': {
+      decoratorsBeforeExport: false,
+    },
     sourcemaps: {
       enabled: true,
       extensions: ['js'],

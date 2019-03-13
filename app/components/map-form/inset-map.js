@@ -1,15 +1,13 @@
 import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
 import { action, observes } from '@ember-decorators/object';
 import { classNames } from '@ember-decorators/component';
 import turfBbox from '@turf/bbox';
 import turfBuffer from '@turf/buffer';
 
-
 export default
 @classNames('inset-map-container')
 class InsetMap extends Component {
-  @argument
+  // @argument
   boundsPolygon
 
   @action

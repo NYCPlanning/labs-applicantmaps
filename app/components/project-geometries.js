@@ -1,29 +1,29 @@
 import Component from '@ember/component';
 import { action } from '@ember-decorators/object';
 import mapboxgl from 'mapbox-gl';
-import { argument } from '@ember-decorators/argument';
 import { tagName } from '@ember-decorators/component';
 
 // it:
 // renders the map
 // sets up a drawable map
 // invokes the types-/mode-renderer with drawable map
+export default
 @tagName('')
-export default class ProjectGeometryEditComponent extends Component {
+class ProjectGeometryEditComponent extends Component {
   // required
-  @argument
+  // // @argument
   model;
 
   // required
-  @argument
+  // // @argument
   type;
 
   // required
-  @argument
+  // // @argument
   mode;
 
   // required
-  @argument
+  // // @argument
   layerGroups;
 
   /* ----------  General Map  ---------- */

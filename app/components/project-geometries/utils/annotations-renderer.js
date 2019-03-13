@@ -1,13 +1,12 @@
 import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
 import { computed } from '@ember-decorators/object';
 import presentationLayerGenerator from '../../../utils/mapbox-gl-draw/annotations/generate-curvature';
 
 export default class AnnotationsRenderer extends Component {
-  @argument
+  // @argument
   annotations;
 
-  @argument
+  // @argument
   map;
 
   @computed('annotations')

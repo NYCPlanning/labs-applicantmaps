@@ -1,18 +1,17 @@
 import Component from '@ember/component';
 import { action, observes, computed } from '@ember-decorators/object';
-import { argument } from '@ember-decorators/argument';
 import { alias } from '@ember-decorators/object/computed';
 
 // it takes a selectedFeature, aliases it, and mutates properties
 // based on callbacks from ember-power-select
 export default class FeatureLabelFormComponent extends Component {
-  @argument
+  // @argument
   selectedFeature;
 
-  @argument
+  // @argument
   updateSelectedFeature() {}
 
-  @argument
+  // @argument
   drawStateCallback() {}
 
   /*
@@ -26,10 +25,10 @@ export default class FeatureLabelFormComponent extends Component {
     return this.get('selectedFeature.features')[0].missingLabel === true;
   }
 
-  @argument
+  // @argument
   options=null;
 
-  @argument
+  // @argument
   canAddNewDistricts=true;
 
   isBold = false;

@@ -1,13 +1,13 @@
 import Component from '@ember/component';
 import { action } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
-import { argument } from '@ember-decorators/argument';
+import { inject as service } from '@ember-decorators/service';
 import { tagName } from '@ember-decorators/component';
 import { Promise } from 'rsvp';
 
+export default
 @tagName('')
-export default class ProjectFormComponent extends Component {
-  @argument
+class ProjectFormComponent extends Component {
+  // // @argument('object')
   model;
 
   @service

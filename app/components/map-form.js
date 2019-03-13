@@ -1,7 +1,6 @@
 import Component from '@ember/component';
 import { action, computed } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
-import { argument } from '@ember-decorators/argument';
+import { inject as service } from '@ember-decorators/service';
 import { next } from '@ember/runloop';
 import turfBbox from '@turf/bbox';
 import mapboxgl from 'mapbox-gl';
@@ -178,8 +177,8 @@ const defaultLayerGroups = {
 };
 
 export default class MapFormComponent extends Component {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     const query = this.get('customLayerGroupQuery') || defaultLayerGroups;
     const store = this.get('store');
@@ -222,10 +221,10 @@ export default class MapFormComponent extends Component {
 
   boundsPolygon = null
 
-  @argument
+  // // @argument
   customLayerGroupQuery = null;
 
-  @argument
+  // // @argument
   model = null;
 
   projectGeomLayers = projectGeomLayers;
