@@ -1,0 +1,13 @@
+{{#ember-wormhole to="map-top-right"}}
+  <button
+    class="reset-canonical-button button small gray"
+    {{action 'resetCanonical'}}
+  >
+    Reset 
+    {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip" popperContainer='body'}}
+      <h5 class="small-margin-bottom">Parallel Measurement</h5>
+      <p class="no-margin">Dimension a zoning district boundary that is being drawn based on a parallel offset from either a street-line or a zoning district boundary</p>
+    {{/ember-tooltip}}
+  </button>
+{{/ember-wormhole}}
+

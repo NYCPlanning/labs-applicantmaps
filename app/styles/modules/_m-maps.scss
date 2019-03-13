@@ -347,6 +347,21 @@
   max-width: 50vw;
 }
 
+.map-top-right {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  background-color: $a11y-yellow;
+  border: 2px solid $a11y-yellow;
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+
+  & > button {
+    margin: 0;
+  }
+}
+
 
 // Selected feature form
 // --------------------------------------------------

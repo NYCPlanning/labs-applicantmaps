@@ -5,7 +5,7 @@ import { service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { containsNumber } from '@turf/invariant';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/geometric-property';
-
+import { observes } from '@ember-decorators/object'; 
 
 export default class DrawComponent extends Component {
   constructor(...args) {
@@ -35,6 +35,16 @@ export default class DrawComponent extends Component {
   drawStateCallback() {
     const drawnFeatures = this.get('drawnFeatures');
     this.set('geometricProperty', drawnFeatures);
+  }
+
+
+  // WARNING: this will fire when geometricProp gets updated.
+  // This may have unintended side effects.
+  @observes('geometricProperty')
+  updateDrawState() {
+    const { draw } = this.get('map');
+
+    draw.shouldReset(this.get('geometricProperty'));
   }
 
   // Simply gets what new feature is selected and sets it to the class
