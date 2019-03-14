@@ -1,6 +1,6 @@
 import { action } from '@ember-decorators/object';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 import BaseClass from './-type';
 
 // Proposed Special Purpose Districts

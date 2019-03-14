@@ -8,7 +8,7 @@ import { set } from '@ember/object';
 import carto from 'cartobox-promises-utility/utils/carto';
 import { task } from 'ember-concurrency-decorators';
 import { waitForProperty } from 'ember-concurrency';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 
 const tolerance = 0.000001;
 const bufferkm = 0.00008;

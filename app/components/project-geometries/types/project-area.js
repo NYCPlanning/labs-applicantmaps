@@ -1,4 +1,4 @@
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 import BaseClass from './-type';
 
 // Project Area

@@ -6,15 +6,13 @@ const { Model } = DS;
 /*
   Abstract base class for applicant maps.
 */
-export default class extends Model {
+export default class ApplicantMapModel extends Model {
   // area, tax, zoning change, zoning section
   @attr('string') type;
 
   @attr('string', { defaultValue: 'landscape' }) paperOrientation;
 
   @attr('string', { defaultValue: 'tabloid' }) paperSize;
-
-  @attr('string') type;
 
   @attr('number', { defaultValue: 0 }) mapBearing;
 

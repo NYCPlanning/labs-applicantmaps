@@ -1,17 +1,17 @@
 import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
 import { tagName } from '@ember-decorators/component';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 
+export default
 @tagName('')
-export default class BackToDashboardButtonComponent extends Component {
-  @argument
+class BackToDashboardButtonComponent extends Component {
+  // @argument
   model;
 
-  @argument
+  // @argument
   type;
 
-  @argument
+  // @argument
   mode;
 
   @service

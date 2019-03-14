@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action, computed } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 
 import { EmptyFeatureCollection } from '../../models/project';
 import projectGeometryIcons from '../../utils/project-geom-icons';

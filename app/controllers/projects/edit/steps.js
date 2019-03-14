@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 import { computed } from '@ember-decorators/object';
 
 export default class StepsController extends Controller {

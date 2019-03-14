@@ -3,9 +3,10 @@ import { tagName, attribute, classNames } from '@ember-decorators/component';
 import { computed } from '@ember-decorators/object';
 import { argument } from '@ember-decorators/argument';
 
+export default
 @tagName('button')
 @classNames('button large expanded project-save-button')
-export default class DrawLotsButtonComponent extends Component.extend({
+class DrawLotsButtonComponent extends Component.extend({
     'data-test-project-geometry-save': true,
   }) {
   @attribute

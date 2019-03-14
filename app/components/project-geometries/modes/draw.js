@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { get } from '@ember/object';
 import { action, computed } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { containsNumber } from '@turf/invariant';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/geometric-property';

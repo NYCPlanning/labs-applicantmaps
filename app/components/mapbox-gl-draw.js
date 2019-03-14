@@ -1,9 +1,8 @@
 import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import DefaultMapboxDrawStyles from '@mapbox/mapbox-gl-draw/src/lib/theme';
 import { next } from '@ember/runloop';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 import { action, computed } from '@ember-decorators/object';
 import { setProperties } from '@ember/object';
 import AnnotationsMode, { DirectSelect_RequiresPolygonLabelMode, annotatable } from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/mode';
@@ -88,7 +87,7 @@ export default class MapboxGlDraw extends Component {
   // @required
   // should be the ember-mapbox-gl contextual object
   // passed from within a mapbox-gl component block
-  @argument
+  // @argument
   map;
 
   @computed
