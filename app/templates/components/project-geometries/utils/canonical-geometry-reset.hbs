@@ -1,0 +1,11 @@
+{{#ember-wormhole to="map-top-right"}}
+  <button
+    class="reset-canonical-button button small gray"
+    {{action 'resetCanonical'}}
+  >
+    Reset 
+    {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip" popperContainer='body'}}
+      <p class="no-margin">Undo all your changes and revert back to the original zoning boundaries.</p>
+    {{/ember-tooltip}}
+  </button>
+{{/ember-wormhole}}
