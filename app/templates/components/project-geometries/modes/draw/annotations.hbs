@@ -8,7 +8,10 @@
       {{fa-icon 'times' transform='shrink-9 up-3'}}
     </span>
     {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip" popperContainer='body'}}
-      <h5 class="small-margin-bottom">Parallel Measurement</h5>
+      <h5 class="small-margin-bottom">
+        <span class="text-weight-normal blue-light">Annotation:</span>
+        Parallel Measurement
+      </h5>
       <p class="no-margin">Dimension a zoning district boundary that is being drawn based on a parallel offset from either a street-line or a zoning district boundary</p>
     {{/ember-tooltip}}
   </button>
@@ -23,7 +26,10 @@
       {{fa-icon 'times' transform='shrink-9 up-3'}}
     </span>
     {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip" popperContainer='body'}}
-      <h5 class="small-margin-bottom">Point-to-point Measurement</h5>
+      <h5 class="small-margin-bottom">
+        <span class="text-weight-normal blue-light">Annotation:</span>
+        Point-to-point Measurement
+      </h5>
       <p class="no-margin">Dimension a zoning district boundary that is being drawn based on a point-to-point offset</p>
     {{/ember-tooltip}}
   </button>
@@ -36,7 +42,10 @@
       {{fa-icon 'chevron-left' transform='rotate-45 shrink-4'}}
     </span>
     {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip" popperContainer='body'}}
-      <h5 class="small-margin-bottom">Right Angle</h5>
+      <h5 class="small-margin-bottom">
+        <span class="text-weight-normal blue-light">Annotation:</span>
+        Right Angle
+      </h5>
       <p class="small-margin-bottom">Annotate a right angle for a zoning district boundary that is being drawing based on a point-to-point offset.</p>
       <p class="no-margin">Place the first point on the vertex of the angle. Place the second point inside the angle at 45º. Drag to adjust the size and position.</p>
     {{/ember-tooltip}}
@@ -48,7 +57,10 @@
   >
     {{fa-icon 'i-cursor' size='2x' fixedWidth=true transform='shrink-4'}}
     {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip" popperContainer='body'}}
-      <h5 class="small-margin-bottom">Text</h5>
+      <h5 class="small-margin-bottom">
+        <span class="text-weight-normal blue-light">Annotation:</span>
+        Text
+      </h5>
       <p class="no-margin">Add a custom label</p>
     {{/ember-tooltip}}
   </button>
@@ -61,10 +73,14 @@
       <span class="fa-layers-text">℄</span>
     </span>
     {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip" popperContainer='body'}}
-      <h5 class="small-margin-bottom">Centerline</h5>
+      <h5 class="small-margin-bottom">
+        <span class="text-weight-normal blue-light">Annotation:</span> 
+        Centerline
+      </h5>
       <p class="no-margin">Annotate a proposed zoning district boundary that runs midway between two streets</p>
     {{/ember-tooltip}}
   </button>
+  {{yield}}
 {{/ember-wormhole}}
 
-{{yield}}
+
