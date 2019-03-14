@@ -26,11 +26,7 @@ export default class LotsComponent extends Component {
   constructor(...args) {
     super(...args);
 
-    // selectedLots
-    this.set('selectedLots', {
-      type: 'FeatureCollection',
-      features: [],
-    });
+    this.set('selectedLots', this.get('geometricProperty'));
 
     // Add the interactive tax lots layer group to the store
     const interactiveTaxLotsLayerGroup = this.store.createRecord('layer-group', {
