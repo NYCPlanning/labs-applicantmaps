@@ -61,7 +61,7 @@ export default class TypesBase extends Component {
       .findBy('geometryType', typeName);
   }
 
-  @computed('geometricPropertyForType', 'target')
+  @computed('geometricPropertyForType', 'target', 'geometricPropertyForType.data')
   get geometricPropertyForMode() {
     const target = this.get('target');
 
