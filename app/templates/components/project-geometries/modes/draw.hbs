@@ -2,7 +2,10 @@
   <button class="polygon {{if (eq currentTool 'draw_polygon') 'active'}}" {{action 'handleDrawButtonClick'}}>
     {{fa-icon 'draw-polygon' size='2x' fixedWidth=true}}
     {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip" popperContainer='body'}}
-      <h5 class="small-margin-bottom">Polygon</h5>
+      <h5 class="small-margin-bottom">
+        <span class="text-weight-normal blue-light">Draw:</span>
+        Polygon
+      </h5>
       <p class="small-margin-bottom">Add a new shape. Complete it by clicking the final point a 2nd time.</p>
       <p class="no-margin">Edit an existing shape by selecting it and dragging/deleting its points. Add a new point by clicking the midpoint of a line.</p>
     {{/ember-tooltip}}
@@ -34,7 +37,7 @@
     {{fa-icon 'trash-alt' prefix='far' size='2x' fixedWidth=true}}
     {{#ember-tooltip side='right' tooltipClassName="ember-tooltip draw-tooltip" popperContainer='body'}}
       <h5 class="small-margin-bottom">Trash</h5>
-      <p class="no-margin">Delete a selected shape or point</p>
+      <p class="no-margin">Delete the selected shape or point</p>
     {{/ember-tooltip}}
   </button>
 {{/ember-wormhole}}

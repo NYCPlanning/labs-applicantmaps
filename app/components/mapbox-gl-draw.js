@@ -102,7 +102,9 @@ export default class MapboxGlDraw extends Component {
   deleteAll() {
     const drawInstance = this.get('drawInstance');
 
-    if (!this.get('isDestroying')) {
+    // unclear why, but unpredictably `deleteAll` is not available on the mapbox-gl-draw
+    // instance. Does the method not become available until something is added? Who knows.
+    if (!this.get('isDestroyed') && !this.get('isDestroying') && drawInstance.deleteAll) {
       drawInstance.deleteAll();
     }
   }
