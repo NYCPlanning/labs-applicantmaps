@@ -268,9 +268,19 @@ export default class MapFormComponent extends Component {
 
   @action
   handleMapLoaded(map) {
+    /*
+     * Set up component to emit 'mapLoaded' event on map render event.
+     * Server listens for 'mapLoaded' in headless chrome browser; ensures
+     * map is fully rendered before generating PDF
+     */
+    map.on('render', function() {
+      if (map.loaded()) {
+        document.dispatchEvent(new Event('mapLoaded', { bubbles: true }));
+      }
+    });
+
     this.set('mapInstance', map);
     this.fitBoundsToSelectedBuffer();
-    this.updateBounds();
     this.toggleMapInteractions();
 
     const scaleControl = new mapboxgl.ScaleControl({ maxWidth: 200, unit: 'imperial' });
