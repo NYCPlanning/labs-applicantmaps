@@ -53,6 +53,6 @@ module('Unit | Model | geometric property', function(hooks) {
       }],
     });
 
-    assert.equal(model.get('annotations.features.firstObject.properties.label'), '729587.9 ft');
+    assert.equal(model.get('annotations.features.firstObject.properties.label'), '729590 ft');
   });
 });
