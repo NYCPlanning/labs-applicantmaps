@@ -21,30 +21,68 @@ CustomDirectSelect.onFeature = function() {
 
 export const CustomDirectSelectForRezoning = { ...CustomDirectSelect };
 /* see https://github.com/NYCPlanning/labs-applicantmaps/issues/417 for full context about this mode */
-function isUnlabeledPolygon(feature) {
-  // not polygon
-  if (feature.type !== 'Polygon') {
-    return false;
-  }
+function isPolygon(feature) {
+  return feature.type === 'Polygon';
+}
 
-  // labeled polygon
+function polygonIsUnlabeled(feature) {
   if (feature.properties.label) {
     return false;
   }
 
-  // unlabeled polygon
+  return true;
+}
+
+function clickedFeatureIsCurrentFeatureChildVertex(clicked, currentFeature) {
+  if (!clicked.properties.active) return false;
+
+  if (!clicked.properties.parent) return false;
+
+  if (clicked.properties.parent !== currentFeature.id) return false;
+
+  return true;
+}
+
+function clickedFeatureIsCurrentFeature(clicked, currentFeature) {
+  if (!clicked.properties.active) return false;
+
+  if (clicked.properties.id !== currentFeature.id) return false;
+
   return true;
 }
 
 CustomDirectSelectForRezoning.onClick = function(state, e) {
   const selected = this.getSelected();
-  if (selected.length && isUnlabeledPolygon(selected[0])) {
-    selected[0].properties.missingLabel = true;
-    this.changeMode('direct_select', { featureId: selected[0].id });
-    return;
+  const clicked = e.featureTarget;
+
+  // if we have selected (i.e. just finished drawing) a polygon
+  if (selected.length && isPolygon(selected[0])) {
+    const selectedFeature = selected[0];
+
+    // if we're clicking on a point in the polygon  direct select that
+    if (clickedFeatureIsCurrentFeatureChildVertex(clicked, selectedFeature)) {
+      return this.onVertex(state, e);
+    }
+
+    // if we're clicking on the polygon itself, select the polygon
+    // (necessary to re-select incase previously a point IN the polygon was the "active" feature)
+    if (clickedFeatureIsCurrentFeature(clicked, selectedFeature)) {
+      return this.changeMode('direct_select_rezoning', { featureId: selectedFeature.id });
+    }
+
+    // if we're clicking elsewhere on the map,
+    // and polygon is unlabeled
+    // signal it is missing a label,
+    // change mode to trigger a re-render of the map
+    // and return early to block the click action
+    if (polygonIsUnlabeled(selectedFeature)) {
+      selectedFeature.properties.missingLabel = true;
+      return this.changeMode('direct_select_rezoning', { featureId: selectedFeature.id });
+    }
   }
 
-  MapboxDraw.modes.direct_select.onClick.apply(this, [state, e]);
+  // do normal direct_select on click action
+  return MapboxDraw.modes.direct_select.onClick.apply(this, [state, e]);
 };
 
 /** ********************* DRAW LINE STRING FOR DISTANCE MEASUREMENTS MODE *************** */
