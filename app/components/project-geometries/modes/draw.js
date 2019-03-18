@@ -107,7 +107,7 @@ export default class DrawComponent extends Component {
 
     // can't direct select a point
     if (selectedID && type !== 'Point' && mode === 'simple_select') {
-      draw.changeMode('direct_select', { featureId: selectedID });
+      draw.changeMode(this.get('directSelectMode'), { featureId: selectedID });
     }
 
     this.set('tool', mode);
@@ -146,6 +146,9 @@ export default class DrawComponent extends Component {
   // @type(FeatureCollection)
   @argument
   geometricProperty;
+
+  @argument
+  directSelectMode = 'direct_select';
 
   // @type(FeatureCollection)
   selectedFeature = EmptyFeatureCollection;
