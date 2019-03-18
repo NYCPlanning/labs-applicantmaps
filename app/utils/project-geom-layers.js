@@ -196,7 +196,7 @@ const proposedSpecialPurposeDistrictsLayer = {
   type: 'fill',
   paint: {
     'fill-color': 'rgba(94, 102, 51, 1)',
-    'fill-opacity': 0.2,
+    'fill-opacity': 0.3,
   },
 };
 
@@ -206,7 +206,7 @@ const proposedSpecialPurposeDistrictsLabelsLayer = {
   layout: {
     'symbol-placement': 'point',
     'text-field': '{label}',
-    'text-size': 12,
+    'text-size': 14,
     visibility: 'visible',
     'symbol-avoid-edges': false,
     'text-offset': [
