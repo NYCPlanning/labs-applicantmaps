@@ -31,7 +31,38 @@ export default [
       ['==', 'meta', 'midpoint']],
     paint: {
       'circle-radius': 5,
-      'circle-color': 'rgba(139, 132, 132, 1)',
+      'circle-color': '#aaafb5',
+    },
+  },
+  {
+    id: 'gl-draw-polygon-stroke-inactive',
+    type: 'line',
+    filter: ['all',
+      ['==', 'active', 'false'],
+      ['==', '$type', 'Polygon'],
+      ['!=', 'mode', 'static'],
+    ],
+    layout: {
+      'line-cap': 'round',
+      'line-join': 'round',
+    },
+    paint: {
+      'line-color': '#3bb2d0',
+      'line-width': 2,
+    },
+  },
+  {
+    id: 'gl-draw-polygon-stroke-active',
+    type: 'line',
+    filter: ['all', ['==', 'active', 'true'], ['==', '$type', 'Polygon']],
+    layout: {
+      'line-cap': 'round',
+      'line-join': 'round',
+    },
+    paint: {
+      'line-color': '#fbb03b',
+      'line-dasharray': [0.2, 2],
+      'line-width': 2,
     },
   },
   {
@@ -77,7 +108,7 @@ export default [
       ['!=', 'mode', 'static'],
     ],
     paint: {
-      'circle-radius': 8,
+      'circle-radius': 7,
       'circle-color': '#fff',
     },
   },
@@ -90,8 +121,8 @@ export default [
       ['!=', 'mode', 'static'],
     ],
     paint: {
-      'circle-radius': 6,
-      'circle-color': 'rgba(139, 132, 132, 1)',
+      'circle-radius': 5,
+      'circle-color': '#aaafb5',
     },
   },
   {
@@ -104,7 +135,7 @@ export default [
       ['!=', 'mode', 'static'],
     ],
     paint: {
-      'circle-radius': 5,
+      'circle-radius': 6,
       'circle-opacity': 1,
       'circle-color': '#fff',
     },
@@ -119,7 +150,7 @@ export default [
       ['!=', 'mode', 'static'],
     ],
     paint: {
-      'circle-radius': 5,
+      'circle-radius': 3,
       'circle-color': '#3bb2d0',
     },
   },
@@ -141,11 +172,11 @@ export default [
     type: 'circle',
     filter: ['all',
       ['==', '$type', 'Point'],
-      ['==', 'active', 'true'],
-      ['!=', 'meta', 'midpoint']],
+      ['!=', 'meta', 'midpoint'],
+      ['==', 'active', 'true']],
     paint: {
       'circle-radius': 6,
-      'circle-color': 'rgba(139, 132, 132, 1)',
+      'circle-color': '#e2750f',
     },
   },
   {
