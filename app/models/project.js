@@ -153,6 +153,15 @@ export const projectProcedure = [
   {
     step: 'complete',
     routing: {
+      route: 'projects.edit.steps.complete',
+    },
+    conditions: {
+      hasCompletedWizard: hasFilledOut,
+    },
+  },
+  {
+    step: 'dashboard',
+    routing: {
       label: 'complete',
       route: 'projects.show',
     },
@@ -221,6 +230,8 @@ export default class Project extends Model {
   @attr('boolean', { allowNull: true, defaultValue: null }) needCommercialOverlay;
 
   @attr('boolean', { allowNull: true, defaultValue: null }) needSpecialDistrict;
+
+  @attr('boolean', { allowNull: true, defaultValue: null }) hasCompletedWizard;
 
   // ******** GEOMETRIES ********
   /**

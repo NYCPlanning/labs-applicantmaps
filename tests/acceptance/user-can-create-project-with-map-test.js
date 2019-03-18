@@ -90,6 +90,10 @@ module('Acceptance | user can create project with map', function(hooks) {
     await click('[data-test-draw-mock]');
     await click('[data-test-project-geometry-save]');
 
+    assert.equal(currentURL(), '/projects/1/edit/complete');
+
+    await click('[data-test-go-to-dash]');
+
     assert.equal(currentURL(), '/projects/1');
 
     await click('[data-test-add-area-map]');
