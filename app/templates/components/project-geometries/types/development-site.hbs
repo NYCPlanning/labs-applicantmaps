@@ -1,7 +1,7 @@
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <div class="fade-in-on-load text-small">
 
-    
+
     <h1 class="header-large small-margin-bottom">Development Site</h1>
 
     <p>The Development Site refers to the zoning lot(s) you plan to develop, facilitated by your requested land use actions.</p>
@@ -65,7 +65,7 @@
           {{#if (eq model.project.currentStep.step 'complete')}}
             Save
           {{else}}
-            Next {{fa-icon 'arrow-right'}}
+            Next {{fa-icon 'arrow-right' fixedWidth=true}}
           {{/if}}
         {{/project-geometries/utils/button}}
       </div>

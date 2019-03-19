@@ -1,7 +1,7 @@
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <div class="fade-in-on-load text-small">
 
-    
+
     <h1 class="header-large small-margin-bottom">Project Area</h1>
 
     <p>The Project Area includes all properties subject to your proposed land use actions. You need to define a Project Area if you are requesting actions on properties that will not be developed (i.e. properties outside your Development Site).</p>
@@ -67,7 +67,7 @@
           {{#if (eq model.project.currentStep.step 'complete')}}
             Save
           {{else}}
-            Next {{fa-icon 'arrow-right'}}
+            Next {{fa-icon 'arrow-right' fixedWidth=true}}
           {{/if}}
         {{/project-geometries/utils/button}}
       </div>
