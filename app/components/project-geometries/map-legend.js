@@ -1,14 +1,13 @@
 import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
 import projectGeometryIcons from '../../utils/project-geom-icons';
 
 export default class ProjectGeometriesMapLegend extends Component {
   // required
-  @argument
+  // @argument
   model;
 
   // required
-  @argument
+  // @argument
   type;
 
   projectGeometryIcons = projectGeometryIcons;

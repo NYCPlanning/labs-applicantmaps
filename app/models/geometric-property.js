@@ -1,13 +1,5 @@
 import DS from 'ember-data';
 import { attr, belongsTo } from '@ember-decorators/data';
-import {
-  type,
-  oneOf,
-  arrayOf,
-  shapeOf,
-  unionOf,
-  optional,
-} from '@ember-decorators/argument/type';
 import { computed } from '@ember-decorators/object';
 import { alias } from '@ember-decorators/object/computed';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/project';
@@ -28,21 +20,6 @@ const queries = {
   specialPurposeDistricts,
   rezoningArea,
 };
-
-const Feature = shapeOf({
-  // TODO
-  // id: unionOf(Number, String),
-  type: oneOf('Feature'),
-  geometry: unionOf(Object, null),
-  properties: optional(Object),
-});
-
-export const FeatureCollection = shapeOf({
-  type: oneOf('FeatureCollection'),
-  features: arrayOf(
-    Feature,
-  ),
-});
 
 export const GEOMETRY_TYPES = [
   'developmentSite',
@@ -71,7 +48,6 @@ export function newPolygonsHaveLabels(geometricPropertyForType) {
 
   return true;
 }
-
 
 // returns true or false based on whether the change to the geometric
 // property was "meaningful", or a change to the `proposedGeometry` attr
@@ -122,15 +98,13 @@ export function isMeaningfulChange(geometricPropertyForType /* model */) {
     && isFeatureCollectionChanged(initial, proposed);
 }
 
-export default class extends Model {
+export default class GeometricPropertyModel extends Model {
   @belongsTo('project')
   project;
 
-  @type(oneOf(...GEOMETRY_TYPES))
   @attr('string')
   geometryType;
 
-  @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection })
   proposedGeometry;
 
@@ -162,7 +136,6 @@ export default class extends Model {
   @attr('boolean', { defaultValue: false })
   hasCanonical;
 
-  @type(FeatureCollection)
   @attr({ defaultValue: () => EmptyFeatureCollection })
   canonical;
 

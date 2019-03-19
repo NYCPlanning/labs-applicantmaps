@@ -1,7 +1,6 @@
 import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
 import { action, computed } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 import { camelize } from '@ember/string';
 
 // This class takes FIVE arguments: map model mode type target
@@ -18,19 +17,19 @@ export default class TypesBase extends Component {
     }
   }
 
-  @argument
+  // // @argument
   map;
 
-  @argument
+  // // @argument
   model;
 
-  @argument
+  // // @argument
   mode;
 
-  @argument
+  // // @argument
   type;
 
-  @argument
+  // // @argument
   target = 'data';
 
   @service

@@ -10,10 +10,10 @@ module.exports = {
     ecmaFeatures: {
       legacyDecorators: true,
       experimentalObjectRestSpread: true,
-    }
+    },
   },
   plugins: [
-    'ember'
+    'ember',
   ],
   extends: [
     'eslint:recommended',
@@ -21,7 +21,7 @@ module.exports = {
     'plugin:ember-best-practices/recommended',
   ],
   env: {
-    browser: true
+    browser: true,
   },
   rules: {
     'import/no-extraneous-dependencies': 0,
@@ -32,7 +32,7 @@ module.exports = {
     'space-before-function-paren': 0,
     'prefer-arrow-callback': 0,
     'no-underscore-dangle': 0,
-    'camelcase': 0,
+    camelcase: 0,
     'max-len': 0,
     'no-param-reassign': 0,
     'ember/avoid-leaking-state-in-ember-objects': 0,
@@ -48,19 +48,19 @@ module.exports = {
         '.template-lintrc.js',
         'blueprints/*/index.js',
         'config/**/*.js',
-        'lib/*/index.js'
+        'lib/*/index.js',
       ],
       parserOptions: {
         sourceType: 'script',
         ecmaVersion: 2017,
         ecmaFeatures: {
-          experimentalObjectRestSpread: true
-        }
+          experimentalObjectRestSpread: true,
+        },
       },
       env: {
         browser: false,
-        node: true
-      }
-    }
-  ]
+        node: true,
+      },
+    },
+  ],
 };

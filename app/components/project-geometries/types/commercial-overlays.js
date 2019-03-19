@@ -1,5 +1,5 @@
 import { action } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import BaseClass from './-type';
 
@@ -137,8 +137,8 @@ export const c25Layer = {
 };
 
 export default class CommercialOverlayComponent extends BaseClass {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     this.fetchCanonical();
   }
