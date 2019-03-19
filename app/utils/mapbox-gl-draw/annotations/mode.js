@@ -34,6 +34,8 @@ function polygonIsUnlabeled(feature) {
 }
 
 function clickedFeatureIsCurrentFeatureChildVertex(clicked, currentFeature) {
+  if (!clicked) return false;
+
   if (!clicked.properties.active) return false;
 
   if (!clicked.properties.parent) return false;
@@ -44,6 +46,8 @@ function clickedFeatureIsCurrentFeatureChildVertex(clicked, currentFeature) {
 }
 
 function clickedFeatureIsCurrentFeature(clicked, currentFeature) {
+  if (!clicked) return false;
+
   if (!clicked.properties.active) return false;
 
   if (clicked.properties.id !== currentFeature.id) return false;
