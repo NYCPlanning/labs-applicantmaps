@@ -46,7 +46,6 @@
         <span class="cell shrink" style="padding-right:0.25rem;">{{fa-icon 'hand-pointer' prefix='far' fixedWidth=true}}</span>
         <span class="cell auto">Select lots to add them to your Development Site (selected lots will be yellow)</span>
       </p>
-      <p><img src="/img/gif-select-lot-development-site.gif" alt="Select Lot Project Area" class="shadowed" /></p>
     {{/if}}
 
     {{#component modeComponent as |editMode|}}
@@ -71,5 +70,8 @@
       </div>
     </div>
 
+    <hr />
+    
+    <p><img src={{ if (eq mode 'draw') '/img/gif-draw-development-site.gif' '/img/gif-select-lot-development-site.gif' }} alt="Select Lot Development Site" class="shadowed" /></p>
   </div>
 {{/ember-wormhole}}
