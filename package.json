@@ -59,6 +59,7 @@
     "ember-mapbox-gl": "0.12.0",
     "ember-maybe-import-regenerator": "^0.1.6",
     "ember-power-select": "^2.0.8",
+    "ember-power-select-with-create": "^0.6.1",
     "ember-promise-helpers": "1.0.6",
     "ember-resolver": "^5.0.1",
     "ember-source": "~3.4.0",

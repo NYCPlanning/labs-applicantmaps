@@ -20,7 +20,8 @@ export default class ProjectsShowRoute extends Route {
     const { routing: { route, mode, type } } = model.get('currentStep');
 
     // has the user completed the steps? if not, transition to that step.
-    if (model.get('currentStep') !== 'complete') {
+    // ('dashboard' is the name of the final step, as defined in `projectProcedure` (model/project.js))
+    if (model.get('currentStep') !== 'dashboard') {
       this.transitionTo(route, model.get('id'), { queryParams: { mode, type } });
     }
   }
