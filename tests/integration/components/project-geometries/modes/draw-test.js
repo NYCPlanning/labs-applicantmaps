@@ -121,6 +121,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     await render(hbs`
       {{#mapbox-gl-draw map=mapObject as |drawable|}}
         {{#project-geometries/modes/draw
+          directSelectMode='direct_select_rezoning'
           map=drawable
           geometricProperty=geometricProperty as |draw|}}
           {{draw.feature-label-form
@@ -166,6 +167,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     await render(hbs`
       {{#mapbox-gl-draw map=mapObject as |drawable|}}
         {{project-geometries/modes/draw
+          directSelectMode='direct_select_rezoning'
           map=drawable
           geometricProperty=geometricProperty}}
       {{/mapbox-gl-draw}}
@@ -242,6 +244,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     await render(hbs`
       {{#mapbox-gl-draw map=mapObject as |drawable|}}
         {{#project-geometries/modes/draw
+          directSelectMode='direct_select_rezoning'
           map=drawable
           geometricProperty=geometricProperty as |drawMode|}}
           {{drawMode.annotations}}
@@ -336,6 +339,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
     await render(hbs`
       {{#mapbox-gl-draw map=mapObject as |drawable|}}
         {{#project-geometries/modes/draw
+          directSelectMode='direct_select_rezoning'
           map=drawable
           geometricProperty=geometricProperty as |drawMode|}}
           {{drawMode.annotations}}
