@@ -28,7 +28,7 @@ export default class FeatureLabelFormComponent extends Component {
   // @argument
   options=null;
 
-  @argument
+  // @argument
   canAddNewDistricts=true;
 
   isBold = false;
