@@ -25,6 +25,6 @@ class DrawLotsButtonComponent extends Component.extend({
   handleClick = () => {};
 
   click() {
-    this.handleClick(this.get('finalGeometry'));
+    this.handleClick();
   }
 }

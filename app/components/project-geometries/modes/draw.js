@@ -1,13 +1,13 @@
 import Component from '@ember/component';
 import { get } from '@ember/object';
-import { action, computed } from '@ember-decorators/object';
+import { action, computed, observes } from '@ember-decorators/object';
 import { inject as service } from '@ember-decorators/service';
 import { argument } from '@ember-decorators/argument';
 import { containsNumber } from '@turf/invariant';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/geometric-property';
 
 export function currentFeatureIsComplete(currentMode, feature) {
-  if (currentMode === 'direct_select' && feature) {
+  if (currentMode === 'direct_select_rezoning' && feature) {
     if (feature.geometry.type === 'Polygon') {
       if (!feature.properties.label) {
         // set special polygon feature flag, used to require used to label their polygons in draw mode
@@ -49,6 +49,16 @@ export default class DrawComponent extends Component {
     this.set('geometricProperty', drawnFeatures);
   }
 
+
+  // WARNING: this will fire when geometricProp gets updated.
+  // This may have unintended side effects.
+  @observes('geometricProperty')
+  updateDrawState() {
+    const { draw } = this.get('map');
+
+    draw.shouldReset(this.get('geometricProperty'));
+  }
+
   // Simply gets what new feature is selected and sets it to the class
   // disallows multiply selectable polygon and line features
   // point features can still be selected as groups
@@ -61,12 +71,12 @@ export default class DrawComponent extends Component {
       /* Bring properties.missingLabel up to top-level property
        * Must be top-level for watching in the feature-label-form,
        * but cannot be added as top-level in the overriden mapbox-gl-draw mode event
+       * This sucks, but I could not get the computed property to properly track the
+       * nested property value.
        * (See https://github.com/NYCPlanning/labs-applicantmaps/issues/417)
        */
       if ('missingLabel' in firstSelectedFeature.properties) {
         firstSelectedFeature.missingLabel = firstSelectedFeature.properties.missingLabel;
-        // delete property to ensure state is not incorrectly persisted
-        delete firstSelectedFeature.properties.missingLabel;
       }
       this.set('selectedFeature', { type: 'FeatureCollection', features: [firstSelectedFeature] });
 
@@ -97,7 +107,7 @@ export default class DrawComponent extends Component {
 
     // can't direct select a point
     if (selectedID && type !== 'Point' && mode === 'simple_select') {
-      draw.changeMode('direct_select', { featureId: selectedID });
+      draw.changeMode(this.get('directSelectMode'), { featureId: selectedID });
     }
 
     this.set('tool', mode);
@@ -137,6 +147,9 @@ export default class DrawComponent extends Component {
   @argument
   geometricProperty;
 
+  @argument
+  directSelectMode = 'direct_select';
+
   // @type(FeatureCollection)
   selectedFeature = EmptyFeatureCollection;
 
@@ -174,6 +187,7 @@ export default class DrawComponent extends Component {
     }
 
     draw.trash();
+    this.set('selectedFeature', EmptyFeatureCollection);
     this.drawStateCallback();
   }
 
@@ -186,7 +200,10 @@ export default class DrawComponent extends Component {
     draw.setFeatureProperty(firstFeature.id, property, value);
 
     // update special polygon feature flag used to require users to label their polygons
-    this.set('selectedFeature.features.firstObject.missingLabel', false);
+    if (property === 'label') {
+      this.set('selectedFeature.features.firstObject.missingLabel', false);
+      draw.setFeatureProperty(firstFeature.id, 'missingLabel', false);
+    }
 
     // this triggers an update that renders the new label as mutated above to show up in the selected feature
     // see https://github.com/mapbox/mapbox-gl-draw/blob/master/docs/API.md#events

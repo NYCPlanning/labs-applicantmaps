@@ -1,6 +1,5 @@
 {{#if (not-eq model.project.currentStep.step 'complete')}}
   {{#let (find-relative-step (hash route=router.currentRouteName type=type mode=mode) -1) as |previous|}}
-    {{log previous}}
     {{#link-to previous.routing.route (query-params mode=previous.routing.mode type=previous.routing.type)
       class="button gray"
       data-test-geometry-edit-back=true}}

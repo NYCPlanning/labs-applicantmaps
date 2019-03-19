@@ -1,15 +1,17 @@
 {{#if isReady}}
-  {{#component modeComponent as |editMode|}}
+  {{#component modeComponent directSelectMode='direct_select_rezoning' as |editMode|}}
     {{editMode.feature-label-form
         options=labelOptions}}
     {{editMode.annotations}}
+    {{project-geometries/utils/canonical-geometry-reset
+      model=model}}
   {{/component}}
 {{/if}}
 
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <div class="fade-in-on-load text-small">
 
-    
+
     <h1 class="header-large small-margin-bottom">
       Rezoning:
       <span class="text-weight-normal" style="display:block;">
