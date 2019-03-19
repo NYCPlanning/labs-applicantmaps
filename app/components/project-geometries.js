@@ -11,19 +11,19 @@ export default
 @tagName('')
 class ProjectGeometryEditComponent extends Component {
   // required
-  // @argument
+  // // @argument
   model;
 
   // required
-  // @argument
+  // // @argument
   type;
 
   // required
-  // @argument
+  // // @argument
   mode;
 
   // required
-  // @argument
+  // // @argument
   layerGroups;
 
   /* ----------  General Map  ---------- */

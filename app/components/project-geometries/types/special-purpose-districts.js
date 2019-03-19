@@ -50,8 +50,8 @@ export const specialPurposeDistrictsLabelsLayer = {
 };
 
 export default class specialPurposeDistrictsComponent extends BaseClass {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     this.fetchCanonical();
   }

@@ -1,5 +1,4 @@
 import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
 import { action, computed } from '@ember-decorators/object';
 import { inject as service } from '@ember-decorators/service';
 import { camelize } from '@ember/string';
@@ -18,19 +17,19 @@ export default class TypesBase extends Component {
     }
   }
 
-  @argument
+  // // @argument
   map;
 
-  @argument
+  // // @argument
   model;
 
-  @argument
+  // // @argument
   mode;
 
-  @argument
+  // // @argument
   type;
 
-  @argument
+  // // @argument
   target = 'data';
 
   @service

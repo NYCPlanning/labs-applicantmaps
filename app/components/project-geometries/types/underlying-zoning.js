@@ -214,8 +214,8 @@ const labelOptions = [
 ];
 
 export default class UnderlyingZoningComponent extends BaseClass {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     this.fetchCanonical();
   }

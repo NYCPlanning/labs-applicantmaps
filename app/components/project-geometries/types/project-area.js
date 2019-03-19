@@ -27,8 +27,8 @@ export const projectAreaIcon = {
 };
 
 export default class ProjectAreaComponent extends BaseClass {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
     const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');
 
     if (zoningDistricts && !this.get('isDestroyed')) zoningDistricts.set('visible', false);

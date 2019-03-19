@@ -40,8 +40,9 @@ export const DefaultDraw = MapboxDraw.bind(null, {
 });
 
 export default class MapboxGlDraw extends Component {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
+
     const {
       draw = new DefaultDraw(),
     } = this.get('map');
@@ -85,7 +86,7 @@ export default class MapboxGlDraw extends Component {
   // @required
   // should be the ember-mapbox-gl contextual object
   // passed from within a mapbox-gl component block
-  // @argument
+  // // @argument
   map;
 
   @computed

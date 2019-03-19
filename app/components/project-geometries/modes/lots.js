@@ -1,6 +1,5 @@
 import Component from '@ember/component';
 import { action, computed } from '@ember-decorators/object';
-import { argument } from '@ember-decorators/argument';
 import turfBuffer from '@turf/buffer';
 import turfUnion from '@turf/union';
 import turfSimplify from '@turf/simplify';
@@ -23,8 +22,8 @@ export const selectedLotsLayer = {
 };
 
 export default class LotsComponent extends Component {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     // selectedLots
     this.set('selectedLots', {
@@ -56,10 +55,10 @@ export default class LotsComponent extends Component {
     });
   }
 
-  @argument
+  // @argument
   map;
 
-  @argument
+  // @argument
   geometricProperty;
 
   @service

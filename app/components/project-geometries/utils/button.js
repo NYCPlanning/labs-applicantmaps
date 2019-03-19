@@ -1,7 +1,6 @@
 import Component from '@ember/component';
 import { tagName, attribute, classNames } from '@ember-decorators/component';
 import { computed } from '@ember-decorators/object';
-import { argument } from '@ember-decorators/argument';
 
 export default
 @tagName('button')
@@ -15,13 +14,13 @@ class DrawLotsButtonComponent extends Component.extend({
     return !this.get('enabled');
   }
 
-  @argument
+  // @argument
   enabled = true;
 
   @attribute
   type = 'button';
 
-  @argument
+  // @argument
   handleClick = () => {};
 
   click() {

@@ -3,13 +3,13 @@ import { action } from '@ember-decorators/object';
 import { run } from '@ember/runloop';
 
 export default class ShareButtonComponent extends Component {
-  // @argument
+  // // @argument
   project;
 
-  // @argument
+  // // @argument
   label='project';
 
-  // @argument
+  // // @argument
   shareURL = window.location.href;
 
   @action

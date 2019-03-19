@@ -3,7 +3,7 @@ import { inject as service } from '@ember-decorators/service';
 import { action } from '@ember-decorators/object';
 
 export default class ProjectSetupStatus extends Component {
-  // @argument
+  // // @argument
   project;
 
   @service

@@ -12,8 +12,8 @@ export const developmentSiteLayer = {
 };
 
 export default class DevelopmentSiteComponent extends BaseClass {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     const zoningDistricts = this.get('store').peekRecord('layer-group', 'zoning-districts');
 

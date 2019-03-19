@@ -137,8 +137,8 @@ export const c25Layer = {
 };
 
 export default class CommercialOverlayComponent extends BaseClass {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     this.fetchCanonical();
   }

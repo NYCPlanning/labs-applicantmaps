@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { get } from '@ember/object';
 import { action, computed, observes } from '@ember-decorators/object';
 import { inject as service } from '@ember-decorators/service';
-import { argument } from '@ember-decorators/argument';
 import { containsNumber } from '@turf/invariant';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/geometric-property';
 
@@ -20,8 +19,8 @@ export function currentFeatureIsComplete(currentMode, feature) {
 }
 
 export default class DrawComponent extends Component {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     this.callbacks = {
       drawState: () => this.drawStateCallback(),
@@ -135,19 +134,19 @@ export default class DrawComponent extends Component {
     return this.get('tool');
   }
 
-  @argument
+  // @argument
   tool;
 
   // @required
   // mapbox-gl map context with draw instance
-  @argument
+  // @argument
   map;
 
   // @type(FeatureCollection)
-  @argument
+  // @argument
   geometricProperty;
 
-  @argument
+  // @argument
   directSelectMode = 'direct_select';
 
   // @type(FeatureCollection)

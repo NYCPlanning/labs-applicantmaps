@@ -1,18 +1,18 @@
 import Component from '@ember/component';
 
 export default class ProjectGeometriesClassComponent extends Component {
-  // @argument
+  // // @argument
   model
 
-  // @argument
+  // // @argument
   mapInstance
 
-  // @argument
+  // // @argument
   selectedLots
 
-  // @argument
+  // // @argument
   lotSelectionMode
 
-  // @argument
+  // // @argument
   geometryMode
 }
