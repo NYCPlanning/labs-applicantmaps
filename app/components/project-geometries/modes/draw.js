@@ -157,12 +157,12 @@ export default class DrawComponent extends Component {
 
   /*
    * Handles trash button click in draw mode
-   * To be able to delete all features regardless of current draw mode,
-   * we cannot always rely on draw.trash(), which is mode-specific.
-   * When a single point of a larger feature is selected, we use draw.trash()
-   * to delete a single polygon vertex, or an entire line (behavior provided by trash()).
-   * When an entire feature is selected (full polygon, line or point type), we rely on draw.delete(),
-   * deleting all selected features by id
+   *
+   * Uses simple select to enable `draw.trash()` for full feature deletion, so we
+   * don't have to call internal `draw.delete()` function. This requires extra checks that
+   * points selected for deletion do not break their owning features before calling
+   * `draw.trash()`.  If a selected point would break the feature, instead the entire
+   * feature is selected for deletion.
    */
   @action
   handleTrashButtonClick() {
@@ -170,11 +170,13 @@ export default class DrawComponent extends Component {
     const { features: [selectedFeaturePoint] } = draw.getSelectedPoints();
     const { features: [selectedFeature] } = draw.getSelected();
 
-    // if user attempts to delete a vertex that renders the polygon invalid (i.e. < 4 vertices)
-    // then select the entire polygon Feature for deletion in simple_select_delete mode
+    // if user attempts to delete a vertex from a line
+    // or attempts to delete a vertex that renders a polygon invalid (i.e. < 4 vertices)
+    // then select the entire Feature for deletion in simple_select_delete mode
     if (selectedFeaturePoint
-        && selectedFeature.geometry.type === 'Polygon'
-        && selectedFeature.geometry.coordinates[0].length < 5) {
+        && (selectedFeature.geometry.type === 'LineString'
+          || (selectedFeature.geometry.type === 'Polygon'
+            && selectedFeature.geometry.coordinates[0].length < 5))) {
       draw.changeMode('simple_select_delete', { featureIds: [selectedFeature.id] });
     }
 

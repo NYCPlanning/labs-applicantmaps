@@ -15,6 +15,7 @@ Router.map(function () { // eslint-disable-line
         this.route('development-site');
         this.route('project-area');
         this.route('rezoning');
+        this.route('complete');
       });
       this.route('geometry-edit');
       this.route('map', function () {

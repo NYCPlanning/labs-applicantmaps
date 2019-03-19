@@ -19,27 +19,41 @@
       </div>
       <div class="cell large-5">
 
-        {{!-- <h2 class="header-medium large-margin-top">Create projects</h2> --}}
-        {{#link-to 'projects.new'
-          data-test-get-started=true
-          tagName='button'
-          type='button'
-          class='get-started button large expanded large-margin-top'}}
-          <strong>Create a Project</strong> &nbsp;{{fa-icon 'arrow-right'}}
-        {{/link-to}}
+        <div class="grid-x">
+          <span class="cell shrink green-muted medium-margin-right">{{fa-icon 'copy' size='3x' prefix='far' fixedWidth=true}}</span>
+          <span class="cell auto">
+            <h2 class="header-medium">Create a project</h2>
+            {{#link-to 'projects.new'
+              data-test-get-started=true
+              tagName='button'
+              type='button'
+              class='get-started button large expanded large-margin-bottom'}}
+              <strong>Get started</strong> &nbsp;{{fa-icon 'arrow-right'}}
+            {{/link-to}}
+          </span>
+        </div>
 
-        <h2 class="header-medium large-margin-top">Define your project geometries</h2>
-        <p><img src="/img/gif-select-lot-development-site.gif" alt="Select Lot Project Area" class="shadowed" style="width:18rem;" /></p>
+        <div class="grid-x">
+          <span class="cell shrink blue-muted medium-margin-right">{{fa-icon 'draw-polygon' size='3x' fixedWidth=true}}</span>
+          <span class="cell auto">
+            <h2 class="header-medium">Define your project geometries</h2>
+            <p class="large-margin-bottom"><img src="/img/gif-select-lot-development-site.gif" alt="Select Lot Project Area" class="shadowed" style="width:18rem;" /></p>
+          </span>
+        </div>
 
-        <h2 class="header-medium large-margin-top clearfix">
-          <span class="float-left dark-gray" style="margin:0.25em 1.5rem 1.5rem 0">{{fa-icon 'share-alt' size='2x'}}</span>
-          Share &amp; collaborate on projects with unique URLs
-        </h2>
+        <div class="grid-x">
+          <span class="cell shrink orange-muted medium-margin-right">{{fa-icon 'share-alt' size='3x' fixedWidth=true}}</span>
+          <span class="cell auto">
+            <h2 class="header-medium large-margin-bottom">Share &amp; collaborate on your project with a unique URL</h2>
+          </span>
+        </div>
 
-        <h2 class="header-medium large-margin-top">
-          <span class="float-left dark-gray" style="margin:0.25em 1.5rem 1.5rem 0">{{fa-icon 'print' size='2x'}}</span>
-          Print your maps to paper or download and save them as PDFs
-        </h2>
+        <div class="grid-x">
+          <span class="cell shrink gray medium-margin-right">{{fa-icon 'print' size='3x' fixedWidth=true}}</span>
+          <span class="cell auto">
+            <h2 class="header-medium large-margin-bottom">Print your maps to paper or download and save them as PDFs</h2>
+          </span>
+        </div>
 
       </div>
     </div>

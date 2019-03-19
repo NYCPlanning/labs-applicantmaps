@@ -1,6 +1,11 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, click, find } from '@ember/test-helpers';
+import {
+  render,
+  click,
+  find,
+  fillIn,
+} from '@ember/test-helpers';
 import { spy } from 'sinon';
 import hbs from 'htmlbars-inline-precompile';
 
@@ -164,5 +169,34 @@ module('Integration | Component | project-geometries/modes/draw/feature-label-fo
 
     assert.ok(updateSelectedFeatureSpy.getCall(0).calledWith('textSize', 'large'));
     assert.ok(updateSelectedFeatureSpy.getCall(1).calledWith('textSize', 'default'));
+  });
+
+  test('it adds new label that user typed in', async function(assert) {
+    this.set('selectedFeature', dummyPolygonFeature);
+
+    const updateSelectedFeatureSpy = spy();
+    this.set('updateSelectedFeature', updateSelectedFeatureSpy);
+
+    await render(hbs`
+      {{project-geometries/modes/draw/feature-label-form
+        selectedFeature=selectedFeature
+        updateSelectedFeature=updateSelectedFeature
+        options=(array 'Option 1' 'Option 2' 'Option 3')
+      }}
+    `);
+
+    // click to open the powerselect list
+    await click('.ember-power-select-trigger');
+
+    // click on search box and type new option to "add"
+    await click('.ember-power-select-search');
+    await fillIn('.ember-power-select-search-input', 'Option 4');
+    // there will be only one option available
+    assert.equal(find('.ember-power-select-option').textContent.trim(), 'Add "Option 4"...');
+    await click('.ember-power-select-option');
+
+    // make sure that the polygon now has the new label that the user typed in
+    assert.ok(updateSelectedFeatureSpy.calledWith('label', 'Option 4'));
+    assert.ok(updateSelectedFeatureSpy.calledWith('textFont', 'bold'));
   });
 });

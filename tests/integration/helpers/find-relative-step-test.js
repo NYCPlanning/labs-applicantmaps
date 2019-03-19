@@ -34,7 +34,7 @@ module('Integration | Helper | find-relative-step', function(hooks) {
     assert.equal(this.element.textContent.trim(), 'project-area-create');
   });
 
-  test('it finds the very last step', async function(assert) {
+  test('it finds the very last (dashboard) step', async function(assert) {
     this.set('inputValue', {
       route: 'projects.show',
     });
@@ -45,7 +45,7 @@ module('Integration | Helper | find-relative-step', function(hooks) {
       {{/let}}
     `);
 
-    assert.equal(this.element.textContent.trim(), 'complete');
+    assert.equal(this.element.textContent.trim(), 'dashboard');
   });
 
   test('it applies an offset', async function(assert) {
@@ -59,6 +59,6 @@ module('Integration | Helper | find-relative-step', function(hooks) {
       {{/let}}
     `);
 
-    assert.equal(this.element.textContent.trim(), 'rezoning-special');
+    assert.equal(this.element.textContent.trim(), 'complete');
   });
 });
