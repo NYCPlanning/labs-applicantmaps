@@ -1,7 +1,8 @@
 {{#if isReady}}
   {{#component modeComponent directSelectMode='direct_select_rezoning' as |editMode|}}
     {{editMode.feature-label-form
-        options=labelOptions}}
+        options=labelOptions
+        canAddNewDistricts=false}}
     {{editMode.annotations}}
   {{/component}}
 {{/if}}
