@@ -5,13 +5,16 @@
 
     {{!-- if an array of values was passed in as the 'options' property, use power select --}}
     {{#if (and options (not (get selectedFeature.features.firstObject.properties 'meta:mode')))}}
-      {{#power-select
+      {{#power-select-with-create
         options=options
         selected=label
         onchange=(action "handleSelectChange")
-      as |selectedLabel|}}
+        showCreateWhen=(action "hideCreateOptionIfAlreadyExists")
+        oncreate=(action "handleSelectChange")
+        as |selectedLabel|
+      }}
         {{selectedLabel}}
-      {{/power-select}}
+      {{/power-select-with-create}}
     {{else}}
       {{input
         data-test-feature-label-form

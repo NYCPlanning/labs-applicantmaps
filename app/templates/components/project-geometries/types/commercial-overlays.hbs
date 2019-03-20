@@ -1,7 +1,8 @@
 {{#if isReady}}
   {{#component modeComponent directSelectMode='direct_select_rezoning' as |editMode|}}
     {{editMode.feature-label-form
-        options=labelOptions}}
+        options=labelOptions
+        canAddNewDistricts=false}}
     {{editMode.annotations}}
   {{/component}}
 {{/if}}
@@ -25,7 +26,6 @@
     <hr />
 
     <p>Overlays are usually drawn to the <strong>lot boundary</strong> (not the street centerline).</p>
-    <p><img src="/img/gif-commercial-overlays.gif" alt="Draw Commercial Overlays" class="shadowed" /></p>
 
     <hr />
 
@@ -44,5 +44,7 @@
       </div>
     </div>
 
+    <hr />
+    <p><img src="/img/gif-commercial-overlays.gif" alt="Draw Commercial Overlays" class="shadowed" /></p>
   </div>
 {{/ember-wormhole}}

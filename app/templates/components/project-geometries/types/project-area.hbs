@@ -18,8 +18,7 @@
             {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
             {{fa-icon 'square' transform='grow-8' class='white'}}
             {{fa-icon 'draw-polygon' transform='shrink-2'}}
-          </span>
-          polygon tool to add a new shape
+          </span> polygon tool to add a new shape
         </li>
         <li>Complete a new shape by clicking its final point a second time</li>
       </ul>
@@ -48,7 +47,6 @@
         <span class="cell auto">Select lots to add them to your Project Area (selected lots will be yellow)</span>
       </p>
       <p>If your Project Area includes your <strong>Development Site</strong>, (usually the case) you will need to reselect those lots.</p>
-      <p><img src="/img/gif-select-lot-project-area.gif" alt="Select Lot Project Area" class="shadowed" /></p>
     {{/if}}
 
     {{#component modeComponent as |editMode|}}
@@ -72,6 +70,9 @@
         {{/project-geometries/utils/button}}
       </div>
     </div>
+
+  <hr />
+  <p><img src={{ if (eq mode 'draw') '/img/gif-draw-project-area.gif' '/img/gif-select-lot-project-area.gif' }} alt="Select Lot Project Area" class="shadowed" /></p>
 
   </div>
 {{/ember-wormhole}}
