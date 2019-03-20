@@ -27,9 +27,11 @@
 
     <p>Overlays are usually drawn to the <strong>lot boundary</strong> (not the street centerline).</p>
 
-    <hr />
+    <p><img src="/img/how-to--zoning--commercial-overlay.gif" alt="Draw Commercial Overlays" class="shadowed" /></p>
 
-    <div class="grid-x">
+    <hr class="wizard-navigation-divider" />
+
+    <div class="grid-x wizard-navigation">
       {{yield}}
       <div class="cell auto">
         {{#project-geometries/utils/button
@@ -44,7 +46,5 @@
       </div>
     </div>
 
-    <hr />
-    <p><img src="/img/gif-commercial-overlays.gif" alt="Draw Commercial Overlays" class="shadowed" /></p>
   </div>
 {{/ember-wormhole}}

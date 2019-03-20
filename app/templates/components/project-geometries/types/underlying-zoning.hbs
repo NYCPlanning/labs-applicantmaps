@@ -25,9 +25,11 @@
 
     <p>Districts usually extend to the <strong>street centerline</strong>. When moving boundaries or drawing new districts, make sure they do not overlap and there are no gaps.</p>
 
-    <hr />
+    <p><img src="/img/how-to--zoning--underlying.gif" alt="Draw Underlying Zoning" class="shadowed" /></p>
 
-    <div class="grid-x">
+    <hr class="wizard-navigation-divider" />
+
+    <div class="grid-x wizard-navigation">
       {{yield}}
       <div class="cell auto">
         {{#project-geometries/utils/button
@@ -42,7 +44,5 @@
       </div>
     </div>
 
-    <hr />
-    <p><img src="/img/gif-underlying-zoning.gif" alt="Draw Underlying Zoning" class="shadowed" /></p>
   </div>
 {{/ember-wormhole}}

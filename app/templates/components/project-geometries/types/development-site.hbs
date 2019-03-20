@@ -48,14 +48,16 @@
       </p>
     {{/if}}
 
+    <p><img src={{ if (eq mode 'draw') '/img/how-to--draw-manually.gif' '/img/how-to--select-lots.gif' }} alt="How to define a Development Site" class="shadowed" /></p>
+
     {{#component modeComponent as |editMode|}}
       {{editMode.toggle-mode-button
         isReadyToProceed=isReadyToProceed}}
     {{/component}}
 
-    <hr />
+    <hr class="wizard-navigation-divider" />
 
-    <div class="grid-x">
+    <div class="grid-x wizard-navigation">
       {{yield}}
       <div class="cell auto">
         {{#project-geometries/utils/button
@@ -70,8 +72,5 @@
       </div>
     </div>
 
-    <hr />
-
-    <p><img src={{ if (eq mode 'draw') '/img/draw-manually.gif' '/img/select-lots.gif' }} alt="How to define a Development Site" class="shadowed" /></p>
   </div>
 {{/ember-wormhole}}

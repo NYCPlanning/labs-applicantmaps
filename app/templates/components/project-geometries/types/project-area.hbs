@@ -49,14 +49,16 @@
       <p>If your Project Area includes your <strong>Development Site</strong>, (usually the case) you will need to reselect those lots.</p>
     {{/if}}
 
+    <p><img src={{ if (eq mode 'draw') '/img/how-to--draw-manually--project-area.gif' '/img/how-to--select-lots--project-area.gif' }} alt="Select Lot Project Area" class="shadowed" /></p>
+
     {{#component modeComponent as |editMode|}}
       {{editMode.toggle-mode-button
         isReadyToProceed=isReadyToProceed}}
     {{/component}}
 
-    <hr />
+    <hr class="wizard-navigation-divider" />
 
-    <div class="grid-x">
+    <div class="grid-x wizard-navigation">
       {{yield}}
       <div class="cell auto">
         {{#project-geometries/utils/button
@@ -70,9 +72,6 @@
         {{/project-geometries/utils/button}}
       </div>
     </div>
-
-  <hr />
-  <p><img src={{ if (eq mode 'draw') '/img/gif-draw-project-area.gif' '/img/gif-select-lot-project-area.gif' }} alt="Select Lot Project Area" class="shadowed" /></p>
 
   </div>
 {{/ember-wormhole}}

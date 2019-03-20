@@ -130,6 +130,23 @@ body {
 
     @include breakpoint(large) {
       box-shadow: 2px 0 0 rgba(0,0,0,0.1);
+
+      .wizard-navigation-divider {
+        margin-top: 7rem;
+        border-bottom: 0;
+      }
+    }
+  }
+
+  .wizard-navigation {
+    @include breakpoint(large) {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 22rem;
+      padding: $global-margin;
+      background-color: $white;
+      box-shadow: 0 -2px 0 0 rgba(0,0,0,0.1);
     }
   }
 }
