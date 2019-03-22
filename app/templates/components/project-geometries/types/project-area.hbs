@@ -1,7 +1,7 @@
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <div class="fade-in-on-load text-small">
 
-    
+
     <h1 class="header-large small-margin-bottom">Project Area</h1>
 
     <p>The Project Area includes all properties subject to your proposed land use actions. You need to define a Project Area if you are requesting actions on properties that will not be developed (i.e. properties outside your Development Site).</p>
@@ -49,14 +49,16 @@
       <p>If your Project Area includes your <strong>Development Site</strong>, (usually the case) you will need to reselect those lots.</p>
     {{/if}}
 
+    <p><img src={{ if (eq mode 'draw') '/img/how-to--draw-manually--project-area.gif' '/img/how-to--select-lots--project-area.gif' }} alt="Select Lot Project Area" class="shadowed" /></p>
+
     {{#component modeComponent as |editMode|}}
       {{editMode.toggle-mode-button
         isReadyToProceed=isReadyToProceed}}
     {{/component}}
 
-    <hr />
+    <hr class="wizard-navigation-divider" />
 
-    <div class="grid-x">
+    <div class="grid-x wizard-navigation">
       {{yield}}
       <div class="cell auto">
         {{#project-geometries/utils/button
@@ -65,14 +67,11 @@
           {{#if (eq model.project.currentStep.step 'complete')}}
             Save
           {{else}}
-            Next {{fa-icon 'arrow-right'}}
+            Next {{fa-icon 'arrow-right' fixedWidth=true}}
           {{/if}}
         {{/project-geometries/utils/button}}
       </div>
     </div>
-
-  <hr />
-  <p><img src={{ if (eq mode 'draw') '/img/gif-draw-project-area.gif' '/img/gif-select-lot-project-area.gif' }} alt="Select Lot Project Area" class="shadowed" /></p>
 
   </div>
 {{/ember-wormhole}}
