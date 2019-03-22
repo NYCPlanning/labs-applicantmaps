@@ -117,6 +117,8 @@
   {{/map.source}}
 {{/if}}
 
+{{ map.image 'arrow' '/img/arrow.png' }}
+{{ map.image 'centerline' '/img/centerline.png' }}
 {{#if (not (is-empty model.annotations))}}
   {{project-geometries/utils/annotations-renderer map=map annotations=model.annotations}}
 {{/if}}
