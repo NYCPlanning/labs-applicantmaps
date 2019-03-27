@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 import { camelize } from '@ember/string';
 import { pluralize } from 'ember-inflector';
 

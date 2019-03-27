@@ -2,11 +2,11 @@
 
   {{project-setup-status project=model}}
 
-  <h4 class="header-small">Project Maps</h4>
-  {{link-to 'Area Map' 'projects.edit.map.edit' model.id (query-params mapType=(dasherize 'Area Map'))
-    data-test-add-area-map
-    class='button large expanded map-type-area-map'
-  }}
+  <hr />
+
+  <p class="lead">From this dashboard, you can edit your proposed geometries and view, print, or download your project maps.</p>
+
+  <p class="text-small dark-gray">* <em>Currently, this tool only produces an Area Map. But more applicant maps are coming soon.</em></p>
 
 </div>
 <div class="cell large-auto dashboard">
@@ -14,7 +14,7 @@
   <div class="grid-x">
     <div class="cell xlarge-auto">
 
-      {{#mapbox-gl
+      {{#labs-map
           id='dashboard-map'
           mapLoaded=(action 'handleMapLoad')
           initOptions=(hash
@@ -26,15 +26,19 @@
           as | map |
         }}
         {{project-geometry-renderer map=map model=model}}
-      {{/mapbox-gl}}
+        {{map.labs-layers layerGroups=(array taxLotsLayerGroup)}}
+      {{/labs-map}}
 
     </div>
-    <div class="cell xlarge-shrink dashboard-controls">
-      <h6>Your proposed changes</h6>
+    <div class="cell xlarge-4 dashboard-controls">
+      <h4 class="">Proposed Geometries</h4>
+
       {{!-- Development Site --}}
       <div class="grid-x control">
         <div class="cell auto">
-          <strong>Development Site</strong>
+          <span class="{{if (not (is-empty model.developmentSite)) 'text-weight-bold charcoal' 'gray'}}">
+            Development Site
+          </span>
           {{#if (not (is-empty model.developmentSite))}}
             {{labs-ui/legend-icon icon=projectGeometryIcons.developmentSiteIcon}}
           {{/if}}
@@ -81,7 +85,9 @@
       {{!-- Project Area --}}
       <div class="grid-x control">
         <div class="cell auto">
-          <strong>Project Area</strong>
+          <span class="{{if (not (is-empty model.projectArea)) 'text-weight-bold charcoal' 'gray'}}">
+            Project Area
+          </span>
           {{#if (not (is-empty model.projectArea))}}
             {{labs-ui/legend-icon icon=projectGeometryIcons.projectAreaIcon}}
           {{/if}}
@@ -128,29 +134,33 @@
       {{!-- Underlying Zoning --}}
       <div class="grid-x control">
         <div class="cell auto">
-          <strong>Underlying Zoning</strong>
-          {{#if (not (is-empty model.underlyingZoning))}}
+          <span class="{{if model.needUnderlyingZoning 'text-weight-bold charcoal' 'gray'}}">
+            Underlying Zoning
+          </span>
+          {{#if model.needUnderlyingZoning}}
             {{labs-ui/legend-icon icon=projectGeometryIcons.underlyingZoningIcon}}
           {{/if}}
         </div>
         <div class="cell shrink">
-          {{#link-to 'projects.edit.geometry-edit' model
-            (query-params type='underlying-zoning' mode='draw')
-            data-test-underlying-zoning
-            tagName='button'
-            classNames='button tiny gray no-margin'}}
-            {{#if (not (is-empty model.underlyingZoning))}}
-              Edit
-            {{else}}
-              {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
-            {{/if}}
-          {{/link-to}}
+          <span {{action (mut model.needUnderlyingZoning) true }}>
+            {{#link-to 'projects.edit.geometry-edit' model
+              (query-params type='underlying-zoning' mode='draw')
+              data-test-underlying-zoning
+              tagName='button'
+              classNames='button tiny gray no-margin'}}
+              {{#if model.needUnderlyingZoning}}
+                Edit
+              {{else}}
+                {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
+              {{/if}}
+            {{/link-to}}
+          </span>
         </div>
-        {{#if (not (is-empty model.underlyingZoning))}}
+        {{#if model.needUnderlyingZoning}}
           <div class="cell shrink">
             <button
               class="button tiny gray no-margin"
-              onclick={{action (mut model.underlyingZoning) EmptyFeatureCollection}}
+              onclick={{ action deleteUnderlyingZoning }}
             >
               {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
             </button>
@@ -161,8 +171,10 @@
       {{!-- Commercial Overlays --}}
       <div class="grid-x control">
         <div class="cell auto">
-          <strong>Commercial Overlays</strong>
-          {{#if (not (is-empty model.commercialOverlays))}}
+          <span class="{{if model.needCommercialOverlay 'text-weight-bold charcoal' 'gray'}}">
+            Commercial Overlays
+          </span>
+          {{#if model.needCommercialOverlay}}
             <div class="legend-icon">
               <div class="sprite c1-1"></div>
               <div class="sprite c2-3"></div>
@@ -170,23 +182,25 @@
           {{/if}}
         </div>
         <div class="cell shrink">
-          {{#link-to 'projects.edit.geometry-edit' model
-            (query-params type='commercial-overlays' mode='draw')
-            data-test-commercial-overlays
-            tagName='button'
-            classNames='button tiny gray no-margin'}}
-            {{#if (not (is-empty model.commercialOverlays))}}
-              Edit
-            {{else}}
-              {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
-            {{/if}}
-          {{/link-to}}
+          <span {{action (mut model.needCommercialOverlay) true}}>
+            {{#link-to 'projects.edit.geometry-edit' model
+              (query-params type='commercial-overlays' mode='draw')
+              data-test-commercial-overlays
+              tagName='button'
+              classNames='button tiny gray no-margin'}}
+              {{#if model.needCommercialOverlay}}
+                Edit
+              {{else}}
+                {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
+              {{/if}}
+            {{/link-to}}
+          </span>
         </div>
-        {{#if (not (is-empty model.commercialOverlays))}}
+        {{#if model.needCommercialOverlay}}
           <div class="cell shrink">
             <button
               class="button tiny gray no-margin"
-              onclick={{action (mut model.commercialOverlays) EmptyFeatureCollection}}
+              onclick={{ action deleteCommercialOverlay }}
             >
               {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
             </button>
@@ -197,29 +211,33 @@
       {{!-- Special Purpose Districts --}}
       <div class="grid-x control">
         <div class="cell auto">
-          <strong>Special Purpose Districts</strong>
-          {{#if (not (is-empty model.specialPurposeDistricts))}}
+          <span class="{{if model.needSpecialDistrict 'text-weight-bold charcoal' 'gray'}}">
+            Special Purpose Districts
+          </span>
+          {{#if model.needSpecialDistrict}}
             {{labs-ui/legend-icon icon=projectGeometryIcons.specialPurposeDistrictsIcon}}
           {{/if}}
         </div>
         <div class="cell shrink">
-          {{#link-to 'projects.edit.geometry-edit' model
-            (query-params type='special-purpose-districts' mode='draw')
-            data-test-special-purpose-districts
-            tagName='button'
-            classNames='button tiny gray no-margin'}}
-            {{#if (not (is-empty model.specialPurposeDistricts))}}
-              Edit
-            {{else}}
-              {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
-            {{/if}}
-          {{/link-to}}
+          <span {{action (mut model.needSpecialDistrict) true}}>
+            {{#link-to 'projects.edit.geometry-edit' model
+              (query-params type='special-purpose-districts' mode='draw')
+              data-test-special-purpose-districts
+              tagName='button'
+              classNames='button tiny gray no-margin'}}
+              {{#if model.needSpecialDistrict}}
+                Edit
+              {{else}}
+                {{fa-icon 'plus' class='green-muted' transform='grow-6'}}
+              {{/if}}
+            {{/link-to}}
+          </span>
         </div>
-        {{#if (not (is-empty model.specialPurposeDistricts))}}
+        {{#if model.needSpecialDistrict}}
           <div class="cell shrink">
             <button
               class="button tiny gray no-margin"
-              onclick={{action (mut model.specialPurposeDistricts) EmptyFeatureCollection}}
+              onclick={{ action  deleteSpecialDistrict }}
             >
               {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
             </button>
@@ -230,7 +248,9 @@
       {{!-- Rezoning Area --}}
       <div class="grid-x control">
         <div class="cell auto">
-          <strong>Rezoning Area</strong>
+          <span class="{{if (not (is-empty model.rezoningArea)) 'text-weight-bold charcoal' 'gray'}}">
+            Rezoning Area
+          </span>
           {{#if (not (is-empty model.rezoningArea))}}
             {{labs-ui/legend-icon icon=projectGeometryIcons.rezoningAreaIcon}}
           {{/if}}
@@ -259,6 +279,17 @@
           </div>
         {{/if}}
       </div>
+
+      <hr />
+
+      <h4 class="">Project Maps</h4>
+
+      {{link-to 'Area Map' 'projects.edit.map.edit' model.id (query-params mapType=(dasherize 'Area Map'))
+        data-test-add-area-map
+        class='button large expanded map-type-area-map'
+      }}
+      <button class="button gray expanded" disabled>Tax Map</button>
+      <button class="button gray expanded" disabled>Zoning Change Map</button>
 
     </div>
   </div>

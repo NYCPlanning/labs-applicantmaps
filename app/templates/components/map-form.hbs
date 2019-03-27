@@ -1,10 +1,16 @@
 {{#if mapConfiguration}}
   <div class="cell sidebar map-sidebar">
+    <p class="text-small">
+      {{#link-to "projects.show" model.project data-test-go-back-to-project=true}}
+        {{fa-icon 'arrow-left'}} Back to Project
+      {{/link-to}}
+    </p>
+
     <h2 class="header-large">{{model.project.projectName}} <span class="nowrap">{{model.mapTypeLabel}}</span></h2>
 
     <div class="grid-x grid-margin-x">
       <div class="cell auto">
-        <label onclick={{action 'toggleMapInteractions'}} class="inline">
+        <label onclick={{action 'toggleMapInteractions'}} data-test-map-form-lock class="inline">
           <span class="fa-layers">
             {{fa-icon 'square' class='white-smoke'}}
             {{fa-icon 'square' prefix='far' class='silver'}}
@@ -18,7 +24,7 @@
           class="button tiny gray"
           onclick={{action 'fitBoundsToSelectedBuffer'}}
           data-test-reset-map
-        >Reset</button>
+        >Recenter</button>
       </div>
     </div>
 
@@ -98,46 +104,41 @@
 
     <p class="text-tiny">Most ULURP area maps should show a buffer of 600 feet around the project area.  CEQR area maps should show a buffer of 400 feet.</p>
 
-    <p class="text-right no-margin">
-      {{share-button label='map'}}
-    </p>
-
-    <hr/>
-
-    <div class="grid-x grid-margin-x align-middle">
-      {{#link-to "projects.show" model.project
-        class="cell shrink button small clear"
-        data-test-go-back-to-project=true
-      }}
-        {{fa-icon 'arrow-left'}}
-        Go Back to Project
-      {{/link-to}}
-      <button
-        class="cell auto button project-save-button"
-        type="button"
-        onclick={{action 'saveProject'}}
-        disabled={{not model.hasDirtyAttributes}}
-        data-test-save-map
-      >Save Map</button>
+    <div class="grid-x">
+      <div class="cell auto">
+        <button
+          class="cell auto button small gray project-save-button"
+          type="button"
+          onclick={{action 'saveProject'}}
+          disabled={{not model.hasDirtyAttributes}}
+          data-test-save-map
+        >Save Settings</button>
+      </div>
+      <div class="cell shrink" style="min-width:1rem;"></div>
+      <div class="cell shrink">
+        {{share-button label='map'}}
+      </div>
     </div>
 
     <hr/>
 
-    <div class="grid-x grid-margin-x">
+    <div class="grid-x">
       <p class="cell shrink medium-6">
-        <button class="button gray expanded" type="button" onClick=print()>{{fa-icon 'print'}} Print</button></p>
-      <p class="cell auto text-tiny dark-gray">Make sure your system's print settings enable printing background graphics and that the paper size and orientation match your map.</p>
+        <button class="button expanded" type="button" onClick=print()>{{fa-icon 'print'}} Print</button>
+      </p>
+      <div class="cell shrink" style="min-width:1rem;"></div>
+      <p class="cell auto text-tiny dark-gray">Make sure your system print settings match the map's size/orientation and background graphics printing is enabled.</p>
     </div>
 
-    <div class="grid-x grid-margin-x">
+    <div class="grid-x">
       <p class="cell shrink medium-6">
         <form action="{{downloadURL}}" target="_blank">
           <input type=hidden name=orientation value={{model.paperOrientation}}>
           <input type=hidden name=size value={{model.paperSize}}>
-          <button class="button gray expanded" type="submit">{{fa-icon 'file-pdf'}} Download</button>
+          <button class="button expanded" type="submit">{{fa-icon 'file-pdf'}} Download</button>
         </form>
       </p>
-
+      <div class="cell shrink" style="min-width:1rem;"></div>
       <p class="cell auto text-tiny dark-gray">The PDF may take several seconds to generate.</p>
     </div>
 
@@ -168,12 +169,19 @@
 
               <section class="legend-section">
                 <div class="data-sources">
+                  <strong>Map Created:</strong>
+                  {{timestamp}}
+                  {{!-- {{moment-format (now) 'MM/DD/YYYY HH:mm'}} --}}
+                  <br/>
                   <strong>Data Sources:</strong>
                   <a href="https://layers-api.planninglabs.nyc/v1/sources" target="_blank" class="nowrap black">layers-api.planninglabs.nyc/v1/sources</a>
                   <br />
                   {{#each mapConfiguration.sources as |source index|}}
                     {{~if index ';'}}
                     {{source.id}}
+                    {{#if (eq source.id 'pluto')}}
+                      {{source.meta.description}}
+                    {{/if}}
                     {{if source.meta.updated_at (concat '(' source.meta.updated_at ')')~}}
                   {{/each}}
                 </div>
@@ -200,6 +208,10 @@
             <div class="labs-map-loaded"></div>
             {{map.labs-layers layerGroups=mapConfiguration.layerGroups}}
 
+            {{#if (not (is-empty model.project.annotations))}}
+              {{project-geometries/utils/annotations-renderer map=map annotations=model.project.annotations}}
+            {{/if}}
+
             {{!-- Ad-hoc source and layer for showing commercial overlays --}}
             {{#if model.project.commercialOverlays}}
               {{#map.source options=(mapbox-geojson-source model.project.commercialOverlays) as |source|}}
@@ -218,8 +230,8 @@
             {{/if}}
 
             {{!-- Ad-hoc source and layer for showing commercial overlays --}}
-            {{#if model.project.proposedSpecialPurposeDistricts}}
-              {{#map.source options=(mapbox-geojson-source model.project.proposedSpecialPurposeDistricts) as |source|}}
+            {{#if model.project.specialPurposeDistricts}}
+              {{#map.source options=(mapbox-geojson-source model.project.specialPurposeDistricts) as |source|}}
                 {{source.layer
                   layer=projectGeomLayers.proposedSpecialPurposeDistrictsLayer
                   before='boundary_country'

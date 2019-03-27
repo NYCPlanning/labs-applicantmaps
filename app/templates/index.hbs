@@ -3,44 +3,57 @@
     <div class="grid-x grid-padding-x grid-padding-y">
       <div class="cell auto">
 
-        <h1>Prepare, save, and print maps for Land Use and Environmental applications.</h1>
+        <h2>Produce maps required for applications to the City Planning Commission for land use approvals</h2>
 
-        <p>Applicant Maps is a tool for producing clear maps required for applications to the City Planning Commission for land use approvals.</p>
+        <p>Most development in New York City is as-of-right, meaning that it complies with the Zoning Resolution and the developer may apply directly to the Department of Buildings for a building permit. However, property owners may seek special approvals to modify zoning requirements by applying to the City Planning Commission (CPC).  </p>
 
-        <p>Most development in New York City is as-of-right, meaning that it complies with the Zoning Resolution and the developer may apply directly to the Department of Buildings for a building permit. However, property owners may seek special approvals to modify zoning requirements by applying to the City Planning Commission.  </p>
+        <p>These applications consist of written and graphic materials&mdash;including maps&mdash;that propose land use approvals and development facilitated by those approvals. They are reviewed for completeness by the Department of City Planning before being presented to the CPC.</p>
 
-        <p>Applications to the City Planning Commission consist of written and graphic materials, including maps, that clearly present the proposed land use approvals and any development facilitated by those approvals. These applications are reviewed for completeness by the Department of City Planning before being presented to the City Planning Commission.</p>
+        <p>Applicant Maps makes the production of required maps less time consuming to prepare and eliminates the need for costly drafting or GIS software. Applicant Maps currently produces Area Maps, which are the most difficult map to make. Other maps are coming soon.</p>
 
-        <p>This tool makes the preparation of commonly required maps easier and less time consuming and eliminates the need for costly drafting or GIS software.  Currently, the tool produces the Area Map, which is the most difficult map to make.  Other required maps will be coming soon.</p>
+        <a href="https://www1.nyc.gov/site/planning/applicants/applicant-portal/application-process.page" class="button gray">
+          <strong>Visit the Applicant Portal</strong>
+          <small style="display:block;margin-top:0.5em;">to learn more about the application review process</small>
+        </a>
 
-        <p>Please visit the Applicant Portal for more information regarding the application review process.</p>
       </div>
       <div class="cell large-5">
 
-        <h2 class="header-small" style="padding-top:1rem;">STEP ONE</h2>
-        <p class="lead">Create a new project for your application.</p>
-        {{#link-to 'projects.new'
-          data-test-get-started=true
-          tagName='button'
-          type='button'
-          class='get-started button large expanded'}}
-          <strong>Get Started</strong> &nbsp;{{fa-icon 'arrow-right'}}
-        {{/link-to}}
-
-        <h2 class="header-small" style="padding-top:1rem;">STEP TWO</h2>
-        <p class="lead">Add maps to your project.</p>
-        <div class="grid-x grid-padding-small align-middle">
-          <div class="cell shrink">
-            {{fa-icon 'plus' size='2x' class="gray"}}
-          </div>
-          <div class="cell small-8 medium-4">
-            <img src="/img/sample-map-1.gif" alt="Sample Map" class="shadowed" />
-          </div>
+        <div class="grid-x">
+          <span class="cell shrink green-muted medium-margin-right">{{fa-icon 'copy' size='3x' prefix='far' fixedWidth=true}}</span>
+          <span class="cell auto">
+            <h2 class="header-medium">Create a project</h2>
+            {{#link-to 'projects.new'
+              data-test-get-started=true
+              tagName='button'
+              type='button'
+              class='get-started button large expanded large-margin-bottom'}}
+              <strong>Get started</strong> {{fa-icon 'arrow-right' fixedWidth=true}}
+            {{/link-to}}
+          </span>
         </div>
 
-        <h2 class="header-small" style="padding-top:1rem;">STEP THREE</h2>
-        <p class="lead clearfix"><span class="float-left" style="margin:0.25rem 1rem 1rem 0">{{fa-icon 'print' size=2}}</span> Print your maps to paper or save them as PDFs.</p>
-        <p class="lead clearfix"><span class="float-left" style="margin:0.25rem 1rem 1rem 0">{{fa-icon 'share-alt' size=2}}</span> Share your projects and maps with unique URLs.</p>
+        <div class="grid-x">
+          <span class="cell shrink blue-muted medium-margin-right">{{fa-icon 'draw-polygon' size='3x' fixedWidth=true}}</span>
+          <span class="cell auto">
+            <h2 class="header-medium">Define your project geometries</h2>
+            <p class="large-margin-bottom"><img src="/img/how-to--draw-manually.gif" alt="Select Lot Project Area" class="shadowed" /></p>
+          </span>
+        </div>
+
+        <div class="grid-x">
+          <span class="cell shrink orange-muted medium-margin-right">{{fa-icon 'share-alt' size='3x' fixedWidth=true}}</span>
+          <span class="cell auto">
+            <h2 class="header-medium large-margin-bottom">Share &amp; collaborate on your project with a unique URL</h2>
+          </span>
+        </div>
+
+        <div class="grid-x">
+          <span class="cell shrink gray medium-margin-right">{{fa-icon 'print' size='3x' fixedWidth=true}}</span>
+          <span class="cell auto">
+            <h2 class="header-medium large-margin-bottom">Print your maps to paper or download and save them as PDFs</h2>
+          </span>
+        </div>
 
       </div>
     </div>

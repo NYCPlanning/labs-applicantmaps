@@ -1,5 +1,5 @@
 import { action } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import BaseClass from './-type';
 
@@ -20,6 +20,11 @@ export const underlyingZoningLabelsLayer = {
     'symbol-placement': 'line',
     'text-field': '{label}',
     'text-size': 16,
+    'text-font': [
+      'match', ['get', 'textFont'], 'bold', // condition
+      ['literal', ['Open Sans Bold', 'Arial Unicode MS Bold']], // match
+      ['literal', ['Open Sans Regular', 'Arial Unicode MS Regular']], // default
+    ],
     visibility: 'visible',
     'symbol-avoid-edges': false,
     'text-offset': [
@@ -209,8 +214,8 @@ const labelOptions = [
 ];
 
 export default class UnderlyingZoningComponent extends BaseClass {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     this.fetchCanonical();
   }

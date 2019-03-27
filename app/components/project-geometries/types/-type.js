@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 
 export default class TypeBaseClass extends Component {
   @service
@@ -10,5 +10,7 @@ export default class TypeBaseClass extends Component {
     if (draw) draw.deleteAll();
 
     super.willDestroyElement(...args);
+
+    this.set('isReady', false);
   }
 }

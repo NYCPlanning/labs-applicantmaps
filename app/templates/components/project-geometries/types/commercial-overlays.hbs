@@ -1,15 +1,14 @@
 {{#if isReady}}
-  {{#component modeComponent as |editMode|}}
+  {{#component modeComponent directSelectMode='direct_select_rezoning' as |editMode|}}
     {{editMode.feature-label-form
-        options=labelOptions}}
+        options=labelOptions
+        canAddNewDistricts=false}}
     {{editMode.annotations}}
   {{/component}}
 {{/if}}
 
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <div class="fade-in-on-load text-small">
-
-    {{back-to-dashboard-button model=model}}
 
     <h1 class="header-large small-margin-bottom">
       Rezoning:
@@ -27,15 +26,25 @@
     <hr />
 
     <p>Overlays are usually drawn to the <strong>lot boundary</strong> (not the street centerline).</p>
-    <p><img src="/img/gif-commercial-overlays.gif" alt="Draw Commercial Overlays" class="shadowed" /></p>
 
-    <hr />
+    <p><img src="/img/how-to--zoning--commercial-overlay.gif" alt="Draw Commercial Overlays" class="shadowed" /></p>
 
-    {{#project-geometries/utils/button
-      enabled=isReadyToProceed
-      handleClick=(action 'calculateRezoningOnSave')}}
-      Save
-      <small style="display:block;line-height:1.75;">Commercial Overlays</small>
-    {{/project-geometries/utils/button}}
+    <hr class="wizard-navigation-divider" />
+
+    <div class="grid-x wizard-navigation">
+      {{yield}}
+      <div class="cell auto">
+        {{#project-geometries/utils/button
+          enabled=isReadyToProceed
+          handleClick=(action 'calculateRezoningOnSave')}}
+          {{#if (eq model.project.currentStep.step 'complete')}}
+            Save
+          {{else}}
+            Next {{fa-icon 'arrow-right' fixedWidth=true}}
+          {{/if}}
+        {{/project-geometries/utils/button}}
+      </div>
+    </div>
+
   </div>
 {{/ember-wormhole}}

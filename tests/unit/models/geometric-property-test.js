@@ -19,4 +19,40 @@ module('Unit | Model | geometric property', function(hooks) {
 
     assert.ok(model);
   });
+
+  test('it splits up a feature collcetion passed to the "data" attr', async function(assert) {
+    const store = this.owner.lookup('service:store');
+    const project = store.createRecord('project', {});
+    const model = store.createRecord('geometric-property', {
+      geometryType: 'developmentSite',
+      proposedGeometry: randomPolygon(1),
+      project,
+    });
+
+    model.set('data', {
+      type: 'FeatureCollection',
+      features: [{
+        type: 'Feature',
+        properties: {
+          'meta:mode': 'draw_annotations:linear',
+          label: '29 ft',
+        },
+        geometry: {
+          coordinates: [
+            [
+              -73.91311260409391,
+              38.75817100752687,
+            ],
+            [
+              -73.91314440749528,
+              40.75808962172928,
+            ],
+          ],
+          type: 'LineString',
+        },
+      }],
+    });
+
+    assert.equal(model.get('annotations.features.firstObject.properties.label'), '729590 ft');
+  });
 });

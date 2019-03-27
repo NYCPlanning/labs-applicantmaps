@@ -1,25 +1,23 @@
 import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import DefaultMapboxDrawStyles from '@mapbox/mapbox-gl-draw/src/lib/theme';
 import { next } from '@ember/runloop';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 import { action, computed } from '@ember-decorators/object';
 import { setProperties } from '@ember/object';
-import AnnotationsMode, { annotatable } from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/mode';
+import AnnotationsMode,
+{
+  CustomDirectSelect,
+  CustomDirectSelectForRezoning,
+  annotatable,
+} from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/mode';
 import AnnotationsStyles from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/styles';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
-const DirectSelectUndraggable = MapboxDraw.modes.direct_select;
-
-DirectSelectUndraggable.onFeature = function() {
-  // Enable map.dragPan when user clicks on feature, overrides ability to drag shape
-  this.map.dragPan.enable();
-};
 
 // extend styles
 const styles = [...AnnotationsStyles, ...DefaultMapboxDrawStyles].uniqBy('id');
-const AnnotationsDrawPoint = { ...annotatable(MapboxDraw.modes.draw_point) };
+const AnnotationsDrawPointMode = { ...annotatable(MapboxDraw.modes.draw_point) };
 
 export const DefaultDraw = MapboxDraw.bind(null, {
   displayControlsDefault: false,
@@ -27,20 +25,23 @@ export const DefaultDraw = MapboxDraw.bind(null, {
     polygon: true,
     trash: true,
   },
-  modes: Object.assign({
-    direct_select_undraggable: DirectSelectUndraggable,
+  modes: Object.assign(MapboxDraw.modes, {
+    direct_select_rezoning: CustomDirectSelectForRezoning,
+    direct_select: CustomDirectSelect,
     'draw_annotations:linear': AnnotationsMode, // These are identical because they function the same
     'draw_annotations:curved': AnnotationsMode, // but only really need to be named differently
     'draw_annotations:square': AnnotationsMode,
-    'draw_annotations:label': AnnotationsDrawPoint,
-    'draw_annotations:centerline': AnnotationsDrawPoint,
-  }, MapboxDraw.modes),
+    'draw_annotations:label': AnnotationsDrawPointMode,
+    'draw_annotations:centerline': AnnotationsMode,
+    // duplicate mode with distinct name  to avoid `skipToDirectSelect` trigger when we switch to simple_select for delete
+    simple_select_delete: MapboxDraw.modes.simple_select,
+  }),
   styles,
 });
 
 export default class MapboxGlDraw extends Component {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     const {
       draw = new DefaultDraw(),
@@ -85,7 +86,7 @@ export default class MapboxGlDraw extends Component {
   // @required
   // should be the ember-mapbox-gl contextual object
   // passed from within a mapbox-gl component block
-  @argument
+  // // @argument
   map;
 
   @computed
@@ -99,7 +100,9 @@ export default class MapboxGlDraw extends Component {
   deleteAll() {
     const drawInstance = this.get('drawInstance');
 
-    if (!this.get('isDestroying')) {
+    // unclear why, but unpredictably `deleteAll` is not available on the mapbox-gl-draw
+    // instance. Does the method not become available until something is added? Who knows.
+    if (!this.get('isDestroyed') && !this.get('isDestroying') && drawInstance.deleteAll) {
       drawInstance.deleteAll();
     }
   }
@@ -116,6 +119,7 @@ export default class MapboxGlDraw extends Component {
     }
   }
 
+  // TODO: clarify the purpose of this
   shouldReset(geometricProperty) {
     if (!isEmpty(geometricProperty)) {
       this.add(geometricProperty);

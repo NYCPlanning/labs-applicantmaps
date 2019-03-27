@@ -1,5 +1,4 @@
 import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
 import { action } from '@ember-decorators/object';
 
 const geocodedLayer = {
@@ -37,7 +36,7 @@ const geocodedLayer = {
 };
 
 export default class SearchHandlerComponent extends Component {
-  @argument
+  // // @argument
   map;
 
   // search
@@ -50,7 +49,7 @@ export default class SearchHandlerComponent extends Component {
     const { map: { mapInstance } } = this;
 
     this.set('geocodedFeature', { type: 'geojson', data: geometry });
-    mapInstance.flyTo({ center: coordinates, zoom: 16 });
+    mapInstance.flyTo({ center: coordinates, zoom: 18 });
   }
 
   // search

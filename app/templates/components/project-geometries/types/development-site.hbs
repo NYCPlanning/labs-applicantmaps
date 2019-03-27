@@ -1,7 +1,6 @@
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <div class="fade-in-on-load text-small">
 
-    {{back-to-dashboard-button model=model}}
 
     <h1 class="header-large small-margin-bottom">Development Site</h1>
 
@@ -21,13 +20,13 @@
           </span>
           polygon tool to add a new shape
         </li>
-        <li>Complete a new shape by clicking its final vertex a second time</li>
+        <li>Complete a new shape by clicking its final point a second time</li>
       </ul>
 
       <p class="text-weight-bold small-margin-bottom">Editing existing shapes:</p>
       <ul>
-        <li>Edit an existing shape by selecting it and dragging its vertices</li>
-        <li>Add a vertex by clicking the midpoint of a line</li>
+        <li>Edit an existing shape by selecting it and dragging its points</li>
+        <li>Add a new point by clicking the midpoint of a line</li>
         <li>
           Use the
           <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
@@ -35,7 +34,7 @@
             {{fa-icon 'square' transform='grow-8' class='white'}}
             {{fa-icon 'trash-alt' prefix='far' transform='shrink-2'}}
           </span>
-          trash button to delete a selected shape or vertex
+          trash button to delete a selected shape or point
         </li>
       </ul>
     {{else}}
@@ -47,22 +46,31 @@
         <span class="cell shrink" style="padding-right:0.25rem;">{{fa-icon 'hand-pointer' prefix='far' fixedWidth=true}}</span>
         <span class="cell auto">Select lots to add them to your Development Site (selected lots will be yellow)</span>
       </p>
-      <p><img src="/img/gif-select-lot-development-site.gif" alt="Select Lot Project Area" class="shadowed" /></p>
     {{/if}}
 
-    <hr />
-
-    {{#project-geometries/utils/button
-      enabled=isReadyToProceed
-      handleClick=(action save)}}
-      Save Development Site
-    {{/project-geometries/utils/button}}
+    <p><img src={{ if (eq mode 'draw') '/img/how-to--draw-manually.gif' '/img/how-to--select-lots.gif' }} alt="How to define a Development Site" class="shadowed" /></p>
 
     {{#component modeComponent as |editMode|}}
       {{editMode.toggle-mode-button
         isReadyToProceed=isReadyToProceed}}
     {{/component}}
+
+    <hr class="wizard-navigation-divider" />
+
+    <div class="grid-x wizard-navigation">
+      {{yield}}
+      <div class="cell auto">
+        {{#project-geometries/utils/button
+          enabled=isReadyToProceed
+          handleClick=(action save)}}
+          {{#if (eq model.project.currentStep.step 'complete')}}
+            Save
+          {{else}}
+            Next {{fa-icon 'arrow-right' fixedWidth=true}}
+          {{/if}}
+        {{/project-geometries/utils/button}}
+      </div>
+    </div>
+
   </div>
 {{/ember-wormhole}}
-
-{{yield}}

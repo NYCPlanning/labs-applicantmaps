@@ -1,13 +1,26 @@
 import Component from '@ember/component';
 import { get } from '@ember/object';
-import { action, computed } from '@ember-decorators/object';
-import { argument } from '@ember-decorators/argument';
+import { action, computed, observes } from '@ember-decorators/object';
+import { inject as service } from '@ember-decorators/service';
 import { containsNumber } from '@turf/invariant';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/geometric-property';
 
+export function currentFeatureIsComplete(currentMode, feature) {
+  if (currentMode === 'direct_select_rezoning' && feature) {
+    if (feature.geometry.type === 'Polygon') {
+      if (!feature.properties.label) {
+        // set special polygon feature flag, used to require used to label their polygons in draw mode
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
 export default class DrawComponent extends Component {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     this.callbacks = {
       drawState: () => this.drawStateCallback(),
@@ -32,21 +45,43 @@ export default class DrawComponent extends Component {
   // upstream set to model
   drawStateCallback() {
     const drawnFeatures = this.get('drawnFeatures');
-
     this.set('geometricProperty', drawnFeatures);
   }
 
-  // update which is the selected feature
+
+  // WARNING: this will fire when geometricProp gets updated.
+  // This may have unintended side effects.
+  @observes('geometricProperty')
+  updateDrawState() {
+    const { draw } = this.get('map');
+
+    draw.shouldReset(this.get('geometricProperty'));
+  }
+
+  // Simply gets what new feature is selected and sets it to the class
+  // disallows multiply selectable polygon and line features
+  // point features can still be selected as groups
   selectedFeatureCallback() {
     const { draw: { drawInstance: draw }, mapInstance } = this.get('map');
     const { features: [firstSelectedFeature] } = draw.getSelected();
     const [selectedId] = draw.getSelectedIds();
 
     if (firstSelectedFeature) {
+      /* Bring properties.missingLabel up to top-level property
+       * Must be top-level for watching in the feature-label-form,
+       * but cannot be added as top-level in the overriden mapbox-gl-draw mode event
+       * This sucks, but I could not get the computed property to properly track the
+       * nested property value.
+       * (See https://github.com/NYCPlanning/labs-applicantmaps/issues/417)
+       */
+      if ('missingLabel' in firstSelectedFeature.properties) {
+        firstSelectedFeature.missingLabel = firstSelectedFeature.properties.missingLabel;
+      }
       this.set('selectedFeature', { type: 'FeatureCollection', features: [firstSelectedFeature] });
 
       const mode = get(firstSelectedFeature, 'properties.meta:mode');
 
+      // what is this doing? why do we need to manually alter filters?
       if (mode) {
         const originalFilter = mapInstance
           .getFilter('gl-draw-polygon-midpoint.cold');
@@ -71,8 +106,10 @@ export default class DrawComponent extends Component {
 
     // can't direct select a point
     if (selectedID && type !== 'Point' && mode === 'simple_select') {
-      draw.changeMode('direct_select', { featureId: selectedID });
+      draw.changeMode(this.get('directSelectMode'), { featureId: selectedID });
     }
+
+    this.set('tool', mode);
   }
 
   // Get drawn features, if they're valid
@@ -92,39 +129,82 @@ export default class DrawComponent extends Component {
     };
   }
 
+  @computed('tool')
+  get currentTool() {
+    return this.get('tool');
+  }
+
+  // @argument
+  tool;
+
   // @required
   // mapbox-gl map context with draw instance
-  @argument
+  // @argument
   map;
 
   // @type(FeatureCollection)
-  @argument
+  // @argument
   geometricProperty;
+
+  // @argument
+  directSelectMode = 'direct_select';
 
   // @type(FeatureCollection)
   selectedFeature = EmptyFeatureCollection;
 
+  @service
+  notificationMessages;
+
+  /*
+   * Handles trash button click in draw mode
+   *
+   * Uses simple select to enable `draw.trash()` for full feature deletion, so we
+   * don't have to call internal `draw.delete()` function. This requires extra checks that
+   * points selected for deletion do not break their owning features before calling
+   * `draw.trash()`.  If a selected point would break the feature, instead the entire
+   * feature is selected for deletion.
+   */
   @action
   handleTrashButtonClick() {
     const { draw: { drawInstance: draw } } = this.get('map');
-    const selectedFeature = draw.getSelectedIds();
-    const { features: [feature] } = draw.getSelectedPoints();
+    const { features: [selectedFeaturePoint] } = draw.getSelectedPoints();
+    const { features: [selectedFeature] } = draw.getSelected();
 
-    if (feature) {
-      draw.trash();
-    } else {
-      draw.delete(selectedFeature);
+    // if user attempts to delete a vertex from a line
+    // or attempts to delete a vertex that renders a polygon invalid (i.e. < 4 vertices)
+    // then select the entire Feature for deletion in simple_select_delete mode
+    if (selectedFeaturePoint
+        && (selectedFeature.geometry.type === 'LineString'
+          || (selectedFeature.geometry.type === 'Polygon'
+            && selectedFeature.geometry.coordinates[0].length < 5))) {
+      draw.changeMode('simple_select_delete', { featureIds: [selectedFeature.id] });
     }
 
+    // if user selects entire Feature(s) (polygon, line, or point(s)) for deletion
+    // then switch to simple_select_delete mode (cannot delete entire Feature in direct_select mode)
+    if (!selectedFeaturePoint && !['simple_select', 'simple_select_delete'].includes(draw.getMode())) {
+      const selectedFeatureIds = draw.getSelectedIds();
+      draw.changeMode('simple_select_delete', { featureIds: selectedFeatureIds });
+    }
+
+    draw.trash();
+    this.set('selectedFeature', EmptyFeatureCollection);
     this.drawStateCallback();
   }
 
   @action
-  updateSelectedFeature(label) {
+  updateSelectedFeature(property, value) {
     const { draw: { drawInstance: draw } } = this.get('map');
     const { features: [firstFeature] } = this.get('selectedFeature');
 
-    draw.setFeatureProperty(firstFeature.id, 'label', label);
+
+    draw.setFeatureProperty(firstFeature.id, property, value);
+
+    // update special polygon feature flag used to require users to label their polygons
+    if (property === 'label') {
+      this.set('selectedFeature.features.firstObject.missingLabel', false);
+      draw.setFeatureProperty(firstFeature.id, 'missingLabel', false);
+    }
 
     // this triggers an update that renders the new label as mutated above to show up in the selected feature
     // see https://github.com/mapbox/mapbox-gl-draw/blob/master/docs/API.md#events
@@ -133,12 +213,39 @@ export default class DrawComponent extends Component {
 
   @action
   handleDrawButtonClick() {
+    const currentMode = this.map.draw.drawInstance.getMode();
+    const { features: [firstFeature] } = this.get('selectedFeature') || { features: [] };
+
+    if (!currentFeatureIsComplete(currentMode, firstFeature)) {
+      // set special polygon feature flag, used to require used to label their polygons in draw mode
+      this.set('selectedFeature.features.firstObject.missingLabel', true);
+      // block mode switch
+      return;
+    }
+
     this.map.draw.drawInstance.changeMode('draw_polygon');
+    this.set('tool', 'draw_polygon');
   }
 
   @action
   handleAnnotation(mode) {
+    // require a user to finish drawing their polygon
+    const currentMode = this.map.draw.drawInstance.getMode();
+    if (currentMode === 'draw_polygon') {
+      return;
+    }
+
+    // require a user to label their finished polygon
+    const { features: [firstFeature] } = this.get('selectedFeature') || { features: [] };
+    if (!currentFeatureIsComplete(currentMode, firstFeature)) {
+      // set special polygon feature flag, used to require used to label their polygons in draw mode
+      this.set('selectedFeature.features.firstObject.missingLabel', true);
+      // block mode switch
+      return;
+    }
+
     this.map.draw.drawInstance.changeMode(mode);
+    this.set('tool', mode);
   }
 
   /* =================================================

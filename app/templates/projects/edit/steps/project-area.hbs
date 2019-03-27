@@ -1,9 +1,10 @@
 <nav class="step-nav">
   {{#link-to 'projects.edit.steps.development-site'
     tagName='span'
-    class='button tiny gray no-margin'
+    class='button small gray small-margin-bottom'
+    data-test-step-back=""
   }}
-    {{fa-icon 'long-arrow-alt-left'}} Back
+    {{fa-icon 'arrow-left'}} Back
   {{/link-to}}
 </nav>
 
@@ -102,7 +103,7 @@
       class='button large'
     }}
       Next
-      {{fa-icon 'long-arrow-alt-right' fixedWidth=true transform='right-3 grow-3'}}
+      {{fa-icon 'arrow-right' fixedWidth=true}}
     {{/link-to}}
   </p>
 

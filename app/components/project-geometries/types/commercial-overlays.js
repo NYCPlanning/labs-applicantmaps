@@ -1,5 +1,5 @@
 import { action } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import BaseClass from './-type';
 
@@ -137,14 +137,15 @@ export const c25Layer = {
 };
 
 export default class CommercialOverlayComponent extends BaseClass {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     this.fetchCanonical();
   }
 
   // this is wrong because it doesn't honor the correct target
   // it should be using the model's API, not passing stuff in directly
+  // this should also probably just happen in the API, when it gets posted!
   async fetchCanonical() {
     if (isEmpty(this.get('model.canonical')) && isEmpty(this.get('model.proposedGeometry'))) {
       await this.get('model').setCanonical();

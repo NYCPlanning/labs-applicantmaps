@@ -1,7 +1,8 @@
 import DS from 'ember-data';
 import { attr, hasMany } from '@ember-decorators/data';
 import { computed } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
+import { not, alias } from '@ember-decorators/object/computed';
+import { inject as service } from '@ember-decorators/service';
 import turfBbox from '@turf/bbox';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import wizard from 'labs-applicant-maps/utils/wizard';
@@ -20,19 +21,38 @@ export const EmptyFeatureCollection = {
   }],
 };
 
+// (property,key) basic checks
 const hasAnswered = property => property === true || property === false;
 const hasFilledOut = property => !isEmpty(property);
+const hasFilledOutAndProposedDifferingZoning = function(property, key) {
+  return !isEmpty(property) && this.get(`${key}Model.proposedDiffersFromCanonical`);
+};
+
+// checks that the schema key isn't dirty by referencing
+// the _model_ for the geometry type. There are computed
+// properties below that return the model by doing a findBy
+const isClean = function(property, key) {
+  return !this.get(`${key}Model`).hasDirtyAttributes;
+};
+
+// aggregate checks
 const requiredIf = function(question, conditionalTest = hasAnswered) {
-  return function(property) {
-    return this.get(question) ? conditionalTest(property) : true;
+  return function(...args) {
+    return this.get(question) ? conditionalTest.bind(this)(...args) : true;
+  };
+};
+const and = function(...checks) {
+  return function(property, key) {
+    return checks.every(check => check.bind(this)(property, key));
   };
 };
 
+// TODO add steps for the real edit pages bt the steps
 export const projectProcedure = [
   {
     step: 'project-creation',
     routing: {
-      route: 'projects.new',
+      route: 'projects.edit',
     },
     conditions: {
       projectName: hasFilledOut,
@@ -44,7 +64,18 @@ export const projectProcedure = [
       route: 'projects.edit.steps.development-site',
     },
     conditions: {
-      developmentSite: hasFilledOut,
+      needDevelopmentSite: hasFilledOut,
+    },
+  },
+  {
+    step: 'development-site-create',
+    routing: {
+      route: 'projects.edit.geometry-edit',
+      mode: 'draw',
+      type: 'development-site',
+    },
+    conditions: {
+      developmentSite: and(hasFilledOut, isClean),
     },
   },
   {
@@ -54,7 +85,18 @@ export const projectProcedure = [
     },
     conditions: {
       needProjectArea: hasAnswered,
-      projectArea: requiredIf('needProjectArea', hasFilledOut),
+    },
+  },
+  {
+    step: 'project-area-create',
+    routing: {
+      route: 'projects.edit.geometry-edit',
+      mode: 'draw',
+      type: 'project-area',
+    },
+    conditions: {
+      needProjectArea: hasAnswered,
+      projectArea: requiredIf('needProjectArea', and(hasFilledOut, isClean)),
     },
   },
   {
@@ -79,7 +121,7 @@ export const projectProcedure = [
     conditions: {
       needRezoning: hasAnswered,
       needUnderlyingZoning: requiredIf('needRezoning', hasAnswered),
-      underlyingZoning: requiredIf('needUnderlyingZoning', hasFilledOut),
+      underlyingZoning: requiredIf('needUnderlyingZoning', and(hasFilledOutAndProposedDifferingZoning, isClean)),
     },
   },
   {
@@ -92,7 +134,7 @@ export const projectProcedure = [
     conditions: {
       needRezoning: hasAnswered,
       needCommercialOverlay: requiredIf('needRezoning', hasAnswered),
-      commercialOverlays: requiredIf('needCommercialOverlay', hasFilledOut),
+      commercialOverlays: requiredIf('needCommercialOverlay', and(hasFilledOutAndProposedDifferingZoning, isClean)),
     },
   },
   {
@@ -105,11 +147,20 @@ export const projectProcedure = [
     conditions: {
       needRezoning: hasAnswered,
       needSpecialDistrict: requiredIf('needRezoning', hasAnswered),
-      specialPurposeDistricts: requiredIf('needSpecialDistrict', hasFilledOut),
+      specialPurposeDistricts: requiredIf('needSpecialDistrict', and(hasFilledOutAndProposedDifferingZoning, isClean)),
     },
   },
   {
     step: 'complete',
+    routing: {
+      route: 'projects.edit.steps.complete',
+    },
+    conditions: {
+      hasCompletedWizard: hasFilledOut,
+    },
+  },
+  {
+    step: 'dashboard',
     routing: {
       label: 'complete',
       route: 'projects.show',
@@ -121,17 +172,20 @@ const procedureKeys = projectProcedure
   .reduce((acc, { conditions }) => acc.concat(conditions ? Object.keys(conditions) : []), []);
 
 export default class Project extends Model {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     // add geometries of each type if they don't exist
+    // this really should happen on the server
     GEOMETRY_TYPES.forEach((geometryType) => {
       if (!this.get('geometricProperties').findBy('geometryType', geometryType)) {
+        const geometricProp = this.store.createRecord('geometric-property', {
+          geometryType,
+          project: this,
+        });
+
         this.get('geometricProperties')
-          .pushObject(this.store.createRecord('geometric-property', {
-            geometryType,
-            project: this,
-          }));
+          .pushObject(geometricProp);
       }
     });
   }
@@ -165,6 +219,8 @@ export default class Project extends Model {
   @attr('number') stepLabel
 
   // ******** REQUIRED ANSWERS ********
+  @attr('boolean', { allowNull: true, defaultValue: null }) needDevelopmentSite;
+
   @attr('boolean', { allowNull: true, defaultValue: null }) needProjectArea;
 
   @attr('boolean', { allowNull: true, defaultValue: null }) needRezoning;
@@ -175,6 +231,8 @@ export default class Project extends Model {
 
   @attr('boolean', { allowNull: true, defaultValue: null }) needSpecialDistrict;
 
+  @attr('boolean', { allowNull: true, defaultValue: null }) hasCompletedWizard;
+
   // ******** GEOMETRIES ********
   /**
    *
@@ -182,47 +240,64 @@ export default class Project extends Model {
    * FeatureCollection of polygons or multipolygons
    */
 
-  @computed('geometricProperties.@each.proposedGeometry')
-  get developmentSite() {
+  // questions:
+  // can we have these return the model? Then in the wizard, use dot notation
+  // too get the proposedGeometry?
+  // how are these setters used? used in tests, they could remain the same actually
+  // we need to change these and create new computeds that only return the model
+  @computed('geometricProperties.@each.{proposedGeometry,hasDirtyAttributes}')
+  get developmentSiteModel() {
     return this.get('geometricProperties')
-      .findBy('geometryType', 'developmentSite')
-      .get('proposedGeometry');
+      .findBy('geometryType', 'developmentSite');
   }
 
-  @computed('geometricProperties.@each.proposedGeometry')
-  get projectArea() {
+  @computed('geometricProperties.@each.{proposedGeometry,hasDirtyAttributes}')
+  get projectAreaModel() {
     return this.get('geometricProperties')
-      .findBy('geometryType', 'projectArea')
-      .get('proposedGeometry');
+      .findBy('geometryType', 'projectArea');
   }
 
-  @computed('geometricProperties.@each.proposedGeometry')
-  get underlyingZoning() {
+  @computed('geometricProperties.@each.{proposedGeometry,hasDirtyAttributes}')
+  get underlyingZoningModel() {
     return this.get('geometricProperties')
-      .findBy('geometryType', 'underlyingZoning')
-      .get('proposedGeometry');
+      .findBy('geometryType', 'underlyingZoning');
   }
 
-  @computed('geometricProperties.@each.proposedGeometry')
-  get commercialOverlays() {
+  @computed('geometricProperties.@each.{proposedGeometry,hasDirtyAttributes}')
+  get commercialOverlaysModel() {
     return this.get('geometricProperties')
-      .findBy('geometryType', 'commercialOverlays')
-      .get('proposedGeometry');
+      .findBy('geometryType', 'commercialOverlays');
   }
 
-  @computed('geometricProperties.@each.proposedGeometry')
-  get specialPurposeDistricts() {
+  @computed('geometricProperties.@each.{proposedGeometry,hasDirtyAttributes}')
+  get specialPurposeDistrictsModel() {
     return this.get('geometricProperties')
-      .findBy('geometryType', 'specialPurposeDistricts')
-      .get('proposedGeometry');
+      .findBy('geometryType', 'specialPurposeDistricts');
   }
 
-  @computed('geometricProperties.@each.proposedGeometry')
-  get rezoningArea() {
+  @computed('geometricProperties.@each.{proposedGeometry,hasDirtyAttributes}')
+  get rezoningAreaModel() {
     return this.get('geometricProperties')
-      .findBy('geometryType', 'rezoningArea')
-      .get('proposedGeometry');
+      .findBy('geometryType', 'rezoningArea');
   }
+
+  @alias('developmentSiteModel.proposedGeometry')
+  developmentSite;
+
+  @alias('projectAreaModel.proposedGeometry')
+  projectArea;
+
+  @alias('underlyingZoningModel.proposedGeometry')
+  underlyingZoning;
+
+  @alias('commercialOverlaysModel.proposedGeometry')
+  commercialOverlays;
+
+  @alias('specialPurposeDistrictsModel.proposedGeometry')
+  specialPurposeDistricts;
+
+  @alias('rezoningAreaModel.proposedGeometry')
+  rezoningArea;
 
   async setRezoningArea() {
     const rezoningArea = this.get('geometricProperties').findBy('geometryType', 'rezoningArea');
@@ -231,18 +306,31 @@ export default class Project extends Model {
   }
 
   // ******** COMPUTING THE CURRENT STEP FOR ROUTING ********
-
-  @computed(...procedureKeys)
+  @computed(...procedureKeys, 'isClean')
   get currentStep() {
-    return wizard(projectProcedure, this);
+    const currStep = wizard(projectProcedure, this);
+
+    return currStep;
   }
+
+  @computed('currentStep')
+  get previousStep() {
+    const { step } = this.get('currentStep');
+    const previousStepIndex = projectProcedure.findIndex(({ step: thisStep }) => thisStep === step) - 1;
+    const previousStep = projectProcedure[previousStepIndex];
+
+    return previousStep;
+  }
+
+  @not('hasDirtyAttributes') isClean;
 
   // ******** CHECKS AND METHODS FOR REZONING QUESTIONS ********
   setRezoningFalse() {
     this.set('needRezoning', false);
-    this.set('needUnderlyingZoning', null);
-    this.set('needCommercialOverlay', null);
-    this.set('needSpecialDistrict', null);
+
+    this.set('needUnderlyingZoning', false);
+    this.set('needCommercialOverlay', false);
+    this.set('needSpecialDistrict', false);
   }
 
   @computed('needRezoning', 'needUnderlyingZoning', 'needCommercialOverlay', 'needSpecialDistrict')
@@ -272,12 +360,13 @@ export default class Project extends Model {
   get projectGeometryBoundingBox() {
     // build a geojson FeatureCollection from all three project geoms
     // const featureCollections = this
-    //   .getProperties('developmentSite.proposedGeometry', 'projectArea.proposedGeometry', 'rezoningArea.proposedGeometry');
 
     const featureCollections = this
       .get('geometricProperties')
-      .filter(geometricProperty => geometricProperty.get('geometryType') === 'developmentSite'
-        || geometricProperty.get('geometryType') === 'projectArea')
+      .filter((geometricProperty) => {
+        const geometryType = geometricProperty.get('geometryType');
+        return ['developmentSite', 'projectArea', 'rezoningArea'].indexOf(geometryType) > -1;
+      })
       .mapBy('proposedGeometry');
 
     // flatten feature collections

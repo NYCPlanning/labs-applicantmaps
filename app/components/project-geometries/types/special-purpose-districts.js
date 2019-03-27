@@ -1,6 +1,6 @@
 import { action } from '@ember-decorators/object';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 import BaseClass from './-type';
 
 // Proposed Special Purpose Districts
@@ -19,7 +19,13 @@ export const specialPurposeDistrictsLabelsLayer = {
   layout: {
     'symbol-placement': 'point',
     'text-field': '{label}',
-    'text-size': 12,
+    'text-size': 16,
+    'text-font': [
+      'match',
+      ['get', 'textFont'],
+      'bold', ['literal', ['Open Sans Bold', 'Arial Unicode MS Bold']],
+      ['literal', ['Open Sans Regular', 'Arial Unicode MS Regular']],
+    ],
     visibility: 'visible',
     'symbol-avoid-edges': false,
     'text-offset': [
@@ -44,8 +50,8 @@ export const specialPurposeDistrictsLabelsLayer = {
 };
 
 export default class specialPurposeDistrictsComponent extends BaseClass {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     this.fetchCanonical();
   }

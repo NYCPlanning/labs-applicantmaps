@@ -1,5 +1,5 @@
 {{#if isReady}}
-  {{#component modeComponent as |editMode|}}
+  {{#component modeComponent directSelectMode='direct_select_rezoning' as |editMode|}}
     {{editMode.feature-label-form}}
     {{editMode.annotations}}
   {{/component}}
@@ -8,7 +8,6 @@
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <div class="fade-in-on-load text-small">
 
-    {{back-to-dashboard-button model=model}}
 
     <h1 class="header-large small-margin-bottom">
       Rezoning:
@@ -22,15 +21,25 @@
     <hr />
 
     <p>Special Purpose Districts usually extend to the <strong>street centerline</strong> (not lot boundaries).</p>
-    <p><img src="/img/gif-special-purpose.gif" alt="Draw Special Purpose Districts" class="shadowed" /></p>
 
-    <hr />
+    <p><img src="/img/how-to--zoning--special-purpose.gif" alt="Draw Special Purpose Districts" class="shadowed" /></p>
 
-    {{#project-geometries/utils/button
-      enabled=isReadyToProceed
-      handleClick=(action 'calculateRezoningOnSave')}}
-      Save
-      <small style="display:block;line-height:1.75;">Special Purpose Districts</small>
-    {{/project-geometries/utils/button}}
+    <hr class="wizard-navigation-divider" />
+
+    <div class="grid-x wizard-navigation">
+      {{yield}}
+      <div class="cell auto">
+        {{#project-geometries/utils/button
+          enabled=isReadyToProceed
+          handleClick=(action 'calculateRezoningOnSave')}}
+          {{#if (eq model.project.currentStep.step 'complete')}}
+            Save
+          {{else}}
+            Next {{fa-icon 'arrow-right' fixedWidth=true}}
+          {{/if}}
+        {{/project-geometries/utils/button}}
+      </div>
+    </div>
+
   </div>
 {{/ember-wormhole}}
