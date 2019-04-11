@@ -1,6 +1,8 @@
 'use strict';
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const { lstatSync, readdirSync } = require('fs');
+const { join } = require('path');
 
 module.exports = function (defaults) {
   const app = new EmberApp(defaults, {
@@ -32,6 +34,18 @@ module.exports = function (defaults) {
               test: /\.mjs$/,
               include: /node_modules\/@turf\/difference/,
               type: 'javascript/auto',
+            },
+            {
+              test: /\.m?js$/,
+              use: {
+                loader: require.resolve('babel-loader'),
+                options: {
+                  presets: [['@babel/preset-env', { targets: require('./config/targets') }]],
+                },
+              },
+              include: readdirSync('node_modules')
+                .map((name) => join(__dirname, 'node_modules', name))
+                .filter((source) => lstatSync(source).isDirectory()),
             },
           ],
         },
