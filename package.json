@@ -102,6 +102,7 @@
     "@turf/voronoi": "5.1.5",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
     "cartobox-promises-utility": "0.0.1",
+    "ember-browser-checker": "^0.0.6",
     "ember-data": "~3.4.0",
     "ember-load-initializers": "^1.1.0",
     "foundation-sites": "^6.3.1",
