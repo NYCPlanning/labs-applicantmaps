@@ -1,7 +1,7 @@
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <div class="fade-in-on-load text-small">
 
-    
+
     <h1 class="header-large small-margin-bottom">Development Site</h1>
 
     <p>The Development Site refers to the zoning lot(s) you plan to develop, facilitated by your requested land use actions.</p>
@@ -48,14 +48,16 @@
       </p>
     {{/if}}
 
+    <p><img src={{ if (eq mode 'draw') '/img/how-to--draw-manually.gif' '/img/how-to--select-lots.gif' }} alt="How to define a Development Site" class="shadowed" /></p>
+
     {{#component modeComponent as |editMode|}}
       {{editMode.toggle-mode-button
         isReadyToProceed=isReadyToProceed}}
     {{/component}}
 
-    <hr />
+    <hr class="wizard-navigation-divider" />
 
-    <div class="grid-x">
+    <div class="grid-x wizard-navigation">
       {{yield}}
       <div class="cell auto">
         {{#project-geometries/utils/button
@@ -64,14 +66,11 @@
           {{#if (eq model.project.currentStep.step 'complete')}}
             Save
           {{else}}
-            Next {{fa-icon 'arrow-right'}}
+            Next {{fa-icon 'arrow-right' fixedWidth=true}}
           {{/if}}
         {{/project-geometries/utils/button}}
       </div>
     </div>
 
-    <hr />
-    
-    <p><img src={{ if (eq mode 'draw') '/img/gif-draw-development-site.gif' '/img/gif-select-lot-development-site.gif' }} alt="Select Lot Development Site" class="shadowed" /></p>
   </div>
 {{/ember-wormhole}}

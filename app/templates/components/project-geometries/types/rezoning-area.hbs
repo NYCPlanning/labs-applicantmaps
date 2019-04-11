@@ -5,7 +5,7 @@
 {{#ember-wormhole to='geometry-type-draw-explainer'}}
   <div class="fade-in-on-load text-small">
 
-    
+
     <h1 class="header-large small-margin-bottom">Rezoning Area</h1>
     <p class="text-small">The Rezoning Area refers to all property subject to the proposed amendment to existing Zoning Districts and Boundaries. It should be graphically offset from the proposed Zoning District boundaries.</p>
 
@@ -41,9 +41,11 @@
       </li>
     </ul>
 
-    <hr />
+    <p><img src="/img/how-to--zoning--rezoning-area.gif" alt="Draw Special Purpose Districts" class="shadowed" /></p>
 
-    <div class="grid-x">
+    <hr class="wizard-navigation-divider" />
+
+    <div class="grid-x wizard-navigation">
       {{yield}}
       <div class="cell auto">
         {{#project-geometries/utils/button
@@ -52,13 +54,11 @@
           {{#if (eq model.project.currentStep.step 'complete')}}
             Save
           {{else}}
-            Next {{fa-icon 'arrow-right'}}
+            Next {{fa-icon 'arrow-right' fixedWidth=true}}
           {{/if}}
         {{/project-geometries/utils/button}}
       </div>
     </div>
 
-    <hr />
-    <p><img src="/img/gif-rezoning-area.gif" alt="Draw Special Purpose Districts" class="shadowed" /></p>
   </div>
 {{/ember-wormhole}}

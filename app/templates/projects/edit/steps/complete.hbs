@@ -1,11 +1,23 @@
+<nav class="step-nav">
+  {{#link-to 'projects.edit.steps.rezoning'
+    tagName='span'
+    class='button small gray small-margin-bottom'
+  }}
+    {{fa-icon 'arrow-left'}} Back
+  {{/link-to}}
+</nav>
+
 <h1>You've finished defining your changes.</h1>
 
-<p class="lead">Next, go to your project dashboard, where you can print or download your project maps, and review or make further changes or additions to your geometries.</p>
+<p class="lead">Next, go to your project dashboard, where you can:</p>
+<ul>
+  <li>Review your proposed changes</li>
+  <li>Make changes or additions to geometries you just created</li>
+  <li>Print and download your project maps</li>
+</ul>
 
-<div class="grid-x grid-margin-x">
-  <div class="cell medium-6 large-5 xlarge-4">
-    <span data-test-go-to-dash class='button large expanded' onclick={{ action 'goToProjectDashboard' }}>
-      Go to Project Dashboard
-    </span>
-  </div>
-</div>
+<p class="text-right">
+  <button data-test-go-to-dash class='button large' onclick={{ action 'goToProjectDashboard' }}>
+    Go to Project Dashboard {{fa-icon 'arrow-right' fixedWidth=true}}
+  </button>
+</p>
