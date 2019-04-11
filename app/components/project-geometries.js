@@ -1,68 +1,34 @@
 import Component from '@ember/component';
-import { action, computed } from '@ember-decorators/object';
+import { action } from '@ember-decorators/object';
 import mapboxgl from 'mapbox-gl';
-import { service } from '@ember-decorators/service';
-import { argument } from '@ember-decorators/argument';
 import { tagName } from '@ember-decorators/component';
-import { developmentSiteLayer } from './project-geometries/types/development-site';
-import { projectAreaLayer } from './project-geometries/types/project-area';
-import projectGeometryIcons from '../utils/project-geom-icons';
 
+// it:
+// renders the map
+// sets up a drawable map
+// invokes the types-/mode-renderer with drawable map
+export default
 @tagName('')
-export default class ProjectGeometryEditComponent extends Component {
-  @argument
+class ProjectGeometryEditComponent extends Component {
+  // required
+  // // @argument
   model;
 
-  @argument
+  // required
+  // // @argument
   type;
 
-  @argument
+  // required
+  // // @argument
   mode;
 
-  @service
-  notificationMessages;
-
-  @service
-  router;
-
-  projectGeometryIcons = projectGeometryIcons;
-
-  developmentSiteLayer = developmentSiteLayer;
-
-  projectAreaLayer = projectAreaLayer;
+  // required
+  // // @argument
+  layerGroups;
 
   /* ----------  General Map  ---------- */
-  showDrawInstructions = true;
-
-  @computed('lat', 'lng')
-  get center() {
-    return [this.get('lat'), this.get('lng')];
-  }
-
-  @computed('type')
-  get projectGeometryType() {
-    return `project-geometries/types/${this.get('type')}`;
-  }
-
-  @action
-  hideInstructions() {
-    this.set('showDrawInstructions', false);
-  }
-
-  @action
-  showInstructions() {
-    this.set('showDrawInstructions', true);
-  }
-
-  @action
-  rollbackChanges() {
-    this.get('model').rollbackAttributes();
-  }
-
   @action
   handleMapLoad(map) {
-    this.set('mapInstance', map);
-
     // setup controls
     const navigationControl = new mapboxgl.NavigationControl();
     map.addControl(navigationControl, 'top-left');
@@ -71,7 +37,7 @@ export default class ProjectGeometryEditComponent extends Component {
     const projectGeometryBoundingBox = this.get('model.projectGeometryBoundingBox');
     if (projectGeometryBoundingBox) {
       map.fitBounds(projectGeometryBoundingBox, {
-        padding: 150,
+        padding: 120,
         duration: 0,
       });
     }

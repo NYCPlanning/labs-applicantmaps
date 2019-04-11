@@ -1,55 +1,64 @@
-{{#component (concat 'project-geometries/modes/' mode)
-  map=map
-  geometricProperty=model.rezoningArea as |edit-mode|
-}}
-  {{project-geometry-renderer map=map model=model}}
-  {{#ember-wormhole to='geometry-type-draw-explainer'}}
-    <div class="fade-in-on-load text-small">
-
-      {{back-to-dashboard-button model=model}}
-
-      <h1 class="header-large small-margin-bottom">Rezoning Area</h1>
-      <p class="text-small">The Rezoning Area refers to all property subject to the proposed amendment to existing Zoning Districts and Boundaries. It should be graphically offset from the proposed Zoning District boundaries.</p>
-
-      <hr />
-
-      <p class="text-weight-bold small-margin-bottom">Adding new shapes:</p>
-      <ul class="small-margin-bottom">
-        <li>
-          Use the
-          <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
-            {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
-            {{fa-icon 'square' transform='grow-8' class='white'}}
-            {{fa-icon 'draw-polygon' transform='shrink-2'}}
-          </span>
-          polygon tool to add a new shape
-        </li>
-        <li>Complete a new shape by clicking its final vertex a second time</li>
-      </ul>
-
-      <p class="text-weight-bold small-margin-bottom">Editing existing shapes:</p>
-      <ul>
-        <li>Edit an existing shape by selecting it and dragging its vertices</li>
-        <li>Add a vertex by clicking the midpoint of a line</li>
-        <li>
-          Use the
-          <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
-            {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
-            {{fa-icon 'square' transform='grow-8' class='white'}}
-            {{fa-icon 'trash-alt' prefix='far' transform='shrink-2'}}
-          </span>
-          trash button to delete a selected shape or vertex
-        </li>
-      </ul>
-
-      <hr />
-
-      {{#edit-mode.button
-        enabled=model.hasDirtyAttributes
-        handleClick=(action 'save')}}
-        Save
-        <small style="display:block;line-height:1.75;">Rezoning Area</small>
-      {{/edit-mode.button}}
-    </div>
-  {{/ember-wormhole}}
+{{#component modeComponent as |editMode|}}
+  {{editMode.annotations}}
 {{/component}}
+
+{{#ember-wormhole to='geometry-type-draw-explainer'}}
+  <div class="fade-in-on-load text-small">
+
+
+    <h1 class="header-large small-margin-bottom">Rezoning Area</h1>
+    <p class="text-small">The Rezoning Area refers to all property subject to the proposed amendment to existing Zoning Districts and Boundaries. It should be graphically offset from the proposed Zoning District boundaries.</p>
+
+    <hr />
+
+    <p class="text-weight-bold small-margin-bottom">Adding new shapes:</p>
+    <ul class="small-margin-bottom">
+      <li>
+        Use the
+        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+          {{fa-icon 'square' transform='grow-8' class='white'}}
+          {{fa-icon 'draw-polygon' transform='shrink-2'}}
+        </span>
+        polygon tool to add a new shape
+      </li>
+      <li>Complete a new shape by clicking its final point a second time</li>
+    </ul>
+
+    <p class="text-weight-bold small-margin-bottom">Editing existing shapes:</p>
+    <ul>
+      <li>Edit an existing shape by selecting it and dragging its points</li>
+      <li>Add a new point by clicking the midpoint of a line</li>
+      <li>Hold <kbd>shift</kbd> while clicking to select multiple points</li>
+      <li>
+        Use the
+        <span class="fa-layers" style="margin-right:0.3em;margin-left:0.3em;">
+          {{fa-icon 'square' transform='grow-14' class='a11y-yellow'}}
+          {{fa-icon 'square' transform='grow-8' class='white'}}
+          {{fa-icon 'trash-alt' prefix='far' transform='shrink-2'}}
+        </span>
+        trash button to delete a selected shape or point(s)
+      </li>
+    </ul>
+
+    <p><img src="/img/how-to--zoning--rezoning-area.gif" alt="Draw Special Purpose Districts" class="shadowed" /></p>
+
+    <hr class="wizard-navigation-divider" />
+
+    <div class="grid-x wizard-navigation">
+      {{yield}}
+      <div class="cell auto">
+        {{#project-geometries/utils/button
+          enabled=model.hasDirtyAttributes
+          handleClick=(action save)}}
+          {{#if (eq model.project.currentStep.step 'complete')}}
+            Save
+          {{else}}
+            Next {{fa-icon 'arrow-right' fixedWidth=true}}
+          {{/if}}
+        {{/project-geometries/utils/button}}
+      </div>
+    </div>
+
+  </div>
+{{/ember-wormhole}}

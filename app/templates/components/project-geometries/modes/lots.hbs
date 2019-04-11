@@ -1,7 +1,6 @@
 {{!-- add the development-specific tax-lots layergroup --}}
-
 {{#map.labs-layers
-  layerGroups=(array taxLots)
+  layerGroups=(array interactiveTaxLots)
   onLayerClick=(action 'handleLayerClick')
   as |layers|}}
   {{#layers.tooltip as |tooltip|}}
@@ -20,7 +19,5 @@
 {{/map.source}}
 
 {{yield (hash
-  button=(component 'project-geometries/utils/button'
-    data-test-project-geometry-save=true
-  )
+  toggle-mode-button=(component 'project-geometries/modes/lots/toggle-mode-button')
 )}}

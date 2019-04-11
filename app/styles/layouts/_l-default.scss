@@ -130,6 +130,23 @@ body {
 
     @include breakpoint(large) {
       box-shadow: 2px 0 0 rgba(0,0,0,0.1);
+
+      .wizard-navigation-divider {
+        margin-top: 7rem;
+        border-bottom: 0;
+      }
+    }
+  }
+
+  .wizard-navigation {
+    @include breakpoint(large) {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 22rem;
+      padding: $global-margin;
+      background-color: $white;
+      box-shadow: 0 -2px 0 0 rgba(0,0,0,0.1);
     }
   }
 }
@@ -150,11 +167,15 @@ body {
   }
 }
 
-.dashboard {
-  padding: $global-margin;
+.dashboard > .grid-x > .cell {
+  padding-right: $global-margin;
+  padding-left: $global-margin;
 
-  @include breakpoint(large) {
-    padding-right: $global-margin*2;
+  @include breakpoint(xlarge) {
+    padding: $global-margin;
+  }
+  @include breakpoint(xlarge) {
+    padding-left: 0;
   }
 }
 
@@ -169,12 +190,10 @@ body {
 }
 
 .dashboard-controls {
-  @include breakpoint(large) {
-    padding-top: $global-margin;
-  }
   @include breakpoint(xlarge) {
-    padding-left: $global-margin;
     min-width: 22rem;
+    max-height: calc(100vh - 6rem);
+    overflow: scroll;
   }
 
   .control > .cell:not(:first-child) {
@@ -187,7 +206,7 @@ body {
 
   .control + .control {
     .cell {
-      border-top: $hr-border;
+      border-top: 1px solid $white-smoke;
       padding-top: rem-calc(10);
     }
   }

@@ -1,9 +1,7 @@
-import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
-import { action, computed } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
-import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
-import isEmpty from '../../../utils/is-empty';
+import { action } from '@ember-decorators/object';
+import isEmpty from 'labs-applicant-maps/utils/is-empty';
+import { inject as service } from '@ember-decorators/service';
+import BaseClass from './-type';
 
 // Proposed Special Purpose Districts
 export const specialPurposeDistrictsLayer = {
@@ -21,7 +19,13 @@ export const specialPurposeDistrictsLabelsLayer = {
   layout: {
     'symbol-placement': 'point',
     'text-field': '{label}',
-    'text-size': 12,
+    'text-size': 16,
+    'text-font': [
+      'match',
+      ['get', 'textFont'],
+      'bold', ['literal', ['Open Sans Bold', 'Arial Unicode MS Bold']],
+      ['literal', ['Open Sans Regular', 'Arial Unicode MS Regular']],
+    ],
     visibility: 'visible',
     'symbol-avoid-edges': false,
     'text-offset': [
@@ -45,71 +49,42 @@ export const specialPurposeDistrictsLabelsLayer = {
   },
 };
 
-export default class specialPurposeDistrictsComponent extends Component {
+export default class specialPurposeDistrictsComponent extends BaseClass {
   init(...args) {
     super.init(...args);
 
-    if (isEmpty(this.get('model.specialPurposeDistricts'))) {
-      this.get('model').setDefaultSpecialPurposeDistricts();
-    }
+    this.fetchCanonical();
   }
 
-  @argument
-  map;
+  // this is wrong because it doesn't honor the correct target
+  // it should be using the model's API, not passing stuff in directly
+  async fetchCanonical() {
+    if (isEmpty(this.get('model.canonical')) && isEmpty(this.get('model.proposedGeometry'))) {
+      await this.get('model').setCanonical();
+      const value = this.get('model.data');
+      const { componentInstance: draw } = this.get('currentMode');
 
-  @argument
-  model;
+      if (draw) draw.shouldReset(value);
+    }
 
-  @argument
-  mode;
+    this.set('isReady', true);
+  }
+
+  isReady = false;
 
   @service
-  router;
-
-  @service
-  notificationMessages;
+  currentMode;
 
   specialPurposeDistrictsLayer = specialPurposeDistrictsLayer;
 
   specialPurposeDistrictsLabelsLayer = specialPurposeDistrictsLabelsLayer;
 
-  @computed('model.specialPurposeDistricts')
-  get isReadyToProceed() {
-    // here, it gets set once by the constructor
-    // const initial = model.get(attribute);
-    const [
-      initial,
-      proposed, // upstream proposed should always be FC
-    ] = this.get('model').changedAttributes().specialPurposeDistricts || [];
-
-    // console.log('if no initial and proposed');
-    // check that proposed is not the original
-    if ((!initial || isEmpty(initial)) && proposed) {
-      return isFeatureCollectionChanged(this.get('model.originalSpecialPurposeDistricts'), proposed);
-    }
-
-    // console.log('if no proposed, there are no changes');
-    if (!proposed) return false; // no changes are proposed to canonical
-
-    return !isEmpty(this.get('model.specialPurposeDistricts'))
-      && isFeatureCollectionChanged(initial, proposed);
-  }
-
   @action
-  async save() {
+  async calculateRezoningOnSave() {
     const model = this.get('model');
+    const project = await model.get('project');
 
-    // because we've just changed the proposed zoning,
-    // we should also calculate the rezoning area
-    await model.setRezoningArea();
-
-    try {
-      const savedProject = await model.save();
-
-      this.get('notificationMessages').success('Project saved!');
-      this.get('router').transitionTo('projects.show', savedProject);
-    } catch (e) {
-      this.get('notificationMessages').error(`Something went wrong: ${e}`);
-    }
+    await project.setRezoningArea();
+    this.save();
   }
 }

@@ -1,16 +1,9 @@
 import EmberRouter from '@ember/routing/router';
-import { inject } from '@ember/service';
 import config from './config/environment';
 
 const Router = EmberRouter.extend({
   location: config.locationType,
   rootURL: config.rootURL,
-  routeHistory: inject(),
-  didTransition(...args) {
-    this._super(...args);
-
-    this.get('routeHistory').pushObject(this.getWithDefault('currentRouteName'));
-  },
 });
 
 Router.map(function () { // eslint-disable-line
@@ -22,6 +15,7 @@ Router.map(function () { // eslint-disable-line
         this.route('development-site');
         this.route('project-area');
         this.route('rezoning');
+        this.route('complete');
       });
       this.route('geometry-edit');
       this.route('map', function () {

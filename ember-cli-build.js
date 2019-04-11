@@ -10,6 +10,9 @@ module.exports = function (defaults) {
     'ember-cli-foundation-6-sass': {
       foundationJs: 'all',
     },
+    '@ember-decorators/babel-transforms': {
+      decoratorsBeforeExport: false,
+    },
     sourcemaps: {
       enabled: true,
       extensions: ['js'],
@@ -35,6 +38,8 @@ module.exports = function (defaults) {
       },
     },
   });
+
+  app.import('node_modules/@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css');
 
   // Use `app.import` to add additional libraries to the generated
   // output files.

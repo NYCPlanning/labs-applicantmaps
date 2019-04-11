@@ -9,6 +9,17 @@ const developmentSiteLayer = {
   },
 };
 
+// Project Area
+const projectAreaLayer = {
+  id: 'project-area-line',
+  type: 'line',
+  paint: {
+    'line-color': 'rgba(0, 122, 122, 1)',
+    'line-width': 2.5,
+    'line-dasharray': [3, 1],
+  },
+};
+
 // Rezoning Area
 const rezoningAreaLayer = {
   id: 'rezoning-area-line',
@@ -185,7 +196,7 @@ const proposedSpecialPurposeDistrictsLayer = {
   type: 'fill',
   paint: {
     'fill-color': 'rgba(94, 102, 51, 1)',
-    'fill-opacity': 0.2,
+    'fill-opacity': 0.3,
   },
 };
 
@@ -195,7 +206,7 @@ const proposedSpecialPurposeDistrictsLabelsLayer = {
   layout: {
     'symbol-placement': 'point',
     'text-field': '{label}',
-    'text-size': 12,
+    'text-size': 14,
     visibility: 'visible',
     'symbol-avoid-edges': false,
     'text-offset': [
@@ -233,6 +244,7 @@ export default {
   c24Layer,
   c25Layer,
   developmentSiteLayer,
+  projectAreaLayer,
   rezoningAreaLayer,
   projectBufferLayer,
   underlyingZoningLayer,

@@ -1,5 +1,7 @@
 import Controller from '@ember/controller';
-import { action } from '@ember-decorators/object';
+import { action, computed } from '@ember-decorators/object';
+import { inject as service } from '@ember-decorators/service';
+
 import { EmptyFeatureCollection } from '../../models/project';
 import projectGeometryIcons from '../../utils/project-geom-icons';
 
@@ -9,6 +11,14 @@ export default class ShowProjectController extends Controller {
 
   projectGeometryIcons = projectGeometryIcons;
 
+  @service
+  store;
+
+  @computed()
+  get taxLotsLayerGroup() {
+    return this.get('store').peekRecord('layer-group', 'tax-lots');
+  }
+
   @action
   handleMapLoad(map) {
     const projectGeometryBoundingBox = this.get('model.projectGeometryBoundingBox');
@@ -17,5 +27,23 @@ export default class ShowProjectController extends Controller {
       padding: 50,
       duration: 0,
     });
+  }
+
+  @action
+  deleteUnderlyingZoning() {
+    this.set('model.needUnderlyingZoning', false);
+    this.set('model.underlyingZoning', EmptyFeatureCollection);
+  }
+
+  @action
+  deleteCommercialOverlay() {
+    this.set('model.needCommercialOverlay', false);
+    this.set('model.commercialOverlays', EmptyFeatureCollection);
+  }
+
+  @action
+  deleteSpecialDistrict() {
+    this.set('model.needSpecialDistrict', false);
+    this.set('model.specialPurposeDistricts', EmptyFeatureCollection);
   }
 }

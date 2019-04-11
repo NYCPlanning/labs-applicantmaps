@@ -7,15 +7,16 @@ module('Unit | Utility | queries/intersecting-zoning-query', function(hooks) {
   setupTest(hooks);
   setupMirage(hooks);
 
-  // Replace this with your real tests.
-  test('it works', async function(assert) {
+  test('returns a feature collection when development site passed into intersecting zoning query', async function(assert) {
     this.server.createList('project', 1);
-    const store = this.owner.lookup('service:store');
-    const model = await store.findRecord('project', 1);
 
-    const result = queriesIntersectingZoningQuery(
+    const store = this.owner.lookup('service:store');
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
+    const result = await queriesIntersectingZoningQuery(
       model.get('developmentSite'),
     );
+
     assert.ok(result);
+    assert.equal(result.type, 'FeatureCollection'); // assert that type property in result object is FeatureCollection
   });
 });

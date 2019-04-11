@@ -22,6 +22,8 @@ import areaMapLegendConfig from '../utils/area-map-legend-config';
 
 
 export default class ProjectGeometryRendererController extends Component {
+  type;
+
   projectAreaLayer = projectAreaLayer;
 
   developmentSiteLayer = developmentSiteLayer;

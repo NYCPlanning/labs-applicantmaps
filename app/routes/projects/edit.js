@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
+import { inject as service } from '@ember-decorators/service';
 import config from '../../config/environment';
 
 const { mapTypes } = config;
@@ -10,7 +10,9 @@ export default class ProjectsEditRoute extends Route {
   notificationMessages;
 
   model({ project_id }) {
-    return this.store.findRecord('project', project_id, { include: mapTypes.toString() });
+    const include = ['geometric-properties', ...mapTypes].toString();
+
+    return this.store.findRecord('project', project_id, { include });
   }
 
   @action

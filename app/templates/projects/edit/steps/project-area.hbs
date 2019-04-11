@@ -1,17 +1,18 @@
 <nav class="step-nav">
   {{#link-to 'projects.edit.steps.development-site'
     tagName='span'
-    class='button tiny gray no-margin'
+    class='button small gray small-margin-bottom'
+    data-test-step-back=""
   }}
-    {{fa-icon 'long-arrow-alt-left'}} Back
+    {{fa-icon 'arrow-left'}} Back
   {{/link-to}}
 </nav>
 
 <h1>Project Area</h1>
 
-<p>The Project Area includes all properties subject to proposed actions. You need to define a Project Area if you are requesting actions on properties that will not be developed (i.e. properties outside your Development Site).</p>
+<p>The Project Area includes all properties subject to your proposed land use actions. You need to define a Project Area if you are requesting actions on properties that will not be developed (i.e. properties outside your Development Site).</p>
 
-<h2 class="header-medium">Are you requesting actions on properties that will not be&nbsp;developed?</h2>
+<h2 class="header-medium">Are you requesting land use actions affecting properties that will not be developed?</h2>
 
 <p class="text-small">Select "No" if you are unsure. You can add a Project Area later if needed.</p>
 
@@ -36,7 +37,7 @@
       {{/if}}
     </span>
     <strong>No</strong>
-    <small>(Only the Development Site is subject to actions)</small>
+    <small>(Only the Development Site is subject to my proposed land use actions)</small>
   </button>
 </p>
 
@@ -102,7 +103,7 @@
       class='button large'
     }}
       Next
-      {{fa-icon 'long-arrow-alt-right' fixedWidth=true transform='right-3 grow-3'}}
+      {{fa-icon 'arrow-right' fixedWidth=true}}
     {{/link-to}}
   </p>
 

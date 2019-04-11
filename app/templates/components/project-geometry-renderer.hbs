@@ -19,7 +19,14 @@
 {{/if}}
 
 {{!-- Ad-hoc source and layer for rezoningArea --}}
-{{#if (not (is-empty model.rezoningArea))}}
+{{!-- if a rezoning area exists AND --}}
+{{!-- we're drawing rezoning OR viewing the dashboard (type is undefined) --}}
+{{#if
+  (and
+    (not (is-empty model.rezoningArea))
+    (or (eq type 'rezoning-area') (not type))
+  )
+}}
   {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
     {{source.layer
       layer=rezoningAreaLayer
@@ -108,4 +115,10 @@
       before='boundary_country'
     }}
   {{/map.source}}
+{{/if}}
+
+{{ map.image 'arrow' '/img/arrow.png' }}
+{{ map.image 'centerline' '/img/centerline.png' }}
+{{#if (not (is-empty model.annotations))}}
+  {{project-geometries/utils/annotations-renderer map=map annotations=model.annotations}}
 {{/if}}

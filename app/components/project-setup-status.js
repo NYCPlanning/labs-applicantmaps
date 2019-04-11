@@ -1,28 +1,24 @@
 import Component from '@ember/component';
+import { inject as service } from '@ember-decorators/service';
 import { action } from '@ember-decorators/object';
-import { argument } from '@ember-decorators/argument';
-import { run } from '@ember/runloop';
 
 export default class ProjectSetupStatus extends Component {
-  @argument
+  // // @argument
   project;
 
-  @argument
-  shareURL = window.location.href;
+  @service
+  notificationMessages;
 
   @action
-  handleShareSuccess() {
-    this.set('copySuccess', true);
-    run.later(() => {
-      this.set('copySuccess', false);
-    }, 2000);
-  }
+  async save(field, value) {
+    const project = this.get('project');
+    project.set(field, value);
 
-  @action
-  handleShareError() {
-    this.set('copyError', true);
-    run.later(() => {
-      this.set('copyError', false);
-    }, 2000);
+    try {
+      await project.save();
+      this.get('notificationMessages').success('Project saved!');
+    } catch (e) {
+      this.get('notificationMessages').error(`Something went wrong: ${e}`);
+    }
   }
 }

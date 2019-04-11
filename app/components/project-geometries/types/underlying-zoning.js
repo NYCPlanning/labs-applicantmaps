@@ -1,9 +1,7 @@
-import Component from '@ember/component';
-import { argument } from '@ember-decorators/argument';
-import { action, computed } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
-import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
-import isEmpty from '../../../utils/is-empty';
+import { action } from '@ember-decorators/object';
+import { inject as service } from '@ember-decorators/service';
+import isEmpty from 'labs-applicant-maps/utils/is-empty';
+import BaseClass from './-type';
 
 // Underlying Zoning
 export const underlyingZoningLayer = {
@@ -22,6 +20,11 @@ export const underlyingZoningLabelsLayer = {
     'symbol-placement': 'line',
     'text-field': '{label}',
     'text-size': 16,
+    'text-font': [
+      'match', ['get', 'textFont'], 'bold', // condition
+      ['literal', ['Open Sans Bold', 'Arial Unicode MS Bold']], // match
+      ['literal', ['Open Sans Regular', 'Arial Unicode MS Regular']], // default
+    ],
     visibility: 'visible',
     'symbol-avoid-edges': false,
     'text-offset': [
@@ -210,74 +213,50 @@ const labelOptions = [
   'R9X',
 ];
 
-export default class UnderlyingZoningComponent extends Component {
+export default class UnderlyingZoningComponent extends BaseClass {
   init(...args) {
     super.init(...args);
 
-    if (isEmpty(this.get('model.underlyingZoning'))) {
-      this.get('model').setDefaultUnderlyingZoning();
-    }
-    window.map = this.get('map.mapInstance');
+    this.fetchCanonical();
   }
 
+  // this is wrong because it doesn't honor the correct target
+  // it should be using the model's API, not passing stuff in directly
+  async fetchCanonical() {
+    if (isEmpty(this.get('model.canonical')) && isEmpty(this.get('model.proposedGeometry'))) {
+      await this.get('model').setCanonical();
+      const value = this.get('model.data');
+      const { componentInstance: draw } = this.get('currentMode');
+
+      if (draw) draw.shouldReset(value);
+    }
+
+    this.set('isReady', true);
+  }
+
+  isReady = false;
+
+  @service
+  currentMode;
+
   labelOptions=labelOptions
-
-  @argument
-  map;
-
-  @argument
-  model;
-
-  @argument
-  mode;
-
-  @service
-  router;
-
-  @service
-  notificationMessages;
 
   underlyingZoningLayer = underlyingZoningLayer;
 
   underlyingZoningLabelsLayer = underlyingZoningLabelsLayer;
 
-  @computed('model.underlyingZoning')
-  get isReadyToProceed() {
-    // here, it gets set once by the constructor
-    // const initial = model.get(attribute);
-    const [
-      initial,
-      proposed, // upstream proposed should always be FC
-    ] = this.get('model').changedAttributes().underlyingZoning || [];
-
-    // console.log('if no initial and proposed');
-    // check that proposed is not the original
-    if ((!initial || isEmpty(initial)) && proposed) {
-      return isFeatureCollectionChanged(this.get('model.originalUnderlyingZoning'), proposed);
-    }
-
-    // console.log('if no proposed, there are no changes');
-    if (!proposed) return false; // no changes are proposed to canonical
-
-    return !isEmpty(this.get('model.underlyingZoning'))
-      && isFeatureCollectionChanged(initial, proposed);
-  }
-
   @action
-  async save() {
+  async calculateRezoningOnSave() {
     const model = this.get('model');
+    const project = await model.get('project');
 
-    // because we've just changed the proposed zoning,
-    // we should also calculate the rezoning area
-    await model.setRezoningArea();
+    const rezoningArea = project.get('geometricProperties')
+      .findBy('geometryType', 'rezoningArea');
 
-    try {
-      const savedProject = await model.save();
+    await rezoningArea.setCanonical();
+    await rezoningArea.save();
 
-      this.get('notificationMessages').success('Project saved!');
-      this.get('router').transitionTo('projects.show', savedProject);
-    } catch (e) {
-      this.get('notificationMessages').error(`Something went wrong: ${e}`);
-    }
+    // call the passed save closure action
+    this.save();
   }
 }

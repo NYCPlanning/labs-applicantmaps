@@ -1,27 +1,46 @@
 {{#if (not (is-empty selectedFeature))}}
-  <div class="selected-feature-form">
-    <div class="input-group">
-      <span class="input-group-label text-small">{{fa-icon 'tag' transform='grow-6'}}</span>
-      {{!-- if an array of values was passed in as the 'options' property, use power select --}}
-      {{#if options}}
-        <div class="input-group-field">
-          {{#power-select
-            options=options
-            selected=label
-            onchange=(action "handleSelectChange")
-          as |selectedLabel|}}
-            {{selectedLabel}}
-          {{/power-select}}
-        </div>
-      {{else}}
-        {{input
-          data-test-feature-label-form
-          type="text"
-          class="input-group-field"
-          value=label
-          key-up=(action updateSelectedFeature)
-        }}
-      {{/if}}
-    </div>
+  <div class="selected-feature-form {{if isSelectedFeatureFormInvalid 'invalid' }}">
+
+    <h6>Edit Label</h6>
+
+    {{!-- if an array of values was passed in as the 'options' property, use power select --}}
+    {{#if (and options (not (get selectedFeature.features.firstObject.properties 'meta:mode')))}}
+      {{#power-select-with-create
+        options=options
+        selected=label
+        onchange=(action "handleSelectChange")
+        showCreateWhen=(action "hideCreateOptionIfAlreadyExists")
+        oncreate=(action "handleSelectChange")
+        as |selectedLabel|
+      }}
+        {{selectedLabel}}
+      {{/power-select-with-create}}
+    {{else}}
+      {{input
+        data-test-feature-label-form
+        type="text"
+        value=label
+        class="no-margin"
+        key-up=(action 'handleSelectChange')
+      }}
+    {{/if}}
+
+    {{#unless (eq geomType 'Polygon') }}
+    <p class="text-right no-margin">
+      <button data-test-large-button onClick={{ action 'toggleSize' }} class="button small no-margin clear">
+        <span class="fa-layers">
+          {{fa-icon 'square' fixedWidth=true class=(if isLarge 'orange-dark' 'white')}}
+          {{fa-icon 'check-square' fixedWidth=true class="white"}}
+        </span>&nbsp; Large
+      </button>
+      <button data-test-bold-button onClick={{ action 'toggleWeight' }} class="button small no-margin clear">
+        <span class="fa-layers">
+          {{fa-icon 'square' fixedWidth=true class=(if isBold 'orange-dark' 'white')}}
+          {{fa-icon 'check-square' fixedWidth=true class="white"}}
+        </span>&nbsp; Bold
+      </button>
+    </p>
+    {{/unless}}
+
   </div>
 {{/if}}

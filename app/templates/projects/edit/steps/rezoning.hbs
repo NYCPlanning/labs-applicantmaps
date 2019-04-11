@@ -1,15 +1,15 @@
 <nav class="step-nav">
   {{#link-to 'projects.edit.steps.project-area'
     tagName='span'
-    class='button tiny gray no-margin'
+    class='button small gray small-margin-bottom'
   }}
-    {{fa-icon 'long-arrow-alt-left'}} Back
+    {{fa-icon 'arrow-left'}} Back
   {{/link-to}}
 </nav>
 
 <h1>Rezoning</h1>
 
-<p>For projects with rezoning actions, you will need to define how the zoning is being&nbsp;altered.</p>
+<p>For projects that include rezoning actions, you will need to define how the existing zoning is being altered.</p>
 
 <h2 class="header-medium">Are you requesting any rezoning&nbsp;actions?</h2>
 
@@ -34,7 +34,7 @@
       {{/if}}
     </span>
     <strong>No</strong>
-    <small>(Project has no rezoning actions)</small>
+    <small>(Proposed Project has no rezoning action(s))</small>
   </button>
 </p>
 
@@ -60,7 +60,7 @@
       {{/if}}
     </span>
     <strong>Yes</strong>
-    <small>(I need to alter the zoning)</small>
+    <small>(Proposed Project includes rezoning action(s))</small>
   </button>
 </p>
 
@@ -254,7 +254,7 @@
       class='button large'
     }}
       Next
-      {{fa-icon 'long-arrow-alt-right' fixedWidth=true transform='right-3 grow-3'}}
+      {{fa-icon 'arrow-right' fixedWidth=true}}
     {{/link-to}}
   </p>
 

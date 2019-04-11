@@ -42,7 +42,7 @@ module('Acceptance | user can create project with map', function(hooks) {
     this.owner.register('component:project-geometries/modes/draw', DrawMode.extend({
       'data-test-draw-mock': true,
       click() {
-        const randomFeatures = randomPolygon(1);
+        const randomFeatures = randomPolygon(1, true);
         this.set('geometricProperty', randomFeatures);
       },
     }));
@@ -89,6 +89,10 @@ module('Acceptance | user can create project with map', function(hooks) {
     await click('[data-test-project-geometry-save]');
     await click('[data-test-draw-mock]');
     await click('[data-test-project-geometry-save]');
+
+    assert.equal(currentURL(), '/projects/1/edit/complete');
+
+    await click('[data-test-go-to-dash]');
 
     assert.equal(currentURL(), '/projects/1');
 

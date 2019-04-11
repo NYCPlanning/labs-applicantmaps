@@ -7,15 +7,16 @@ module('Unit | Utility | queries/proposed-commercial-overlays-query', function(h
   setupTest(hooks);
   setupMirage(hooks);
 
-  // Replace this with your real tests.
-  test('it works', async function(assert) {
+  test('returns a feature collection when development site passed into commercial overlays query', async function(assert) {
     this.server.createList('project', 1);
 
     const store = this.owner.lookup('service:store');
-    const model = await store.findRecord('project', 1);
-    const result = queriesProposedCommercialOverlaysQuery(
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
+    const result = await queriesProposedCommercialOverlaysQuery(
       model.get('developmentSite'),
     );
+
     assert.ok(result);
+    assert.equal(result.type, 'FeatureCollection'); // assert that type property in result object is FeatureCollection
   });
 });

@@ -1,7 +1,6 @@
 import Component from '@ember/component';
 import { action, computed } from '@ember-decorators/object';
-import { service } from '@ember-decorators/service';
-import { argument } from '@ember-decorators/argument';
+import { inject as service } from '@ember-decorators/service';
 import { next } from '@ember/runloop';
 import turfBbox from '@turf/bbox';
 import mapboxgl from 'mapbox-gl';
@@ -9,9 +8,13 @@ import { sanitizeStyle } from 'labs-applicant-maps/helpers/sanitize-style';
 // TODO import geom layers from the various modes that export them,
 // this util should be deprecated
 import projectGeomLayers from '../utils/project-geom-layers';
+import config from '../config/environment';
+
+const { host } = config;
 
 const defaultLayerGroups = {
   'layer-groups': [
+    { id: 'sidewalks', visible: true },
     {
       id: 'subway',
       visible: true,
@@ -41,21 +44,6 @@ const defaultLayerGroups = {
             },
           },
         }, // subway_entrances_labels
-      ],
-    },
-    {
-      id: 'building-footprints',
-      visible: true,
-      layers: [
-        {
-          style: {
-            paint: {
-              'fill-opacity': 0.35,
-              'fill-color': 'rgba(33, 35, 38, 0)',
-              'fill-outline-color': 'rgba(33, 35, 38, 0.8)',
-            },
-          },
-        },
       ],
     },
     { id: 'special-purpose-districts', visible: false },
@@ -110,7 +98,10 @@ const defaultLayerGroups = {
         {
           style: {
             layout: { 'text-field': '{numfloors}' },
-            paint: { 'text-color': 'rgba(33, 35, 38, 1)' },
+            paint: {
+              'text-color': 'rgba(33, 35, 38, 1)',
+              'text-opacity': 1,
+            },
           },
         },
         {
@@ -179,20 +170,22 @@ const defaultLayerGroups = {
             },
           },
         },
+
       ],
     },
   ],
 };
 
 export default class MapFormComponent extends Component {
-  constructor(...args) {
-    super(...args);
+  init(...args) {
+    super.init(...args);
 
     const query = this.get('customLayerGroupQuery') || defaultLayerGroups;
     const store = this.get('store');
 
     store.query('layer-group', query).then((layerGroups) => {
       const { meta } = layerGroups;
+
       const sources = store.peekAll('source').toArray().uniqBy('meta.description');
 
       this.set('mapConfiguration', {
@@ -201,6 +194,17 @@ export default class MapFormComponent extends Component {
         sources,
       });
     });
+
+    // get canonical geometries for missing zoning layers, which should be displayed regardless of if the user updated them
+    if (this.get('model.project.underlyingZoningModel.proposedGeometryIsEmptyDefault')) {
+      this.get('model.project.underlyingZoningModel').setCanonical();
+    }
+    if (this.get('model.project.commercialOverlaysModel.proposedGeometryIsEmptyDefault')) {
+      this.get('model.project.commercialOverlaysModel').setCanonical();
+    }
+    if (this.get('model.project.specialPurposeDistrictsModel.proposedGeometryIsEmptyDefault')) {
+      this.get('model.project.specialPurposeDistrictsModel').setCanonical();
+    }
   }
 
   @service
@@ -217,13 +221,32 @@ export default class MapFormComponent extends Component {
 
   boundsPolygon = null
 
-  @argument
+  // // @argument
   customLayerGroupQuery = null;
 
-  @argument
+  // // @argument
   model = null;
 
   projectGeomLayers = projectGeomLayers;
+
+  @computed()
+  get timestamp() {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const d = new Date();
+    let hr = d.getHours();
+    let min = d.getMinutes();
+    if (min < 10) { min = `0${min}`; }
+    let ampm = 'am';
+    if (hr > 12) {
+      hr -= 12;
+      ampm = 'pm';
+    }
+    const date = d.getDate();
+    const month = months[d.getMonth()];
+    const year = d.getFullYear();
+
+    return `${month} ${date}, ${year}, ${hr}:${min}${ampm}`;
+  }
 
   @computed('model.mapBearing', 'mapPitch')
   get northArrowTransforms() {
@@ -237,16 +260,33 @@ export default class MapFormComponent extends Component {
     }]);
   }
 
+  @computed
+  get downloadURL() {
+    const id = this.get('model.project.id');
+    return `${host}/export-pdf/${encodeURIComponent(id)}`;
+  }
+
   @action
   handleMapLoaded(map) {
+    /*
+     * Set up component to emit 'mapLoaded' event on map render event.
+     * Server listens for 'mapLoaded' in headless chrome browser; ensures
+     * map is fully rendered before generating PDF
+     */
+    map.on('render', function() {
+      if (map.loaded()) {
+        document.dispatchEvent(new Event('mapLoaded', { bubbles: true }));
+      }
+    });
+
     this.set('mapInstance', map);
     this.fitBoundsToSelectedBuffer();
-    this.updateBounds();
     this.toggleMapInteractions();
 
     const scaleControl = new mapboxgl.ScaleControl({ maxWidth: 200, unit: 'imperial' });
     map.addControl(scaleControl, 'bottom-left');
 
+    // for editing the OpenStreetMap basemap style (look at maputnik, mapbox GL JS API docs, or style.json in the layers-api for reference)
     const basemapLayersToHide = [
       'background',
       'highway_path',
@@ -271,6 +311,11 @@ export default class MapFormComponent extends Component {
       'railway_dashline',
     ];
     basemapLayersToHide.forEach(layer => map.removeLayer(layer));
+
+    // editing building layer in the basemap to only show shape outlines and filtering for only ground floor structures
+    map.setPaintProperty('building', 'fill-color', 'rgba(234, 234, 229, 0)');
+    map.setPaintProperty('building', 'fill-outline-color', 'rgba(0, 0, 0, 1)');
+    map.setFilter('building', ['==', 'render_min_height', 0]);
   }
 
   @action
