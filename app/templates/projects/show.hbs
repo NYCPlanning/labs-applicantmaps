@@ -70,16 +70,6 @@
             {{/ember-popover}}
           </button>
         </div>
-        {{#if (not (is-empty model.developmentSite))}}
-          <div class="cell shrink">
-            <button
-              class="button tiny gray no-margin"
-              onclick={{action (mut model.developmentSite) EmptyFeatureCollection}}
-            >
-              {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
-            </button>
-          </div>
-        {{/if}}
       </div>
 
       {{!-- Project Area --}}
@@ -123,7 +113,7 @@
           <div class="cell shrink">
             <button
               class="button tiny gray no-margin"
-              onclick={{action (mut model.projectArea) EmptyFeatureCollection}}
+              onclick={{action deleteProjectArea}}
             >
               {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
             </button>

@@ -30,20 +30,34 @@ export default class ShowProjectController extends Controller {
   }
 
   @action
+  deleteProjectArea() {
+    this.set('model.needProjectArea', false);
+    this.set('model.projectArea', EmptyFeatureCollection);
+    const model = this.get('model');
+    model.save();
+  }
+
+  @action
   deleteUnderlyingZoning() {
     this.set('model.needUnderlyingZoning', false);
     this.set('model.underlyingZoning', EmptyFeatureCollection);
+    const model = this.get('model');
+    model.save();
   }
 
   @action
   deleteCommercialOverlay() {
     this.set('model.needCommercialOverlay', false);
     this.set('model.commercialOverlays', EmptyFeatureCollection);
+    const model = this.get('model');
+    model.save();
   }
 
   @action
   deleteSpecialDistrict() {
     this.set('model.needSpecialDistrict', false);
     this.set('model.specialPurposeDistricts', EmptyFeatureCollection);
+    const model = this.get('model');
+    model.save();
   }
 }
