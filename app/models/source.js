@@ -1,8 +1,7 @@
 import DS from 'ember-data';
-import { attr } from '@ember-decorators/data';
 
-const { Model } = DS;
+const { Model, attr } = DS;
 
-export default class extends Model {
+export default class Source extends Model {
   @attr() meta;
 }

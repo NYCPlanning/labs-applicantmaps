@@ -1,11 +1,13 @@
+import DS from 'ember-data';
 import { computed } from '@ember-decorators/object';
 import turfUnion from '@turf/union';
 import turfBuffer from '@turf/buffer';
-import { attr } from '@ember-decorators/data';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import ApplicantMap from './applicant-map';
 
-export default class extends ApplicantMap {
+const { attr } = DS;
+
+export default class AreaMap extends ApplicantMap {
   @attr('string', { defaultValue: 'Area Map' })
   mapTypeLabel;
 
