@@ -52,7 +52,7 @@
     "ember-cli-uglify": "^2.1.0",
     "ember-cli-what-input": "^1.0.0",
     "ember-computed-promise-monitor": "0.1.6",
-    "ember-concurrency": "0.8.27",
+    "ember-concurrency": "0.9.0",
     "ember-concurrency-decorators": "0.6.0",
     "ember-decorators": "5.1.4",
     "ember-export-application-global": "^2.0.0",
@@ -122,6 +122,8 @@
   },
   "resolutions": {
     "ember-fetch": "5.1.3",
-    "mapbox-gl": "0.50.0"
+    "mapbox-gl": "0.50.0",
+    "ember-concurrency": "0.9.0",
+    "ember-power-select": "2.2.3"
   }
 }
