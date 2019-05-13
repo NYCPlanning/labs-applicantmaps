@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
-import { inject as service } from '@ember-decorators/service';
-import { computed } from '@ember-decorators/object';
+import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 
 const userFacingSteps = ['development-site', 'project-area', 'rezoning', 'complete'];
 

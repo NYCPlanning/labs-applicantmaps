@@ -10,8 +10,7 @@
 
 </div>
 <div class="cell large-auto map-container">
-        {{#if layerGroups}}
-
+  {{#if layerGroups}}
     {{#labs-map
       id='main-map'
       initOptions=(hash
@@ -24,20 +23,20 @@
 
       {{!-- Wrap drawable components and pass as context --}}
       {{#mapbox-gl-draw map=map as |drawableMap|}}
-        {{search-handler
-          map=map}}
+        {{#search-handler map=map as |search|}}
+          {{labs-bbl-lookup flyTo=(action search.flyTo)}}
+        {{/search-handler}}
 
         {{!-- labs-layers (includes tax-lots layer) --}}
-
-          {{#map.labs-layers
-            layerGroups=layerGroups.layerGroups
-            as |layers|}}
-            {{#layers.tooltip as |tooltip|}}
-              {{tooltip-renderer
-                feature=tooltip.feature
-                template=tooltip.layer.tooltipTemplate}}
-            {{/layers.tooltip}}
-          {{/map.labs-layers}}
+        {{#map.labs-layers
+          layerGroups=layerGroups.layerGroups
+          as |layers|}}
+          {{#layers.tooltip as |tooltip|}}
+            {{tooltip-renderer
+              feature=tooltip.feature
+              template=tooltip.layer.tooltipTemplate}}
+          {{/layers.tooltip}}
+        {{/map.labs-layers}}
 
         {{!-- pass type and mode to invoke both --}}
         {{project-geometries/types
@@ -47,7 +46,7 @@
           map=drawableMap}}
       {{/mapbox-gl-draw}}
     {{/labs-map}}
-        {{/if}}
+  {{/if}}
 
   {{outlet}}
 

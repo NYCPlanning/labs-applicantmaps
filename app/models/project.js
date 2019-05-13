@@ -1,14 +1,13 @@
 import DS from 'ember-data';
-import { attr, hasMany } from '@ember-decorators/data';
-import { computed } from '@ember-decorators/object';
-import { not, alias } from '@ember-decorators/object/computed';
-import { inject as service } from '@ember-decorators/service';
+import { computed } from '@ember/object';
+import { not, alias } from '@ember/object/computed';
+import { inject as service } from '@ember/service';
 import turfBbox from '@turf/bbox';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import wizard from 'labs-applicant-maps/utils/wizard';
 import { GEOMETRY_TYPES } from './geometric-property';
 
-const { Model } = DS;
+const { Model, attr, hasMany } = DS;
 
 export const EmptyFeatureCollection = {
   type: 'FeatureCollection',

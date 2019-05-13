@@ -1,5 +1,6 @@
 {{!-- add the development-specific tax-lots layergroup --}}
 {{#map.labs-layers
+  data-test-labs-layers=true
   layerGroups=(array interactiveTaxLots)
   onLayerClick=(action 'handleLayerClick')
   as |layers|}}

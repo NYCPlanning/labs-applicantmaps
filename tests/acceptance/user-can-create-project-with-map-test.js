@@ -4,51 +4,37 @@ import {
   currentURL,
   click,
   fillIn,
+  settled,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { faker } from 'ember-cli-mirage';
-import random from 'labs-applicant-maps/tests/helpers/random-geometry';
-import LabsLayers from 'labs-applicant-maps/components/labs-layers';
-import DrawMode from 'labs-applicant-maps/components/project-geometries/modes/draw';
-import setupMapMocks from 'labs-applicant-maps/tests/helpers/setup-map-mocks';
+import setupMapMocks from 'labs-applicant-maps/tests/helpers/mapbox-gl-stub';
+import setupComposerMocks from 'labs-applicant-maps/tests/helpers/mapbox-composer-stub';
+import Component from '@ember/component';
 
-const { randomPolygon } = random;
+import { classNames } from '@ember-decorators/component';
 
 module('Acceptance | user can create project with map', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupMapMocks(hooks);
-
-  hooks.beforeEach(async function() {
-    this.server.createList('layer-group', 10);
-    this.server.create('layer-group', { id: 'tax-lots' });
-
-    let onLayerClick;
-    this.owner.register('component:labs-layers', LabsLayers.extend({
-      init(...args) {
-        this._super(...args);
-
-        onLayerClick = this.get('onLayerClick');
-      },
-      'data-test-labs-layers': true,
-      click() {
-        const randomFeature = randomPolygon(1).features[0];
-        randomFeature.properties.bbl = faker.random.uuid();
-        onLayerClick(randomFeature);
-      },
-    }));
-
-    this.owner.register('component:project-geometries/modes/draw', DrawMode.extend({
-      'data-test-draw-mock': true,
-      click() {
-        const randomFeatures = randomPolygon(1, true);
-        this.set('geometricProperty', randomFeatures);
-      },
-    }));
-  });
+  setupComposerMocks(hooks);
 
   test('User can create new project', async function(assert) {
+    // stub in the labs layers consumer component
+    @classNames('labs-layers')
+    class LabsLayers extends Component {
+      onLayerClick = () => {};
+
+      map = {};
+
+      click() {
+        this.onLayerClick({ properties: {} });
+      }
+    }
+
+    this.owner.register('component:labs-layers', LabsLayers);
+
     await visit('/');
 
     await click('[data-test-get-started]');
@@ -60,9 +46,10 @@ module('Acceptance | user can create project with map', function(hooks) {
     assert.equal(currentURL(), '/projects/1/edit/development-site');
 
     await click('[data-test-select-lots]');
-    await click('[data-test-labs-layers]');
-    await click('[data-test-labs-layers]');
-    await click('[data-test-labs-layers]');
+
+    await click('.labs-layers');
+    await click('.labs-layers');
+    await click('.labs-layers');
 
     await click('[data-test-project-geometry-save]');
 
@@ -71,23 +58,74 @@ module('Acceptance | user can create project with map', function(hooks) {
     await click('[data-test-project-area-yes]');
     await click('[data-test-project-area-select-lots]');
 
-    await click('[data-test-labs-layers]');
-    await click('[data-test-labs-layers]');
-    await click('[data-test-labs-layers]');
+    await click('.labs-layers');
+    await click('.labs-layers');
+    await click('.labs-layers');
 
     await click('[data-test-project-geometry-save]');
+
+    const triangle = {
+      type: 'Feature',
+      properties: {
+        id: 1,
+        label: 'test',
+      },
+      geometry: {
+        type: 'Polygon',
+        coordinates: [[[1, 1], [0, 1], [1, 0], [1, 1]]],
+      },
+    };
+
+    const triangleFC = {
+      type: 'FeatureCollection',
+      features: [triangle],
+    };
+
+    let currentReturnValue = {
+      type: 'FeatureCollection',
+      features: [],
+    };
+
+    const artificialEvents = {};
+    this.mapboxEventStub = {
+      draw: {
+        add: () => {},
+        set: () => {},
+        getAll: () => currentReturnValue,
+        getSelected: () => currentReturnValue,
+        getSelectedIds: () => [1],
+        getMode: () => 'simple_select',
+        changeMode: () => {},
+      },
+      mapInstance: {
+        on: (event, func) => {
+          artificialEvents[event] = func;
+        },
+      },
+    };
 
     await click('[data-test-rezoning-yes]');
     await click('[data-test-rezoning-underlying-zoning-yes]');
     await click('[data-test-rezoning-commercial-overlays-yes]');
     await click('[data-test-rezoning-special-purpose-districts-yes]');
     await click('[data-test-alter-zoning]');
-    await click('[data-test-draw-mock]');
 
+    currentReturnValue = triangleFC;
+
+    await artificialEvents['draw.create']();
+    await settled();
     await click('[data-test-project-geometry-save]');
-    await click('[data-test-draw-mock]');
+
+    currentReturnValue = triangleFC;
+
+    await artificialEvents['draw.create']();
+    await settled();
     await click('[data-test-project-geometry-save]');
-    await click('[data-test-draw-mock]');
+
+    currentReturnValue = triangleFC;
+
+    await artificialEvents['draw.create']();
+    await settled();
     await click('[data-test-project-geometry-save]');
 
     assert.equal(currentURL(), '/projects/1/edit/complete');

@@ -1,10 +1,10 @@
 import Component from '@ember/component';
-import { action, computed } from '@ember-decorators/object';
-import { inject as service } from '@ember-decorators/service';
+import { inject as service } from '@ember/service';
 import { next } from '@ember/runloop';
 import turfBbox from '@turf/bbox';
 import mapboxgl from 'mapbox-gl';
 import { sanitizeStyle } from 'labs-applicant-maps/helpers/sanitize-style';
+import { computed, action } from '@ember/object';
 // TODO import geom layers from the various modes that export them,
 // this util should be deprecated
 import projectGeomLayers from '../utils/project-geom-layers';
@@ -229,6 +229,30 @@ export default class MapFormComponent extends Component {
 
   projectGeomLayers = projectGeomLayers;
 
+  preventMapInteractions = false;
+
+  handleMapInteractions() {
+    const map = this.get('mapInstance');
+    const preventMapInteractions = this.get('preventMapInteractions');
+    const targetInteractions = [
+      'scrollZoom',
+      'boxZoom',
+      'dragRotate',
+      'dragPan',
+      'keyboard',
+      'doubleClickZoom',
+      'touchZoomRotate',
+    ];
+
+    if (preventMapInteractions === true) {
+      targetInteractions
+        .forEach(interaction => map[interaction].enable());
+    } else {
+      targetInteractions
+        .forEach(interaction => map[interaction].disable());
+    }
+  }
+
   @computed()
   get timestamp() {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -281,7 +305,7 @@ export default class MapFormComponent extends Component {
 
     this.set('mapInstance', map);
     this.fitBoundsToSelectedBuffer();
-    this.toggleMapInteractions();
+    this.handleMapInteractions();
 
     const scaleControl = new mapboxgl.ScaleControl({ maxWidth: 200, unit: 'imperial' });
     map.addControl(scaleControl, 'bottom-left');
@@ -384,27 +408,8 @@ export default class MapFormComponent extends Component {
 
   @action
   toggleMapInteractions () {
-    const map = this.get('mapInstance');
-    const preventMapInteractions = this.get('preventMapInteractions');
-    const targetInteractions = [
-      'scrollZoom',
-      'boxZoom',
-      'dragRotate',
-      'dragPan',
-      'keyboard',
-      'doubleClickZoom',
-      'touchZoomRotate',
-    ];
-
-    if (preventMapInteractions === true) {
-      this.set('preventMapInteractions', false);
-      targetInteractions
-        .forEach(interaction => map[interaction].enable());
-    } else {
-      this.set('preventMapInteractions', true);
-      targetInteractions
-        .forEach(interaction => map[interaction].disable());
-    }
+    this.toggleProperty('preventMapInteractions');
+    this.handleMapInteractions();
   }
 
   @action

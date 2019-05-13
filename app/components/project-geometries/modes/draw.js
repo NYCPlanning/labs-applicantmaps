@@ -1,7 +1,7 @@
 import Component from '@ember/component';
-import { get } from '@ember/object';
-import { action, computed, observes } from '@ember-decorators/object';
-import { inject as service } from '@ember-decorators/service';
+import { get, action, computed } from '@ember/object';
+import { observes } from '@ember-decorators/object';
+import { inject as service } from '@ember/service';
 import { containsNumber } from '@turf/invariant';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/geometric-property';
 
@@ -45,6 +45,7 @@ export default class DrawComponent extends Component {
   // upstream set to model
   drawStateCallback() {
     const drawnFeatures = this.get('drawnFeatures');
+
     this.set('geometricProperty', drawnFeatures);
   }
 
@@ -253,7 +254,6 @@ export default class DrawComponent extends Component {
   ================================================= */
   didInsertElement(...params) {
     const { draw: { shouldReset } } = this.get('map');
-
     shouldReset(this.get('geometricProperty'));
 
     super.didInsertElement(...params);

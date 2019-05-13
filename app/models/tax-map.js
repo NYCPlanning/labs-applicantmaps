@@ -1,3 +1,3 @@
 import ApplicantMap from './applicant-map';
 
-export default class extends ApplicantMap {}
+export default class TaxMap extends ApplicantMap {}
