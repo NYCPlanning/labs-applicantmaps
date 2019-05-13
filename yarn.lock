@@ -4995,13 +4995,6 @@ ember-cli-version-checker@^3.0.0, ember-cli-version-checker@^3.0.1, ember-cli-ve
     resolve-package-path "^1.2.6"
     semver "^5.6.0"
 
-ember-cli-version-checker@^3.1.2:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/ember-cli-version-checker/-/ember-cli-version-checker-3.1.3.tgz#7c9b4f5ff30fdebcd480b1c06c4de43bb51c522c"
-  dependencies:
-    resolve-package-path "^1.2.6"
-    semver "^5.6.0"
-
 ember-cli-what-input@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/ember-cli-what-input/-/ember-cli-what-input-1.0.0.tgz#6c43bf6aaed5a566c3f29f8d3a1760f724e5e924"
@@ -5133,17 +5126,9 @@ ember-concurrency-decorators@0.6.0:
     "@ember-decorators/utils" "^5.1.4 || 5.1.2 || ^4.0.0 || ^3.0.0"
     ember-cli-babel "^7.5.0"
 
-ember-concurrency@0.8.27, ember-concurrency@^0.8.19, ember-concurrency@^0.8.26:
-  version "0.8.27"
-  resolved "https://registry.yarnpkg.com/ember-concurrency/-/ember-concurrency-0.8.27.tgz#6dd1b9928cf5d13d5ae9c8cd3d5869f6ff81a9a9"
-  dependencies:
-    babel-core "^6.24.1"
-    ember-cli-babel "^6.8.2"
-    ember-maybe-import-regenerator "^0.1.5"
-
-"ember-concurrency@^0.8.27 || ^0.9.0 || ^0.10.0":
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/ember-concurrency/-/ember-concurrency-0.10.0.tgz#9c7c79dca411e01466119f02d7197c0a4ff0df08"
+ember-concurrency@0.9.0, ember-concurrency@^0.8.19, ember-concurrency@^0.8.26:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/ember-concurrency/-/ember-concurrency-0.9.0.tgz#0016652ff780fb665842e7f47815ee0601122ea1"
   dependencies:
     babel-core "^6.24.1"
     ember-cli-babel "^6.8.2"
@@ -5366,7 +5351,7 @@ ember-power-select-with-create@^0.6.1:
     ember-cli-htmlbars "^2.0.1"
     ember-power-select "^2.0.0"
 
-ember-power-select@2.2.3:
+ember-power-select@2.2.3, ember-power-select@^2.0.0, ember-power-select@^2.0.4:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/ember-power-select/-/ember-power-select-2.2.3.tgz#ab23ba0c1bcf743b60703afb0655788ccb0912e4"
   dependencies:
@@ -5374,17 +5359,6 @@ ember-power-select@2.2.3:
     ember-cli-babel "^7.2.0"
     ember-cli-htmlbars "^3.0.1"
     ember-concurrency "^0.8.26"
-    ember-text-measurer "^0.5.0"
-    ember-truth-helpers "^2.1.0"
-
-ember-power-select@^2.0.0, ember-power-select@^2.0.4:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/ember-power-select/-/ember-power-select-2.3.2.tgz#8bd20989c52ec53e5f526bd5d3267aac6f0a76f4"
-  dependencies:
-    ember-basic-dropdown "^1.1.0"
-    ember-cli-babel "^7.2.0"
-    ember-cli-htmlbars "^3.0.1"
-    ember-concurrency "^0.8.27 || ^0.9.0 || ^0.10.0"
     ember-text-measurer "^0.5.0"
     ember-truth-helpers "^2.1.0"
 
@@ -10249,13 +10223,6 @@ resolve-from@^1.0.0:
   resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-1.0.1.tgz#26cbfe935d1aeeeabb29bc3fe5aeb01e93d44226"
 
 resolve-package-path@^1.0.11, resolve-package-path@^1.2.6:
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/resolve-package-path/-/resolve-package-path-1.2.7.tgz#2a7bc37ad96865e239330e3102c31322847e652e"
-  dependencies:
-    path-root "^0.1.1"
-    resolve "^1.10.0"
-
-resolve-package-path@^1.2.6:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/resolve-package-path/-/resolve-package-path-1.2.7.tgz#2a7bc37ad96865e239330e3102c31322847e652e"
   dependencies:
