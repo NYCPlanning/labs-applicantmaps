@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { action } from '@ember-decorators/object';
+import { action } from '@ember/object';
 import mapboxgl from 'mapbox-gl';
 import { tagName } from '@ember-decorators/component';
 

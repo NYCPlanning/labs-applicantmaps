@@ -2,9 +2,8 @@ import Component from '@ember/component';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import DefaultMapboxDrawStyles from '@mapbox/mapbox-gl-draw/src/lib/theme';
 import { next } from '@ember/runloop';
-import { inject as service } from '@ember-decorators/service';
-import { action, computed } from '@ember-decorators/object';
-import { setProperties } from '@ember/object';
+import { inject as service } from '@ember/service';
+import { setProperties, computed, action } from '@ember/object';
 import AnnotationsMode,
 {
   CustomDirectSelect,

@@ -1,4 +1,4 @@
-import { inject as service } from '@ember-decorators/service';
+import { inject as service } from '@ember/service';
 import BaseClass from './-type';
 
 export const developmentSiteLayer = {

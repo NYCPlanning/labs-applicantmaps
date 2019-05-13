@@ -1,7 +1,6 @@
 import DS from 'ember-data';
-import { attr, belongsTo } from '@ember-decorators/data';
-import { computed } from '@ember-decorators/object';
-import { alias } from '@ember-decorators/object/computed';
+import { computed } from '@ember/object';
+import { alias } from '@ember/object/computed';
 import { EmptyFeatureCollection } from 'labs-applicant-maps/models/project';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import isFeatureCollectionChanged from 'labs-applicant-maps/utils/is-feature-collection-changed';
@@ -12,7 +11,7 @@ import commercialOverlays from '../utils/queries/proposed-commercial-overlays-qu
 import specialPurposeDistricts from '../utils/queries/proposed-special-districts-query';
 import rezoningArea from '../utils/queries/rezoning-area-query';
 
-const { Model } = DS;
+const { Model, attr, belongsTo } = DS;
 
 const queries = {
   underlyingZoning,

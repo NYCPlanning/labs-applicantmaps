@@ -1,5 +1,5 @@
-import { action } from '@ember-decorators/object';
-import { inject as service } from '@ember-decorators/service';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 import BaseClass from './-type';
 

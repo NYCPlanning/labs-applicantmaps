@@ -1,6 +1,7 @@
 import Component from '@ember/component';
-import { action, observes, computed } from '@ember-decorators/object';
-import { alias } from '@ember-decorators/object/computed';
+import { observes } from '@ember-decorators/object';
+import { action, computed } from '@ember/object';
+import { alias } from '@ember/object/computed';
 
 // it takes a selectedFeature, aliases it, and mutates properties
 // based on callbacks from ember-power-select
