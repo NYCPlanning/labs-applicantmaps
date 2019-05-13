@@ -65,7 +65,6 @@ module('Acceptance | user can create project with map', function(hooks) {
     };
 
     await visit('/');
-
     await click('[data-test-get-started]');
     await fillIn('[data-test-new-project-project-name]', 'Mulholland Drive');
     await fillIn('[data-test-new-project-applicant-name]', 'David Lynch');
@@ -143,5 +142,29 @@ module('Acceptance | user can create project with map', function(hooks) {
     await click('[data-test-go-back-to-project]');
 
     assert.equal(currentURL(), '/projects/1');
+  });
+
+  test('User can delete geometries from project', async function(assert) {
+    assert.expect(1);
+
+    // #create invokes the model factory which includes a development site
+    // the second and third arguments to #create are "traits" defined
+    // in the factory
+    // we override the other properties so that the project is in a valid state
+    this.server.create('project', 'hasDevelopmentSite', 'hasProjectArea', {
+      needRezoning: false,
+      hasCompletedWizard: true,
+    });
+
+    // here we intercept the request to the server and assert that the request
+    // gets made
+    this.server.patch('/projects/1', (schema) => {
+      assert.ok(true);
+
+      return schema.projects.first();
+    });
+
+    await visit('/projects/1');
+    await click('[data-test-delete-project-area]');
   });
 });
