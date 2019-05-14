@@ -4,6 +4,7 @@ import {
   currentURL,
   click,
   fillIn,
+  pauseTest,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -50,8 +51,7 @@ module('Acceptance | user can create project with map', function(hooks) {
 
   test('User can create new project', async function(assert) {
     await visit('/');
-
-    await click('[data-test-get-started]');
+await click('[data-test-get-started]');
     await fillIn('[data-test-new-project-project-name]', 'Mulholland Drive');
     await fillIn('[data-test-new-project-applicant-name]', 'David Lynch');
     await fillIn('[data-test-new-project-project-number]', 'Winkies');
@@ -110,5 +110,31 @@ module('Acceptance | user can create project with map', function(hooks) {
     await click('[data-test-go-back-to-project]');
 
     assert.equal(currentURL(), '/projects/1');
+  });
+
+  test('User can delete geometries from project', async function(assert) {
+    const store = this.owner.lookup('service:store');
+
+    const project = await store.createRecord('project', { id: 1, needsRezoning: false });
+
+    const devSite = await store.createRecord('geometric-property', {
+      project,
+      geometryType: 'developmentSite',
+      proposedGeometry: randomPolygon(5),
+    });
+    project.set('developmentSiteModel', devSite);
+
+    const projectArea = await store.createRecord('geometric-property', {
+      project,
+      geometryType: 'projectArea',
+      proposedGeometry: randomPolygon(5),
+    });
+    project.set('projectAreaModel', projectArea);
+
+    await project.save();
+
+    await visit('/projects/1/edit/complete');
+    await click('[data-test-delete-project-area]');
+
   });
 });
