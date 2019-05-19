@@ -1,5 +1,6 @@
 import Component from '@ember/component';
-import { action, observes } from '@ember-decorators/object';
+import { action } from '@ember/object';
+import { observes } from '@ember-decorators/object';
 import { classNames } from '@ember-decorators/component';
 import turfBbox from '@turf/bbox';
 import turfBuffer from '@turf/buffer';

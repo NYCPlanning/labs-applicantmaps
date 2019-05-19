@@ -1,10 +1,10 @@
 import Component from '@ember/component';
-import { action, computed } from '@ember-decorators/object';
-import { inject as service } from '@ember-decorators/service';
+import { inject as service } from '@ember/service';
 import { next } from '@ember/runloop';
 import turfBbox from '@turf/bbox';
 import mapboxgl from 'mapbox-gl';
 import { sanitizeStyle } from 'labs-applicant-maps/helpers/sanitize-style';
+import { computed, action } from '@ember/object';
 // TODO import geom layers from the various modes that export them,
 // this util should be deprecated
 import projectGeomLayers from '../utils/project-geom-layers';
