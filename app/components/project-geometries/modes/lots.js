@@ -1,13 +1,12 @@
 import Component from '@ember/component';
-import { action, computed } from '@ember-decorators/object';
+import { action, computed, set } from '@ember/object';
 import turfBuffer from '@turf/buffer';
 import turfUnion from '@turf/union';
 import turfSimplify from '@turf/simplify';
-import { set } from '@ember/object';
 import carto from 'cartobox-promises-utility/utils/carto';
 import { task } from 'ember-concurrency-decorators';
 import { waitForProperty } from 'ember-concurrency';
-import { inject as service } from '@ember-decorators/service';
+import { inject as service } from '@ember/service';
 
 const tolerance = 0.000001;
 const bufferkm = 0.00008;

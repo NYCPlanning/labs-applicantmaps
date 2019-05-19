@@ -1,7 +1,6 @@
 import DS from 'ember-data';
-import { attr, belongsTo } from '@ember-decorators/data';
 
-const { Model } = DS;
+const { Model, attr, belongsTo } = DS;
 
 /*
   Abstract base class for applicant maps.

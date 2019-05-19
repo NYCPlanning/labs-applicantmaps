@@ -1,6 +1,6 @@
 import Component from '@ember/component';
-import { action, computed } from '@ember-decorators/object';
-import { inject as service } from '@ember-decorators/service';
+import { action, computed } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { camelize } from '@ember/string';
 
 // This class takes FIVE arguments: map model mode type target
