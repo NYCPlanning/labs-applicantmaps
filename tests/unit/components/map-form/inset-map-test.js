@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { fake } from 'sinon';
-import createMap from 'labs-applicant-maps/tests/helpers/create-map';
+import { defaultMapboxEventStub } from 'labs-applicant-maps/tests/helpers/mapbox-gl-stub';
 
 module('Unit | Component | map-form/inset-map', function(hooks) {
   setupTest(hooks);
@@ -47,7 +47,7 @@ module('Unit | Component | map-form/inset-map', function(hooks) {
         [0, 0],
       ]],
     });
-    const map = await createMap();
+    const map = defaultMapboxEventStub.mapInstance;
     component.handleMapLoad(map);
 
     // update boundsPolygon (triggers resize observer -- assume this "just works" b/c it is ember feature)

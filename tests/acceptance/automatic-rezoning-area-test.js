@@ -7,7 +7,7 @@ import {
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import random from '@turf/random';
-import setupMapMocks from 'labs-applicant-maps/tests/helpers/setup-map-mocks';
+import setupMapMocks from 'labs-applicant-maps/tests/helpers/mapbox-gl-stub';
 
 const { randomPolygon } = random;
 

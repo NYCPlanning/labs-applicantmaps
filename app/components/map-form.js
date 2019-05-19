@@ -229,6 +229,30 @@ export default class MapFormComponent extends Component {
 
   projectGeomLayers = projectGeomLayers;
 
+  preventMapInteractions = false;
+
+  handleMapInteractions() {
+    const map = this.get('mapInstance');
+    const preventMapInteractions = this.get('preventMapInteractions');
+    const targetInteractions = [
+      'scrollZoom',
+      'boxZoom',
+      'dragRotate',
+      'dragPan',
+      'keyboard',
+      'doubleClickZoom',
+      'touchZoomRotate',
+    ];
+
+    if (preventMapInteractions === true) {
+      targetInteractions
+        .forEach(interaction => map[interaction].enable());
+    } else {
+      targetInteractions
+        .forEach(interaction => map[interaction].disable());
+    }
+  }
+
   @computed()
   get timestamp() {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -281,7 +305,7 @@ export default class MapFormComponent extends Component {
 
     this.set('mapInstance', map);
     this.fitBoundsToSelectedBuffer();
-    this.toggleMapInteractions();
+    this.handleMapInteractions();
 
     const scaleControl = new mapboxgl.ScaleControl({ maxWidth: 200, unit: 'imperial' });
     map.addControl(scaleControl, 'bottom-left');
@@ -384,27 +408,8 @@ export default class MapFormComponent extends Component {
 
   @action
   toggleMapInteractions () {
-    const map = this.get('mapInstance');
-    const preventMapInteractions = this.get('preventMapInteractions');
-    const targetInteractions = [
-      'scrollZoom',
-      'boxZoom',
-      'dragRotate',
-      'dragPan',
-      'keyboard',
-      'doubleClickZoom',
-      'touchZoomRotate',
-    ];
-
-    if (preventMapInteractions === true) {
-      this.set('preventMapInteractions', false);
-      targetInteractions
-        .forEach(interaction => map[interaction].enable());
-    } else {
-      this.set('preventMapInteractions', true);
-      targetInteractions
-        .forEach(interaction => map[interaction].disable());
-    }
+    this.toggleProperty('preventMapInteractions');
+    this.handleMapInteractions();
   }
 
   @action
