@@ -231,6 +231,9 @@ export default class MapFormComponent extends Component {
 
   preventMapInteractions = false;
 
+  // this was originally intended to toggle preventMapInteractions
+  // this became unruly, so we split it out. anytime this is called,
+  // usually preventMapInteractions is toggled.
   handleMapInteractions() {
     const map = this.get('mapInstance');
     const preventMapInteractions = this.get('preventMapInteractions');

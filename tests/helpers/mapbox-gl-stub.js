@@ -116,12 +116,10 @@ export class MapboxOn extends Component {
 
   // the core functionality of mapbox-gl-on is handled on init by binding
   // the passed event name with the passed action.
-  // bindOnInvocation is used to pull in test context the moment the event itself is
-  // triggered (rather than being pulled in on initialization)
   init(...args) {
     super.init(...args);
 
-    // the component allows for an option id to be passed as the second argument.
+    // the component allows for an optional id to be passed as the second argument.
     // if it's not passed, we have to make sure the action gets set correctly
     if (!this.action) this.action = this.optionalLayerId;
 
@@ -144,9 +142,34 @@ export class MapboxGlSource extends Component {
 // `setupMapboxStubs(hooks);`
 // This also defines an extension of the mapbox-gl stub so that the
 // test context can be pulled in.
-// downstream stubs are those that depend on a "pre-initialized"
-// mapbox-gl-stub, specifically referring to the references to
-// the testContext
+// When this is used, each test will have access to a stub property
+// called `mapboxEventStub`, allowing insertion of mock methods/properties
+// or references for intercepting events:
+//
+// Mock response for an internal mapbox-gl method:
+// this.mapboxEventStub = {
+//   mapInstance: {
+//     querySourceFeatures() {
+//       return [mockFeature];
+//     },
+//   },
+// };
+
+// Intercept mapbox-gl events and trigger artificially:
+// const artificialEvents = {};
+// this.mapboxEventStub = {
+//   mapInstance: {
+//     on: (event, func) => {
+//       artificialEvents[event] = func;
+//     },
+//   },
+// };
+//
+// artificialEvents.click(triangleFC);
+//
+// In the example above, artificialEvents.click() directly calls the event callback
+// for the mapbox-gl `click` event. The argument is whatever that callback is provided
+// as an argument.
 export default function(hooks) {
   hooks.beforeEach(function() {
     let _mapboxEventStub = defaultMapboxEventStub;
@@ -169,7 +192,9 @@ export default function(hooks) {
       }
     }
 
-    // internal merge helper for handling block params
+    // template helper used in the template for the mocks above. this helper
+    // simple merges multiple objects into one. it's helpful for extending objects
+    // that're usually yielded out from a component.
     this.owner.register('helper:assign', helper(function(hashes, hash) {
       return assign({}, ...hashes, hash);
     }));

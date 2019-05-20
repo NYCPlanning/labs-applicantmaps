@@ -38,7 +38,7 @@ module('Acceptance | back button works', function(hooks) {
       features: [triangle],
     };
 
-    this.currentReturnValue = {
+    this.currentMapboxStubReturnValue = {
       type: 'FeatureCollection',
       features: [],
     };
@@ -48,8 +48,8 @@ module('Acceptance | back button works', function(hooks) {
       draw: {
         add: () => {},
         set: () => {},
-        getAll: () => this.currentReturnValue,
-        getSelected: () => this.currentReturnValue,
+        getAll: () => this.currentMapboxStubReturnValue,
+        getSelected: () => this.currentMapboxStubReturnValue,
         getSelectedIds: () => [1],
         getMode: () => 'simple_select',
         changeMode: () => {},
@@ -152,7 +152,7 @@ module('Acceptance | back button works', function(hooks) {
     await click('[data-test-rezoning-commercial-overlays-yes]');
     await click('[data-test-rezoning-special-purpose-districts-yes]');
     await click('[data-test-alter-zoning]');
-    this.currentReturnValue = this.triangleFC;
+    this.currentMapboxStubReturnValue = this.triangleFC;
     this.artificialEvents['draw.create']();
     await settled();
 
@@ -175,7 +175,7 @@ module('Acceptance | back button works', function(hooks) {
 
     assert.equal(currentURL(), '/projects/1/edit/geometry-edit?mode=draw&type=commercial-overlays');
 
-    this.currentReturnValue = this.triangleFC;
+    this.currentMapboxStubReturnValue = this.triangleFC;
     this.artificialEvents['draw.create']();
     await settled();
 
@@ -183,7 +183,7 @@ module('Acceptance | back button works', function(hooks) {
 
     assert.equal(currentURL(), '/projects/1/edit/geometry-edit?mode=draw&type=special-purpose-districts');
 
-    this.currentReturnValue = this.triangleFC;
+    this.currentMapboxStubReturnValue = this.triangleFC;
     this.artificialEvents['draw.create']();
     await settled();
 
