@@ -15,7 +15,6 @@ export default function() {
   };
 
   if (this.environment === 'test' || interceptCarto) {
-    console.log('intercepting...');
     // generate geojson from memory for testing
     this.get('https://planninglabs.carto.com/api/v2/sql', handleCartoGeometries);
     this.post('/layer-groups', function(schema) {
@@ -42,11 +41,23 @@ export default function() {
   this.passthrough('http://raw.githubusercontent.com/**');
   this.passthrough('https://raw.githubusercontent.com/**');
   this.passthrough('/write-coverage');
-  this.passthrough('https://search-api.planninglabs.nyc/**');
   this.passthrough('http://localhost:3000/**');
   this.passthrough('https://maputnik-push.planninglabs.nyc/**');
   this.passthrough('https://upload.wikimedia.org/**');
   this.passthrough('/img/**');
+
+  // 3rd Party APIs
+  this.get('https://search-api.planninglabs.nyc/**', function() {
+    return [{
+      label: 'test',
+      bbl: 100000,
+      geometry: {
+        type: 'Point',
+        coordinates: [0, 0],
+      },
+      type: 'lot',
+    }];
+  });
 
   // REST Endpoints
   this.get('/projects');

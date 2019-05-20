@@ -1,4 +1,4 @@
-<div class="search-and-bbl-lookup-container">
+<div class="search-and-bbl-lookup-container" data-test-search-handler="">
   {{#labs-search
     data-test-search-address=true
     searchPlaceholder='Search for Address...'
@@ -9,7 +9,7 @@
     <small class="dark-gray">{{search.result.label}}</small>
   {{/labs-search}}
 
-  {{labs-bbl-lookup flyTo=(action 'flyTo')}}
+  {{yield (hash flyTo=(action 'flyTo'))}}
 </div>
 
 {{#if geocodedFeature}}

@@ -1,7 +1,9 @@
+
 {{!-- Ad-hoc source and layer for developmentSite --}}
 {{#if (not (is-empty model.developmentSite))}}
   {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
     {{source.layer
+      data-test-layer=developmentSiteLayer.id
       layer=developmentSiteLayer
       before='boundary_country'
     }}
@@ -12,6 +14,7 @@
 {{#if (not (is-empty model.projectArea))}}
   {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
     {{source.layer
+      data-test-layer=projectAreaLayer.id
       layer=projectAreaLayer
       before='boundary_country'
     }}
@@ -29,6 +32,7 @@
 }}
   {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
     {{source.layer
+      data-test-layer=rezoningAreaLayer.id
       layer=rezoningAreaLayer
       before='boundary_country'
     }}
@@ -39,10 +43,12 @@
 {{#if (not (is-empty model.underlyingZoning))}}
   {{#map.source options=(mapbox-geojson-source model.underlyingZoning) as |source|}}
     {{source.layer
+      data-test-layer=underlyingZoningLayer.id
       layer=underlyingZoningLayer
       before='boundary_country'
     }}
     {{source.layer
+      data-test-layer=underlyingZoningLabelsLayer.id
       layer=underlyingZoningLabelsLayer
       before='boundary_country'
     }}
@@ -53,50 +59,62 @@
 {{#if (not (is-empty model.commercialOverlays))}}
   {{#map.source options=(mapbox-geojson-source model.commercialOverlays) as |source|}}
     {{source.layer
+      data-test-layer=commercialOverlaysLayer.id
       layer=commercialOverlaysLayer
       before='boundary_country'
     }}
     {{source.layer
+      data-test-layer=coLayer.id
       layer=coLayer
       before='boundary_country'
     }}
     {{source.layer
+      data-test-layer=c11Layer.id
       layer=c11Layer
       before='boundary_country'
     }}
     {{source.layer
+      data-test-layer=c12Layer.id
       layer=c12Layer
       before='boundary_country'
     }}
     {{source.layer
+      data-test-layer=c13Layer.id
       layer=c13Layer
       before='boundary_country'
     }}
     {{source.layer
+      data-test-layer=c14Layer.id
       layer=c14Layer
       before='boundary_country'
     }}
     {{source.layer
+      data-test-layer=c15Layer.id
       layer=c15Layer
       before='boundary_country'
     }}
     {{source.layer
+      data-test-layer=c21Layer.id
       layer=c21Layer
       before='boundary_country'
     }}
     {{source.layer
+      data-test-layer=c22Layer.id
       layer=c22Layer
       before='boundary_country'
     }}
     {{source.layer
+      data-test-layer=c23Layer.id
       layer=c23Layer
       before='boundary_country'
     }}
     {{source.layer
+      data-test-layer=c24Layer.id
       layer=c24Layer
       before='boundary_country'
     }}
     {{source.layer
+      data-test-layer=c25Layer.id
       layer=c25Layer
       before='boundary_country'
     }}
@@ -107,10 +125,12 @@
 {{#if (not (is-empty model.specialPurposeDistricts))}}
   {{#map.source options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
     {{source.layer
+      data-test-layer=specialPurposeDistrictsLayer.id
       layer=specialPurposeDistrictsLayer
       before='boundary_country'
     }}
     {{source.layer
+      data-test-layer=specialPurposeDistrictsLabelsLayer.id
       layer=specialPurposeDistrictsLabelsLayer
       before='boundary_country'
     }}

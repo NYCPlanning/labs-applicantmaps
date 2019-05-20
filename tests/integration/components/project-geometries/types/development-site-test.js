@@ -4,7 +4,6 @@ import { render, settled } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { run } from '@ember/runloop';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import mapboxGlLoaded from '../../../../helpers/mapbox-gl-loaded';
 
 const DUMMY_FEATURE_COLLECTION = {
   type: 'FeatureCollection',
@@ -51,8 +50,6 @@ module('Integration | Component | project-geometries/development-site', function
           model=model}}
       {{/mapbox-gl}}
     `);
-
-    await mapboxGlLoaded();
 
     assert.equal(this.element.querySelector('[data-test-project-geometry-save]').disabled, true);
 

@@ -17,7 +17,7 @@ module('Unit | Utility | compute-difference', function(hooks) {
     this.server.createList('project', 1);
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
-    console.log(model.get('developmentSite'));
+
     const current = await queriesIntersectingZoningQuery(
       model.get('developmentSite'),
     );

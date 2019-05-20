@@ -1,7 +1,5 @@
 import random from '@turf/random';
 
-// import { helper } from '@ember/component/helper';
-
 const { randomPoint } = random;
 const randomPolygon = function(count, label = false) {
   if (count === 1) {
