@@ -89,6 +89,7 @@ export default [
     needDevelopmentSite: true,
     needProjectArea: false,
     needRezoning: false,
+    hasCompletedWizard: true,
     geometricPropertyIds: [1],
   },
   {

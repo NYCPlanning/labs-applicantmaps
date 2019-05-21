@@ -18,7 +18,7 @@ const labelOptions = [
 
 // Proposed Commercial Overlays
 export const commercialOverlaysLayer = {
-  id: 'commemrcial-overlays-lines',
+  id: 'commercial-overlays-lines',
   type: 'line',
   paint: {
     'line-opacity': 0.5,

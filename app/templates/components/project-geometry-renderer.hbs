@@ -4,6 +4,7 @@
   {{#map.source options=(mapbox-geojson-source model.developmentSite) as |source|}}
     {{source.layer
       data-test-layer=developmentSiteLayer.id
+      supportsDataTestProperties=true
       layer=developmentSiteLayer
       before='boundary_country'
     }}
@@ -15,6 +16,7 @@
   {{#map.source options=(mapbox-geojson-source model.projectArea) as |source|}}
     {{source.layer
       data-test-layer=projectAreaLayer.id
+      supportsDataTestProperties=true
       layer=projectAreaLayer
       before='boundary_country'
     }}
@@ -33,6 +35,7 @@
   {{#map.source options=(mapbox-geojson-source model.rezoningArea) as |source|}}
     {{source.layer
       data-test-layer=rezoningAreaLayer.id
+      supportsDataTestProperties=true
       layer=rezoningAreaLayer
       before='boundary_country'
     }}
@@ -40,15 +43,17 @@
 {{/if}}
 
 {{!-- Ad-hoc source and layer for proposedZoning --}}
-{{#if (not (is-empty model.underlyingZoning))}}
+{{#if (and (not (is-empty model.underlyingZoning)) model.needUnderlyingZoning)}}
   {{#map.source options=(mapbox-geojson-source model.underlyingZoning) as |source|}}
     {{source.layer
       data-test-layer=underlyingZoningLayer.id
+      supportsDataTestProperties=true
       layer=underlyingZoningLayer
       before='boundary_country'
     }}
     {{source.layer
       data-test-layer=underlyingZoningLabelsLayer.id
+      supportsDataTestProperties=true
       layer=underlyingZoningLabelsLayer
       before='boundary_country'
     }}
@@ -56,65 +61,77 @@
 {{/if}}
 
 {{!-- Ad-hoc source and layer for proposedCommercialOverlays --}}
-{{#if (not (is-empty model.commercialOverlays))}}
+{{#if (and (not (is-empty model.commercialOverlays)) model.needCommercialOverlays)}}
   {{#map.source options=(mapbox-geojson-source model.commercialOverlays) as |source|}}
     {{source.layer
       data-test-layer=commercialOverlaysLayer.id
+      supportsDataTestProperties=true
       layer=commercialOverlaysLayer
       before='boundary_country'
     }}
     {{source.layer
       data-test-layer=coLayer.id
+      supportsDataTestProperties=true
       layer=coLayer
       before='boundary_country'
     }}
     {{source.layer
       data-test-layer=c11Layer.id
+      supportsDataTestProperties=true
       layer=c11Layer
       before='boundary_country'
     }}
     {{source.layer
       data-test-layer=c12Layer.id
+      supportsDataTestProperties=true
       layer=c12Layer
       before='boundary_country'
     }}
     {{source.layer
       data-test-layer=c13Layer.id
+      supportsDataTestProperties=true
       layer=c13Layer
       before='boundary_country'
     }}
     {{source.layer
       data-test-layer=c14Layer.id
+      supportsDataTestProperties=true
       layer=c14Layer
       before='boundary_country'
     }}
     {{source.layer
       data-test-layer=c15Layer.id
+      supportsDataTestProperties=true
       layer=c15Layer
       before='boundary_country'
     }}
     {{source.layer
       data-test-layer=c21Layer.id
+      supportsDataTestProperties=true
       layer=c21Layer
       before='boundary_country'
     }}
     {{source.layer
       data-test-layer=c22Layer.id
+      supportsDataTestProperties=true
       layer=c22Layer
       before='boundary_country'
     }}
     {{source.layer
       data-test-layer=c23Layer.id
+      supportsDataTestProperties=true
       layer=c23Layer
       before='boundary_country'
     }}
     {{source.layer
       data-test-layer=c24Layer.id
+      supportsDataTestProperties=true
       layer=c24Layer
       before='boundary_country'
     }}
     {{source.layer
       data-test-layer=c25Layer.id
+      supportsDataTestProperties=true
       layer=c25Layer
       before='boundary_country'
     }}
@@ -122,15 +139,17 @@
 {{/if}}
 
 {{!-- Ad-hoc source and layer for proposedSpecialPurposeDistricts --}}
-{{#if (not (is-empty model.specialPurposeDistricts))}}
+{{#if (and (not (is-empty model.specialPurposeDistricts)) model.needSpecialPurposeDistricts)}}
   {{#map.source options=(mapbox-geojson-source model.specialPurposeDistricts) as |source|}}
     {{source.layer
       data-test-layer=specialPurposeDistrictsLayer.id
+      supportsDataTestProperties=true
       layer=specialPurposeDistrictsLayer
       before='boundary_country'
     }}
     {{source.layer
       data-test-layer=specialPurposeDistrictsLabelsLayer.id
+      supportsDataTestProperties=true
       layer=specialPurposeDistrictsLabelsLayer
       before='boundary_country'
     }}

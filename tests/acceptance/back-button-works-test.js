@@ -152,6 +152,7 @@ module('Acceptance | back button works', function(hooks) {
     await click('[data-test-rezoning-commercial-overlays-yes]');
     await click('[data-test-rezoning-special-purpose-districts-yes]');
     await click('[data-test-alter-zoning]');
+
     this.currentMapboxStubReturnValue = this.triangleFC;
     this.artificialEvents['draw.create']();
     await settled();

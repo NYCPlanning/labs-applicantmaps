@@ -1,4 +1,5 @@
-{{#if (not-eq model.project.currentStep.step 'complete')}}
+{{#if (and (not-eq model.project.currentStep.step 'complete') (not-eq model.project.currentStep.step 'dashboard'))}}
+  {{!-- find the previous step related to the current --}}
   {{#let (find-relative-step (hash route=router.currentRouteName type=type mode=mode) -1) as |previous|}}
     {{#link-to previous.routing.route (query-params mode=previous.routing.mode type=previous.routing.type)
       class="button gray"
@@ -7,7 +8,10 @@
     {{/link-to}}
   {{/let}}
 {{else}}
-  {{#link-to "projects.show" model.project.id class="button gray"}}
+  {{!-- cancel state - go back to the project dashboard --}}
+  {{#link-to "projects.show" model.project.id
+    data-test-geometry-edit-cancel=true
+    class="button gray"}}
     Cancel
   {{/link-to}}
 {{/if}}
