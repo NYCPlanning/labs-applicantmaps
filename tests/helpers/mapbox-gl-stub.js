@@ -119,7 +119,7 @@ export class MapboxOn extends Component {
   init(...args) {
     super.init(...args);
 
-    // the component allows for an optional id to be passed as the second argument.
+    // the component allows for an option id to be passed as the second argument.
     // if it's not passed, we have to make sure the action gets set correctly
     if (!this.action) this.action = this.optionalLayerId;
 
