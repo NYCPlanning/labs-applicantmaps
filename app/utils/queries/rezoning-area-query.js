@@ -41,6 +41,36 @@ export async function combineFeatureCollections(developmentSite, allGeometricPro
   return combinedFC;
 }
 
+// returns a new GeoJSON feature if the feature is a polygon
+// and if the polygon includes multiple LinearRings
+// prevents "holes" from appearing the rezoning area
+// see https://macwright.org/2015/03/23/geojson-second-bite#polygons
+export function fillMultiPolygonHoles(feature) {
+  const { geometry } = feature;
+  const { type } = geometry;
+
+  // extract the exterior of the linearRing in a polygon
+  // the exterior ring is always the first in the set of coordinates:
+  // - Polygon coordinates:
+  //   - LinearRing (exterior)
+  //     - Positions...
+  //   - LinearRing (interior)
+  //     - Positions...
+  // splice modifies the array in-place.
+  // Additionally, these are multipolygons whose coordinates
+  // member is an array of Polygon coordinate arrays.
+  if (type === 'MultiPolygon') {
+    geometry.coordinates
+      .forEach(polygonCoords => polygonCoords.splice(1, polygonCoords.length - 1));
+  }
+
+  if (type === 'Polygon') {
+    geometry.coordinates.splice(1, geometry.coordinates.length - 1);
+  }
+
+  return feature;
+}
+
 export default async (...args) => {
   const combinedFC = await combineFeatureCollections(...args);
 
@@ -56,10 +86,13 @@ export default async (...args) => {
       return turfBuffer(union, -0.0005);
     }, null);
 
+  // this is always one feature
   let bufferedUnionedGeoms = [];
   try {
-    // buffer the geoms by ~20 feet
-    bufferedUnionedGeoms = [turfBuffer(unionedGeoms, 0.006)];
+    const buffered = turfBuffer(unionedGeoms, 0.006);
+    const filled = fillMultiPolygonHoles(buffered);
+
+    bufferedUnionedGeoms = [filled];
   } catch (e) {
     console.log(e);
   }
