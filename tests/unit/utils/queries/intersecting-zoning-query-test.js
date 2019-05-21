@@ -8,7 +8,7 @@ module('Unit | Utility | queries/intersecting-zoning-query', function(hooks) {
   setupMirage(hooks);
 
   test('returns a feature collection when development site passed into intersecting zoning query', async function(assert) {
-    this.server.createList('project', 1);
+    this.server.create('project', 'hasDevelopmentSite');
 
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1, { include: 'geometric-properties' });

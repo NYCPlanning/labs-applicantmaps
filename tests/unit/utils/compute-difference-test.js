@@ -14,7 +14,7 @@ module('Unit | Utility | compute-difference', function(hooks) {
 
   // Replace this with your real tests.
   test('it computes difference', async function(assert) {
-    this.server.createList('project', 1);
+    this.server.create('project', 'hasDevelopmentSite');
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
 
@@ -28,7 +28,7 @@ module('Unit | Utility | compute-difference', function(hooks) {
   });
 
   test('it returns empty feature collection if proposed is falsey', async function(assert) {
-    this.server.createList('project', 1);
+    this.server.create('project', 'hasDevelopmentSite');
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
     const current = await queriesIntersectingZoningQuery(

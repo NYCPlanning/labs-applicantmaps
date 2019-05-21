@@ -13,7 +13,7 @@ module('Integration | Component | map-form', function(hooks) {
   setupComposerMocks(hooks);
 
   test('unchecking Lock Interactions allows interaction on the map', async function(assert) {
-    this.server.create('project', 1);
+    this.server.create('project', 'hasDevelopmentSite', 1);
     assert.expect(1);
 
     this.mapboxEventStub = {

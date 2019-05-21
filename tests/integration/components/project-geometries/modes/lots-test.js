@@ -48,7 +48,7 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
   test('click handler action is functional', async function(assert) {
     const store = this.owner.lookup('service:store');
 
-    this.server.create('project');
+    this.server.create('project', 'hasDevelopmentSite');
     this.server.get('https://planninglabs.carto.com/api/v2/sql', () => randomPolygon(1));
 
     const model = await store.findRecord('project', 1, {
@@ -119,7 +119,7 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
   test('it removes a previously clicked lot', async function(assert) {
     const store = this.owner.lookup('service:store');
 
-    this.server.create('project');
+    this.server.create('project', 'hasDevelopmentSite');
 
     const model = await store.findRecord('project', 1, {
       include: 'geometric-properties',
@@ -261,7 +261,7 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
     const { features: [randomFeature1, randomFeature2] } = randomFeatures;
     randomFeature1.properties.bbl = '100100100';
 
-    this.server.create('project');
+    this.server.create('project', 'hasDevelopmentSite');
     this.server.get('https://planninglabs.carto.com/api/v2/sql', () => randomFeatures);
 
     let actionArgs = [];
