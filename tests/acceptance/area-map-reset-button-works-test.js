@@ -12,7 +12,7 @@ module('Acceptance | area map reset button works', function(hooks) {
   setupComposerMocks(hooks);
 
   test('reset button fits map to bounds, triggers reset bounds on data changes', async function(assert) {
-    this.server.create('project');
+    this.server.create('project', 'hasDevelopmentSite');
     assert.expect(9);
 
     this.mapboxEventStub = {

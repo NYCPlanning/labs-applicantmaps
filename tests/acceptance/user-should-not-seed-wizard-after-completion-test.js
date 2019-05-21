@@ -17,7 +17,7 @@ module('Acceptance | user should not be bounced back to wizard if complete', fun
   setupComposerMocks(hooks);
 
   test('visiting a completed project shows the dashboard', async function(assert) {
-    this.server.create('project', {
+    this.server.create('project', 'hasDevelopmentSite', {
       projectName: 'test',
       applicantName: 'test',
       zapProjectId: 'test',
@@ -33,7 +33,7 @@ module('Acceptance | user should not be bounced back to wizard if complete', fun
   });
 
   test('visiting a completed project, adding underlying zoning, then hitting back should should dashboard', async function(assert) {
-    this.server.create('project', {
+    this.server.create('project', 'hasDevelopmentSite', {
       projectName: 'test',
       applicantName: 'test',
       zapProjectId: 'test',
@@ -57,7 +57,7 @@ module('Acceptance | user should not be bounced back to wizard if complete', fun
   });
 
   test('visiting a completed project, adding comm overlay, then hitting back should should dashboard', async function(assert) {
-    this.server.create('project', {
+    this.server.create('project', 'hasDevelopmentSite', {
       projectName: 'test',
       applicantName: 'test',
       zapProjectId: 'test',

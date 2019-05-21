@@ -8,7 +8,7 @@ module('Unit | Utility | queries/proposed-commercial-overlays-query', function(h
   setupMirage(hooks);
 
   test('returns a feature collection when development site passed into commercial overlays query', async function(assert) {
-    this.server.createList('project', 1);
+    this.server.create('project', 'hasDevelopmentSite');
 
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1, { include: 'geometric-properties' });

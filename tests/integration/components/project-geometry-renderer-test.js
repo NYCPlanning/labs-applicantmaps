@@ -15,7 +15,7 @@ module('Integration | Component | project-geometry-renderer', function(hooks) {
   // todo: refactor "mystery guest" antipattern, which is that the factory for project
   // implicitly includes a developmentSite upon generation.
   test('it does not render any layers if there are not project geometries set on the model', async function(assert) {
-    this.server.create('project');
+    this.server.create('project', 'hasDevelopmentSite');
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
 
@@ -45,7 +45,7 @@ module('Integration | Component | project-geometry-renderer', function(hooks) {
   });
 
   test('it renders a developmentSite if one exists on the model', async function(assert) {
-    this.server.create('project');
+    this.server.create('project', 'hasDevelopmentSite');
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
 

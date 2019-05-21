@@ -8,7 +8,7 @@ module('Unit | Utility | queries/proposed-special-districts-query', function(hoo
   setupMirage(hooks);
 
   test('returns a feature collection when development site passed into special districts query', async function(assert) {
-    this.server.createList('project', 1);
+    this.server.create('project', 'hasDevelopmentSite');
 
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1, { include: 'geometric-properties' });

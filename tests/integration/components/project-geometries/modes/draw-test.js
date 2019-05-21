@@ -20,14 +20,14 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
 
   test('it switches to draw mode', async function(assert) {
     assert.expect(1);
-    this.server.create('project');
+    const geometricPropData = this.server.create('geometric-property', 'hasAnnotations', {
+      geometryType: 'developmentSite',
+    });
     const store = this.owner.lookup('service:store');
-    const model = await store.findRecord('project', 1);
+    const model = await store.createRecord('project', geometricPropData);
 
     // factory setup for data context
-    this.set('geometricProperty', model.get('geometricProperties')
-      .findBy('geometryType', 'developmentSite')
-      .get('proposedGeometry'));
+    this.geometricProperty = model.proposedGeometry;
 
     this.mapboxEventStub = {
       draw: {
@@ -51,16 +51,16 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
   });
 
   test('it deletes selected polygon', async function(assert) {
-    this.server.create('project');
-    const store = this.owner.lookup('service:store');
-    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
-
-    const geometricProperty = model.get('geometricProperties')
-      .findBy('geometryType', 'developmentSite')
-      .get('proposedGeometry');
-    this.set('geometricProperty', geometricProperty);
-
     assert.expect(3);
+
+    const geometricPropData = this.server.create('geometric-property', 'hasAnnotations', {
+      geometryType: 'developmentSite',
+    });
+    const store = this.owner.lookup('service:store');
+    const model = await store.createRecord('project', geometricPropData);
+
+    this.geometricProperty = model.proposedGeometry;
+
     const artificialEvents = {};
     this.mapboxEventStub = {
       draw: {
@@ -106,7 +106,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
   // but since I'm having to simulate practically everything for DRAW
   // it doesn't work!
   skip('it updates the draw layer label', async function(assert) {
-    this.server.create('project');
+    this.server.create('project', 'hasDevelopmentSite');
     const store = this.owner.lookup('service:store');
     const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
     const { map, draw } = this;
@@ -211,7 +211,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
 
   // need to look at this later - firefox is behaving differently with the clicks
   test('it can handle label tool', async function(assert) {
-    this.server.create('project', {
+    this.server.create('project', 'hasDevelopmentSite', {
       developmentSite: {
         type: 'FeatureCollection',
         features: [],
@@ -285,7 +285,7 @@ module('Integration | Component | project-geometries/modes/draw', function(hooks
   });
 
   test('it can handle centerline tool', async function(assert) {
-    this.server.create('project', {
+    this.server.create('project', 'hasDevelopmentSite', {
       developmentSite: {
         type: 'FeatureCollection',
         features: [],
