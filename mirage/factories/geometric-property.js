@@ -1,7 +1,30 @@
-import { Factory, faker } from 'ember-cli-mirage';
+import { Factory, faker, trait } from 'ember-cli-mirage';
 import random from '../helpers/random-geometry';
 
 const { randomPolygon } = random;
+const annotations = {
+  type: 'FeatureCollection',
+  features: [{
+    type: 'Feature',
+    properties: {
+      'meta:mode': 'draw_annotations:linear',
+      label: '29 ft',
+    },
+    geometry: {
+      coordinates: [
+        [
+          -73.91311260409391,
+          40.75817100752687,
+        ],
+        [
+          -73.91314440749528,
+          40.75808962172928,
+        ],
+      ],
+      type: 'LineString',
+    },
+  }],
+};
 
 export default Factory.extend({
   proposedGeometry() {
@@ -12,4 +35,8 @@ export default Factory.extend({
       max_radial_length: 0.003,
     });
   },
+
+  hasAnnotations: trait({
+    annotations,
+  }),
 });

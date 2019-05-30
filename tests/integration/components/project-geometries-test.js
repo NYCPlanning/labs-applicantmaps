@@ -2,16 +2,17 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import setupMapMocks from 'labs-applicant-maps/tests/helpers/setup-map-mocks';
+import setupMapMocks from 'labs-applicant-maps/tests/helpers/mapbox-gl-stub';
+import setupComposerMocks from 'labs-applicant-maps/tests/helpers/mapbox-composer-stub';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | project-geometries', function(hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupMapMocks(hooks);
+  setupComposerMocks(hooks);
 
   test('it renders', async function(assert) {
-    this.server.createList('layer-group', 10);
     this.server.create('project');
 
     const store = this.owner.lookup('service:store');

@@ -1,68 +1,62 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
-import createMap from 'labs-applicant-maps/tests/helpers/create-map';
+import { render, find } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import setupMapMocks from 'labs-applicant-maps/tests/helpers/setup-map-mocks';
+import setupMapMocks from 'labs-applicant-maps/tests/helpers/mapbox-gl-stub';
+import setupComposerMocks from 'labs-applicant-maps/tests/helpers/mapbox-composer-stub';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | project-geometry-renderer', function(hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
   setupMapMocks(hooks);
+  setupComposerMocks(hooks);
 
-  hooks.before(async function() {
-    this.map = await createMap();
-  });
-
-  hooks.after(function() {
-    this.map.remove();
-  });
-
+  // todo: refactor "mystery guest" antipattern, which is that the factory for project
+  // implicitly includes a developmentSite upon generation.
   test('it does not render any layers if there are not project geometries set on the model', async function(assert) {
-    this.server.create('project');
+    this.server.create('project', 'hasDevelopmentSite');
     const store = this.owner.lookup('service:store');
-    const currentMapService = this.owner.lookup('service:mock-map-service');
-    const model = await store.findRecord('project', 1);
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
 
-    this.set('model', model);
+    this.model = model;
+
+    const artificialEvents = {};
+    this.mapboxEventStub = {
+      mapInstance: {
+        on: (event, func) => {
+          artificialEvents[event] = func;
+        },
+      },
+    };
 
     await render(hbs`
-      {{#mapbox-gl id='main-map' as |map|}}
+      {{#mapbox-gl as |map|}}
         {{project-geometry-renderer map=map model=model}}
       {{/mapbox-gl}}
     `);
 
-    const { map } = currentMapService.get('maps').get('main-map');
-
-    // make sure none of the layer ids associated with our project geometries exist on the map
-    assert.notOk(map.getStyle().layers
-      .filter(({ id }) => [
-        'development-site-line',
-        'project-buffer-line',
-        'rezoning-area-line',
-        'underlying-zoning-line',
-        'co_outline',
-        'proposed-special-purpose-districts-fill',
-      ].includes(id))
-      .length);
+    assert.ok(find('[data-test-layer="development-site-line"]'));
+    assert.notOk(find('[data-test-layer="project-buffer-line"]'));
+    assert.notOk(find('[data-test-layer="rezoning-area-line"]'));
+    assert.notOk(find('[data-test-layer="underlying-zoning-line"]'));
+    assert.notOk(find('[data-test-layer="co_outline"]'));
+    assert.notOk(find('[data-test-layer="proposed-special-purpose-districts-fill"]'));
   });
 
   test('it renders a developmentSite if one exists on the model', async function(assert) {
-    this.server.create('project');
+    this.server.create('project', 'hasDevelopmentSite');
     const store = this.owner.lookup('service:store');
-    const currentMapService = this.owner.lookup('service:mock-map-service');
-    const model = await store.findRecord('project', 1);
+    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
 
-    this.set('model', model);
+    this.model = model;
 
     await render(hbs`
-      {{#mapbox-gl id='main-map' as |map|}}
+      {{#mapbox-gl as |map|}}
         {{project-geometry-renderer map=map model=model}}
       {{/mapbox-gl}}
     `);
 
-    const { map } = currentMapService.get('maps').get('main-map');
-    assert.ok(map.getStyle().layers.filter(({ id }) => id === 'development-site-line'));
+    assert.ok(find('[data-test-layer="development-site-line"]'));
   });
 });

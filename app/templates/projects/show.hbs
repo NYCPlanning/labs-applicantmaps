@@ -13,18 +13,16 @@
 
   <div class="grid-x">
     <div class="cell xlarge-auto">
-
       {{#labs-map
-          id='dashboard-map'
-          mapLoaded=(action 'handleMapLoad')
-          initOptions=(hash
-            zoom=15.479951257235973
-            center=(array -73.96532400540775 40.709710016659386)
-            bearing=20.97777777785973
-            pitchWithRotate=false
-          )
-          as | map |
-        }}
+        id='dashboard-map'
+        mapLoaded=(action 'handleMapLoad')
+        initOptions=(hash
+          zoom=15.479951257235973
+          center=(array -73.96532400540775 40.709710016659386)
+          bearing=20.97777777785973
+          pitchWithRotate=false
+        ) as |map|
+      }}
         {{project-geometry-renderer map=map model=model}}
         {{map.labs-layers layerGroups=(array taxLotsLayerGroup)}}
       {{/labs-map}}
@@ -70,16 +68,6 @@
             {{/ember-popover}}
           </button>
         </div>
-        {{#if (not (is-empty model.developmentSite))}}
-          <div class="cell shrink">
-            <button
-              class="button tiny gray no-margin"
-              onclick={{action (mut model.developmentSite) EmptyFeatureCollection}}
-            >
-              {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
-            </button>
-          </div>
-        {{/if}}
       </div>
 
       {{!-- Project Area --}}
@@ -121,9 +109,9 @@
         </div>
         {{#if (not (is-empty model.projectArea))}}
           <div class="cell shrink">
-            <button
+            <button data-test-delete-project-area
               class="button tiny gray no-margin"
-              onclick={{action (mut model.projectArea) EmptyFeatureCollection}}
+              onclick={{action deleteProjectArea}}
             >
               {{fa-icon 'trash' class='dark-gray' transform='grow-3'}}
             </button>
@@ -142,7 +130,7 @@
           {{/if}}
         </div>
         <div class="cell shrink">
-          <span {{action (mut model.needUnderlyingZoning) true }}>
+          <span>
             {{#link-to 'projects.edit.geometry-edit' model
               (query-params type='underlying-zoning' mode='draw')
               data-test-underlying-zoning
@@ -182,7 +170,7 @@
           {{/if}}
         </div>
         <div class="cell shrink">
-          <span {{action (mut model.needCommercialOverlay) true}}>
+          <span>
             {{#link-to 'projects.edit.geometry-edit' model
               (query-params type='commercial-overlays' mode='draw')
               data-test-commercial-overlays
@@ -219,7 +207,7 @@
           {{/if}}
         </div>
         <div class="cell shrink">
-          <span {{action (mut model.needSpecialDistrict) true}}>
+          <span>
             {{#link-to 'projects.edit.geometry-edit' model
               (query-params type='special-purpose-districts' mode='draw')
               data-test-special-purpose-districts

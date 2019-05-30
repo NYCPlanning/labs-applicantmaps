@@ -2,51 +2,44 @@ import { module, test, skip } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import {
   render,
-  // pauseTest,
   click,
+  settled,
 } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import Component from '@ember/component';
-import { faker } from 'ember-cli-mirage';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import createMap from 'labs-applicant-maps/tests/helpers/create-map';
 import Sinon from 'sinon';
 import random from 'labs-applicant-maps/tests/helpers/random-geometry';
 import computeArea from '@turf/area';
+import setupMapMocks from 'labs-applicant-maps/tests/helpers/mapbox-gl-stub';
+import setupComposerMocks from 'labs-applicant-maps/tests/helpers/mapbox-composer-stub';
 
 const { randomPolygon } = random;
 
 module('Integration | Component | project-geometries/modes/lots', function(hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
+  setupMapMocks(hooks);
+  setupComposerMocks(hooks);
 
   hooks.before(async function() {
     this.sandbox = Sinon.createSandbox();
-    this.map = await createMap();
   });
 
   hooks.afterEach(function() {
     this.sandbox.restore();
   });
 
-  hooks.after(function() {
-    this.map.remove();
-  });
-
   test('it adds the tax-lots-interactive layer', async function(assert) {
     const store = this.owner.lookup('service:store');
     const peekRecordSpy = this.sandbox.spy(store, 'peekRecord');
 
-    // make dependent components happy
-    this.owner.register('component:labs-layers', Component.extend({}));
-    this.owner.register('component:mapbox-gl-source', Component.extend({}));
-
     await render(hbs`
-      {{project-geometries/modes/lots
-        map=(hash
-          labs-layers=(component 'labs-layers')
-          source=(component 'mapbox-gl-source')
-        )}}
+      {{#labs-map as |map|}}
+        {{#mapbox-gl-draw map=map as |drawable|}}
+          {{project-geometries/modes/lots map=drawable}}
+        {{/mapbox-gl-draw}}
+      {{/labs-map}}
     `);
 
     assert.equal(peekRecordSpy.firstCall.args[1], 'tax-lots-interactive');
@@ -55,34 +48,66 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
   test('click handler action is functional', async function(assert) {
     const store = this.owner.lookup('service:store');
 
-    this.server.create('project');
+    this.server.create('project', 'hasDevelopmentSite');
     this.server.get('https://planninglabs.carto.com/api/v2/sql', () => randomPolygon(1));
-    this.owner.register('component:labs-layers', Component.extend({
-      'data-test-lot-selector': true,
-      click() {
-        const randomFeature = randomPolygon(1).features[0];
-        randomFeature.properties.bbl = faker.random.uuid();
 
-        this.get('onLayerClick')(randomFeature);
-      },
-    }));
-
-    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
+    const model = await store.findRecord('project', 1, {
+      include: 'geometric-properties',
+    });
     const developmentSite = model.get('geometricProperties')
       .findBy('geometryType', 'developmentSite');
-    this.set('model', developmentSite);
+    this.model = developmentSite;
+
+    const polygon = {
+      type: 'Feature',
+      properties: {
+        id: 1,
+        label: 'test',
+      },
+      geometry: {
+        type: 'Polygon',
+        coordinates: [[[1, 1], [0, 1], [1, 0], [1, 1]]],
+      },
+      layer: {
+        id: 'test',
+      },
+    };
+
+    const polyFC = {
+      type: 'FeatureCollection',
+      features: [polygon],
+    };
+
+    const artificialEvents = {};
+    this.mapboxEventStub = {
+      features: [polygon],
+      mapInstance: {
+        querySourceFeatures() {
+          return [polygon];
+        },
+        on: (event, func) => {
+          artificialEvents[event] = func;
+        },
+      },
+    };
 
     await render(hbs`
-      {{project-geometries/modes/lots
-        map=(hash labs-layers=(component 'labs-layers'))
-        geometricProperty=model.proposedGeometry}}
+      {{#labs-map as |map|}}
+        {{#mapbox-gl-draw map=map as |drawable|}}
+          {{project-geometries/modes/lots
+            map=drawable
+            geometricProperty=model.proposedGeometry}}
+        {{/mapbox-gl-draw}}
+      {{/labs-map}}
     `);
 
     const startingArea = computeArea(developmentSite.get('proposedGeometry'));
 
-    await click('[data-test-lot-selector]');
-    await click('[data-test-lot-selector]');
-    await click('[data-test-lot-selector]');
+    artificialEvents.click(polyFC);
+    artificialEvents.click(polyFC);
+    artificialEvents.click(polyFC);
+
+    await settled();
 
     // geometry property gets mutated
     assert.equal(developmentSite.get('hasDirtyAttributes'), true);
@@ -94,37 +119,74 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
   test('it removes a previously clicked lot', async function(assert) {
     const store = this.owner.lookup('service:store');
 
-    // stable random feature
-    const randomFeatures = randomPolygon(2);
-    const { features: [randomFeature1, randomFeature2] } = randomFeatures;
-    randomFeature1.properties.bbl = '100100100';
+    this.server.create('project', 'hasDevelopmentSite');
 
-    this.server.create('project');
-    this.server.get('https://planninglabs.carto.com/api/v2/sql', () => randomFeatures);
-    this.owner.register('component:labs-layers', Component.extend({
-      'data-test-lot-selector': true,
-      click(options) {
-        if (options.clientX === 1) {
-          this.get('onLayerClick')(randomFeature1);
-        } else {
-          this.get('onLayerClick')(randomFeature2);
-        }
+    const model = await store.findRecord('project', 1, {
+      include: 'geometric-properties',
+    });
+
+    this.model = model.get('geometricProperties').findBy('geometryType', 'developmentSite');
+
+    const polygon = {
+      type: 'Feature',
+      properties: {
+        id: 1,
+        label: 'test',
       },
-    }));
+      geometry: {
+        type: 'Polygon',
+        coordinates: [[[1, 1], [0, 1], [1, 0], [1, 1]]],
+      },
+      layer: {
+        id: 'test',
+      },
+    };
 
-    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
+    const artificialEvents = {};
 
-    this.set('model', model.get('geometricProperties').findBy('geometryType', 'developmentSite'));
+    this.mapboxEventStub = {
+      features: [polygon],
+      mapInstance: {
+        querySourceFeatures() {
+          return [polygon];
+        },
+        on: (event, func) => {
+          artificialEvents[event] = func;
+        },
+      },
+    };
 
     await render(hbs`
-      {{project-geometries/modes/lots
-        map=(hash labs-layers=(component 'labs-layers'))
-        geometricProperty=model.proposedGeometry}}
+      {{#labs-map as |map|}}
+        {{#mapbox-gl-draw map=map as |drawable|}}
+          {{project-geometries/modes/lots
+            map=drawable
+            geometricProperty=model.proposedGeometry}}
+        {{/mapbox-gl-draw}}
+      {{/labs-map}}
     `);
-    await click('[data-test-lot-selector]', { clientX: 1 });
+
+    // click the first polygon
+    polygon.properties.bbl = '1';
+    artificialEvents.click({
+      type: 'FeatureCollection',
+      features: [polygon],
+    });
+    await settled();
+
     const initialArea = computeArea(model.get('developmentSite'));
-    await click('[data-test-lot-selector]', { clientX: 2 });
-    await click('[data-test-lot-selector]', { clientX: 2 });
+
+    // click another polygon, then click again
+    polygon.properties.bbl = '2';
+    artificialEvents.click({
+      type: 'FeatureCollection',
+      features: [polygon],
+    });
+    artificialEvents.click({
+      type: 'FeatureCollection',
+      features: [polygon],
+    });
+    await settled();
 
     // area is the same
     assert.equal(initialArea, computeArea(model.get('developmentSite')));
@@ -132,40 +194,59 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
 
   test('it removes a singly selected lot', async function(assert) {
     const store = this.owner.lookup('service:store');
+    const model = await store.createRecord('project', 1);
+    this.model = model.get('geometricProperties').findBy('geometryType', 'developmentSite');
+    this.model.proposedGeometry.features = [];
 
-    // stable random feature
-    const randomFeatures = randomPolygon(1);
-    const { features: [randomFeature1] } = randomFeatures;
-    randomFeature1.properties.bbl = '100100100';
-
-    this.server.create('project');
-    this.server.get('https://planninglabs.carto.com/api/v2/sql', () => randomFeatures);
-    this.owner.register('component:labs-layers', Component.extend({
-      'data-test-lot-selector': true,
-      click() {
-        this.get('onLayerClick')(randomFeature1);
+    const polygon = {
+      type: 'Feature',
+      properties: {
+        id: 1,
+        label: 'test',
       },
-    }));
+      geometry: {
+        type: 'Polygon',
+        coordinates: [[[1, 1], [0, 1], [1, 0], [1, 1]]],
+      },
+      layer: {
+        id: 'test',
+      },
+    };
 
-    const model = await store.findRecord('project', 1, { include: 'geometric-properties' });
+    const artificialEvents = {};
 
-    this.set('model', model.get('geometricProperties').findBy('geometryType', 'developmentSite'));
-
-    // ensure the development site is empty to start
-    model.set('developmentSite', {
-      type: 'FeatureCollection',
-      features: [],
-    });
+    this.mapboxEventStub = {
+      features: [polygon],
+      mapInstance: {
+        querySourceFeatures() {
+          return [polygon];
+        },
+        on: (event, func) => {
+          artificialEvents[event] = func;
+        },
+      },
+    };
 
     await render(hbs`
-      {{project-geometries/modes/lots
-        map=(hash labs-layers=(component 'labs-layers'))
-        geometricProperty=model.proposedGeometry}}
+      {{#labs-map as |map|}}
+        {{#mapbox-gl-draw map=map as |drawable|}}
+          {{project-geometries/modes/lots
+            map=drawable
+            geometricProperty=model.proposedGeometry}}
+        {{/mapbox-gl-draw}}
+      {{/labs-map}}
     `);
 
     const initialArea = computeArea(model.get('developmentSite'));
-    await click('[data-test-lot-selector]');
-    await click('[data-test-lot-selector]');
+    artificialEvents.click({
+      type: 'FeatureCollection',
+      features: [polygon],
+    });
+    artificialEvents.click({
+      type: 'FeatureCollection',
+      features: [polygon],
+    });
+    await settled();
 
     // area is the same
     assert.equal(computeArea(model.get('developmentSite')), initialArea);
@@ -180,7 +261,7 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
     const { features: [randomFeature1, randomFeature2] } = randomFeatures;
     randomFeature1.properties.bbl = '100100100';
 
-    this.server.create('project');
+    this.server.create('project', 'hasDevelopmentSite');
     this.server.get('https://planninglabs.carto.com/api/v2/sql', () => randomFeatures);
 
     let actionArgs = [];
@@ -202,9 +283,9 @@ module('Integration | Component | project-geometries/modes/lots', function(hooks
         geometricProperty=model.developmentSite}}
     `);
     actionArgs = [randomFeature1];
-    await click('[data-test-lot-selector]');
+    await click('.labs-layers');
     actionArgs = [randomFeature2];
-    await click('[data-test-lot-selector]');
+    await click('.labs-layers');
 
     // area is the same
     assert.equal(initialArea, computeArea(model.get('developmentSite')));
