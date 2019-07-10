@@ -53,7 +53,7 @@ module.exports = function (environment) {
     },
 
     'ember-mapbox-composer': {
-      host: 'https://layers-api-staging.planninglabs.nyc',
+      host: 'https://layers-api.planninglabs.nyc',
       namespace: 'v1',
     },
 
@@ -64,7 +64,7 @@ module.exports = function (environment) {
     'mapbox-gl': {
       accessToken: '',
       map: {
-        style: 'https://layers-api-staging.planninglabs.nyc/v1/base/style.json',
+        style: 'https://layers-api.planninglabs.nyc/v1/base/style.json',
         zoom: 12.25,
         center: [-73.9868, 40.724],
       },
