@@ -151,6 +151,7 @@ module.exports = function (environment) {
     // here you can enable a production-specific feature
     ENV.host = 'https://applicantmaps-api.planninglabs.nyc';
     ENV['mapbox-gl'].map.style = 'https://layers-api.planninglabs.nyc/v1/base/style.json';
+    ENV['ember-mapbox-composer'].host = 'https://layers-api.planninglabs.nyc';
   }
 
   return ENV;
