@@ -129,19 +129,6 @@
       <div class="cell shrink" style="min-width:1rem;"></div>
       <p class="cell auto text-tiny dark-gray">Make sure your system print settings match the map's size/orientation and background graphics printing is enabled.</p>
     </div>
-
-    <div class="grid-x">
-      <p class="cell shrink medium-6">
-        <form action="{{downloadURL}}" target="_blank">
-          <input type=hidden name=orientation value={{model.paperOrientation}}>
-          <input type=hidden name=size value={{model.paperSize}}>
-          <button class="button expanded" type="submit">{{fa-icon 'file-pdf'}} Download</button>
-        </form>
-      </p>
-      <div class="cell shrink" style="min-width:1rem;"></div>
-      <p class="cell auto text-tiny dark-gray">The PDF may take several seconds to generate.</p>
-    </div>
-
   </div>
 
   <div class="cell large-auto paper-container text-center">
