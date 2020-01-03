@@ -53,7 +53,7 @@ module.exports = function (environment) {
     },
 
     'ember-mapbox-composer': {
-      host: 'https://layers-api-staging.planninglabs.nyc',
+      host: 'https://labs-layers-api-staging.herokuapp.com',
       namespace: 'v1',
     },
 
@@ -64,7 +64,7 @@ module.exports = function (environment) {
     'mapbox-gl': {
       accessToken: '',
       map: {
-        style: 'https://layers-api-staging.planninglabs.nyc/v1/base/style.json',
+        style: 'https://labs-layers-api-staging.herokuapp.com/v1/base/style.json',
         zoom: 12.25,
         center: [-73.9868, 40.724],
       },
@@ -141,7 +141,7 @@ module.exports = function (environment) {
     };
     // here you can enable a staging-specific feature
     ENV.host = 'https://applicantmaps-api-staging.herokuapp.com';
-    ENV['mapbox-gl'].map.style = 'https://layers-api-staging.planninglabs.nyc/v1/base/style.json';
+    ENV['mapbox-gl'].map.style = 'https://labs-layers-api-staging.herokuapp.com/v1/base/style.json';
   }
 
   if (environment === 'production') {
@@ -150,8 +150,8 @@ module.exports = function (environment) {
     };
     // here you can enable a production-specific feature
     ENV.host = 'https://applicantmaps-api.herokuapp.com';
-    ENV['mapbox-gl'].map.style = 'https://layers-api.planninglabs.nyc/v1/base/style.json';
-    ENV['ember-mapbox-composer'].host = 'https://layers-api.planninglabs.nyc';
+    ENV['mapbox-gl'].map.style = 'https://labs-layers-api.herokuapp.com/v1/base/style.json';
+    ENV['ember-mapbox-composer'].host = 'https://labs-layers-api.herokuapp.com';
   }
 
   return ENV;
