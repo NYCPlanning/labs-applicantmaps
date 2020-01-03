@@ -149,7 +149,7 @@ module.exports = function (environment) {
       enabled: false,
     };
     // here you can enable a production-specific feature
-    ENV.host = 'https://applicantmaps-api.planninglabs.nyc';
+    ENV.host = 'https://applicantmaps-api.herokuapp.com';
     ENV['mapbox-gl'].map.style = 'https://layers-api.planninglabs.nyc/v1/base/style.json';
     ENV['ember-mapbox-composer'].host = 'https://layers-api.planninglabs.nyc';
   }
