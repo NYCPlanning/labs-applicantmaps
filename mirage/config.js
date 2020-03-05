@@ -35,6 +35,7 @@ export default function() {
 
   // map interceptions
   this.passthrough('https://layers-api.planninglabs.nyc/**');
+  this.passthrough('https://labs-layers-api-staging.herokuapp.com/**');
   this.passthrough('https://tiles.planninglabs.nyc/**');
   this.passthrough('https://layers-api-staging.planninglabs.nyc/**');
   this.passthrough('https://raw.githubusercontent.com/**');
