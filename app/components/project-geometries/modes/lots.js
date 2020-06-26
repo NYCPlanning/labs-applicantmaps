@@ -10,7 +10,7 @@ import { inject as service } from '@ember/service';
 
 const tolerance = 0.000001;
 const bufferkm = 0.00008;
-const plutoTable = 'mappluto_v18_1';
+const plutoTable = 'mappluto';
 
 export const selectedLotsLayer = {
   type: 'fill',
