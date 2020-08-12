@@ -23,7 +23,7 @@ export default async (developmentSite) => {
         4326)::geometry AS the_geom
       )
       SELECT ST_Intersection(spd.the_geom, buffer.the_geom) AS the_geom, sdname AS label, cartodb_id AS id
-      FROM planninglabs.special_purpose_districts_v201809 spd, buffer
+      FROM planninglabs.special_purpose_districts spd, buffer
       WHERE ST_Intersects(spd.the_geom,buffer.the_geom)
     `;
 
