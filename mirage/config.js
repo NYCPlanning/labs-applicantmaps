@@ -48,7 +48,7 @@ export default function() {
   this.passthrough('/img/**');
 
   // 3rd Party APIs
-  this.get('https://search-api.planninglabs.nyc/**', function() {
+  this.get('https://search-api-production.herokuapp.com/**', function() {
     return [{
       label: 'test',
       bbl: 100000,
