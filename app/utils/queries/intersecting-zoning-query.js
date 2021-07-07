@@ -23,7 +23,7 @@ export default async (developmentSite) => {
         4326)::geometry AS the_geom
       )
       SELECT ST_Intersection(zoning.the_geom, buffer.the_geom) AS the_geom, zonedist AS label, cartodb_id AS id
-      FROM planninglabs.zoning_districts zoning, buffer
+      FROM dcp_zoning_districts zoning, buffer
       WHERE ST_Intersects(zoning.the_geom,buffer.the_geom)
     `;
 
