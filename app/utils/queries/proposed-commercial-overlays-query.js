@@ -23,7 +23,7 @@ export default async (developmentSite) => {
         4326)::geometry AS the_geom
       )
       SELECT ST_Intersection(co.the_geom, buffer.the_geom) AS the_geom, overlay AS label, cartodb_id AS id
-      FROM planninglabs.commercial_overlays co, buffer
+      FROM dcp_commercial_overlays co, buffer
       WHERE ST_Intersects(co.the_geom,buffer.the_geom)
     `;
 
