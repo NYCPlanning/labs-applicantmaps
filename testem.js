@@ -12,8 +12,8 @@ module.exports = {
     Chrome: {
       ci: [
         '--no-sandbox',
-        '--disable-dev-shm-usage',
-        '--mute-audio',
+        '--disable-gpu',
+        '--headless',
         '--remote-debugging-port=0',
         '--window-size=1440,900',
       ].filter(Boolean),
