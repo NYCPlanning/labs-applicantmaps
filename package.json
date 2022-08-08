@@ -13,7 +13,7 @@
   "scripts": {
     "build": "ember build",
     "lint:js": "eslint .",
-    "start": "ember serve",
+    "start": "ember serve -dev",
     "test": "ember test",
     "prepare": "husky install"
   },
