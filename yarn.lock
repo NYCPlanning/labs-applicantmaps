@@ -810,6 +810,11 @@
   version "0.2.18"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.18.tgz#c0d8f073a5116b2de0a2c8a7aba66093a6956ce7"
 
+"@fortawesome/fontawesome-common-types@^0.2.26":
+  version "0.2.36"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.36.tgz#b44e52db3b6b20523e0c57ef8c42d315532cb903"
+  integrity sha512-a/7BiSgobHAgBWeN7N0w+lAhInrGxksn13uK7231n2m8EDPE3BMCl9NZLTGrj9ZXfCmC6LM0QLqXidIizVQ6yg==
+
 "@fortawesome/fontawesome-svg-core@^1.2.0":
   version "1.2.18"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.18.tgz#c26cbded461895ebe260f0dea771ca29d8cb3517"
@@ -834,13 +839,20 @@
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.18"
 
+"@fortawesome/free-solid-svg-icons@5.12.0":
+  version "5.12.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.12.0.tgz#8decac5844e60453cc0c7c51437d1461df053a35"
+  integrity sha512-CnpsWs6GhTs9ekNB3d8rcO5HYqRkXbYKf2YNiAlTWbj5eVlPqsd/XH1F9If8jkcR1aegryAbln/qYeKVZzpM0g==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.26"
+
 "@fortawesome/free-solid-svg-icons@5.7.2":
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.7.2.tgz#9ec2ed353d630092a8e19cc8aae2f716572963e5"
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.15"
 
-"@fortawesome/free-solid-svg-icons@>=5.1.0", "@fortawesome/free-solid-svg-icons@^5.7.0":
+"@fortawesome/free-solid-svg-icons@>=5.1.0":
   version "5.8.2"
   resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.8.2.tgz#aa2f042f73aca43eb4a26149907e63bf26d2e31c"
   dependencies:
@@ -5133,12 +5145,15 @@ ember-compatibility-helpers@^1.1.1, ember-compatibility-helpers@^1.1.2, ember-co
     ember-cli-version-checker "^2.1.1"
     semver "^5.4.1"
 
-ember-composable-helpers@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/ember-composable-helpers/-/ember-composable-helpers-2.1.0.tgz#71f75ab2de1c696d21939b5f9dcc62eaf2c947e5"
+ember-composable-helpers@^3.1.1:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/ember-composable-helpers/-/ember-composable-helpers-3.2.0.tgz#6eb03626cf21d7cdcec4b949ac202c0cef43f4c3"
+  integrity sha512-OBnwpDkeOnDBMGQ/96B7TUy3e3wR1dqmAJ8+zDQTEjWrrCztKFg2dNGzCJchN1AD1i4FS4B/9iloAnn1pPWw8w==
   dependencies:
-    broccoli-funnel "^1.0.1"
-    ember-cli-babel "^6.6.0"
+    "@babel/core" "^7.0.0"
+    broccoli-funnel "2.0.1"
+    ember-cli-babel "^7.1.0"
+    resolve "^1.10.0"
 
 ember-computed-promise-monitor@0.1.6:
   version "0.1.6"
@@ -5153,7 +5168,7 @@ ember-concurrency-decorators@0.6.0:
     "@ember-decorators/utils" "^5.1.4 || 5.1.2 || ^4.0.0 || ^3.0.0"
     ember-cli-babel "^7.5.0"
 
-ember-concurrency@0.9.0, ember-concurrency@^0.8.19, ember-concurrency@^0.8.26:
+ember-concurrency@0.9.0, ember-concurrency@^0.8.26:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/ember-concurrency/-/ember-concurrency-0.9.0.tgz#0016652ff780fb665842e7f47815ee0601122ea1"
   dependencies:
@@ -7698,20 +7713,21 @@ klaw@^1.0.0:
   optionalDependencies:
     graceful-fs "^4.1.9"
 
-labs-ember-search@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/labs-ember-search/-/labs-ember-search-3.0.0.tgz#ec1c3f32bc59cd9b90a9c7844731cac97fb86d22"
+labs-ember-search@3.1.6:
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/labs-ember-search/-/labs-ember-search-3.1.6.tgz#18891fe83fca585655d3e19433e5907228f209f1"
+  integrity sha512-DeyuRHjb0Le+3GqYcdiJWBvNFVZ5p//+fo4d9YlkJWacIQuDWOjSQ2fS/FVRe/9ySCdQiLFVOa+PukvFzgyJ3Q==
   dependencies:
     "@fortawesome/ember-fontawesome" "^0.1.9"
     "@fortawesome/free-regular-svg-icons" "^5.7.1"
-    "@fortawesome/free-solid-svg-icons" "^5.7.0"
+    "@fortawesome/free-solid-svg-icons" "5.12.0"
     babel-plugin-htmlbars-inline-precompile "1.0.0"
     cartobox-promises-utility "1.0.2"
     ember-cli-babel "^6.16.0"
     ember-cli-htmlbars "^3.0.0"
     ember-cli-htmlbars-inline-precompile "^1.0.2"
-    ember-composable-helpers "2.1.0"
-    ember-concurrency "^0.8.19"
+    ember-composable-helpers "^3.1.1"
+    ember-concurrency "0.9.0"
     ember-fetch "^5.1.1"
     ember-power-select "^2.0.4"
     ember-promise-helpers "1.0.6"
