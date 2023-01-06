@@ -9,7 +9,7 @@ You will need the following things properly installed on your computer.
 
 * [Git](https://git-scm.com/)
 * [Node.js](https://nodejs.org/) (with npm)
-  * This installation was tested using Node v10.24.1
+  * This installation was tested using Node v14.19.1
 * [Ember CLI](https://ember-cli.com/)
 * [Google Chrome](https://google.com/chrome/)
 
@@ -17,7 +17,7 @@ You will need the following things properly installed on your computer.
 
 * `git clone <repository-url>` this repository
 * `cd labs-applicant-maps`
-* `npm install`
+* `yarn`
 
 ## Running / Development
 

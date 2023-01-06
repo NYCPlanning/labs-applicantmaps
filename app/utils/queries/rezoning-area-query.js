@@ -94,7 +94,7 @@ export default async (...args) => {
 
     bufferedUnionedGeoms = [filled];
   } catch (e) {
-    console.log(e);
+    console.log(e); // eslint-disable-line
   }
 
   return {

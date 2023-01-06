@@ -81,6 +81,16 @@ module.exports = function (environment) {
           sendHitTask: (environment !== 'development' && environment !== 'devlocal'),
         },
       },
+      {
+        name: 'GoogleAnalyticsFour',
+        environments: ['production'],
+        config: {
+          id: 'G-HL6ZK1ZS2K',
+          options: {
+            debug_mode: environment === 'development',
+          },
+        },
+      },
     ],
 
     fontawesome: {
@@ -92,7 +102,7 @@ module.exports = function (environment) {
   };
 
   if (environment === 'development') {
-    ENV['labs-search']['host'] = 'https://search-api-staging.herokuapp.com'
+    ENV['labs-search'].host = 'https://search-api-staging.herokuapp.com';
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
@@ -101,14 +111,14 @@ module.exports = function (environment) {
   }
 
   if (environment === 'dev-local') {
-    ENV['labs-search']['host'] = 'https://search-api-staging.herokuapp.com'
+    ENV['labs-search'].host = 'https://search-api-staging.herokuapp.com';
     ENV['ember-cli-mirage'] = {
       enabled: false,
     };
   }
 
   if (environment === 'test') {
-    ENV['labs-search']['host'] = 'https://search-api-staging.herokuapp.com'
+    ENV['labs-search'].host = 'https://search-api-staging.herokuapp.com';
     // Testem prefers this...
     ENV.locationType = 'none';
     ENV['ember-mapbox-composer'].host = '';
@@ -138,7 +148,7 @@ module.exports = function (environment) {
   }
 
   if (environment === 'staging') {
-    ENV['labs-search']['host'] = 'https://search-api-staging.herokuapp.com'
+    ENV['labs-search'].host = 'https://search-api-staging.herokuapp.com';
     ENV['ember-cli-mirage'] = {
       enabled: false,
     };
@@ -155,7 +165,7 @@ module.exports = function (environment) {
     ENV.host = 'https://applicantmaps-api.herokuapp.com';
     ENV['mapbox-gl'].map.style = 'https://labs-layers-api.herokuapp.com/v1/base/style.json';
     ENV['ember-mapbox-composer'].host = 'https://labs-layers-api.herokuapp.com';
-    ENV['labs-search']['host'] = 'https://search-api-production.herokuapp.com'
+    ENV['labs-search'].host = 'https://search-api-production.herokuapp.com';
   }
 
   return ENV;
