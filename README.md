@@ -8,8 +8,7 @@ A short introduction of this app could easily go here.
 You will need the following things properly installed on your computer.
 
 * [Git](https://git-scm.com/)
-* [Node.js](https://nodejs.org/) (with npm)
-  * This installation was tested using Node v14.19.1
+* [Node.js](https://nodejs.org/) (with npm) **version listed in .nvmrc**
 * [Ember CLI](https://ember-cli.com/)
 * [Google Chrome](https://google.com/chrome/)
 
