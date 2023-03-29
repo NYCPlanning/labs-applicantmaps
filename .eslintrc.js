@@ -38,6 +38,7 @@ module.exports = {
     'ember/avoid-leaking-state-in-ember-objects': 0,
     'ember-best-practices/require-dependent-keys': 0,
     'class-methods-use-this': 0,
+    'ember/no-jquery': 'error',
   },
   overrides: [
     // node files
