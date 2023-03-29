@@ -29,7 +29,7 @@
     "deepmerge": "3.2.0",
     "ember-auto-import": "1.2.19",
     "ember-awesome-macros": "3.1.0",
-    "ember-cli": "~3.8.1",
+    "ember-cli": "~3.28.6",
     "ember-cli-app-version": "^3.2.0",
     "ember-cli-babel": "7.7.3",
     "ember-cli-clipboard": "^0.9.0",
@@ -88,7 +88,7 @@
     "testem": "2.16.0"
   },
   "engines": {
-    "node": "14.*"
+    "node": "16.*"
   },
   "dependencies": {
     "@mapbox/mapbox-gl-draw": "1.1.1",
