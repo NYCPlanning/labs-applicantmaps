@@ -50,6 +50,7 @@
     "ember-cli-sass": "^6.0.0",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-uglify": "^2.1.0",
+    "ember-cli-update": "^1.0.1",
     "ember-cli-what-input": "^1.0.0",
     "ember-computed-promise-monitor": "0.1.6",
     "ember-concurrency": "0.9.0",
