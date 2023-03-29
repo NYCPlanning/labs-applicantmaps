@@ -6,7 +6,7 @@ INTERCEPT_MAPBOX_GL = JSON.parse(INTERCEPT_MAPBOX_GL);
 INTERCEPT_CARTO = JSON.parse(INTERCEPT_CARTO);
 
 module.exports = function (environment) {
-  const ENV = {
+  let ENV = {
     modulePrefix: 'labs-applicant-maps',
     environment,
     rootURL: '/',
@@ -14,7 +14,7 @@ module.exports = function (environment) {
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
-        // e.g. 'with-controller': true
+        // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
       },
       EXTEND_PROTOTYPES: {
         // Prevent Ember Data from overriding Date.parse.
