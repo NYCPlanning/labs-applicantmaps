@@ -3,12 +3,13 @@ import { scheduleOnce } from '@ember/runloop';
 import { inject as service } from '@ember/service';
 import config from './config/environment';
 
-const Router = EmberRouter.extend({
-  metrics: service(),
+export default class Router extends EmberRouter {
+  metrics = service();
+
   didTransition(...args) {
     this._super(...args);
     this._trackPage();
-  },
+  }
 
   _trackPage() {
     scheduleOnce('afterRender', this, () => {
@@ -16,11 +17,12 @@ const Router = EmberRouter.extend({
       const title = this.getWithDefault('currentRouteName', 'unknown');
       this.metrics.trackPage({ page, title });
     });
-  },
+  }
 
-  location: config.locationType,
-  rootURL: config.rootURL,
-});
+  location = config.locationType;
+
+  rootURL = config.rootURL;
+}
 
 Router.map(function () { // eslint-disable-line
   this.route('projects', function () {
@@ -40,5 +42,3 @@ Router.map(function () { // eslint-disable-line
     });
   });
 });
-
-export default Router;
