@@ -29,3 +29,5 @@
 *.pid
 
 .DS_Store
+
+.eslintcache
