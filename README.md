@@ -21,13 +21,13 @@ You will need the following things properly installed on your computer.
 
 ## Running / Development
 
-* `ember serve`
+* `npx ember serve`
 * Visit your app at [http://localhost:4200](http://localhost:4200).
 * Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
 
 To run the app against a local development API (labs-applicantmaps-api), make sure the API is running and serve the Ember app in the `devlocal` environment:
 
-`ember s --environment=devlocal`
+`npx ember s --environment=devlocal`
 
 ### Code Generators
 
