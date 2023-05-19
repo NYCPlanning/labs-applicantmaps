@@ -27,7 +27,7 @@ You will need the following things properly installed on your computer.
 
 To run the app against a local development API (labs-applicantmaps-api), make sure the API is running and serve the Ember app in the `devlocal` environment:
 
-`ember s --environment=devlocal`
+`start:local-api`
 
 ### Code Generators
 

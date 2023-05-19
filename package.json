@@ -14,6 +14,7 @@
     "build": "ember build",
     "lint:js": "eslint .",
     "start": "ember serve -dev",
+    "start:local-api": "ember s --environment=devlocal",
     "test": "ember test",
     "prepare": "husky install"
   },
