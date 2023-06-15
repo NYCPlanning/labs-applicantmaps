@@ -4,7 +4,6 @@ import turfBuffer from '@turf/buffer';
 import turfUnion from '@turf/union';
 import turfSimplify from '@turf/simplify';
 import carto from 'cartobox-promises-utility/utils/carto';
-import { task } from 'ember-concurrency-decorators';
 import { waitForProperty } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 
@@ -114,8 +113,6 @@ export default class LotsComponent extends Component {
       });
   }
 
-  // Hydrate geometric fragments with true lot data
-  @task
   hydrateFeatures = function* (feature) {
     const { properties } = feature;
     const targetFeature = this.get('selectedLots.features')
@@ -143,7 +140,8 @@ export default class LotsComponent extends Component {
       this.get('selectedLots.features')
         .pushObject(feature);
 
-      this.get('hydrateFeatures').perform(feature); // task to fetch full feature;
+      this.hydrateFeatures(feature);
+      // this.get('hydrateFeatures').perform(feature); // task to fetch full feature;
     } else {
       const newLots = selectedLots
         .features
