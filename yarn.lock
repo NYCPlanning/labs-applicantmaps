@@ -7152,16 +7152,7 @@ ember-concurrency-decorators@0.6.0:
     "@ember-decorators/utils" "^5.1.4 || 5.1.2 || ^4.0.0 || ^3.0.0"
     ember-cli-babel "^7.5.0"
 
-ember-concurrency@0.9.0, ember-concurrency@^0.8.26:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/ember-concurrency/-/ember-concurrency-0.9.0.tgz#0016652ff780fb665842e7f47815ee0601122ea1"
-  dependencies:
-    babel-core "^6.24.1"
-    ember-cli-babel "^6.8.2"
-    ember-compatibility-helpers "^1.2.0"
-    ember-maybe-import-regenerator "^0.1.5"
-
-ember-concurrency@1.0:
+ember-concurrency@0.9.0, ember-concurrency@1.0, ember-concurrency@^0.8.26:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/ember-concurrency/-/ember-concurrency-1.0.0.tgz#3b650672fdd5dc1d45007626119135829076c2b6"
   integrity sha512-76aKC0lo2LAPoQYz7vMRlpolWTIQerszr8PPf3JMM5cTOzPwXUtzDcjfso3JAEDdhyUF9fkv2V1DmHagFbC2YQ==
