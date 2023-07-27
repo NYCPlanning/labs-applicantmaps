@@ -82,7 +82,7 @@ body {
 
 .paper-container {
   @media screen {
-    @include xy-cell-static(full,false,0);
+    @include xy-cell(full,false,0);
 
     position: relative;
     z-index: 1;
@@ -225,7 +225,7 @@ body {
   }
 
   @include breakpoint(medium down) {
-    @include xy-cell-static(full,false,0);
+    @include xy-cell(full,false,0);
   }
 
   @include breakpoint(large) {

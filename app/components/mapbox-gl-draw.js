@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
-import DefaultMapboxDrawStyles from '@mapbox/mapbox-gl-draw/src/lib/theme';
+// import {DefaultMapboxDrawStyles} from '@mapbox/mapbox-gl-draw/src/lib/theme';
 import { next } from '@ember/runloop';
 import { inject as service } from '@ember/service';
 import { setProperties, computed, action } from '@ember/object';
@@ -15,7 +15,7 @@ import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
 
 // extend styles
-const styles = [...AnnotationsStyles, ...DefaultMapboxDrawStyles].uniqBy('id');
+const styles = [...AnnotationsStyles, ...MapboxDraw.lib.theme].uniqBy('id');
 const AnnotationsDrawPointMode = { ...annotatable(MapboxDraw.modes.draw_point) };
 
 export const DefaultDraw = MapboxDraw.bind(null, {

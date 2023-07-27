@@ -1,6 +1,7 @@
 'use strict';
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const sass = require('sass-embedded');
 
 module.exports = function (defaults) {
   const app = new EmberApp(defaults, {
@@ -20,24 +21,25 @@ module.exports = function (defaults) {
     'ember-cli-babel': {
       includePolyfill: true,
     },
+    sassOptions: {
+      implementation: sass,
+      includePaths: [
+        'node_modules/foundation-sites/scss',
+        'node_modules/nyc-planning-style-guide/dist/assets/scss',
+      ],
+      sourceMapEmbed: true,
+    },
     autoImport: {
       alias: {
         'mapbox-gl': 'mapbox-gl/dist/mapbox-gl',
         '@mapbox/mapbox-gl-draw': '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw',
       },
       webpack: {
-        node: {
-          fs: 'empty',
-        },
-        module: {
-          rules: [
-            /* see: https://github.com/graphql/graphql-js/issues/1272#issuecomment-393903706 */
-            {
-              test: /\.mjs$/,
-              include: /node_modules\/@turf\/difference/,
-              type: 'javascript/auto',
-            },
-          ],
+        resolve: {
+          fallback: {
+            fs: false,
+            path: false,
+          },
         },
       },
     },

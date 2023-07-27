@@ -1,12 +1,11 @@
-{{#labs-ui/site-header
-  responsiveNav=false
-  betaNotice=false
-  as |banner|
-}}
+<Deprecated::SiteHeader
+  @responsiveNav={{false}}
+  @betaNotice={{false}} as |banner|
+>
   {{#banner.title}}
     {{#link-to 'application' classNames='site-title'}}Applicant Maps <small class="site-subtitle show-for-medium"></small>{{/link-to}}
   {{/banner.title}}
-{{/labs-ui/site-header}}
+</Deprecated::SiteHeader>
 
 <div class="site-main grid-x route-{{currentRouteName}}">
   {{#if (user-agent "browser.isIE")}}

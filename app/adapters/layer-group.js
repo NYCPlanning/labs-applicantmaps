@@ -1,5 +1,4 @@
 import DS from 'ember-data';
-import fetch from 'fetch';
 import config from '../config/environment';
 
 const { 'ember-mapbox-composer': { host, namespace } } = config;
