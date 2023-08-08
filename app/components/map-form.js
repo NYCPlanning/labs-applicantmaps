@@ -211,7 +211,7 @@ export default class MapFormComponent extends Component {
   store;
 
   @service
-  notificationMessages;
+  notifications;
 
   projectURL = window.location.href;
 
@@ -437,6 +437,6 @@ export default class MapFormComponent extends Component {
   async saveProject() {
     const model = this.get('model');
     await model.save();
-    this.get('notificationMessages').success('Map saved to project!');
+    this.get('notifications').success('Map saved to project!');
   }
 }

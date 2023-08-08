@@ -4,8 +4,6 @@ import turfBuffer from '@turf/buffer';
 import turfUnion from '@turf/union';
 import turfSimplify from '@turf/simplify';
 import carto from 'cartobox-promises-utility/utils/carto';
-import { task } from 'ember-concurrency-decorators';
-import { waitForProperty } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 
 const tolerance = 0.000001;
@@ -92,37 +90,32 @@ export default class LotsComponent extends Component {
     const [{ geometry }] = features;
     const { length } = features;
 
-    waitForProperty(this, 'hydrateFeatures.isIdle')
-      .then(() => {
-        let union = turfBuffer(geometry, bufferkm);
+    let union = turfBuffer(geometry, bufferkm);
 
-        if (length > 1) {
-          for (let i = 1; i < length; i += 1) {
-            const bufferedGeometry = turfBuffer(features[i].geometry, bufferkm);
+    if (length > 1) {
+      for (let i = 1; i < length; i += 1) {
+        const bufferedGeometry = turfBuffer(features[i].geometry, bufferkm);
 
-            union = turfUnion(union, bufferedGeometry);
-          }
-        }
+        union = turfUnion(union, bufferedGeometry);
+      }
+    }
 
-        const Feature = turfSimplify(union, { tolerance });
+    const Feature = turfSimplify(union, { tolerance });
 
-        // wrap as FC
-        this.set('geometricProperty', {
-          type: 'FeatureCollection',
-          features: [Feature],
-        });
-      });
+    // wrap as FC
+    this.set('geometricProperty', {
+      type: 'FeatureCollection',
+      features: [Feature],
+    });
   }
 
   // Hydrate geometric fragments with true lot data
-  @task
-  hydrateFeatures = function* (feature) {
+  async hydrateFeatures(feature) {
     const { properties } = feature;
     const targetFeature = this.get('selectedLots.features')
       .find(({ properties: { bbl } }) => bbl === properties.bbl);
     const bblSelectionQuery = `SELECT the_geom FROM ${plutoTable} WHERE bbl = ${properties.bbl}`;
-    const { features: [{ geometry }] } = yield carto.SQL(bblSelectionQuery, 'geojson');
-
+    const { features: [{ geometry }] } = await carto.SQL(bblSelectionQuery, 'geojson');
     set(targetFeature, 'geometry', geometry);
 
     // features are hydrated so generate buffer
@@ -142,8 +135,7 @@ export default class LotsComponent extends Component {
     if (inSelection === undefined) {
       this.get('selectedLots.features')
         .pushObject(feature);
-
-      this.get('hydrateFeatures').perform(feature); // task to fetch full feature;
+      this.hydrateFeatures(feature);
     } else {
       const newLots = selectedLots
         .features

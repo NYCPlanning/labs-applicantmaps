@@ -37,6 +37,7 @@ export default function() {
   this.passthrough('https://layers-api.planninglabs.nyc/**');
   this.passthrough('https://labs-layers-api-staging.herokuapp.com/**');
   this.passthrough('https://tiles.planninglabs.nyc/**');
+  this.passthrough('https://tiles-staging.planninglabs.nyc/**');
   this.passthrough('https://layers-api-staging.planninglabs.nyc/**');
   this.passthrough('https://raw.githubusercontent.com/**');
   this.passthrough('http://raw.githubusercontent.com/**');

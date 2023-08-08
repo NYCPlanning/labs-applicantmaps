@@ -11,20 +11,20 @@
     {{#if (not (is-empty model.developmentSite))}}
       <li data-test-legend-item="development-site">
         <strong>Development Site</strong>
-        {{labs-ui/legend-icon icon=projectGeometryIcons.developmentSiteIcon}}
+        <Deprecated::LegendIcon @icon={projectGeometryIcons.developmentSiteIcon} />
       </li>
     {{/if}}
 
     {{#if (not (is-empty model.projectArea))}}
-      <li><strong>Project Area</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.projectAreaIcon}}</li>
+      <li><strong>Project Area</strong> <Deprecated::LegendIcon @icon={projectGeometryIcons.projectAreaIcon} /></li>
     {{/if}}
 
     {{#if (not (is-empty model.underlyingZoning))}}
-      <li><strong>Underlying Zoning</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.underlyingZoningIcon}}</li>
+      <li><strong>Underlying Zoning</strong> <Deprecated::LegendIcon @icon={projectGeometryIcons.underlyingZoningIcon}} /></li>
     {{/if}}
 
     {{#if (not (is-empty model.specialPurposeDistricts))}}
-      <li><strong>Special Purpose Districts</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.specialPurposeDistrictsIcon}}</li>
+      <li><strong>Special Purpose Districts</strong> <Deprecated::LegendIcon @icon={projectGeometryIcons.specialPurposeDistrictsIcon} /></li>
     {{/if}}
 
     {{!-- if a rezoning area exists AND --}}
@@ -35,7 +35,7 @@
         (or (eq type 'rezoning-area') (not type))
       )
     }}
-       <li><strong>Rezoning Area</strong> {{labs-ui/legend-icon icon=projectGeometryIcons.rezoningAreaIcon}}</li>
+       <li><strong>Rezoning Area</strong> <Deprecated::LegendIcon @icon={projectGeometryIcons.rezoningAreaIcon} /></li>
      {{/if}}
 
    </ul>

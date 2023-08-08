@@ -11,7 +11,7 @@ class ProjectFormComponent extends Component {
   model;
 
   @service
-  notificationMessages;
+  notifications;
 
   @service
   router;
@@ -24,7 +24,7 @@ class ProjectFormComponent extends Component {
     // again, this should happen in the server
     await Promise.all(project.get('geometricProperties').map(geom => geom.save()));
 
-    this.get('notificationMessages').success('Project saved!');
+    this.get('notifications').success('Project saved!');
 
     this.get('router').transitionTo('projects.show', project);
   }

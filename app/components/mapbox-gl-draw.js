@@ -13,7 +13,7 @@ import AnnotationsMode,
 import AnnotationsStyles from 'labs-applicant-maps/utils/mapbox-gl-draw/annotations/styles';
 import isEmpty from 'labs-applicant-maps/utils/is-empty';
 
-
+console.log({ DefaultMapboxDrawStyles });
 // extend styles
 const styles = [...AnnotationsStyles, ...DefaultMapboxDrawStyles].uniqBy('id');
 const AnnotationsDrawPointMode = { ...annotatable(MapboxDraw.modes.draw_point) };

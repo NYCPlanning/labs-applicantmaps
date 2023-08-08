@@ -49,9 +49,8 @@ See full documentation here: https://github.com/kategengler/ember-cli-browsersta
 
 ### Linting
 
-* `npm run lint:hbs`
-* `npm run lint:js`
-* `npm run lint:js -- --fix`
+* `yarn lint`
+* `yarn lint:fix`
 
 ### Building
 

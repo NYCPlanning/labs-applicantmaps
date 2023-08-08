@@ -39,7 +39,7 @@ export default class TypesBase extends Component {
   store;
 
   @service
-  notificationMessages;
+  notifications;
 
   @computed('type')
   get componentForType() {
@@ -83,12 +83,12 @@ export default class TypesBase extends Component {
       const project = await model.get('project');
       await project.save();
 
-      this.get('notificationMessages').success('Project saved!');
+      this.get('notifications').success('Project saved!');
       // only transition to the next step if it's not annotation mode
 
       this.get('router').transitionTo('projects.show', project);
     } catch (e) {
-      this.get('notificationMessages').error(`Something went wrong: ${e}`);
+      this.get('notifications').error(`Something went wrong: ${e}`);
     }
   }
 

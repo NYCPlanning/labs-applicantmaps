@@ -1,3 +1,5 @@
+
+
 module.exports = {
   globals: {
     server: true,
@@ -5,12 +7,8 @@ module.exports = {
   root: true,
   parser: 'babel-eslint',
   parserOptions: {
-    ecmaVersion: 2017,
+    ecmaVersion: 2018,
     sourceType: 'module',
-    ecmaFeatures: {
-      legacyDecorators: true,
-      experimentalObjectRestSpread: true,
-    },
   },
   plugins: [
     'ember',
@@ -61,6 +59,7 @@ module.exports = {
         browser: false,
         node: true,
       },
+      plugins: ['node'],
     },
   ],
 };

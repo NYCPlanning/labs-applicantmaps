@@ -5,22 +5,22 @@
     <div class="grid-x">
       {{#if model.project.projectArea}}
         <div class="cell project-geom-cell">
-          {{labs-ui/legend-item item=areaMapLegendConfig.projectArea}}
+          <Deprecated::LegendItem @item={areaMapLegendConfig.projectArea} />
         </div>
       {{/if}}
       {{#if model.project.developmentSite}}
         <div class="cell project-geom-cell">
-          {{labs-ui/legend-item item=areaMapLegendConfig.developmentSite}}
+          <Deprecated::LegendItem @item={areaMapLegendConfig.developmentSite} />
         </div>
       {{/if}}
       {{#if model.project.rezoningArea}}
         <div class="cell project-geom-cell">
-          {{labs-ui/legend-item item=areaMapLegendConfig.rezoningArea}}
+          <Deprecated::LegendItem @item={areaMapLegendConfig.rezoningArea} />
         </div>
       {{/if}}
       {{#if model.projectGeometryBuffer}}
         <div class="cell project-geom-cell">
-          {{labs-ui/legend-item item=areaMapLegendConfig.projectGeometryBuffer}}
+          <Deprecated::LegendItem @item={areaMapLegendConfig.projectGeometryBuffer} />
         </div>
       {{/if}}
     </div>
@@ -56,7 +56,7 @@
       <div class="cell land-use-section-cell">
         <h2 class="legend-section-header">Land Use</h2>
         {{#each areaMapLegendConfig.landuseLegendItems as |item|}}
-          {{labs-ui/legend-item item=item}}
+          <Deprecated::LegendItem @item={item} />
         {{/each}}
       </div>
     </div>

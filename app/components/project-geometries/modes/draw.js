@@ -153,7 +153,7 @@ export default class DrawComponent extends Component {
   selectedFeature = EmptyFeatureCollection;
 
   @service
-  notificationMessages;
+  notifications;
 
   /*
    * Handles trash button click in draw mode
