@@ -7,7 +7,7 @@ export default class ProjectSetupStatus extends Component {
   project;
 
   @service
-  notificationMessages;
+  notifications;
 
   @action
   async save(field, value) {
@@ -16,9 +16,9 @@ export default class ProjectSetupStatus extends Component {
 
     try {
       await project.save();
-      this.get('notificationMessages').success('Project saved!');
+      this.get('notifications').success('Project saved!');
     } catch (e) {
-      this.get('notificationMessages').error(`Something went wrong: ${e}`);
+      this.get('notifications').error(`Something went wrong: ${e}`);
     }
   }
 }

@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 
 export default class ProjectsEditRoute extends Route {
   @service
-  notificationMessages;
+  notifications;
 
   model() {
     return this.modelFor('projects.edit');
@@ -12,7 +12,7 @@ export default class ProjectsEditRoute extends Route {
 
   @action
   error({ message }) {
-    this.get('notificationMessages').error(message);
+    this.get('notifications').error(message);
     this.transitionTo('application');
   }
 }

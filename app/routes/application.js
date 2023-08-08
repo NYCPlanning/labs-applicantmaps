@@ -4,11 +4,11 @@ import { inject as service } from '@ember/service';
 
 export default class RouteClass extends Route {
   @service
-  notificationMessages;
+  notifications;
 
   @action
   error({ message }) {
-    this.get('notificationMessages').error(message);
+    this.get('notifications').error(message);
     this.transitionTo('application');
   }
 }

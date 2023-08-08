@@ -6,7 +6,7 @@ import { pluralize } from 'ember-inflector';
 
 export default class ProjectsEditMapRoute extends Route {
   @service
-  notificationMessages;
+  notifications;
 
   model({ mapType = 'area-map' }) {
     const project = this.modelFor('projects.edit');
@@ -23,7 +23,7 @@ export default class ProjectsEditMapRoute extends Route {
 
   @action
   error({ message }) {
-    this.get('notificationMessages').error(message);
+    this.get('notifications').error(message);
     this.transitionTo('application');
   }
 }

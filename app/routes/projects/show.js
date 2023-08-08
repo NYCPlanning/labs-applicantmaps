@@ -7,7 +7,7 @@ const { mapTypes } = config;
 
 export default class ProjectsShowRoute extends Route {
   @service
-  notificationMessages;
+  notifications;
 
   model({ project_id }) {
     const include = ['geometric-properties', ...mapTypes].toString();
@@ -28,7 +28,7 @@ export default class ProjectsShowRoute extends Route {
 
   @action
   error({ message }) {
-    this.get('notificationMessages').error(message);
+    this.get('notifications').error(message);
     this.transitionTo('application');
   }
 }

@@ -23,6 +23,7 @@
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.6.0",
     "@fortawesome/ember-fontawesome": "0.3.0",
@@ -51,15 +52,14 @@
     "ember-cli-inject-live-reload": "^2.1.0",
     "ember-cli-mirage": "0.4.10",
     "ember-cli-netlify": "0.1.0",
-    "ember-cli-notifications": "4.3.3",
+    "ember-cli-notifications": "^8.0.0",
     "ember-cli-pretender": "3.0.0",
     "ember-cli-sass": "^11.0.1",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-terser": "^4.0.2",
     "ember-cli-what-input": "^1.0.0",
     "ember-computed-promise-monitor": "0.1.6",
-    "ember-concurrency": "1.0",
-    "ember-concurrency-decorators": "0.6.0",
+    "ember-concurrency": "^2.3.7",
     "ember-decorators": "5.1.4",
     "ember-decorators-polyfill": "1.0.4",
     "ember-export-application-global": "^2.0.1",
@@ -76,6 +76,7 @@
     "ember-source": "~3.28.8",
     "ember-template-lint": "^3.15.0",
     "ember-test-selectors": "^2.1.0",
+    "ember-tooltips": "^3.1.0",
     "ember-truth-helpers": "2.1.0",
     "ember-unused-components": "0.2.0",
     "ember-useragent": "^0.9.0",
@@ -98,7 +99,6 @@
     "qunit": "^2.17.2",
     "sass-embedded": "^1.63.6",
     "sinon": "7.1.1",
-    "testem": "2.16.0",
     "webpack": "^5.75.0"
   },
   "engines": {
@@ -135,13 +135,12 @@
     "ember-data": "~3.28.6",
     "ember-load-initializers": "^2.1.2",
     "foundation-sites": "^6.7.5",
+    "jquery": "^3.6.0",
     "mustache": "^3.0.0",
+    "postcss": "^8.0.0",
     "what-input": "^5.1.2"
   },
   "resolutions": {
-    "broccoli-postcss": "^4.0.2",
-    "ember-concurrency": "1.0",
-    "xmlhttprequest-ssl": "^1.6.2",
     "ember-cli-sass": "^11.0.1"
   },
   "lint-staged": {

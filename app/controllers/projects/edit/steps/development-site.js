@@ -6,6 +6,6 @@ export default class DevelopmentSiteController extends Controller {
   async saveProject() {
     const model = this.get('model');
     await model.save();
-    this.get('notificationMessages').success('Map saved to project!');
+    this.get('notifications').success('Map saved to project!');
   }
 }
