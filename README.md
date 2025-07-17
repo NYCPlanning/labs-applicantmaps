@@ -3,7 +3,7 @@
 This README outlines the details of collaborating on this Ember application.
 A short introduction of this app could easily go here.
 
-## Prerequisites 
+## Prerequisites
 
 You will need the following things properly installed on your computer.
 
@@ -21,8 +21,9 @@ You will need the following things properly installed on your computer.
 
 ## Running / Development
 
-* `ember serve`
+* `yarn start`
 * Visit your app at [http://localhost:4200](http://localhost:4200).
+* `yarn test`
 * Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
 
 To run the app against a local development API (labs-applicantmaps-api), make sure the API is running and serve the Ember app in the `devlocal` environment:
